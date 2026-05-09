@@ -1,0 +1,12 @@
+{
+  "git.autoRepositoryDetection": "subFolders",
+  "explorer.compactFolders": false,
+  "git.scanRepositories": [
+    "chains",
+    "mirror",
+  ],
+  "git.repositoryScanMaxDepth": 3,
+  "workbench.colorCustomizations": {
+    "gitDecoration.ignoredResourceForeground": "#a0a0a0"
+  }
+}
