@@ -11,6 +11,7 @@
 !.vscode
 !.vscode/**
 !graphene-rs
+!graphene-rs/**
 
 # ── GSD baseline (auto-generated) ──
 .gsd
