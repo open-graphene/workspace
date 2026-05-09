@@ -8,6 +8,10 @@ publish = false
 
 [dependencies]
 graphene-protocol = { path = "../graphene-protocol" }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"
 
 [lints]
 workspace = true

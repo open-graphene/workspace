@@ -1,4 +1,12 @@
 pub mod account;
+pub mod account_balance;
+pub mod account_statistics;
+pub mod address;
 pub mod asset;
+pub mod asset_bitasset_data;
+pub mod asset_dynamic_data;
 pub mod committee_member;
+mod prefixed_string;
+pub mod public_key;
+pub mod vote;
 pub mod witness;

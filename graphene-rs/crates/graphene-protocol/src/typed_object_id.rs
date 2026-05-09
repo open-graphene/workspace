@@ -1,8 +1,8 @@
 /// Defines a chain-specific typed object id wrapper around [`ObjectId`].
 ///
-/// The macro intentionally requires each chain crate to provide the object type number and
-/// chain-specific wording. That keeps the numeric object map owned by the chain crate while sharing
-/// the repetitive wrapper implementation.
+/// The macro intentionally requires each chain crate to provide the object space and type number
+/// plus chain-specific wording. That keeps the numeric object map owned by the chain crate while
+/// sharing the repetitive wrapper implementation.
 #[macro_export]
 macro_rules! define_object_id_type {
     (
@@ -15,12 +15,35 @@ macro_rules! define_object_id_type {
         wrong_type_doc: $wrong_type_doc:literal,
         wrong_type_message: $wrong_type_message:literal $(,)?
     ) => {
+        $crate::define_object_id_type! {
+            chain: $chain_name,
+            chain_article: $chain_article,
+            $(#[$id_meta])*
+            id: $type_name,
+            object_space: 1,
+            type_id: $type_id,
+            instance_doc: $instance_doc,
+            wrong_type_doc: $wrong_type_doc,
+            wrong_type_message: $wrong_type_message,
+        }
+    };
+    (
+        chain: $chain_name:literal,
+        chain_article: $chain_article:literal,
+        $(#[$id_meta:meta])*
+        id: $type_name:literal,
+        object_space: $object_space:literal,
+        type_id: $type_id:literal,
+        instance_doc: $instance_doc:literal,
+        wrong_type_doc: $wrong_type_doc:literal,
+        wrong_type_message: $wrong_type_message:literal $(,)?
+    ) => {
         use core::fmt;
         use core::str::FromStr;
 
         use $crate::{ObjectId, ObjectIdParseError};
 
-        const SPACE: u8 = 1;
+        const SPACE: u8 = $object_space;
         const TYPE_ID: u8 = $type_id;
 
         $(#[$id_meta])*
@@ -73,6 +96,18 @@ macro_rules! define_object_id_type {
 
             fn from_str(value: &str) -> Result<Self, Self::Err> {
                 Self::try_from(value.parse::<ObjectId>()?)
+            }
+        }
+
+        impl<'de> ::serde::Deserialize<'de> for Id {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: ::serde::Deserializer<'de>,
+            {
+                use ::serde::de::Error as _;
+
+                let value = <&str>::deserialize(deserializer)?;
+                value.parse::<Self>().map_err(D::Error::custom)
             }
         }
 
