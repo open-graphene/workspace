@@ -10,6 +10,7 @@
 !pnpm-workspace.yaml
 !.vscode
 !.vscode/**
+!graphene-rs/**
 
 # ── GSD baseline (auto-generated) ──
 .gsd
@@ -41,5 +42,3 @@ vendor/
 coverage/
 .cache/
 tmp/
-
-!graphene-rs/**
