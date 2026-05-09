@@ -95,3 +95,7 @@ git = "git@github.com:open-graphene/workspace.git"
 branch = "main"
 path = "."
 flat = true
+
+[[repositories]]
+git = "git@github.com:alloy-rs/alloy.git"
+path = "examples/alloy"
