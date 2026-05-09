@@ -1,12 +1,12 @@
 graphene_protocol::define_object_id_type! {
-    chain: "BitShares",
-    chain_article: "a",
-    /// A BitShares committee member object identifier (`1.5.x`).
+    chain: "RSquared",
+    chain_article: "an",
+    /// A RSquared committee member object identifier (`1.5.x`).
     id: "committee member",
     type_id: 5,
     instance_doc: "Returns the committee member object instance component.",
-    wrong_type_doc: "The object id is not in the BitShares committee member object range (`1.5.x`).",
-    wrong_type_message: "object id {actual} is not a BitShares committee member id",
+    wrong_type_doc: "The object id is not in the RSquared committee member object range (`1.5.x`).",
+    wrong_type_message: "object id {actual} is not a RSquared committee member id",
 }
 
 #[cfg(test)]

@@ -16,6 +16,9 @@ dependencies = [
 [[package]]
 name = "graphene-chain-rsquared"
 version = "0.0.0"
+dependencies = [
+ "graphene-protocol",
+]
 
 [[package]]
 name = "graphene-chain-swaplock"

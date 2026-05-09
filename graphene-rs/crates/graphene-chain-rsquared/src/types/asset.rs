@@ -1,12 +1,12 @@
 graphene_protocol::define_object_id_type! {
-    chain: "BitShares",
-    chain_article: "a",
-    /// A BitShares asset object identifier (`1.3.x`).
+    chain: "RSquared",
+    chain_article: "an",
+    /// A RSquared asset object identifier (`1.3.x`).
     id: "asset",
     type_id: 3,
     instance_doc: "Returns the asset object instance component.",
-    wrong_type_doc: "The object id is not in the BitShares asset object range (`1.3.x`).",
-    wrong_type_message: "object id {actual} is not a BitShares asset id",
+    wrong_type_doc: "The object id is not in the RSquared asset object range (`1.3.x`).",
+    wrong_type_message: "object id {actual} is not a RSquared asset id",
 }
 
 #[cfg(test)]

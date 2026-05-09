@@ -1,12 +1,12 @@
 graphene_protocol::define_object_id_type! {
-    chain: "BitShares",
-    chain_article: "a",
-    /// A BitShares account object identifier (`1.2.x`).
+    chain: "RSquared",
+    chain_article: "an",
+    /// A RSquared account object identifier (`1.2.x`).
     id: "account",
     type_id: 2,
     instance_doc: "Returns the account object instance component.",
-    wrong_type_doc: "The object id is not in the BitShares account object range (`1.2.x`).",
-    wrong_type_message: "object id {actual} is not a BitShares account id",
+    wrong_type_doc: "The object id is not in the RSquared account object range (`1.2.x`).",
+    wrong_type_message: "object id {actual} is not a RSquared account id",
 }
 
 #[cfg(test)]
