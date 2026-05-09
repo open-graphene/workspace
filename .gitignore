@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# Allow these files
+!.gitignore
+!Cargo.lock
+!Cargo.toml
+!mirror.toml
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!.vscode
+!.vscode/**
