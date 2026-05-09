@@ -10,3 +10,7 @@
 !pnpm-workspace.yaml
 !.vscode
 !.vscode/**
+
+!.agents/
+!.specify/
+!AGENTS.md
