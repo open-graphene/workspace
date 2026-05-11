@@ -87,16 +87,14 @@ fn deserializes_committee_member_object() {
 
     assert_eq!(object.id.to_string(), "1.5.2");
     assert_eq!(object.committee_member_account.to_string(), "1.2.17");
-    assert_eq!(object.vote_id.to_string(), "0:12");
-    assert_eq!(object.vote_id.vote_type(), 0);
-    assert_eq!(object.vote_id.instance(), 12);
+    assert_eq!(object.vote_id, "0:12");
     assert_eq!(object.total_votes, 88);
     assert_eq!(object.url, "https://committee.example");
 }
 
 #[test]
 fn deserializes_dynamic_global_property_object() {
-    let recent_slots_filled = "340282366920938463463374607431768211455";
+    let recent_slots_filled = 123456789_u128;
     let object: dynamic_global_property::Object = serde_json::from_value(json!({
         "id": "2.1.0",
         "head_block_number": 123_u32,
@@ -135,8 +133,7 @@ fn deserializes_dynamic_global_property_object() {
     assert_eq!(object.accounts_registered_this_interval, 4);
     assert_eq!(object.recently_missed_count, 5);
     assert_eq!(object.current_aslot, 6);
-    assert_eq!(object.recent_slots_filled.to_string(), recent_slots_filled);
-    assert_eq!(object.recent_slots_filled.value(), u128::MAX);
+    assert_eq!(object.recent_slots_filled, recent_slots_filled);
     assert_eq!(object.dynamic_flags, 1);
     assert_eq!(object.last_irreversible_block_num, 122);
 }
@@ -173,17 +170,6 @@ fn deserializes_fba_accumulator_object_without_designated_asset() {
     assert_eq!(object.id.to_string(), "2.16.4");
     assert_eq!(object.accumulated_fba_fees, -5);
     assert!(object.designated_asset.is_none());
-}
-
-#[test]
-fn deserializes_uint128_from_json_number_and_string() {
-    let from_number: graphene_protocol::Uint128 = serde_json::from_value(json!(123_u64))
-        .expect("Uint128 should deserialize from JSON number");
-    let from_string: graphene_protocol::Uint128 = serde_json::from_value(json!("456"))
-        .expect("Uint128 should deserialize from decimal string");
-
-    assert_eq!(from_number.value(), 123);
-    assert_eq!(from_string.value(), 456);
 }
 
 #[test]

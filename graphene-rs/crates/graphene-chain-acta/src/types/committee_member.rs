@@ -11,7 +11,7 @@ graphene_protocol::define_object_id_type! {
 pub struct Object {
     pub id: Id,
     pub committee_member_account: crate::types::account::Id,
-    pub vote_id: graphene_protocol::VoteId,
+    pub vote_id: String,
     pub total_votes: u64,
     pub url: String,
 }
