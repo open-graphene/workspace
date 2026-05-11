@@ -1,5 +1,5 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, account_statistics, asset, asset_bitasset_data,
+    account, account_balance, account_history, account_statistics, asset, asset_bitasset_data,
     asset_dynamic_data, balance, blinded_balance, block_summary, buyback, call_order,
     chain_property, collateral_bid, committee_member, credit_deal, credit_deal_summary,
     credit_offer, custom_authority, dynamic_global_property, fba_accumulator, force_settlement,
@@ -101,6 +101,86 @@ fn deserializes_account_statistics_object() {
     assert_eq!(object.lifetime_fees_paid, 16);
     assert_eq!(object.pending_fees, 17);
     assert_eq!(object.pending_vested_fees, 18);
+}
+
+#[test]
+fn deserializes_account_object_with_options_and_special_authorities() {
+    let key = "BTS1111111111111111111111111111111114T1Anm";
+    let object: account::Object = serde_json::from_value(json!({
+        "id": "1.2.17",
+        "membership_expiration_date": "1969-12-31T23:59:59",
+        "registrar": "1.2.1",
+        "referrer": "1.2.2",
+        "lifetime_referrer": "1.2.3",
+        "network_fee_percentage": 2000_u16,
+        "lifetime_referrer_fee_percentage": 3000_u16,
+        "referrer_rewards_percentage": 4000_u16,
+        "name": "alice",
+        "owner": {
+            "weight_threshold": 1_u32,
+            "account_auths": [["1.2.1", 1_u16]],
+            "key_auths": [[key, 1_u16]],
+            "address_auths": []
+        },
+        "active": {
+            "weight_threshold": 1_u32,
+            "account_auths": [],
+            "key_auths": [[key, 1_u16]],
+            "address_auths": []
+        },
+        "options": {
+            "memo_key": key,
+            "voting_account": "1.2.5",
+            "num_witness": 21_u16,
+            "num_committee": 11_u16,
+            "votes": ["0:5", "1:6", "2:7"],
+            "extensions": []
+        },
+        "num_committee_voted": 11_u16,
+        "statistics": "2.6.17",
+        "whitelisting_accounts": ["1.2.8"],
+        "blacklisting_accounts": ["1.2.9"],
+        "whitelisted_accounts": ["1.2.10"],
+        "blacklisted_accounts": ["1.2.11"],
+        "cashback_vb": "1.13.4",
+        "owner_special_authority": [0, {}],
+        "active_special_authority": [1, {
+            "asset": "1.3.0",
+            "num_top_holders": 5_u8
+        }],
+        "top_n_control_flags": 2_u8,
+        "allowed_assets": ["1.3.0", "1.3.7"],
+        "creation_block_num": 123_u32,
+        "creation_time": "2024-01-02T03:04:05"
+    }))
+    .expect("account object should deserialize with options and special authorities");
+
+    assert_eq!(object.id.to_string(), "1.2.17");
+    assert_eq!(object.registrar.to_string(), "1.2.1");
+    assert_eq!(object.name, "alice");
+    assert_eq!(object.owner.account_auths[0].0.to_string(), "1.2.1");
+    assert_eq!(object.active.key_auths[0].0, key);
+    assert_eq!(object.options.memo_key, key);
+    assert_eq!(object.options.voting_account.to_string(), "1.2.5");
+    assert_eq!(object.options.votes, vec!["0:5", "1:6", "2:7"]);
+    assert_eq!(object.statistics.to_string(), "2.6.17");
+    assert_eq!(object.cashback_vb.unwrap().to_string(), "1.13.4");
+    assert!(matches!(
+        object.owner_special_authority,
+        graphene_protocol::SpecialAuthority::None(_)
+    ));
+    match object.active_special_authority {
+        graphene_protocol::SpecialAuthority::TopHolders(authority) => {
+            assert_eq!(authority.asset.to_string(), "1.3.0");
+            assert_eq!(authority.num_top_holders, 5);
+        }
+        graphene_protocol::SpecialAuthority::None(_) => {
+            panic!("expected top holders special authority")
+        }
+    }
+    assert_eq!(object.allowed_assets.unwrap()[1].to_string(), "1.3.7");
+    assert_eq!(object.creation_block_num, 123);
+    assert_eq!(object.creation_time, "2024-01-02T03:04:05");
 }
 
 #[test]

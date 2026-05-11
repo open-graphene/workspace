@@ -3,6 +3,12 @@ name = "bitshares"
 core_path = "chains/bitshares/bitshares-core"
 
 [[objects]]
+family_name = "account"
+cpp_class = "account_object"
+header_path = "libraries/chain/include/graphene/chain/account_object.hpp"
+source_path = "libraries/chain/account_object.cpp"
+
+[[objects]]
 family_name = "account_balance"
 cpp_class = "account_balance_object"
 header_path = "libraries/chain/include/graphene/chain/account_object.hpp"

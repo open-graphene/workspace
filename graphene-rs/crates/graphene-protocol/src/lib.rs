@@ -4,6 +4,7 @@
 //! reads C++ sources and emits Rust files belongs in `graphene-codegen`; the generated Rust should
 //! depend on this crate for shared protocol behavior.
 
+pub mod account;
 pub mod asset;
 pub mod asset_options;
 pub mod authority;
@@ -16,6 +17,9 @@ pub mod restriction;
 pub mod vesting;
 pub mod worker;
 
+pub use account::{
+    AccountOptions, NoSpecialAuthority, SpecialAuthority, TopHoldersSpecialAuthority,
+};
 pub use asset::Asset;
 pub use asset_options::{
     AdditionalAssetOptions, AssetOptions, BitAssetOptionExtensions, BitAssetOptions, PriceFeed,

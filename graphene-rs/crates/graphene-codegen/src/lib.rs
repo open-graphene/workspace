@@ -162,6 +162,9 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
 
     match normalized.as_str() {
         "string" => return Some("String".to_owned()),
+        "account_options" => {
+            return Some("graphene_protocol::AccountOptions<crate::types::account::Id>".to_owned());
+        }
         "address" => return Some("String".to_owned()),
         "asset" => return Some("graphene_protocol::Asset<crate::types::asset::Id>".to_owned()),
         "asset_options" => {
@@ -217,12 +220,14 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         }
         "memo_data" => return Some("graphene_protocol::MemoData".to_owned()),
         "restriction" => return Some("graphene_protocol::Restriction".to_owned()),
+        "special_authority" => {
+            return Some("graphene_protocol::SpecialAuthority<crate::types::asset::Id>".to_owned());
+        }
         "transfer_info" => {
             return Some(
                 "graphene_protocol::HtlcTransfer<crate::types::account::Id, crate::types::asset::Id>".to_owned(),
             );
         }
-        "account_options" => return Some("Options".to_owned()),
         _ => {}
     }
 
@@ -1055,6 +1060,14 @@ mod tests {
             Some("Option<graphene_protocol::MemoData>".to_owned())
         );
         assert_eq!(map_cpp_type_to_rust("address"), Some("String".to_owned()));
+        assert_eq!(
+            map_cpp_type_to_rust("account_options"),
+            Some("graphene_protocol::AccountOptions<crate::types::account::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("special_authority"),
+            Some("graphene_protocol::SpecialAuthority<crate::types::asset::Id>".to_owned())
+        );
         assert_eq!(map_cpp_type_to_rust("unsigned_int"), Some("u64".to_owned()));
         assert_eq!(
             map_cpp_type_to_rust("asset_options"),
