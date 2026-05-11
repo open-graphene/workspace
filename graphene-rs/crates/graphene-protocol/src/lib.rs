@@ -177,7 +177,7 @@ macro_rules! define_object_id_type {
             {
                 use serde::de::Error as _;
 
-                let value = <&str>::deserialize(deserializer)?;
+                let value = String::deserialize(deserializer)?;
                 value.parse::<Self>().map_err(D::Error::custom)
             }
         }
