@@ -6,3 +6,13 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 8,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub borrower: crate::types::account::Id,
+    pub collateral: i64,
+    pub debt: i64,
+    pub call_price: graphene_protocol::Price<crate::types::asset::Id>,
+    pub target_collateral_ratio: Option<u16>,
+}

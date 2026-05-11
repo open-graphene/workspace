@@ -27,6 +27,12 @@ header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
 source_path = "libraries/chain/asset_object.cpp"
 
 [[objects]]
+family_name = "balance"
+cpp_class = "balance_object"
+header_path = "libraries/chain/include/graphene/chain/balance_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "blinded_balance"
 cpp_class = "blinded_balance_object"
 header_path = "libraries/chain/include/graphene/chain/confidential_object.hpp"
@@ -45,6 +51,12 @@ header_path = "libraries/chain/include/graphene/chain/buyback_object.hpp"
 source_path = "libraries/chain/small_objects.cpp"
 
 [[objects]]
+family_name = "call_order"
+cpp_class = "call_order_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
 family_name = "chain_property"
 cpp_class = "chain_property_object"
 header_path = "libraries/chain/include/graphene/chain/chain_property_object.hpp"
@@ -55,6 +67,12 @@ family_name = "committee_member"
 cpp_class = "committee_member_object"
 header_path = "libraries/chain/include/graphene/chain/committee_member_object.hpp"
 source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "collateral_bid"
+cpp_class = "collateral_bid_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
 
 [[objects]]
 family_name = "dynamic_global_property"

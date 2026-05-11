@@ -1,8 +1,8 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, account_statistics, asset_dynamic_data, blinded_balance,
-    block_summary, buyback, chain_property, committee_member, dynamic_global_property,
-    fba_accumulator, force_settlement, special_authority, withdraw_permission, witness,
-    witness_schedule,
+    account_balance, account_history, account_statistics, asset_dynamic_data, balance,
+    blinded_balance, block_summary, buyback, call_order, chain_property, collateral_bid,
+    committee_member, dynamic_global_property, fba_accumulator, force_settlement,
+    special_authority, withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
 
@@ -122,6 +122,60 @@ fn deserializes_asset_dynamic_data_object() {
 }
 
 #[test]
+fn deserializes_balance_object_with_linear_vesting_policy() {
+    let owner = "BTSFN9r6VYzBK8EKtMewfNbfiGCr56pHDBFi";
+    let object: balance::Object = serde_json::from_value(json!({
+        "id": "1.15.3",
+        "owner": owner,
+        "balance": {
+            "amount": 1000_i64,
+            "asset_id": "1.3.0"
+        },
+        "vesting_policy": {
+            "begin_timestamp": "2024-01-01T00:00:00",
+            "vesting_cliff_seconds": 3600_u32,
+            "vesting_duration_seconds": 86400_u32,
+            "begin_balance": 1000_i64
+        },
+        "last_claim_date": "2024-01-02T00:00:00"
+    }))
+    .expect("balance object should deserialize with linear vesting policy");
+
+    assert_eq!(object.id.to_string(), "1.15.3");
+    assert_eq!(object.owner, owner);
+    assert_eq!(object.balance.amount, 1000);
+    assert_eq!(object.balance.asset_id.to_string(), "1.3.0");
+    let vesting_policy = object
+        .vesting_policy
+        .expect("linear vesting policy should be present");
+    assert_eq!(vesting_policy.begin_timestamp, "2024-01-01T00:00:00");
+    assert_eq!(vesting_policy.vesting_cliff_seconds, 3600);
+    assert_eq!(vesting_policy.vesting_duration_seconds, 86400);
+    assert_eq!(vesting_policy.begin_balance, 1000);
+    assert_eq!(object.last_claim_date, "2024-01-02T00:00:00");
+}
+
+#[test]
+fn deserializes_balance_object_without_vesting_policy() {
+    let object: balance::Object = serde_json::from_value(json!({
+        "id": "1.15.4",
+        "owner": "BTS1111111111111111111111111111111114T1Anm",
+        "balance": {
+            "amount": 5_i64,
+            "asset_id": "1.3.7"
+        },
+        "vesting_policy": null,
+        "last_claim_date": "1970-01-01T00:00:00"
+    }))
+    .expect("balance object should deserialize without vesting policy");
+
+    assert_eq!(object.id.to_string(), "1.15.4");
+    assert_eq!(object.balance.amount, 5);
+    assert_eq!(object.balance.asset_id.to_string(), "1.3.7");
+    assert!(object.vesting_policy.is_none());
+}
+
+#[test]
 fn deserializes_blinded_balance_object() {
     let commitment = "028f7d2c1b00000000000000000000000000000000000000000000000000000000";
     let key = "BTS1111111111111111111111111111111114T1Anm";
@@ -175,6 +229,51 @@ fn deserializes_buyback_object() {
 }
 
 #[test]
+fn deserializes_call_order_object_with_target_collateral_ratio() {
+    let object: call_order::Object = serde_json::from_value(json!({
+        "id": "1.8.9",
+        "borrower": "1.2.17",
+        "collateral": 10000_i64,
+        "debt": 2500_i64,
+        "call_price": {
+            "base": { "amount": 4_i64, "asset_id": "1.3.7" },
+            "quote": { "amount": 1_i64, "asset_id": "1.3.0" }
+        },
+        "target_collateral_ratio": 1750_u16
+    }))
+    .expect("call_order object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.8.9");
+    assert_eq!(object.borrower.to_string(), "1.2.17");
+    assert_eq!(object.collateral, 10000);
+    assert_eq!(object.debt, 2500);
+    assert_eq!(object.call_price.base.amount, 4);
+    assert_eq!(object.call_price.base.asset_id.to_string(), "1.3.7");
+    assert_eq!(object.call_price.quote.amount, 1);
+    assert_eq!(object.call_price.quote.asset_id.to_string(), "1.3.0");
+    assert_eq!(object.target_collateral_ratio, Some(1750));
+}
+
+#[test]
+fn deserializes_call_order_object_without_target_collateral_ratio() {
+    let object: call_order::Object = serde_json::from_value(json!({
+        "id": "1.8.10",
+        "borrower": "1.2.18",
+        "collateral": 100_i64,
+        "debt": 20_i64,
+        "call_price": {
+            "base": { "amount": 5_i64, "asset_id": "1.3.7" },
+            "quote": { "amount": 1_i64, "asset_id": "1.3.0" }
+        },
+        "target_collateral_ratio": null
+    }))
+    .expect("call_order object should deserialize without target collateral ratio");
+
+    assert_eq!(object.id.to_string(), "1.8.10");
+    assert_eq!(object.target_collateral_ratio, None);
+}
+
+#[test]
 fn deserializes_chain_property_object() {
     let chain_id = "4018d7844c78f6a9f816ed8e2bde14b0df7c6a7ac8f11b6f3b5d6f5e9c8a7b6c";
     let object: chain_property::Object = serde_json::from_value(json!({
@@ -213,6 +312,26 @@ fn deserializes_committee_member_object() {
     assert_eq!(object.vote_id, "0:12");
     assert_eq!(object.total_votes, 88);
     assert_eq!(object.url, "https://committee.example");
+}
+
+#[test]
+fn deserializes_collateral_bid_object() {
+    let object: collateral_bid::Object = serde_json::from_value(json!({
+        "id": "2.17.5",
+        "bidder": "1.2.17",
+        "inv_swan_price": {
+            "base": { "amount": 3_i64, "asset_id": "1.3.7" },
+            "quote": { "amount": 2_i64, "asset_id": "1.3.0" }
+        }
+    }))
+    .expect("collateral_bid object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.17.5");
+    assert_eq!(object.bidder.to_string(), "1.2.17");
+    assert_eq!(object.inv_swan_price.base.amount, 3);
+    assert_eq!(object.inv_swan_price.base.asset_id.to_string(), "1.3.7");
+    assert_eq!(object.inv_swan_price.quote.amount, 2);
+    assert_eq!(object.inv_swan_price.quote.asset_id.to_string(), "1.3.0");
 }
 
 #[test]

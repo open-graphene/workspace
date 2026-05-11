@@ -162,7 +162,9 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
 
     match normalized.as_str() {
         "string" => return Some("String".to_owned()),
+        "address" => return Some("String".to_owned()),
         "asset" => return Some("graphene_protocol::Asset<crate::types::asset::Id>".to_owned()),
+        "price" => return Some("graphene_protocol::Price<crate::types::asset::Id>".to_owned()),
         "bool" => return Some("bool".to_owned()),
         "uint8_t" => return Some("u8".to_owned()),
         "uint16_t" => return Some("u16".to_owned()),
@@ -181,6 +183,9 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         }
         "immutable_chain_parameters" => {
             return Some("graphene_protocol::ImmutableChainParameters".to_owned());
+        }
+        "linear_vesting_policy" => {
+            return Some("graphene_protocol::LinearVestingPolicy".to_owned());
         }
         "account_options" => return Some("Options".to_owned()),
         _ => {}
@@ -896,6 +901,15 @@ mod tests {
         assert_eq!(
             map_cpp_type_to_rust("immutable_chain_parameters"),
             Some("graphene_protocol::ImmutableChainParameters".to_owned())
+        );
+        assert_eq!(map_cpp_type_to_rust("address"), Some("String".to_owned()));
+        assert_eq!(
+            map_cpp_type_to_rust("optional<linear_vesting_policy>"),
+            Some("Option<graphene_protocol::LinearVestingPolicy>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("price"),
+            Some("graphene_protocol::Price<crate::types::asset::Id>".to_owned())
         );
         assert_eq!(
             map_cpp_type_to_rust("account_id_type"),
