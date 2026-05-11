@@ -4,9 +4,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use graphene_codegen::{
-    ObjectFamily, RustField, map_fields_to_rust, parse_object_families,
-    parse_reflected_class_fields, parse_reflected_objects, render_object_id_module,
-    render_object_struct, render_types_mod,
+    GENERATED_OBJECTS, ObjectFamily, ObjectGeneration, RustField, map_fields_to_rust,
+    parse_object_families, parse_reflected_class_fields, parse_reflected_objects,
+    render_object_id_module, render_object_struct, render_types_mod,
 };
 
 struct ChainConfig {
@@ -19,94 +19,6 @@ struct GeneratedFile {
     path: PathBuf,
     contents: String,
 }
-
-struct ObjectGeneration {
-    family_name: &'static str,
-    cpp_class: &'static str,
-    header_path: &'static str,
-    source_path: &'static str,
-}
-
-const GENERATED_OBJECTS: &[ObjectGeneration] = &[
-    ObjectGeneration {
-        family_name: "account_balance",
-        cpp_class: "account_balance_object",
-        header_path: "libraries/chain/include/graphene/chain/account_object.hpp",
-        source_path: "libraries/chain/account_object.cpp",
-    },
-    ObjectGeneration {
-        family_name: "account_history",
-        cpp_class: "account_history_object",
-        header_path: "libraries/chain/include/graphene/chain/operation_history_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "asset_dynamic_data",
-        cpp_class: "asset_dynamic_data_object",
-        header_path: "libraries/chain/include/graphene/chain/asset_object.hpp",
-        source_path: "libraries/chain/asset_object.cpp",
-    },
-    ObjectGeneration {
-        family_name: "blinded_balance",
-        cpp_class: "blinded_balance_object",
-        header_path: "libraries/chain/include/graphene/chain/confidential_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "block_summary",
-        cpp_class: "block_summary_object",
-        header_path: "libraries/chain/include/graphene/chain/block_summary_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "buyback",
-        cpp_class: "buyback_object",
-        header_path: "libraries/chain/include/graphene/chain/buyback_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "chain_property",
-        cpp_class: "chain_property_object",
-        header_path: "libraries/chain/include/graphene/chain/chain_property_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "committee_member",
-        cpp_class: "committee_member_object",
-        header_path: "libraries/chain/include/graphene/chain/committee_member_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "dynamic_global_property",
-        cpp_class: "dynamic_global_property_object",
-        header_path: "libraries/chain/include/graphene/chain/global_property_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "fba_accumulator",
-        cpp_class: "fba_accumulator_object",
-        header_path: "libraries/chain/include/graphene/chain/fba_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "witness",
-        cpp_class: "witness_object",
-        header_path: "libraries/chain/include/graphene/chain/witness_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "witness_schedule",
-        cpp_class: "witness_schedule_object",
-        header_path: "libraries/chain/include/graphene/chain/witness_schedule_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-    ObjectGeneration {
-        family_name: "withdraw_permission",
-        cpp_class: "withdraw_permission_object",
-        header_path: "libraries/chain/include/graphene/chain/withdraw_permission_object.hpp",
-        source_path: "libraries/chain/small_objects.cpp",
-    },
-];
 
 const CHAINS: &[ChainConfig] = &[
     ChainConfig {

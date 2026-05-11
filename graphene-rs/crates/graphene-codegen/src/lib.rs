@@ -4,6 +4,10 @@
 //! Rust source files for chain crates. Runtime protocol primitives and macros used by generated
 //! code belong in `graphene-protocol`.
 
+mod object_generation;
+
+pub use object_generation::{GENERATED_OBJECTS, ObjectGeneration};
+
 /// One object-id family discovered from a Graphene `GRAPHENE_DEFINE_IDS(...)` macro.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ObjectFamily {
