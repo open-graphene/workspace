@@ -6,3 +6,9 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 12,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub current_shuffled_witnesses: Vec<crate::types::witness::Id>,
+}

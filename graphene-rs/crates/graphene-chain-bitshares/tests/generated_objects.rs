@@ -1,6 +1,6 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, asset_dynamic_data, block_summary, buyback, committee_member,
-    dynamic_global_property, fba_accumulator, witness,
+    dynamic_global_property, fba_accumulator, witness, witness_schedule,
 };
 use serde_json::json;
 
@@ -217,6 +217,23 @@ fn deserializes_witness_object() {
     assert_eq!(object.url, "https://witness.example");
     assert_eq!(object.total_missed, -1);
     assert_eq!(object.last_confirmed_block_num, 789);
+}
+
+#[test]
+fn deserializes_witness_schedule_object() {
+    let object: witness_schedule::Object = serde_json::from_value(json!({
+        "id": "2.12.0",
+        "current_shuffled_witnesses": ["1.6.5", "1.6.6"]
+    }))
+    .expect("witness_schedule object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.12.0");
+    let witness_ids = object
+        .current_shuffled_witnesses
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>();
+    assert_eq!(witness_ids, vec!["1.6.5", "1.6.6"]);
 }
 
 #[test]
