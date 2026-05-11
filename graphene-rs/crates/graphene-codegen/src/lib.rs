@@ -534,10 +534,6 @@ pub fn map_operation_field_for_operation(
 ) -> OperationFieldClassification {
     let normalized = normalize_cpp_type(&field.cpp_type);
 
-    if let Some(reason) = m003_deferred_operation_reason(operation_name, &field.name, &normalized) {
-        return OperationFieldClassification::Unsupported { reason };
-    }
-
     if is_approved_operation_raw_fallback(operation_name, &field.name, &normalized) {
         return OperationFieldClassification::ApprovedRawFallback {
             rust_type: approved_operation_raw_fallback_type(&field.name, &normalized),
@@ -582,6 +578,13 @@ fn map_operation_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "block_id_type" => return Some("String".to_owned()),
         "chain_id_type" => return Some("String".to_owned()),
         "transaction_id_type" => return Some("String".to_owned()),
+        "blind_factor_type" => return Some("graphene_protocol::BlindFactor".to_owned()),
+        "blind_input" => return Some("graphene_protocol::BlindInput".to_owned()),
+        "blind_output" => return Some("graphene_protocol::BlindOutput".to_owned()),
+        "range_proof_type" => return Some("graphene_protocol::RangeProof".to_owned()),
+        "commitment_type" | "fc::ecc::commitment_type" => {
+            return Some("graphene_protocol::Commitment".to_owned());
+        }
         "htlc_hash" => return Some("graphene_protocol::HtlcHash".to_owned()),
         "chain_parameters" => return Some("graphene_protocol::ChainParameters".to_owned()),
         "vesting_policy_initializer" => {
@@ -669,21 +672,6 @@ fn map_operation_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
     }
 
     None
-}
-
-fn m003_deferred_operation_reason(
-    operation_name: &str,
-    field_name: &str,
-    cpp_type: &str,
-) -> Option<String> {
-    let reason = match (operation_name, field_name, cpp_type) {
-        (_, _, "blind_factor_type" | "vector<blind_input>" | "vector<blind_output>") => {
-            "M003 confidential boundary: blind transfer input/output/factor support is deferred"
-        }
-        _ => return None,
-    };
-
-    Some(reason.to_owned())
 }
 
 fn is_approved_operation_raw_fallback(
@@ -2962,7 +2950,7 @@ mod tests {
     }
 
     #[test]
-    fn operation_mapper_reports_m003_deferred_crypto_and_confidential_boundaries() {
+    fn operation_mapper_types_htlc_and_confidential_boundaries() {
         for (operation_name, field_name) in [
             ("htlc_create_operation", "preimage_hash"),
             ("htlc_redeemed_operation", "htlc_preimage_hash"),
@@ -3002,45 +2990,47 @@ mod tests {
             "htlc_create_operation.extensions should use the approved raw fallback boundary"
         );
 
-        for (operation_name, field_name, cpp_type, reason_markers) in [
+        for (operation_name, field_name, cpp_type, rust_type) in [
             (
                 "transfer_to_blind_operation",
                 "blinding_factor",
                 "blind_factor_type",
-                ["M003", "confidential", "blind"],
+                "graphene_protocol::BlindFactor",
             ),
             (
                 "blind_transfer_operation",
                 "inputs",
                 "vector<blind_input>",
-                ["M003", "confidential", "blind"],
+                "Vec<graphene_protocol::BlindInput>",
             ),
             (
                 "blind_transfer_operation",
                 "outputs",
                 "vector<blind_output>",
-                ["M003", "confidential", "blind"],
+                "Vec<graphene_protocol::BlindOutput>",
+            ),
+            (
+                "transfer_from_blind_operation",
+                "inputs",
+                "vector<blind_input>",
+                "Vec<graphene_protocol::BlindInput>",
             ),
         ] {
-            let classification = map_operation_field_for_operation(
-                operation_name,
-                &OperationField {
-                    name: field_name.to_owned(),
-                    cpp_type: cpp_type.to_owned(),
-                    source_file: "m003.hpp".to_owned(),
-                    source_line: 1,
+            assert_eq!(
+                map_operation_field_for_operation(
+                    operation_name,
+                    &OperationField {
+                        name: field_name.to_owned(),
+                        cpp_type: cpp_type.to_owned(),
+                        source_file: "confidential.hpp".to_owned(),
+                        source_line: 1,
+                    },
+                ),
+                OperationFieldClassification::Typed {
+                    rust_type: rust_type.to_owned(),
                 },
+                "{operation_name}.{field_name} should map {cpp_type} to {rust_type}"
             );
-
-            let OperationFieldClassification::Unsupported { reason } = classification else {
-                panic!("{operation_name}.{field_name} should remain unsupported");
-            };
-            for marker in reason_markers {
-                assert!(
-                    reason.contains(marker),
-                    "reason {reason:?} should mention {marker:?} for {operation_name}.{field_name}"
-                );
-            }
         }
     }
 

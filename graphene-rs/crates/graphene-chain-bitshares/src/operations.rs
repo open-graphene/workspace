@@ -375,6 +375,31 @@ pub struct OverrideTransferOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct TransferToBlindOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub from: graphene_protocol::ObjectId,
+    pub blinding_factor: graphene_protocol::BlindFactor,
+    pub outputs: Vec<graphene_protocol::BlindOutput>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct BlindTransferOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub inputs: Vec<graphene_protocol::BlindInput>,
+    pub outputs: Vec<graphene_protocol::BlindOutput>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct TransferFromBlindOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub to: graphene_protocol::ObjectId,
+    pub blinding_factor: graphene_protocol::BlindFactor,
+    pub inputs: Vec<graphene_protocol::BlindInput>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct AssetSettleCancelOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub settlement: graphene_protocol::ObjectId,
@@ -800,6 +825,9 @@ pub enum Operation {
     Assert(AssertOperation),
     BalanceClaim(BalanceClaimOperation),
     OverrideTransfer(OverrideTransferOperation),
+    TransferToBlind(TransferToBlindOperation),
+    BlindTransfer(BlindTransferOperation),
+    TransferFromBlind(TransferFromBlindOperation),
     AssetSettleCancel(AssetSettleCancelOperation),
     AssetClaimFees(AssetClaimFeesOperation),
     FbaDistribute(FbaDistributeOperation),
@@ -884,6 +912,9 @@ impl Operation {
             Self::Assert(_) => 36,
             Self::BalanceClaim(_) => 37,
             Self::OverrideTransfer(_) => 38,
+            Self::TransferToBlind(_) => 39,
+            Self::BlindTransfer(_) => 40,
+            Self::TransferFromBlind(_) => 41,
             Self::AssetSettleCancel(_) => 42,
             Self::AssetClaimFees(_) => 43,
             Self::FbaDistribute(_) => 44,
@@ -1071,6 +1102,15 @@ impl<'de> serde::Deserialize<'de> for Operation {
                 .map_err(serde::de::Error::custom),
             38 => serde_json::from_value(payload)
                 .map(Self::OverrideTransfer)
+                .map_err(serde::de::Error::custom),
+            39 => serde_json::from_value(payload)
+                .map(Self::TransferToBlind)
+                .map_err(serde::de::Error::custom),
+            40 => serde_json::from_value(payload)
+                .map(Self::BlindTransfer)
+                .map_err(serde::de::Error::custom),
+            41 => serde_json::from_value(payload)
+                .map(Self::TransferFromBlind)
                 .map_err(serde::de::Error::custom),
             42 => serde_json::from_value(payload)
                 .map(Self::AssetSettleCancel)

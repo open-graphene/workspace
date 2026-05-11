@@ -11,6 +11,7 @@ pub mod asset_options;
 pub mod authority;
 pub mod budget;
 pub mod chain_parameters;
+pub mod confidential;
 pub mod htlc;
 pub mod market;
 pub mod object_id;
@@ -37,6 +38,9 @@ pub use budget::BudgetRecord;
 pub use chain_parameters::{
     ChainParameterExtensions, ChainParameters, CustomAuthorityOptions, HtlcOptions,
     ImmutableChainParameters,
+};
+pub use confidential::{
+    BlindFactor, BlindInput, BlindOutput, Commitment, PublicKey, RangeProof, StealthConfirmation,
 };
 pub use htlc::{HtlcConditions, HtlcHash, HtlcHashLock, HtlcTimeLock, HtlcTransfer, MemoData};
 pub use market::{CreateTakeProfitOrderAction, LimitOrderAutoAction};

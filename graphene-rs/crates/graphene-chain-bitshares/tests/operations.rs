@@ -10,7 +10,7 @@ use graphene_protocol::{
     HtlcHash, LimitOrderAutoAction, Predicate, VestingPolicyInitializer, WorkerInitializer,
 };
 use serde_json::{Value, json};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 fn transfer_payload_json() -> Value {
     json!({
@@ -305,6 +305,71 @@ fn htlc_refund_payload_json() -> Value {
         "htlc_amount": { "amount": "4567", "asset_id": "1.3.9" },
         "htlc_preimage_hash": [1_u64, "sha1-fixture-hash"],
         "htlc_preimage_size": 20_u16
+    })
+}
+
+fn blind_owner_authority_json(account_id: &str) -> Value {
+    json!({
+        "weight_threshold": 1_u32,
+        "account_auths": [[account_id, 1_u16]],
+        "key_auths": [],
+        "address_auths": []
+    })
+}
+
+fn transfer_to_blind_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 138_i64, "asset_id": "1.3.0" },
+        "amount": { "amount": "12345", "asset_id": "1.3.9" },
+        "from": "1.2.17",
+        "blinding_factor": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "outputs": [
+            {
+                "commitment": "02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "range_proof": [1_u8, 2_u8, 3_u8, 4_u8],
+                "owner": blind_owner_authority_json("1.2.17"),
+                "stealth_memo": {
+                    "one_time_key": "BTS1111111111111111111111111111111114T1Anm",
+                    "to": null,
+                    "encrypted_memo": [9_u8, 8_u8, 7_u8]
+                }
+            }
+        ]
+    })
+}
+
+fn blind_transfer_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 139_i64, "asset_id": "1.3.0" },
+        "inputs": [
+            {
+                "commitment": "03bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "owner": blind_owner_authority_json("1.2.17")
+            }
+        ],
+        "outputs": [
+            {
+                "commitment": "02cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "range_proof": [5_u8, 6_u8, 7_u8],
+                "owner": blind_owner_authority_json("1.2.18"),
+                "stealth_memo": null
+            }
+        ]
+    })
+}
+
+fn transfer_from_blind_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 140_i64, "asset_id": "1.3.0" },
+        "amount": { "amount": "67890", "asset_id": "1.3.9" },
+        "to": "1.2.18",
+        "blinding_factor": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "inputs": [
+            {
+                "commitment": "04dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "owner": blind_owner_authority_json("1.2.18")
+            }
+        ]
     })
 }
 
@@ -1240,64 +1305,73 @@ fn operation_enum_preserves_unknown_payloads_as_unsupported() {
 }
 
 #[test]
-fn operation_enum_preserves_deferred_blind_confidential_payloads_as_unsupported() {
-    for (tag, payload) in [
-        (
-            39_u16,
-            json!({
-                "inputs": [
-                    {
-                        "commitment": "02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                        "owner": "BTS8HF8Mtr9TjW1LxQcyP9KWf3BMaj2PCt6HN9YRzysjmrTjbeiE5"
-                    }
-                ],
-                "outputs": [
-                    {
-                        "commitment": "03bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-                        "range_proof": "synthetic-range-proof",
-                        "memo": { "message": "blind transfer deferred fallback" }
-                    }
-                ],
-                "blinding_factor": "000102030405060708090a0b0c0d0e0f",
-                "deferred_marker": "blind_transfer_operation"
-            }),
-        ),
-        (
-            40_u16,
-            json!({
-                "fee": { "amount": 0_i64, "asset_id": "1.3.0" },
-                "from": "1.2.17",
-                "amount": { "amount": "12345", "asset_id": "1.3.9" },
-                "outputs": [
-                    {
-                        "owner": "BTS8HF8Mtr9TjW1LxQcyP9KWf3BMaj2PCt6HN9YRzysjmrTjbeiE5",
-                        "stealth_memo": [0_u64, { "nonce": "tag-40", "payload": [1_u8, 2_u8, 3_u8] }]
-                    }
-                ],
-                "deferred_marker": "transfer_to_blind_operation"
-            }),
-        ),
-        (
-            41_u16,
-            json!({
-                "fee": { "amount": 1_i64, "asset_id": "1.3.0" },
-                "to": "1.2.18",
-                "amount": { "amount": "67890", "asset_id": "1.3.9" },
-                "inputs": [
-                    {
-                        "commitment": "04cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-                        "authority": { "weight_threshold": 1_u32, "key_auths": [], "account_auths": [], "address_auths": [] }
-                    }
-                ],
-                "deferred_marker": "transfer_from_blind_operation"
-            }),
-        ),
-    ] {
-        let operation: Operation = serde_json::from_value(json!([tag, payload.clone()]))
-            .expect("deferred blind/confidential operation should preserve raw payload");
-        assert_eq!(operation.tag(), tag);
-        assert!(!operation.is_typed());
-        assert_eq!(operation, Operation::Unsupported { tag, payload });
+fn operations_enum_deserializes_blind_confidential_tags_as_typed() {
+    let transfer_to_blind: Operation =
+        serde_json::from_value(json!([39_u64, transfer_to_blind_payload_json()]))
+            .expect("tag 39 transfer_to_blind should deserialize through typed enum");
+    assert_eq!(transfer_to_blind.tag(), 39);
+    assert!(transfer_to_blind.is_typed());
+    match transfer_to_blind {
+        Operation::TransferToBlind(operation) => {
+            assert_eq!(operation.fee.amount, 138);
+            assert_eq!(operation.amount.amount, 12_345);
+            assert_eq!(operation.from.to_string(), "1.2.17");
+            assert_eq!(
+                operation.blinding_factor,
+                "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+            );
+            assert_eq!(operation.outputs.len(), 1);
+            assert_eq!(operation.outputs[0].range_proof, vec![1, 2, 3, 4]);
+            assert_eq!(operation.outputs[0].owner.weight_threshold, 1);
+            let memo = operation.outputs[0]
+                .stealth_memo
+                .as_ref()
+                .expect("stealth memo should be typed");
+            assert_eq!(memo.encrypted_memo, vec![9, 8, 7]);
+        }
+        other => panic!("unexpected operation variant for tag 39: {other:?}"),
+    }
+
+    let blind_transfer: Operation =
+        serde_json::from_value(json!([40_u64, blind_transfer_payload_json()]))
+            .expect("tag 40 blind_transfer should deserialize through typed enum");
+    assert_eq!(blind_transfer.tag(), 40);
+    assert!(blind_transfer.is_typed());
+    match blind_transfer {
+        Operation::BlindTransfer(operation) => {
+            assert_eq!(operation.fee.amount, 139);
+            assert_eq!(
+                operation.inputs[0].owner.account_auths[0].0.to_string(),
+                "1.2.17"
+            );
+            assert_eq!(
+                operation.inputs[0].commitment,
+                "03bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            );
+            assert_eq!(operation.outputs[0].range_proof, vec![5, 6, 7]);
+            assert!(operation.outputs[0].stealth_memo.is_none());
+        }
+        other => panic!("unexpected operation variant for tag 40: {other:?}"),
+    }
+
+    let transfer_from_blind: Operation =
+        serde_json::from_value(json!([41_u64, transfer_from_blind_payload_json()]))
+            .expect("tag 41 transfer_from_blind should deserialize through typed enum");
+    assert_eq!(transfer_from_blind.tag(), 41);
+    assert!(transfer_from_blind.is_typed());
+    match transfer_from_blind {
+        Operation::TransferFromBlind(operation) => {
+            assert_eq!(operation.fee.amount, 140);
+            assert_eq!(operation.amount.amount, 67_890);
+            assert_eq!(operation.to.to_string(), "1.2.18");
+            assert_eq!(
+                operation.blinding_factor,
+                "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+            );
+            assert_eq!(operation.inputs.len(), 1);
+            assert_eq!(operation.inputs[0].owner.weight_threshold, 1);
+        }
+        other => panic!("unexpected operation variant for tag 41: {other:?}"),
     }
 }
 
@@ -1739,57 +1813,6 @@ fn parse_operation_report_rows(report: &str) -> Result<Vec<OperationReportRow>, 
     Ok(rows)
 }
 
-fn expected_m003_unsupported_rows() -> BTreeSet<(String, String, String, String)> {
-    [
-        (
-            "transfer_to_blind_operation",
-            "39",
-            "blinding_factor",
-            "blind_factor_type",
-        ),
-        (
-            "transfer_to_blind_operation",
-            "39",
-            "outputs",
-            "vector<blind_output>",
-        ),
-        (
-            "blind_transfer_operation",
-            "40",
-            "inputs",
-            "vector<blind_input>",
-        ),
-        (
-            "blind_transfer_operation",
-            "40",
-            "outputs",
-            "vector<blind_output>",
-        ),
-        (
-            "transfer_from_blind_operation",
-            "41",
-            "blinding_factor",
-            "blind_factor_type",
-        ),
-        (
-            "transfer_from_blind_operation",
-            "41",
-            "inputs",
-            "vector<blind_input>",
-        ),
-    ]
-    .into_iter()
-    .map(|(operation, tag, field, cpp_type)| {
-        (
-            operation.to_string(),
-            tag.to_string(),
-            field.to_string(),
-            cpp_type.to_string(),
-        )
-    })
-    .collect()
-}
-
 fn duplicate_unsupported_row_details(rows: &[&OperationReportRow]) -> Vec<String> {
     let mut rows_by_key: BTreeMap<_, Vec<_>> = BTreeMap::new();
     for row in rows {
@@ -1813,7 +1836,7 @@ fn duplicate_unsupported_row_details(rows: &[&OperationReportRow]) -> Vec<String
 }
 
 #[test]
-fn operation_report_only_leaves_m003_deferred_unsupported_rows() {
+fn operation_report_has_no_unsupported_rows() {
     let report = include_str!("../src/operation_model_skips.md");
     let rows = parse_operation_report_rows(report).expect("operation report table should parse");
     let unsupported_rows: Vec<_> = rows
@@ -1827,36 +1850,14 @@ fn operation_report_only_leaves_m003_deferred_unsupported_rows() {
         duplicate_rows.join("\n")
     );
 
-    let actual: BTreeSet<_> = unsupported_rows.iter().map(|row| row.key()).collect();
-    let expected = expected_m003_unsupported_rows();
-
-    let unexpected: Vec<_> = actual
-        .difference(&expected)
-        .map(|key| {
-            unsupported_rows
-                .iter()
-                .find(|row| row.key() == *key)
-                .map(|row| row.detail())
-                .unwrap_or_else(|| {
-                    format!(
-                        "operation={} tag={} field={} cpp_type={}",
-                        key.0, key.1, key.2, key.3
-                    )
-                })
-        })
-        .collect();
-    let missing: Vec<_> = expected
-        .difference(&actual)
-        .map(|(operation, tag, field, cpp_type)| {
-            format!("operation={operation} tag={tag} field={field} cpp_type={cpp_type}")
-        })
-        .collect();
-
+    let unexpected = unsupported_rows
+        .iter()
+        .map(|row| row.detail())
+        .collect::<Vec<_>>();
     assert!(
-        unexpected.is_empty() && missing.is_empty(),
-        "operation_model_skips.md unsupported boundary mismatch\nunexpected unsupported rows:\n{}\nmissing expected M003 rows:\n{}",
-        unexpected.join("\n"),
-        missing.join("\n")
+        unexpected.is_empty(),
+        "operation_model_skips.md should have no unsupported rows\n{}",
+        unexpected.join("\n")
     );
 }
 

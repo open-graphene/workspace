@@ -19,14 +19,7 @@ import sys
 from pathlib import Path
 
 REPORT_PATH = Path(sys.argv[1])
-EXPECTED_UNSUPPORTED = {
-    ("transfer_to_blind_operation", "39", "blinding_factor", "blind_factor_type"),
-    ("transfer_to_blind_operation", "39", "outputs", "vector<blind_output>"),
-    ("blind_transfer_operation", "40", "inputs", "vector<blind_input>"),
-    ("blind_transfer_operation", "40", "outputs", "vector<blind_output>"),
-    ("transfer_from_blind_operation", "41", "blinding_factor", "blind_factor_type"),
-    ("transfer_from_blind_operation", "41", "inputs", "vector<blind_input>"),
-}
+EXPECTED_UNSUPPORTED = set()
 
 
 def strip_code(value: str) -> str:
@@ -112,12 +105,12 @@ if unexpected or missing:
             else:
                 print(f"  - operation={key[0]} tag={key[1]} field={key[2]} cpp_type={key[3]}", file=sys.stderr)
     if missing:
-        print("Missing expected M003-deferred unsupported rows:", file=sys.stderr)
+        print("Missing expected unsupported rows:", file=sys.stderr)
         for operation, tag, field, cpp_type in missing:
             print(f"  - operation={operation} tag={tag} field={field} cpp_type={cpp_type}", file=sys.stderr)
     sys.exit(1)
 
-print(f"operation_model_skips.md unsupported boundary matches {len(expected)} M003-deferred rows")
+print("operation_model_skips.md has no unsupported rows")
 PY
 
 diff -u "$SNAPSHOT_DIR/operation_variants.rs" "$CRATE_DIR/src/operation_variants.rs"
