@@ -1,7 +1,7 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, asset_dynamic_data, blinded_balance, block_summary, buyback,
-    committee_member, dynamic_global_property, fba_accumulator, withdraw_permission, witness,
-    witness_schedule,
+    chain_property, committee_member, dynamic_global_property, fba_accumulator,
+    withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
 
@@ -113,6 +113,29 @@ fn deserializes_buyback_object() {
 
     assert_eq!(object.id.to_string(), "2.15.4");
     assert_eq!(object.asset_to_buy.to_string(), "1.3.7");
+}
+
+#[test]
+fn deserializes_chain_property_object() {
+    let chain_id = "4018d7844c78f6a9f816ed8e2bde14b0df7c6a7ac8f11b6f3b5d6f5e9c8a7b6c";
+    let object: chain_property::Object = serde_json::from_value(json!({
+        "id": "2.11.0",
+        "chain_id": chain_id,
+        "immutable_parameters": {
+            "min_committee_member_count": 7_u16,
+            "min_witness_count": 11_u16,
+            "num_special_accounts": 100_u32,
+            "num_special_assets": 200_u32
+        }
+    }))
+    .expect("chain_property object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.11.0");
+    assert_eq!(object.chain_id, chain_id);
+    assert_eq!(object.immutable_parameters.min_committee_member_count, 7);
+    assert_eq!(object.immutable_parameters.min_witness_count, 11);
+    assert_eq!(object.immutable_parameters.num_special_accounts, 100);
+    assert_eq!(object.immutable_parameters.num_special_assets, 200);
 }
 
 #[test]

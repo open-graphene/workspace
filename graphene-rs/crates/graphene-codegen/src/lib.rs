@@ -164,6 +164,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "uint64_t" => return Some("u64".to_owned()),
         "int64_t" | "share_type" => return Some("i64".to_owned()),
         "block_id_type" => return Some("String".to_owned()),
+        "chain_id_type" => return Some("String".to_owned()),
         "commitment_type" | "fc::ecc::commitment_type" => return Some("String".to_owned()),
         "public_key_type" => return Some("String".to_owned()),
         "fc::uint128_t" | "uint128_t" => return Some("u128".to_owned()),
@@ -171,6 +172,9 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "vote_id_type" => return Some("String".to_owned()),
         "authority" => {
             return Some("graphene_protocol::Authority<crate::types::account::Id>".to_owned());
+        }
+        "immutable_chain_parameters" => {
+            return Some("graphene_protocol::ImmutableChainParameters".to_owned());
         }
         "account_options" => return Some("Options".to_owned()),
         _ => {}
@@ -848,6 +852,10 @@ mod tests {
             Some("String".to_owned())
         );
         assert_eq!(
+            map_cpp_type_to_rust("chain_id_type"),
+            Some("String".to_owned())
+        );
+        assert_eq!(
             map_cpp_type_to_rust("fc::ecc::commitment_type"),
             Some("String".to_owned())
         );
@@ -866,6 +874,10 @@ mod tests {
         assert_eq!(
             map_cpp_type_to_rust("authority"),
             Some("graphene_protocol::Authority<crate::types::account::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("immutable_chain_parameters"),
+            Some("graphene_protocol::ImmutableChainParameters".to_owned())
         );
         assert_eq!(
             map_cpp_type_to_rust("account_id_type"),
