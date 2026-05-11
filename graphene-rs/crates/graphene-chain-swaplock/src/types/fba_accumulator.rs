@@ -6,3 +6,10 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 16,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub accumulated_fba_fees: i64,
+    pub designated_asset: Option<crate::types::asset::Id>,
+}

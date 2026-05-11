@@ -6,3 +6,12 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 3,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub current_supply: i64,
+    pub accumulated_fees: i64,
+    pub accumulated_collateral_fees: i64,
+    pub fee_pool: i64,
+}

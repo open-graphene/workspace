@@ -15,6 +15,33 @@ pub struct ObjectFamily {
     pub name: String,
 }
 
+/// One C++ field declaration discovered for a reflected Graphene object.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct CppField {
+    /// Field name as used by FC reflection and RPC JSON.
+    pub name: String,
+    /// C++ source type, normalized but not resolved.
+    pub cpp_type: String,
+}
+
+/// One Rust field after applying the generator's C++ type mapping rules.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RustField {
+    /// Rust field name.
+    pub name: String,
+    /// Rust type expression to emit.
+    pub rust_type: String,
+}
+
+/// One FC-reflected C++ type and its reflected field order.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ReflectedObject {
+    /// Fully qualified C++ type name, for example `graphene::chain::account_balance_object`.
+    pub cpp_type: String,
+    /// Field names in FC reflection order.
+    pub fields: Vec<String>,
+}
+
 /// Parse all `GRAPHENE_DEFINE_IDS(...)` object families from C++ source text.
 ///
 /// This is the first generator boundary: it extracts only facts needed by
@@ -87,6 +114,329 @@ pub fn render_types_mod(families: &[ObjectFamily]) -> String {
     }
 
     output
+}
+
+/// Parse C++ field declarations for `class_name`, keeping only fields listed by FC reflection.
+///
+/// This is intentionally narrower than a general C++ parser. It is the first struct-generation
+/// boundary: FC reflection decides which field names matter, and this function only recovers their
+/// source types from the class declaration.
+pub fn parse_reflected_class_fields(
+    header_source: &str,
+    class_name: &str,
+    reflected_fields: &[&str],
+) -> Result<Vec<CppField>, String> {
+    let body = class_body(header_source, class_name)
+        .ok_or_else(|| format!("could not find C++ class body for {class_name}"))?;
+    let declarations = parse_top_level_declarations(body);
+    let mut fields = Vec::new();
+
+    for reflected_field in reflected_fields {
+        let Some(cpp_type) = declarations
+            .iter()
+            .find(|field| field.name == *reflected_field)
+            .map(|field| field.cpp_type.clone())
+        else {
+            return Err(format!(
+                "could not find reflected field {class_name}::{reflected_field} in class declaration"
+            ));
+        };
+        fields.push(CppField {
+            name: (*reflected_field).to_owned(),
+            cpp_type,
+        });
+    }
+
+    Ok(fields)
+}
+
+/// Map a Graphene C++ field type into the Rust type expression used by generated structs.
+pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
+    let normalized = normalize_cpp_type(cpp_type);
+
+    match normalized.as_str() {
+        "string" => return Some("String".to_owned()),
+        "bool" => return Some("bool".to_owned()),
+        "uint8_t" => return Some("u8".to_owned()),
+        "uint16_t" => return Some("u16".to_owned()),
+        "uint32_t" => return Some("u32".to_owned()),
+        "uint64_t" => return Some("u64".to_owned()),
+        "int64_t" | "share_type" => return Some("i64".to_owned()),
+        "time_point_sec" => return Some("graphene_protocol::TimePointSec".to_owned()),
+        "authority" => return Some("Authority".to_owned()),
+        "account_options" => return Some("Options".to_owned()),
+        _ => {}
+    }
+
+    if let Some(inner) = template_argument(&normalized, "optional") {
+        return map_cpp_type_to_rust(inner).map(|rust_type| format!("Option<{rust_type}>"));
+    }
+
+    for container in ["flat_set", "set", "vector"] {
+        if let Some(inner) = template_argument(&normalized, container) {
+            return map_cpp_type_to_rust(inner).map(|rust_type| format!("Vec<{rust_type}>"));
+        }
+    }
+
+    normalized
+        .strip_suffix("_id_type")
+        .map(|family| format!("crate::types::{family}::Id"))
+}
+
+/// Apply C++ type mapping to parsed reflected fields.
+pub fn map_fields_to_rust(fields: &[CppField]) -> Result<Vec<RustField>, String> {
+    fields
+        .iter()
+        .map(|field| {
+            let Some(rust_type) = map_cpp_type_to_rust(&field.cpp_type) else {
+                return Err(format!(
+                    "no Rust type mapping for C++ field {}: {}",
+                    field.name, field.cpp_type
+                ));
+            };
+            Ok(RustField {
+                name: field.name.clone(),
+                rust_type,
+            })
+        })
+        .collect()
+}
+
+/// Render a generated Rust `Object` struct from already-mapped fields.
+///
+/// The generated struct always includes `id: Id` first. Other fields preserve FC reflection order.
+pub fn render_object_struct(fields: &[RustField]) -> String {
+    let mut output = String::new();
+    output.push_str("#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]\n");
+    output.push_str("pub struct Object {\n");
+    output.push_str("    pub id: Id,\n");
+
+    for field in fields {
+        if field.name == "id" {
+            continue;
+        }
+        output.push_str(&format!("    pub {}: {},\n", field.name, field.rust_type));
+    }
+
+    output.push_str("}\n");
+    output
+}
+
+/// Parse `FC_REFLECT...` macros from C++ source text.
+///
+/// This parser uses FC reflection as the source of field order. It intentionally does not infer
+/// fields from class declarations; use [`parse_reflected_class_fields`] afterwards to recover C++
+/// source types for these reflected names.
+pub fn parse_reflected_objects(source: &str) -> Result<Vec<ReflectedObject>, String> {
+    let mut reflected_objects = Vec::new();
+    let mut remaining = source;
+
+    while let Some(relative_start) = remaining.find("FC_REFLECT") {
+        remaining = &remaining[relative_start..];
+        let Some(open_paren) = remaining.find('(') else {
+            break;
+        };
+        let macro_name = remaining[..open_paren].trim();
+        let after_open = &remaining[open_paren + 1..];
+        let Some((body, consumed)) = take_balanced_parentheses_body(after_open) else {
+            break;
+        };
+
+        if let Some(reflected_object) = parse_reflect_body(macro_name, body)? {
+            reflected_objects.push(reflected_object);
+        }
+        remaining = &after_open[consumed..];
+    }
+
+    Ok(reflected_objects)
+}
+
+fn parse_reflect_body(macro_name: &str, body: &str) -> Result<Option<ReflectedObject>, String> {
+    let Some(first_comma) = find_next_code_comma(body, 0) else {
+        return Ok(None);
+    };
+    let cpp_type = body[..first_comma].trim();
+    if !cpp_type.starts_with("graphene::") {
+        return Ok(None);
+    }
+
+    let fields_source = if macro_name.contains("DERIVED") {
+        let Some(second_comma) = find_next_code_comma(body, first_comma + 1) else {
+            return Err(format!(
+                "{macro_name} for {cpp_type} is missing reflected field list"
+            ));
+        };
+        &body[second_comma + 1..]
+    } else {
+        &body[first_comma + 1..]
+    };
+
+    Ok(Some(ReflectedObject {
+        cpp_type: normalize_cpp_type(cpp_type),
+        fields: parse_reflected_field_names(fields_source),
+    }))
+}
+
+fn parse_reflected_field_names(source: &str) -> Vec<String> {
+    let mut fields = Vec::new();
+    let mut index = 0usize;
+    let bytes = source.as_bytes();
+
+    while index < bytes.len() {
+        if bytes[index] == b'(' {
+            if let Some(close_offset) = source[index + 1..].find(')') {
+                let name = source[index + 1..index + 1 + close_offset].trim();
+                if is_family_name(name) {
+                    fields.push(name.to_owned());
+                }
+                index += close_offset + 2;
+                continue;
+            }
+            break;
+        }
+        index += 1;
+    }
+
+    fields
+}
+
+fn class_body<'a>(source: &'a str, class_name: &str) -> Option<&'a str> {
+    let class_marker = format!("class {class_name}");
+    let class_start = source.find(&class_marker)?;
+    let after_class = &source[class_start + class_marker.len()..];
+    let open_brace = after_class.find('{')?;
+    let after_open = &after_class[open_brace + 1..];
+    take_balanced_brace_body(after_open).map(|(body, _consumed)| body)
+}
+
+fn take_balanced_brace_body(source_after_open: &str) -> Option<(&str, usize)> {
+    let mut depth = 1usize;
+
+    for (index, character) in source_after_open.char_indices() {
+        match character {
+            '{' => depth += 1,
+            '}' => {
+                depth -= 1;
+                if depth == 0 {
+                    return Some((&source_after_open[..index], index + 1));
+                }
+            }
+            _ => {}
+        }
+    }
+
+    None
+}
+
+fn parse_top_level_declarations(class_body: &str) -> Vec<CppField> {
+    let class_body = strip_cpp_comments(class_body);
+    let mut declarations = Vec::new();
+    let mut statement_start = 0usize;
+    let mut angle_depth = 0usize;
+    let mut paren_depth = 0usize;
+    let mut brace_depth = 0usize;
+
+    for (index, character) in class_body.char_indices() {
+        match character {
+            '<' if brace_depth == 0 && paren_depth == 0 => angle_depth += 1,
+            '>' if angle_depth > 0 && brace_depth == 0 && paren_depth == 0 => angle_depth -= 1,
+            '(' if brace_depth == 0 => paren_depth += 1,
+            ')' if paren_depth > 0 && brace_depth == 0 => paren_depth -= 1,
+            '{' => brace_depth += 1,
+            '}' if brace_depth > 0 => brace_depth -= 1,
+            ';' if angle_depth == 0 && paren_depth == 0 && brace_depth == 0 => {
+                let statement = class_body[statement_start..index].trim();
+                if let Some(field) = parse_field_declaration(statement) {
+                    declarations.push(field);
+                }
+                statement_start = index + 1;
+            }
+            _ => {}
+        }
+    }
+
+    declarations
+}
+
+fn parse_field_declaration(statement: &str) -> Option<CppField> {
+    let declaration = statement
+        .rsplit([':', '}'])
+        .next()
+        .unwrap_or(statement)
+        .trim();
+    if declaration.is_empty()
+        || declaration.starts_with("static ")
+        || declaration.starts_with("typedef ")
+        || declaration.starts_with("using ")
+        || declaration.starts_with("struct ")
+        || declaration.starts_with("class ")
+    {
+        return None;
+    }
+
+    let declaration_without_initializer = declaration.split('=').next()?.trim();
+    if declaration_without_initializer.contains('(') {
+        return None;
+    }
+
+    let mut parts = declaration_without_initializer.rsplitn(2, char::is_whitespace);
+    let name = parts.next()?.trim();
+    let cpp_type = parts.next()?.trim();
+    if !is_family_name(name) || cpp_type.is_empty() {
+        return None;
+    }
+
+    Some(CppField {
+        name: name.to_owned(),
+        cpp_type: normalize_cpp_type(cpp_type),
+    })
+}
+
+fn strip_cpp_comments(source: &str) -> String {
+    let mut output = String::with_capacity(source.len());
+    let mut index = 0usize;
+
+    while index < source.len() {
+        if source[index..].starts_with("/*") {
+            if let Some(comment_end) = source[index + 2..].find("*/") {
+                index += comment_end + 4;
+                output.push(' ');
+                continue;
+            }
+        }
+
+        if source[index..].starts_with("//") {
+            if let Some(line_end) = source[index + 2..].find('\n') {
+                index += line_end + 2;
+                output.push('\n');
+                continue;
+            }
+            break;
+        }
+
+        let character = source[index..].chars().next().expect("valid char boundary");
+        output.push(character);
+        index += character.len_utf8();
+    }
+
+    output
+}
+
+fn normalize_cpp_type(cpp_type: &str) -> String {
+    cpp_type
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .replace("< ", "<")
+        .replace(" >", ">")
+}
+
+fn template_argument<'a>(cpp_type: &'a str, template: &str) -> Option<&'a str> {
+    let prefix = format!("{template}<");
+    cpp_type
+        .strip_prefix(&prefix)
+        .and_then(|rest| rest.strip_suffix('>'))
+        .map(str::trim)
 }
 
 fn parse_define_ids_body(body: &str) -> Result<Vec<ObjectFamily>, String> {
@@ -234,7 +584,11 @@ fn take_balanced_parentheses_body(source_after_open: &str) -> Option<(&str, usiz
 
 #[cfg(test)]
 mod tests {
-    use super::{ObjectFamily, parse_object_families, render_object_id_module, render_types_mod};
+    use super::{
+        CppField, ObjectFamily, ReflectedObject, RustField, map_cpp_type_to_rust,
+        map_fields_to_rust, parse_object_families, parse_reflected_class_fields,
+        parse_reflected_objects, render_object_id_module, render_object_struct, render_types_mod,
+    };
 
     #[test]
     fn parses_protocol_object_families() {
@@ -468,6 +822,204 @@ mod tests {
                 "\n",
                 "pub mod account;\n",
                 "pub mod account_balance;\n",
+            )
+        );
+    }
+
+    #[test]
+    fn maps_basic_graphene_cpp_types_to_rust_types() {
+        assert_eq!(map_cpp_type_to_rust("bool"), Some("bool".to_owned()));
+        assert_eq!(map_cpp_type_to_rust("uint16_t"), Some("u16".to_owned()));
+        assert_eq!(map_cpp_type_to_rust("share_type"), Some("i64".to_owned()));
+        assert_eq!(
+            map_cpp_type_to_rust("account_id_type"),
+            Some("crate::types::account::Id".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("optional< flat_set<asset_id_type> >"),
+            Some("Option<Vec<crate::types::asset::Id>>".to_owned())
+        );
+    }
+
+    #[test]
+    fn parses_and_maps_account_balance_object_fields() {
+        let header = r#"
+            class account_balance_object : public abstract_object<account_balance_object,
+                                                implementation_ids, impl_account_balance_object_type>
+            {
+               public:
+                  account_id_type   owner;
+                  asset_id_type     asset_type;
+                  share_type        balance;
+                  bool              maintenance_flag = false;
+
+                  asset get_balance()const { return asset(balance, asset_type); }
+                  void  adjust_balance(const asset& delta);
+            };
+        "#;
+        let reflected_fields = ["owner", "asset_type", "balance", "maintenance_flag"];
+
+        let cpp_fields =
+            parse_reflected_class_fields(header, "account_balance_object", &reflected_fields)
+                .expect("account balance fields should parse");
+
+        assert_eq!(
+            cpp_fields,
+            vec![
+                CppField {
+                    name: "owner".to_owned(),
+                    cpp_type: "account_id_type".to_owned(),
+                },
+                CppField {
+                    name: "asset_type".to_owned(),
+                    cpp_type: "asset_id_type".to_owned(),
+                },
+                CppField {
+                    name: "balance".to_owned(),
+                    cpp_type: "share_type".to_owned(),
+                },
+                CppField {
+                    name: "maintenance_flag".to_owned(),
+                    cpp_type: "bool".to_owned(),
+                },
+            ]
+        );
+
+        assert_eq!(
+            map_fields_to_rust(&cpp_fields).expect("account balance fields should map"),
+            vec![
+                RustField {
+                    name: "owner".to_owned(),
+                    rust_type: "crate::types::account::Id".to_owned(),
+                },
+                RustField {
+                    name: "asset_type".to_owned(),
+                    rust_type: "crate::types::asset::Id".to_owned(),
+                },
+                RustField {
+                    name: "balance".to_owned(),
+                    rust_type: "i64".to_owned(),
+                },
+                RustField {
+                    name: "maintenance_flag".to_owned(),
+                    rust_type: "bool".to_owned(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn parses_fc_reflect_derived_field_order() {
+        let source = r#"
+            FC_REFLECT_DERIVED_NO_TYPENAME( graphene::chain::account_balance_object,
+                                (graphene::db::object),
+                                (owner)(asset_type)(balance)(maintenance_flag) )
+        "#;
+
+        assert_eq!(
+            parse_reflected_objects(source).expect("reflection should parse"),
+            vec![ReflectedObject {
+                cpp_type: "graphene::chain::account_balance_object".to_owned(),
+                fields: vec![
+                    "owner".to_owned(),
+                    "asset_type".to_owned(),
+                    "balance".to_owned(),
+                    "maintenance_flag".to_owned(),
+                ],
+            }]
+        );
+    }
+
+    #[test]
+    fn maps_account_balance_object_from_fc_reflection_and_header_declarations() {
+        let header = r#"
+            class account_balance_object : public abstract_object<account_balance_object,
+                                                implementation_ids, impl_account_balance_object_type>
+            {
+               public:
+                  account_id_type   owner;
+                  asset_id_type     asset_type;
+                  share_type        balance;
+                  bool              maintenance_flag = false;
+
+                  asset get_balance()const { return asset(balance, asset_type); }
+                  void  adjust_balance(const asset& delta);
+            };
+        "#;
+        let reflection = r#"
+            FC_REFLECT_DERIVED_NO_TYPENAME( graphene::chain::account_balance_object,
+                                (graphene::db::object),
+                                (owner)(asset_type)(balance)(maintenance_flag) )
+        "#;
+
+        let reflected = parse_reflected_objects(reflection)
+            .expect("reflection should parse")
+            .pop()
+            .expect("one reflected object");
+        let reflected_fields = reflected
+            .fields
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>();
+        let cpp_fields =
+            parse_reflected_class_fields(header, "account_balance_object", &reflected_fields)
+                .expect("fields should parse");
+
+        assert_eq!(
+            map_fields_to_rust(&cpp_fields).expect("fields should map"),
+            vec![
+                RustField {
+                    name: "owner".to_owned(),
+                    rust_type: "crate::types::account::Id".to_owned(),
+                },
+                RustField {
+                    name: "asset_type".to_owned(),
+                    rust_type: "crate::types::asset::Id".to_owned(),
+                },
+                RustField {
+                    name: "balance".to_owned(),
+                    rust_type: "i64".to_owned(),
+                },
+                RustField {
+                    name: "maintenance_flag".to_owned(),
+                    rust_type: "bool".to_owned(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn renders_object_struct_from_mapped_account_balance_fields() {
+        let fields = vec![
+            RustField {
+                name: "owner".to_owned(),
+                rust_type: "crate::types::account::Id".to_owned(),
+            },
+            RustField {
+                name: "asset_type".to_owned(),
+                rust_type: "crate::types::asset::Id".to_owned(),
+            },
+            RustField {
+                name: "balance".to_owned(),
+                rust_type: "i64".to_owned(),
+            },
+            RustField {
+                name: "maintenance_flag".to_owned(),
+                rust_type: "bool".to_owned(),
+            },
+        ];
+
+        assert_eq!(
+            render_object_struct(&fields),
+            concat!(
+                "#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]\n",
+                "pub struct Object {\n",
+                "    pub id: Id,\n",
+                "    pub owner: crate::types::account::Id,\n",
+                "    pub asset_type: crate::types::asset::Id,\n",
+                "    pub balance: i64,\n",
+                "    pub maintenance_flag: bool,\n",
+                "}\n",
             )
         );
     }

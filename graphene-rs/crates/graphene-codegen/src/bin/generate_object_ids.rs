@@ -1,9 +1,12 @@
+use std::collections::BTreeMap;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use graphene_codegen::{
-    ObjectFamily, parse_object_families, render_object_id_module, render_types_mod,
+    ObjectFamily, RustField, map_fields_to_rust, parse_object_families,
+    parse_reflected_class_fields, parse_reflected_objects, render_object_id_module,
+    render_object_struct, render_types_mod,
 };
 
 struct ChainConfig {
@@ -16,6 +19,34 @@ struct GeneratedFile {
     path: PathBuf,
     contents: String,
 }
+
+struct ObjectGeneration {
+    family_name: &'static str,
+    cpp_class: &'static str,
+    header_path: &'static str,
+    source_path: &'static str,
+}
+
+const GENERATED_OBJECTS: &[ObjectGeneration] = &[
+    ObjectGeneration {
+        family_name: "account_balance",
+        cpp_class: "account_balance_object",
+        header_path: "libraries/chain/include/graphene/chain/account_object.hpp",
+        source_path: "libraries/chain/account_object.cpp",
+    },
+    ObjectGeneration {
+        family_name: "asset_dynamic_data",
+        cpp_class: "asset_dynamic_data_object",
+        header_path: "libraries/chain/include/graphene/chain/asset_object.hpp",
+        source_path: "libraries/chain/asset_object.cpp",
+    },
+    ObjectGeneration {
+        family_name: "fba_accumulator",
+        cpp_class: "fba_accumulator_object",
+        header_path: "libraries/chain/include/graphene/chain/fba_object.hpp",
+        source_path: "libraries/chain/small_objects.cpp",
+    },
+];
 
 const CHAINS: &[ChainConfig] = &[
     ChainConfig {
@@ -53,7 +84,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for chain in CHAINS {
         let families = read_chain_families(&graphene_v2_root, chain)?;
-        let generated_files = render_chain_files(&graphene_v2_root, chain, &families);
+        let generated_objects = read_generated_object_fields(&graphene_v2_root, chain)?;
+        let generated_files =
+            render_chain_files(&graphene_v2_root, chain, &families, &generated_objects);
         total_files += generated_files.len();
 
         println!(
@@ -98,10 +131,61 @@ fn read_chain_families(
     Ok(parse_object_families(&source)?)
 }
 
+fn read_generated_object_fields(
+    graphene_v2_root: &Path,
+    chain: &ChainConfig,
+) -> Result<BTreeMap<String, Vec<RustField>>, Box<dyn std::error::Error>> {
+    let mut generated_objects = BTreeMap::new();
+
+    for object in GENERATED_OBJECTS {
+        if let Some(fields) = read_object_fields(graphene_v2_root, chain, object)? {
+            generated_objects.insert(object.family_name.to_owned(), fields);
+        }
+    }
+
+    Ok(generated_objects)
+}
+
+fn read_object_fields(
+    graphene_v2_root: &Path,
+    chain: &ChainConfig,
+    object: &ObjectGeneration,
+) -> Result<Option<Vec<RustField>>, Box<dyn std::error::Error>> {
+    let core_path = graphene_v2_root.join(chain.core_path);
+    let header_path = core_path.join(object.header_path);
+    let source_path = core_path.join(object.source_path);
+
+    if !header_path.exists() || !source_path.exists() {
+        return Ok(None);
+    }
+
+    let header_source = fs::read_to_string(&header_path)?;
+    let source = fs::read_to_string(&source_path)?;
+    let reflected_objects = parse_reflected_objects(&source)?;
+    let reflected_cpp_type = format!("graphene::chain::{}", object.cpp_class);
+    let Some(reflected_object) = reflected_objects
+        .iter()
+        .find(|reflected| reflected.cpp_type == reflected_cpp_type)
+    else {
+        return Ok(None);
+    };
+
+    let reflected_fields = reflected_object
+        .fields
+        .iter()
+        .map(String::as_str)
+        .collect::<Vec<_>>();
+    let cpp_fields =
+        parse_reflected_class_fields(&header_source, object.cpp_class, &reflected_fields)?;
+
+    Ok(Some(map_fields_to_rust(&cpp_fields)?))
+}
+
 fn render_chain_files(
     graphene_v2_root: &Path,
     chain: &ChainConfig,
     families: &[ObjectFamily],
+    generated_objects: &BTreeMap<String, Vec<RustField>>,
 ) -> Vec<GeneratedFile> {
     let types_path = graphene_v2_root.join(chain.crate_path).join("src/types");
     let mut files = Vec::with_capacity(families.len() + 1);
@@ -112,9 +196,15 @@ fn render_chain_files(
     });
 
     for family in families {
+        let mut contents = render_object_id_module(family);
+        if let Some(fields) = generated_objects.get(&family.name) {
+            contents.push('\n');
+            contents.push_str(&render_object_struct(fields));
+        }
+
         files.push(GeneratedFile {
             path: types_path.join(format!("{}.rs", family.name)),
-            contents: render_object_id_module(family),
+            contents,
         });
     }
 
