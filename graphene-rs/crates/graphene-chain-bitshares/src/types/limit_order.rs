@@ -12,9 +12,12 @@ pub struct Object {
     pub id: Id,
     pub expiration: String,
     pub seller: crate::types::account::Id,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub for_sale: i64,
     pub sell_price: graphene_protocol::Price<crate::types::asset::Id>,
+    #[serde(deserialize_with = "graphene_protocol::u128_from_number_or_string")]
     pub filled_amount: u128,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub deferred_fee: i64,
     pub deferred_paid_fee: graphene_protocol::Asset<crate::types::asset::Id>,
     pub is_settled_debt: bool,

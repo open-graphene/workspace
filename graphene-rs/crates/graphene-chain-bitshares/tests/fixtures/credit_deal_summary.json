@@ -1,0 +1,11 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "credit_deal_summary",
+  "object": null,
+  "object_id": null,
+  "object_id_prefix": "2.18",
+  "probe_range": [
+    0,
+    100
+  ]
+}

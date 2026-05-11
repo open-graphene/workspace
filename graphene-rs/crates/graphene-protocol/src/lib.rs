@@ -15,6 +15,7 @@ pub mod market;
 pub mod object_id;
 pub mod price;
 pub mod restriction;
+pub mod serde_utils;
 pub mod transaction;
 pub mod vesting;
 pub mod worker;
@@ -38,6 +39,9 @@ pub use market::{CreateTakeProfitOrderAction, LimitOrderAutoAction};
 pub use object_id::{ObjectId, ObjectIdParseError};
 pub use price::Price;
 pub use restriction::{Restriction, RestrictionArgument};
+pub use serde_utils::{
+    i64_from_number_or_string, u64_from_number_or_string, u128_from_number_or_string,
+};
 pub use transaction::{Operation, OperationResult, SignedTransaction, Transaction};
 pub use vesting::{CddVestingPolicy, InstantVestingPolicy, LinearVestingPolicy, VestingPolicy};
 pub use worker::{BurnWorkerType, RefundWorkerType, VestingBalanceWorkerType, WorkerType};

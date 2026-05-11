@@ -1,0 +1,107 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "account",
+  "object": {
+    "active": {
+      "account_auths": [
+        [
+          "1.2.121",
+          6
+        ],
+        [
+          "1.2.159",
+          6
+        ],
+        [
+          "1.2.282",
+          3525
+        ],
+        [
+          "1.2.12376",
+          49346
+        ],
+        [
+          "1.2.125824",
+          6
+        ],
+        [
+          "1.2.605288",
+          6
+        ],
+        [
+          "1.2.1014025",
+          3525
+        ],
+        [
+          "1.2.1120617",
+          3525
+        ],
+        [
+          "1.2.1673567",
+          379
+        ],
+        [
+          "1.2.1693380",
+          6
+        ],
+        [
+          "1.2.1791523",
+          3525
+        ]
+      ],
+      "address_auths": [],
+      "key_auths": [],
+      "weight_threshold": 31928
+    },
+    "active_special_authority": [
+      0,
+      {}
+    ],
+    "blacklisted_accounts": [],
+    "blacklisting_accounts": [
+      "1.2.979278"
+    ],
+    "creation_block_num": 0,
+    "creation_time": "2015-10-13T13:00:00",
+    "id": "1.2.0",
+    "lifetime_referrer": "1.2.0",
+    "lifetime_referrer_fee_percentage": 8000,
+    "membership_expiration_date": "2106-02-07T06:28:15",
+    "name": "committee-account",
+    "network_fee_percentage": 2000,
+    "num_committee_voted": 12398,
+    "options": {
+      "extensions": [],
+      "memo_key": "BTS1111111111111111111111111111111114T1Anm",
+      "num_committee": 0,
+      "num_witness": 0,
+      "votes": [],
+      "voting_account": "1.2.5"
+    },
+    "owner": {
+      "account_auths": [],
+      "address_auths": [],
+      "key_auths": [],
+      "weight_threshold": 1
+    },
+    "owner_special_authority": [
+      0,
+      {}
+    ],
+    "referrer": "1.2.0",
+    "referrer_rewards_percentage": 0,
+    "registrar": "1.2.0",
+    "statistics": "2.6.0",
+    "top_n_control_flags": 0,
+    "whitelisted_accounts": [],
+    "whitelisting_accounts": [
+      "1.2.1530380"
+    ]
+  },
+  "object_id": "1.2.0",
+  "object_id_prefix": "1.2",
+  "probe_range": [
+    0,
+    100
+  ]
+}

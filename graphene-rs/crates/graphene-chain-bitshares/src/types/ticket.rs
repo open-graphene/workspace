@@ -15,6 +15,7 @@ pub struct Object {
     pub amount: graphene_protocol::Asset<crate::types::asset::Id>,
     pub current_type: String,
     pub status: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub value: i64,
     pub next_auto_update_time: String,
     pub next_type_downgrade_time: String,

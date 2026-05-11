@@ -1,0 +1,14 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "special_authority",
+  "object": {
+    "account": "1.2.102338",
+    "id": "2.14.0"
+  },
+  "object_id": "2.14.0",
+  "object_id_prefix": "2.14",
+  "probe_range": [
+    0,
+    100
+  ]
+}

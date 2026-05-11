@@ -17,12 +17,17 @@ pub struct Object {
     pub next_maintenance_time: String,
     pub last_vote_tally_time: String,
     pub last_budget_time: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub witness_budget: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub total_pob: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub total_inactive: i64,
     pub accounts_registered_this_interval: u32,
     pub recently_missed_count: u32,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub current_aslot: u64,
+    #[serde(deserialize_with = "graphene_protocol::u128_from_number_or_string")]
     pub recent_slots_filled: u128,
     pub dynamic_flags: u32,
     pub last_irreversible_block_num: u32,

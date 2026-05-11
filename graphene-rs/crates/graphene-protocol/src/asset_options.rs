@@ -11,8 +11,10 @@ pub struct AdditionalAssetOptions<AccountId> {
 /// Options common to all Graphene assets.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
 pub struct AssetOptions<AccountId, AssetId> {
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub max_supply: i64,
     pub market_fee_percent: u16,
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub max_market_fee: i64,
     pub issuer_permissions: u16,
     pub flags: u16,

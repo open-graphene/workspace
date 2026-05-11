@@ -304,11 +304,25 @@ pub fn render_object_struct(fields: &[RustField]) -> String {
         if field.name == "id" {
             continue;
         }
+        if let Some(deserializer) = numeric_deserializer(&field.rust_type) {
+            output.push_str(&format!(
+                "    #[serde(deserialize_with = \"graphene_protocol::{deserializer}\")]\n"
+            ));
+        }
         output.push_str(&format!("    pub {}: {},\n", field.name, field.rust_type));
     }
 
     output.push_str("}\n");
     output
+}
+
+fn numeric_deserializer(rust_type: &str) -> Option<&'static str> {
+    match rust_type {
+        "i64" => Some("i64_from_number_or_string"),
+        "u64" => Some("u64_from_number_or_string"),
+        "u128" => Some("u128_from_number_or_string"),
+        _ => None,
+    }
 }
 
 /// Parse `FC_REFLECT...` macros from C++ source text.
@@ -1392,6 +1406,7 @@ mod tests {
                 "    pub id: Id,\n",
                 "    pub owner: crate::types::account::Id,\n",
                 "    pub asset_type: crate::types::asset::Id,\n",
+                "    #[serde(deserialize_with = \"graphene_protocol::i64_from_number_or_string\")]\n",
                 "    pub balance: i64,\n",
                 "    pub maintenance_flag: bool,\n",
                 "}\n",

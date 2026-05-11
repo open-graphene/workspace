@@ -10,9 +10,14 @@ graphene_protocol::define_object_id_type! {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub current_supply: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub confidential_supply: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub accumulated_fees: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub accumulated_collateral_fees: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub fee_pool: i64,
 }

@@ -7,6 +7,7 @@ pub struct LinearVestingPolicy {
     pub begin_timestamp: String,
     pub vesting_cliff_seconds: u32,
     pub vesting_duration_seconds: u32,
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub begin_balance: i64,
 }
 
@@ -15,6 +16,7 @@ pub struct LinearVestingPolicy {
 pub struct CddVestingPolicy {
     pub vesting_seconds: u32,
     pub start_claim: String,
+    #[serde(deserialize_with = "crate::u128_from_number_or_string")]
     pub coin_seconds_earned: u128,
     pub coin_seconds_earned_last_update: String,
 }

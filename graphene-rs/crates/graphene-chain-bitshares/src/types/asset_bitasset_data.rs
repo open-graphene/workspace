@@ -24,11 +24,15 @@ pub struct Object {
     pub current_maintenance_collateralization: graphene_protocol::Price<crate::types::asset::Id>,
     pub current_initial_collateralization: graphene_protocol::Price<crate::types::asset::Id>,
     pub options: graphene_protocol::BitAssetOptions<crate::types::asset::Id>,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub force_settled_volume: i64,
     pub is_prediction_market: bool,
     pub settlement_price: graphene_protocol::Price<crate::types::asset::Id>,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub settlement_fund: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub individual_settlement_debt: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub individual_settlement_fund: i64,
     pub asset_cer_updated: bool,
     pub feed_cer_updated: bool,

@@ -1,0 +1,15 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "fba_accumulator",
+  "object": {
+    "accumulated_fba_fees": 0,
+    "designated_asset": "1.3.743",
+    "id": "2.16.0"
+  },
+  "object_id": "2.16.0",
+  "object_id_prefix": "2.16",
+  "probe_range": [
+    0,
+    100
+  ]
+}

@@ -12,10 +12,13 @@ pub struct Object {
     pub id: Id,
     pub owner_account: crate::types::account::Id,
     pub asset_type: crate::types::asset::Id,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub total_balance: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub current_balance: i64,
     pub fee_rate: u32,
     pub max_duration_seconds: u32,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub min_deal_amount: i64,
     pub enabled: bool,
     pub auto_disable_time: String,

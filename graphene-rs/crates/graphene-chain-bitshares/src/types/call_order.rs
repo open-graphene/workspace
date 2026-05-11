@@ -11,7 +11,9 @@ graphene_protocol::define_object_id_type! {
 pub struct Object {
     pub id: Id,
     pub borrower: crate::types::account::Id,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub collateral: i64,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub debt: i64,
     pub call_price: graphene_protocol::Price<crate::types::asset::Id>,
     pub target_collateral_ratio: Option<u16>,

@@ -1,0 +1,28 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "budget_record",
+  "object": {
+    "id": "2.13.0",
+    "record": {
+      "current_supply": "253409943611989",
+      "from_accumulated_fees": 0,
+      "from_initial_reserve": "106647106598218",
+      "from_unused_witness_budget": 0,
+      "leftover_worker_funds": 0,
+      "max_supply": "360057050210207",
+      "requested_witness_budget": 142800000,
+      "supply_delta": 0,
+      "time_since_last_budget": 0,
+      "total_budget": 0,
+      "witness_budget": 0,
+      "worker_budget": 0
+    },
+    "time": "2015-10-13T14:12:24"
+  },
+  "object_id": "2.13.0",
+  "object_id_prefix": "2.13",
+  "probe_range": [
+    0,
+    100
+  ]
+}

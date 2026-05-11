@@ -1,0 +1,28 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "vesting_balance",
+  "object": {
+    "balance": {
+      "amount": 808800000,
+      "asset_id": "1.3.0"
+    },
+    "balance_type": "witness",
+    "id": "1.13.0",
+    "owner": "1.2.90744",
+    "policy": [
+      1,
+      {
+        "coin_seconds_earned": "69867360000000",
+        "coin_seconds_earned_last_update": "2015-10-19T12:59:12",
+        "start_claim": "1970-01-01T00:00:00",
+        "vesting_seconds": 86400
+      }
+    ]
+  },
+  "object_id": "1.13.0",
+  "object_id_prefix": "1.13",
+  "probe_range": [
+    0,
+    100
+  ]
+}

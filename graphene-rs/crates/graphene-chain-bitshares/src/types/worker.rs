@@ -13,11 +13,14 @@ pub struct Object {
     pub worker_account: crate::types::account::Id,
     pub work_begin_date: String,
     pub work_end_date: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub daily_pay: i64,
     pub worker: graphene_protocol::WorkerType<crate::types::vesting_balance::Id>,
     pub vote_for: String,
     pub vote_against: String,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub total_votes_for: u64,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub total_votes_against: u64,
     pub name: String,
     pub url: String,

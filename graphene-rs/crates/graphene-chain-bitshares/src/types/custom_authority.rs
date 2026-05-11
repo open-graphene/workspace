@@ -14,6 +14,7 @@ pub struct Object {
     pub enabled: bool,
     pub valid_from: String,
     pub valid_to: String,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub operation_type: u64,
     pub auth: graphene_protocol::Authority<crate::types::account::Id>,
     pub restrictions: Vec<(u16, graphene_protocol::Restriction)>,

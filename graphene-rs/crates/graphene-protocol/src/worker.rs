@@ -4,6 +4,7 @@ use std::fmt;
 /// Worker that returns all pay to reserve.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
 pub struct RefundWorkerType {
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub total_burned: i64,
 }
 
@@ -16,6 +17,7 @@ pub struct VestingBalanceWorkerType<VestingBalanceId> {
 /// Worker that permanently destroys all pay.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
 pub struct BurnWorkerType {
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub total_burned: i64,
 }
 
