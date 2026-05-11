@@ -47,6 +47,12 @@ const GENERATED_OBJECTS: &[ObjectGeneration] = &[
         source_path: "libraries/chain/asset_object.cpp",
     },
     ObjectGeneration {
+        family_name: "blinded_balance",
+        cpp_class: "blinded_balance_object",
+        header_path: "libraries/chain/include/graphene/chain/confidential_object.hpp",
+        source_path: "libraries/chain/small_objects.cpp",
+    },
+    ObjectGeneration {
         family_name: "block_summary",
         cpp_class: "block_summary_object",
         header_path: "libraries/chain/include/graphene/chain/block_summary_object.hpp",

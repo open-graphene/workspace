@@ -1,6 +1,7 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, asset_dynamic_data, block_summary, buyback, committee_member,
-    dynamic_global_property, fba_accumulator, withdraw_permission, witness, witness_schedule,
+    account_balance, account_history, asset_dynamic_data, blinded_balance, block_summary, buyback,
+    committee_member, dynamic_global_property, fba_accumulator, withdraw_permission, witness,
+    witness_schedule,
 };
 use serde_json::json;
 
@@ -59,6 +60,34 @@ fn deserializes_asset_dynamic_data_object() {
     assert_eq!(object.accumulated_fees, 10);
     assert_eq!(object.accumulated_collateral_fees, 20);
     assert_eq!(object.fee_pool, 30);
+}
+
+#[test]
+fn deserializes_blinded_balance_object() {
+    let commitment = "028f7d2c1b00000000000000000000000000000000000000000000000000000000";
+    let key = "BTS1111111111111111111111111111111114T1Anm";
+    let address = "BTSFN9r6VYzBK8EKtMewfNbfiGCr56pHDBFi";
+    let object: blinded_balance::Object = serde_json::from_value(json!({
+        "id": "2.10.4",
+        "commitment": commitment,
+        "asset_id": "1.3.0",
+        "owner": {
+            "weight_threshold": 2_u32,
+            "account_auths": [["1.2.17", 1_u16]],
+            "key_auths": [[key, 1_u16]],
+            "address_auths": [[address, 1_u16]]
+        }
+    }))
+    .expect("blinded_balance object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.10.4");
+    assert_eq!(object.commitment, commitment);
+    assert_eq!(object.asset_id.to_string(), "1.3.0");
+    assert_eq!(object.owner.weight_threshold, 2);
+    assert_eq!(object.owner.account_auths[0].0.to_string(), "1.2.17");
+    assert_eq!(object.owner.account_auths[0].1, 1);
+    assert_eq!(object.owner.key_auths, vec![(key.to_owned(), 1)]);
+    assert_eq!(object.owner.address_auths, vec![(address.to_owned(), 1)]);
 }
 
 #[test]

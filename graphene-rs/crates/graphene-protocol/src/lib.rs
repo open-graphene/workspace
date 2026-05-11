@@ -5,7 +5,9 @@
 //! depend on this crate for shared protocol behavior.
 
 pub mod asset;
+pub mod authority;
 pub mod object_id;
 
 pub use asset::Asset;
+pub use authority::Authority;
 pub use object_id::{ObjectId, ObjectIdParseError};
