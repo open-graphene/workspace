@@ -53,6 +53,12 @@ const GENERATED_OBJECTS: &[ObjectGeneration] = &[
         source_path: "libraries/chain/small_objects.cpp",
     },
     ObjectGeneration {
+        family_name: "buyback",
+        cpp_class: "buyback_object",
+        header_path: "libraries/chain/include/graphene/chain/buyback_object.hpp",
+        source_path: "libraries/chain/small_objects.cpp",
+    },
+    ObjectGeneration {
         family_name: "committee_member",
         cpp_class: "committee_member_object",
         header_path: "libraries/chain/include/graphene/chain/committee_member_object.hpp",

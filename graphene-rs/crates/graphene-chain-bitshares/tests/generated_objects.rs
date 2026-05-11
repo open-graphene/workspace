@@ -1,5 +1,5 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, asset_dynamic_data, block_summary, committee_member,
+    account_balance, account_history, asset_dynamic_data, block_summary, buyback, committee_member,
     dynamic_global_property, fba_accumulator,
 };
 use serde_json::json;
@@ -72,6 +72,18 @@ fn deserializes_block_summary_object() {
 
     assert_eq!(object.id.to_string(), "2.8.10");
     assert_eq!(object.block_id, block_id);
+}
+
+#[test]
+fn deserializes_buyback_object() {
+    let object: buyback::Object = serde_json::from_value(json!({
+        "id": "2.15.4",
+        "asset_to_buy": "1.3.7"
+    }))
+    .expect("buyback object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.15.4");
+    assert_eq!(object.asset_to_buy.to_string(), "1.3.7");
 }
 
 #[test]
