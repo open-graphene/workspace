@@ -63,6 +63,12 @@ header_path = "libraries/chain/include/graphene/chain/fba_object.hpp"
 source_path = "libraries/chain/small_objects.cpp"
 
 [[objects]]
+family_name = "special_authority"
+cpp_class = "special_authority_object"
+header_path = "libraries/chain/include/graphene/chain/special_authority_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "witness"
 cpp_class = "witness_object"
 header_path = "libraries/chain/include/graphene/chain/witness_object.hpp"

@@ -1,6 +1,6 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, asset_dynamic_data, blinded_balance, block_summary, buyback,
-    chain_property, committee_member, dynamic_global_property, fba_accumulator,
+    chain_property, committee_member, dynamic_global_property, fba_accumulator, special_authority,
     withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
@@ -286,6 +286,18 @@ fn deserializes_witness_schedule_object() {
         .map(ToString::to_string)
         .collect::<Vec<_>>();
     assert_eq!(witness_ids, vec!["1.6.5", "1.6.6"]);
+}
+
+#[test]
+fn deserializes_special_authority_object() {
+    let object: special_authority::Object = serde_json::from_value(json!({
+        "id": "2.14.3",
+        "account": "1.2.17"
+    }))
+    .expect("special_authority object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.14.3");
+    assert_eq!(object.account.to_string(), "1.2.17");
 }
 
 #[test]
