@@ -6,8 +6,9 @@
 
 /// Defines a typed Graphene object-id wrapper for the current module.
 ///
-/// This is intentionally only the API skeleton for now. The generator can target this call shape
-/// before the wrapper implementation is filled in.
+/// This is intentionally only a compileable API skeleton for now. The generated modules can be
+/// indexed by rust-analyzer and carry source-backed metadata, while the full `Id` wrapper behavior
+/// is implemented in a later step.
 ///
 /// Object family name, object space, and type id must be explicit. Generated code should preserve
 /// the exact facts read from Graphene `GRAPHENE_DEFINE_IDS(...)` declarations instead of relying on
@@ -20,14 +21,6 @@
 ///     type_id: 2,
 /// }
 /// ```
-///
-/// ```ignore
-/// graphene_protocol::define_object_id_type! {
-///     name: "account_balance",
-///     object_space: 2,
-///     type_id: 5,
-/// }
-/// ```
 #[macro_export]
 macro_rules! define_object_id_type {
     (
@@ -35,8 +28,11 @@ macro_rules! define_object_id_type {
         object_space: $object_space:literal,
         type_id: $type_id:literal $(,)?
     ) => {
-        compile_error!(
-            "graphene_protocol::define_object_id_type! is an API skeleton; wrapper emission is not implemented yet"
-        );
+        /// Source Graphene object-family name.
+        pub const NAME: &str = $name;
+        /// Graphene object space for this object-family.
+        pub const OBJECT_SPACE: u8 = $object_space;
+        /// Graphene type id inside [`OBJECT_SPACE`].
+        pub const TYPE_ID: u8 = $type_id;
     };
 }
