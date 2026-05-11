@@ -176,6 +176,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "bitasset_options" => {
             return Some("graphene_protocol::BitAssetOptions<crate::types::asset::Id>".to_owned());
         }
+        "budget_record" => return Some("graphene_protocol::BudgetRecord".to_owned()),
         "price" => return Some("graphene_protocol::Price<crate::types::asset::Id>".to_owned()),
         "price_feed_with_icr" => {
             return Some("graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>".to_owned());
@@ -201,6 +202,9 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         }
         "ticket_status" => return Some("String".to_owned()),
         "ticket_type" => return Some("String".to_owned()),
+        "transaction" => return Some("graphene_protocol::Transaction".to_owned()),
+        "transaction_id_type" => return Some("String".to_owned()),
+        "signed_transaction" => return Some("graphene_protocol::SignedTransaction".to_owned()),
         "vote_id_type" => return Some("String".to_owned()),
         "authority" => {
             return Some("graphene_protocol::Authority<crate::types::account::Id>".to_owned());
@@ -219,6 +223,8 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
             return Some("graphene_protocol::LinearVestingPolicy".to_owned());
         }
         "memo_data" => return Some("graphene_protocol::MemoData".to_owned()),
+        "operation" => return Some("graphene_protocol::Operation".to_owned()),
+        "operation_result" => return Some("graphene_protocol::OperationResult".to_owned()),
         "restriction" => return Some("graphene_protocol::Restriction".to_owned()),
         "special_authority" => {
             return Some("graphene_protocol::SpecialAuthority<crate::types::asset::Id>".to_owned());
@@ -1079,6 +1085,30 @@ mod tests {
         assert_eq!(
             map_cpp_type_to_rust("bitasset_options"),
             Some("graphene_protocol::BitAssetOptions<crate::types::asset::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("budget_record"),
+            Some("graphene_protocol::BudgetRecord".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("operation"),
+            Some("graphene_protocol::Operation".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("operation_result"),
+            Some("graphene_protocol::OperationResult".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("transaction"),
+            Some("graphene_protocol::Transaction".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("signed_transaction"),
+            Some("graphene_protocol::SignedTransaction".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("transaction_id_type"),
+            Some("String".to_owned())
         );
         assert_eq!(
             map_cpp_type_to_rust("price_feed_with_icr"),

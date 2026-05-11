@@ -1,11 +1,11 @@
 use graphene_chain_bitshares::types::{
     account, account_balance, account_history, account_statistics, asset, asset_bitasset_data,
-    asset_dynamic_data, balance, base, blinded_balance, block_summary, buyback, call_order,
-    chain_property, collateral_bid, committee_member, credit_deal, credit_deal_summary,
-    credit_offer, custom_authority, dynamic_global_property, fba_accumulator, force_settlement,
-    global_property, htlc, limit_order, liquidity_pool, null, reserved0, samet_fund,
-    special_authority, ticket, vesting_balance, withdraw_permission, witness, witness_schedule,
-    worker,
+    asset_dynamic_data, balance, base, blinded_balance, block_summary, budget_record, buyback,
+    call_order, chain_property, collateral_bid, committee_member, credit_deal, credit_deal_summary,
+    credit_offer, custom, custom_authority, dynamic_global_property, fba_accumulator,
+    force_settlement, global_property, htlc, limit_order, liquidity_pool, null, operation_history,
+    proposal, reserved0, samet_fund, special_authority, ticket, transaction_history,
+    vesting_balance, withdraw_permission, witness, witness_schedule, worker,
 };
 use serde_json::json;
 
@@ -21,6 +21,128 @@ fn deserializes_marker_objects() {
     assert_eq!(null_object.id.to_string(), "1.0.0");
     assert_eq!(base_object.id.to_string(), "1.1.0");
     assert_eq!(reserved_object.id.to_string(), "2.2.0");
+
+    let custom_object: custom::Object = serde_json::from_value(json!({ "id": "1.9.0" }))
+        .expect("custom marker object should deserialize from Graphene JSON");
+    assert_eq!(custom_object.id.to_string(), "1.9.0");
+}
+
+#[test]
+fn deserializes_budget_record_object() {
+    let object: budget_record::Object = serde_json::from_value(json!({
+        "id": "2.13.4",
+        "time": "2024-01-02T03:04:05",
+        "record": {
+            "time_since_last_budget": 3600_u64,
+            "from_initial_reserve": 1_i64,
+            "from_accumulated_fees": 2_i64,
+            "from_unused_witness_budget": 3_i64,
+            "requested_witness_budget": 4_i64,
+            "total_budget": 5_i64,
+            "witness_budget": 6_i64,
+            "worker_budget": 7_i64,
+            "leftover_worker_funds": 8_i64,
+            "supply_delta": -9_i64,
+            "max_supply": 10_i64,
+            "current_supply": 11_i64
+        }
+    }))
+    .expect("budget_record object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.13.4");
+    assert_eq!(object.time, "2024-01-02T03:04:05");
+    assert_eq!(object.record.time_since_last_budget, 3600);
+    assert_eq!(object.record.from_initial_reserve, 1);
+    assert_eq!(object.record.supply_delta, -9);
+    assert_eq!(object.record.current_supply, 11);
+}
+
+#[test]
+fn deserializes_operation_history_object_with_raw_operation_payloads() {
+    let object: operation_history::Object = serde_json::from_value(json!({
+        "id": "1.11.9",
+        "op": [0, {
+            "fee": { "amount": 10_i64, "asset_id": "1.3.0" },
+            "from": "1.2.17",
+            "to": "1.2.18",
+            "amount": { "amount": 100_i64, "asset_id": "1.3.0" },
+            "extensions": []
+        }],
+        "result": [0, {}],
+        "block_num": 123_u32,
+        "trx_in_block": 1_u16,
+        "op_in_trx": 2_u16,
+        "virtual_op": 0_u32,
+        "is_virtual": false,
+        "block_time": "2024-01-02T03:04:05"
+    }))
+    .expect("operation_history object should deserialize with raw operation payloads");
+
+    assert_eq!(object.id.to_string(), "1.11.9");
+    assert_eq!(object.block_num, 123);
+    assert_eq!(object.trx_in_block, 1);
+    assert_eq!(object.op_in_trx, 2);
+    assert!(!object.is_virtual);
+    assert_eq!(object.block_time, "2024-01-02T03:04:05");
+}
+
+#[test]
+fn deserializes_proposal_object_with_raw_transaction_payload() {
+    let object: proposal::Object = serde_json::from_value(json!({
+        "id": "1.10.5",
+        "expiration_time": "2024-01-03T00:00:00",
+        "review_period_time": null,
+        "proposed_transaction": {
+            "ref_block_num": 42_u16,
+            "ref_block_prefix": 123456_u32,
+            "expiration": "2024-01-03T00:00:00",
+            "operations": [[0, {
+                "fee": { "amount": 10_i64, "asset_id": "1.3.0" },
+                "from": "1.2.17",
+                "to": "1.2.18",
+                "amount": { "amount": 100_i64, "asset_id": "1.3.0" },
+                "extensions": []
+            }]],
+            "extensions": []
+        },
+        "required_active_approvals": ["1.2.17"],
+        "available_active_approvals": ["1.2.18"],
+        "required_owner_approvals": ["1.2.19"],
+        "available_owner_approvals": ["1.2.20"],
+        "available_key_approvals": ["BTS1111111111111111111111111111111114T1Anm"],
+        "proposer": "1.2.17",
+        "fail_reason": ""
+    }))
+    .expect("proposal object should deserialize with raw transaction payload");
+
+    assert_eq!(object.id.to_string(), "1.10.5");
+    assert_eq!(object.review_period_time, None);
+    assert_eq!(object.required_active_approvals[0].to_string(), "1.2.17");
+    assert_eq!(
+        object.available_key_approvals[0],
+        "BTS1111111111111111111111111111111114T1Anm"
+    );
+    assert_eq!(object.proposer.to_string(), "1.2.17");
+}
+
+#[test]
+fn deserializes_transaction_history_object_with_raw_signed_transaction_payload() {
+    let object: transaction_history::Object = serde_json::from_value(json!({
+        "id": "2.7.5",
+        "trx": {
+            "ref_block_num": 42_u16,
+            "ref_block_prefix": 123456_u32,
+            "expiration": "2024-01-03T00:00:00",
+            "operations": [],
+            "extensions": [],
+            "signatures": ["1f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"]
+        },
+        "trx_id": "abcdef0123456789abcdef0123456789abcdef01"
+    }))
+    .expect("transaction_history object should deserialize with raw signed transaction payload");
+
+    assert_eq!(object.id.to_string(), "2.7.5");
+    assert_eq!(object.trx_id, "abcdef0123456789abcdef0123456789abcdef01");
 }
 
 #[test]

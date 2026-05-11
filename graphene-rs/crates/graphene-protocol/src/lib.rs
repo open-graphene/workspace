@@ -8,12 +8,14 @@ pub mod account;
 pub mod asset;
 pub mod asset_options;
 pub mod authority;
+pub mod budget;
 pub mod chain_parameters;
 pub mod htlc;
 pub mod market;
 pub mod object_id;
 pub mod price;
 pub mod restriction;
+pub mod transaction;
 pub mod vesting;
 pub mod worker;
 
@@ -26,6 +28,7 @@ pub use asset_options::{
     PriceFeedWithIcr,
 };
 pub use authority::Authority;
+pub use budget::BudgetRecord;
 pub use chain_parameters::{
     ChainParameterExtensions, ChainParameters, CustomAuthorityOptions, HtlcOptions,
     ImmutableChainParameters,
@@ -35,5 +38,6 @@ pub use market::{CreateTakeProfitOrderAction, LimitOrderAutoAction};
 pub use object_id::{ObjectId, ObjectIdParseError};
 pub use price::Price;
 pub use restriction::{Restriction, RestrictionArgument};
+pub use transaction::{Operation, OperationResult, SignedTransaction, Transaction};
 pub use vesting::{CddVestingPolicy, InstantVestingPolicy, LinearVestingPolicy, VestingPolicy};
 pub use worker::{BurnWorkerType, RefundWorkerType, VestingBalanceWorkerType, WorkerType};
