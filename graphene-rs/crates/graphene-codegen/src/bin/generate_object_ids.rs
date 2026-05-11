@@ -4,15 +4,16 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use graphene_codegen::{
-    GENERATED_OBJECTS, ObjectFamily, ObjectGeneration, RustField, map_fields_to_rust,
+    ObjectFamily, ObjectGeneration, RustField, load_codegen_config, map_fields_to_rust,
     parse_object_families, parse_reflected_class_fields, parse_reflected_objects,
     render_object_id_module, render_object_struct, render_types_mod,
 };
 
 struct ChainConfig {
-    name: &'static str,
-    core_path: &'static str,
-    crate_path: &'static str,
+    name: String,
+    core_path: String,
+    crate_path: PathBuf,
+    objects: Vec<ObjectGeneration>,
 }
 
 struct GeneratedFile {
@@ -20,45 +21,51 @@ struct GeneratedFile {
     contents: String,
 }
 
-const CHAINS: &[ChainConfig] = &[
-    ChainConfig {
-        name: "acta",
-        core_path: "chains/acta-network/acta-network-core",
-        crate_path: "graphene-rs/crates/graphene-chain-acta",
-    },
-    ChainConfig {
-        name: "bitshares",
-        core_path: "chains/bitshares/bitshares-core",
-        crate_path: "graphene-rs/crates/graphene-chain-bitshares",
-    },
-    ChainConfig {
-        name: "rsquared",
-        core_path: "chains/rsquared/R-Squared-core",
-        crate_path: "graphene-rs/crates/graphene-chain-rsquared",
-    },
-    ChainConfig {
-        name: "swaplock",
-        core_path: "chains/swaplock/swaplock-core",
-        crate_path: "graphene-rs/crates/graphene-chain-swaplock",
-    },
-];
+struct Args {
+    write: bool,
+    config_path: Option<PathBuf>,
+}
+
+impl Args {
+    fn parse(arguments: impl IntoIterator<Item = String>) -> Result<Self, String> {
+        let mut write = false;
+        let mut config_path = None;
+        let mut arguments = arguments.into_iter();
+
+        while let Some(argument) = arguments.next() {
+            match argument.as_str() {
+                "--write" => write = true,
+                "--config" => {
+                    let Some(path) = arguments.next() else {
+                        return Err("--config requires a path".to_owned());
+                    };
+                    config_path = Some(PathBuf::from(path));
+                }
+                _ => return Err(format!("unknown argument: {argument}")),
+            }
+        }
+
+        Ok(Self { write, config_path })
+    }
+}
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let write = env::args().any(|argument| argument == "--write");
+    let args = Args::parse(env::args().skip(1))
+        .map_err(|error| std::io::Error::new(std::io::ErrorKind::InvalidInput, error))?;
     let graphene_v2_root = find_graphene_v2_root()?;
+    let chains = read_chain_configs(&graphene_v2_root, args.config_path.as_deref())?;
 
     let mut total_files = 0usize;
     println!(
         "graphene-codegen object-id generation ({})",
-        if write { "write" } else { "dry-run" }
+        if args.write { "write" } else { "dry-run" }
     );
     println!("root: {}", graphene_v2_root.display());
 
-    for chain in CHAINS {
+    for chain in &chains {
         let families = read_chain_families(&graphene_v2_root, chain)?;
         let generated_objects = read_generated_object_fields(&graphene_v2_root, chain)?;
-        let generated_files =
-            render_chain_files(&graphene_v2_root, chain, &families, &generated_objects);
+        let generated_files = render_chain_files(chain, &families, &generated_objects);
         total_files += generated_files.len();
 
         println!(
@@ -69,7 +76,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
 
         for generated_file in generated_files {
-            if write {
+            if args.write {
                 if let Some(parent) = generated_file.path.parent() {
                     fs::create_dir_all(parent)?;
                 }
@@ -79,7 +86,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    if !write {
+    if !args.write {
         println!("dry-run only; pass --write to update generated files");
     }
     println!("planned files: {total_files}");
@@ -87,11 +94,61 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+fn read_chain_configs(
+    graphene_v2_root: &Path,
+    config_path: Option<&Path>,
+) -> Result<Vec<ChainConfig>, Box<dyn std::error::Error>> {
+    let mut config_paths = if let Some(config_path) = config_path {
+        vec![resolve_config_path(graphene_v2_root, config_path)]
+    } else {
+        let crates_path = graphene_v2_root.join("graphene-rs/crates");
+        fs::read_dir(&crates_path)?
+            .filter_map(Result::ok)
+            .map(|entry| entry.path())
+            .filter(|path| {
+                path.is_dir()
+                    && path
+                        .file_name()
+                        .and_then(|name| name.to_str())
+                        .is_some_and(|name| name.starts_with("graphene-chain-"))
+            })
+            .map(|crate_path| crate_path.join("codegen.toml"))
+            .filter(|config_path| config_path.exists())
+            .collect::<Vec<_>>()
+    };
+    config_paths.sort();
+
+    let mut chains = Vec::with_capacity(config_paths.len());
+    for config_path in config_paths {
+        let config = load_codegen_config(&config_path)?;
+        let crate_path = config_path
+            .parent()
+            .ok_or_else(|| format!("{} has no parent directory", config_path.display()))?
+            .to_path_buf();
+        chains.push(ChainConfig {
+            name: config.chain.name,
+            core_path: config.chain.core_path,
+            crate_path,
+            objects: config.objects,
+        });
+    }
+
+    Ok(chains)
+}
+
+fn resolve_config_path(graphene_v2_root: &Path, config_path: &Path) -> PathBuf {
+    if config_path.is_absolute() {
+        return config_path.to_path_buf();
+    }
+
+    graphene_v2_root.join("graphene-rs").join(config_path)
+}
+
 fn read_chain_families(
     graphene_v2_root: &Path,
     chain: &ChainConfig,
 ) -> Result<Vec<ObjectFamily>, Box<dyn std::error::Error>> {
-    let core_path = graphene_v2_root.join(chain.core_path);
+    let core_path = graphene_v2_root.join(&chain.core_path);
     let protocol_types = core_path.join("libraries/protocol/include/graphene/protocol/types.hpp");
     let chain_types = core_path.join("libraries/chain/include/graphene/chain/types.hpp");
 
@@ -109,9 +166,9 @@ fn read_generated_object_fields(
 ) -> Result<BTreeMap<String, Vec<RustField>>, Box<dyn std::error::Error>> {
     let mut generated_objects = BTreeMap::new();
 
-    for object in GENERATED_OBJECTS {
+    for object in &chain.objects {
         if let Some(fields) = read_object_fields(graphene_v2_root, chain, object)? {
-            generated_objects.insert(object.family_name.to_owned(), fields);
+            generated_objects.insert(object.family_name.clone(), fields);
         }
     }
 
@@ -123,9 +180,9 @@ fn read_object_fields(
     chain: &ChainConfig,
     object: &ObjectGeneration,
 ) -> Result<Option<Vec<RustField>>, Box<dyn std::error::Error>> {
-    let core_path = graphene_v2_root.join(chain.core_path);
-    let header_path = core_path.join(object.header_path);
-    let source_path = core_path.join(object.source_path);
+    let core_path = graphene_v2_root.join(&chain.core_path);
+    let header_path = core_path.join(&object.header_path);
+    let source_path = core_path.join(&object.source_path);
 
     if !header_path.exists() || !source_path.exists() {
         return Ok(None);
@@ -148,18 +205,17 @@ fn read_object_fields(
         .map(String::as_str)
         .collect::<Vec<_>>();
     let cpp_fields =
-        parse_reflected_class_fields(&header_source, object.cpp_class, &reflected_fields)?;
+        parse_reflected_class_fields(&header_source, &object.cpp_class, &reflected_fields)?;
 
     Ok(Some(map_fields_to_rust(&cpp_fields)?))
 }
 
 fn render_chain_files(
-    graphene_v2_root: &Path,
     chain: &ChainConfig,
     families: &[ObjectFamily],
     generated_objects: &BTreeMap<String, Vec<RustField>>,
 ) -> Vec<GeneratedFile> {
-    let types_path = graphene_v2_root.join(chain.crate_path).join("src/types");
+    let types_path = chain.crate_path.join("src/types");
     let mut files = Vec::with_capacity(families.len() + 1);
 
     files.push(GeneratedFile {

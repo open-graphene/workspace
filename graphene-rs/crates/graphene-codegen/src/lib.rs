@@ -6,7 +6,9 @@
 
 mod object_generation;
 
-pub use object_generation::{GENERATED_OBJECTS, ObjectGeneration};
+pub use object_generation::{
+    ChainGenerationConfig, CodegenConfig, ObjectGeneration, load_codegen_config,
+};
 
 /// One object-id family discovered from a Graphene `GRAPHENE_DEFINE_IDS(...)` macro.
 #[derive(Clone, Debug, Eq, PartialEq)]
