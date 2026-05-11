@@ -26,7 +26,7 @@ pub struct ObjectFamily {
 /// GRAPHENE_DEFINE_IDS(protocol, protocol_ids, /* prefix */, /* 1.2.x */ (account))
 /// GRAPHENE_DEFINE_IDS(chain, implementation_ids, impl_, /* 2.5.x */ (account_balance))
 /// ```
-pub fn parse_object_families(source: &str) -> Vec<ObjectFamily> {
+pub fn parse_object_families(source: &str) -> Result<Vec<ObjectFamily>, String> {
     let mut families = Vec::new();
     let mut remaining = source;
 
@@ -42,11 +42,11 @@ pub fn parse_object_families(source: &str) -> Vec<ObjectFamily> {
             break;
         };
 
-        families.extend(parse_define_ids_body(macro_body));
+        families.extend(parse_define_ids_body(macro_body)?);
         remaining = &after_open[consumed..];
     }
 
-    families
+    Ok(families)
 }
 
 /// Render the Rust module source for one generated object-id family.
@@ -83,12 +83,12 @@ pub fn render_types_mod(families: &[ObjectFamily]) -> String {
     output
 }
 
-fn parse_define_ids_body(body: &str) -> Vec<ObjectFamily> {
+fn parse_define_ids_body(body: &str) -> Result<Vec<ObjectFamily>, String> {
     let Some((object_space_name, family_names_source)) = define_ids_space_and_names(body) else {
-        return Vec::new();
+        return Ok(Vec::new());
     };
     let Some(object_space) = object_space_from_name(object_space_name) else {
-        return Vec::new();
+        return Ok(Vec::new());
     };
 
     parse_family_names(family_names_source, object_space)
@@ -144,7 +144,7 @@ fn find_next_code_comma(source: &str, start: usize) -> Option<usize> {
     None
 }
 
-fn parse_family_names(source: &str, object_space: u8) -> Vec<ObjectFamily> {
+fn parse_family_names(source: &str, object_space: u8) -> Result<Vec<ObjectFamily>, String> {
     let mut families = Vec::new();
     let mut next_type_id = 0u8;
     let mut pending_comment_type_id = None;
@@ -168,10 +168,11 @@ fn parse_family_names(source: &str, object_space: u8) -> Vec<ObjectFamily> {
                 if is_family_name(name) {
                     let type_id = next_type_id;
                     if let Some(comment_type_id) = pending_comment_type_id {
-                        assert_eq!(
-                            comment_type_id, type_id,
-                            "GRAPHENE_DEFINE_IDS comment type id for {name} disagrees with declaration order"
-                        );
+                        if comment_type_id != type_id {
+                            return Err(format!(
+                                "GRAPHENE_DEFINE_IDS comment type id for {name} ({comment_type_id}) disagrees with declaration order ({type_id})"
+                            ));
+                        }
                     }
                     families.push(ObjectFamily {
                         object_space,
@@ -190,7 +191,7 @@ fn parse_family_names(source: &str, object_space: u8) -> Vec<ObjectFamily> {
         index += 1;
     }
 
-    families
+    Ok(families)
 }
 
 fn parse_type_id_from_comment(comment: &str) -> Option<u8> {
@@ -241,7 +242,7 @@ mod tests {
         "#;
 
         assert_eq!(
-            parse_object_families(source),
+            parse_object_families(source).expect("source should parse"),
             vec![
                 ObjectFamily {
                     object_space: 1,
@@ -281,7 +282,7 @@ mod tests {
         "#;
 
         assert_eq!(
-            parse_object_families(source),
+            parse_object_families(source).expect("source should parse"),
             vec![
                 ObjectFamily {
                     object_space: 2,
@@ -329,7 +330,7 @@ mod tests {
         "#;
 
         assert_eq!(
-            parse_object_families(source),
+            parse_object_families(source).expect("source should parse"),
             vec![
                 ObjectFamily {
                     object_space: 2,
@@ -365,7 +366,7 @@ mod tests {
         "#;
 
         assert_eq!(
-            parse_object_families(source),
+            parse_object_families(source).expect("source should parse"),
             vec![
                 ObjectFamily {
                     object_space: 1,
@@ -382,7 +383,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "disagrees with declaration order")]
     fn validates_comments_against_declaration_order_without_trusting_them() {
         let source = r#"
             GRAPHENE_DEFINE_IDS(protocol, protocol_ids, prefix_,
@@ -390,7 +390,8 @@ mod tests {
                                )
         "#;
 
-        let _ = parse_object_families(source);
+        let error = parse_object_families(source).expect_err("comment/order mismatch should fail");
+        assert!(error.contains("disagrees with declaration order"));
     }
 
     #[test]

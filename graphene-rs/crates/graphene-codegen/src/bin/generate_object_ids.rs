@@ -95,7 +95,7 @@ fn read_chain_families(
     source.push('\n');
     source.push_str(&fs::read_to_string(&chain_types)?);
 
-    Ok(parse_object_families(&source))
+    Ok(parse_object_families(&source)?)
 }
 
 fn render_chain_files(
