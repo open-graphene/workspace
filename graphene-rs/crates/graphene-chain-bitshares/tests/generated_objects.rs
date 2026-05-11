@@ -1,6 +1,6 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, asset_dynamic_data, block_summary, buyback, committee_member,
-    dynamic_global_property, fba_accumulator,
+    dynamic_global_property, fba_accumulator, witness,
 };
 use serde_json::json;
 
@@ -182,6 +182,41 @@ fn deserializes_fba_accumulator_object_without_designated_asset() {
     assert_eq!(object.id.to_string(), "2.16.4");
     assert_eq!(object.accumulated_fba_fees, -5);
     assert!(object.designated_asset.is_none());
+}
+
+#[test]
+fn deserializes_witness_object() {
+    let signing_key = "BTS1111111111111111111111111111111114T1Anm";
+    let object: witness::Object = serde_json::from_value(json!({
+        "id": "1.6.5",
+        "witness_account": "1.2.17",
+        "last_aslot": 123_u64,
+        "signing_key": signing_key,
+        "pay_vb": "1.13.8",
+        "vote_id": "1:5",
+        "total_votes": 456_u64,
+        "url": "https://witness.example",
+        "total_missed": -1_i64,
+        "last_confirmed_block_num": 789_u32
+    }))
+    .expect("witness object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.6.5");
+    assert_eq!(object.witness_account.to_string(), "1.2.17");
+    assert_eq!(object.last_aslot, 123);
+    assert_eq!(object.signing_key, signing_key);
+    assert_eq!(
+        object
+            .pay_vb
+            .expect("pay vesting balance should be present")
+            .to_string(),
+        "1.13.8"
+    );
+    assert_eq!(object.vote_id, "1:5");
+    assert_eq!(object.total_votes, 456);
+    assert_eq!(object.url, "https://witness.example");
+    assert_eq!(object.total_missed, -1);
+    assert_eq!(object.last_confirmed_block_num, 789);
 }
 
 #[test]

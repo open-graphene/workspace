@@ -163,6 +163,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "uint64_t" => return Some("u64".to_owned()),
         "int64_t" | "share_type" => return Some("i64".to_owned()),
         "block_id_type" => return Some("String".to_owned()),
+        "public_key_type" => return Some("String".to_owned()),
         "fc::uint128_t" | "uint128_t" => return Some("u128".to_owned()),
         "time_point_sec" => return Some("String".to_owned()),
         "vote_id_type" => return Some("String".to_owned()),
@@ -362,10 +363,11 @@ fn parse_top_level_declarations(class_body: &str) -> Vec<CppField> {
 }
 
 fn parse_field_declaration(statement: &str) -> Option<CppField> {
-    let declaration = statement
-        .rsplit([':', '}'])
+    let declaration_without_initializer = statement.split(['=', '{']).next()?.trim();
+    let declaration = declaration_without_initializer
+        .rsplit(':')
         .next()
-        .unwrap_or(statement)
+        .unwrap_or(declaration_without_initializer)
         .trim();
     if declaration.is_empty()
         || declaration.starts_with("static ")
@@ -377,12 +379,11 @@ fn parse_field_declaration(statement: &str) -> Option<CppField> {
         return None;
     }
 
-    let declaration_without_initializer = declaration.split('=').next()?.trim();
-    if declaration_without_initializer.contains('(') {
+    if declaration.contains('(') {
         return None;
     }
 
-    let mut parts = declaration_without_initializer.rsplitn(2, char::is_whitespace);
+    let mut parts = declaration.rsplitn(2, char::is_whitespace);
     let name = parts.next()?.trim();
     let cpp_type = parts.next()?.trim();
     if !is_family_name(name) || cpp_type.is_empty() {
@@ -839,6 +840,10 @@ mod tests {
             Some("String".to_owned())
         );
         assert_eq!(
+            map_cpp_type_to_rust("public_key_type"),
+            Some("String".to_owned())
+        );
+        assert_eq!(
             map_cpp_type_to_rust("fc::uint128_t"),
             Some("u128".to_owned())
         );
@@ -920,6 +925,26 @@ mod tests {
                     rust_type: "bool".to_owned(),
                 },
             ]
+        );
+    }
+
+    #[test]
+    fn parses_field_with_braced_initializer() {
+        let header = r#"
+            class witness_object : public abstract_object<witness_object, protocol_ids, witness_object_type>
+            {
+               public:
+                  vote_id_type     vote_id { vote_id_type::witness };
+            };
+        "#;
+
+        assert_eq!(
+            parse_reflected_class_fields(header, "witness_object", &["vote_id"])
+                .expect("witness vote_id field should parse"),
+            vec![CppField {
+                name: "vote_id".to_owned(),
+                cpp_type: "vote_id_type".to_owned(),
+            }]
         );
     }
 

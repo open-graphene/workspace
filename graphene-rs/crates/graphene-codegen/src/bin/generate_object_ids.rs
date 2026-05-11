@@ -76,6 +76,12 @@ const GENERATED_OBJECTS: &[ObjectGeneration] = &[
         header_path: "libraries/chain/include/graphene/chain/fba_object.hpp",
         source_path: "libraries/chain/small_objects.cpp",
     },
+    ObjectGeneration {
+        family_name: "witness",
+        cpp_class: "witness_object",
+        header_path: "libraries/chain/include/graphene/chain/witness_object.hpp",
+        source_path: "libraries/chain/small_objects.cpp",
+    },
 ];
 
 const CHAINS: &[ChainConfig] = &[
