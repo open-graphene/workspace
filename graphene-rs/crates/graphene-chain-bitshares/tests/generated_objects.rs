@@ -1,9 +1,10 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, account_statistics, asset_dynamic_data, balance,
-    blinded_balance, block_summary, buyback, call_order, chain_property, collateral_bid,
-    committee_member, credit_deal, credit_deal_summary, credit_offer, custom_authority,
-    dynamic_global_property, fba_accumulator, force_settlement, htlc, limit_order, liquidity_pool,
-    samet_fund, special_authority, ticket, withdraw_permission, witness, witness_schedule,
+    account_balance, account_history, account_statistics, asset, asset_bitasset_data,
+    asset_dynamic_data, balance, blinded_balance, block_summary, buyback, call_order,
+    chain_property, collateral_bid, committee_member, credit_deal, credit_deal_summary,
+    credit_offer, custom_authority, dynamic_global_property, fba_accumulator, force_settlement,
+    global_property, htlc, limit_order, liquidity_pool, samet_fund, special_authority, ticket,
+    vesting_balance, withdraw_permission, witness, witness_schedule, worker,
 };
 use serde_json::json;
 
@@ -120,6 +121,161 @@ fn deserializes_asset_dynamic_data_object() {
     assert_eq!(object.accumulated_fees, 10);
     assert_eq!(object.accumulated_collateral_fees, 20);
     assert_eq!(object.fee_pool, 30);
+}
+
+#[test]
+fn deserializes_asset_object_with_asset_options() {
+    let object: asset::Object = serde_json::from_value(json!({
+        "id": "1.3.7",
+        "symbol": "USD",
+        "precision": 4_u8,
+        "issuer": "1.2.17",
+        "options": {
+            "max_supply": 1_000_000_000_i64,
+            "market_fee_percent": 20_u16,
+            "max_market_fee": 10_000_i64,
+            "issuer_permissions": 79_u16,
+            "flags": 1_u16,
+            "core_exchange_rate": {
+                "base": { "amount": 1_i64, "asset_id": "1.3.0" },
+                "quote": { "amount": 2_i64, "asset_id": "1.3.7" }
+            },
+            "whitelist_authorities": ["1.2.17"],
+            "blacklist_authorities": ["1.2.18"],
+            "whitelist_markets": ["1.3.0"],
+            "blacklist_markets": ["1.3.9"],
+            "description": "United States dollar",
+            "extensions": {
+                "reward_percent": 100_u16,
+                "whitelist_market_fee_sharing": ["1.2.19"],
+                "taker_fee_percent": 30_u16
+            }
+        },
+        "dynamic_asset_data_id": "2.3.7",
+        "bitasset_data_id": "2.4.7",
+        "buyback_account": "1.2.20",
+        "for_liquidity_pool": "1.19.3",
+        "creation_block_num": 42_u32,
+        "creation_time": "2024-01-02T03:04:05"
+    }))
+    .expect("asset object should deserialize with asset options");
+
+    assert_eq!(object.id.to_string(), "1.3.7");
+    assert_eq!(object.symbol, "USD");
+    assert_eq!(object.precision, 4);
+    assert_eq!(object.issuer.to_string(), "1.2.17");
+    assert_eq!(object.options.max_supply, 1_000_000_000);
+    assert_eq!(
+        object.options.core_exchange_rate.base.asset_id.to_string(),
+        "1.3.0"
+    );
+    assert_eq!(
+        object.options.whitelist_authorities[0].to_string(),
+        "1.2.17"
+    );
+    assert_eq!(object.options.blacklist_markets[0].to_string(), "1.3.9");
+    assert_eq!(object.options.extensions.reward_percent, Some(100));
+    assert_eq!(
+        object
+            .options
+            .extensions
+            .whitelist_market_fee_sharing
+            .unwrap()[0]
+            .to_string(),
+        "1.2.19"
+    );
+    assert_eq!(object.options.extensions.taker_fee_percent, Some(30));
+    assert_eq!(object.dynamic_asset_data_id.to_string(), "2.3.7");
+    assert_eq!(object.bitasset_data_id.unwrap().to_string(), "2.4.7");
+    assert_eq!(object.buyback_account.unwrap().to_string(), "1.2.20");
+    assert_eq!(object.for_liquidity_pool.unwrap().to_string(), "1.19.3");
+    assert_eq!(object.creation_block_num, 42);
+    assert_eq!(object.creation_time, "2024-01-02T03:04:05");
+}
+
+#[test]
+fn deserializes_asset_bitasset_data_object_with_feeds() {
+    let feed = json!({
+        "settlement_price": {
+            "base": { "amount": 3_i64, "asset_id": "1.3.7" },
+            "quote": { "amount": 1_i64, "asset_id": "1.3.0" }
+        },
+        "maintenance_collateral_ratio": 1750_u16,
+        "maximum_short_squeeze_ratio": 1100_u16,
+        "core_exchange_rate": {
+            "base": { "amount": 1_i64, "asset_id": "1.3.0" },
+            "quote": { "amount": 3_i64, "asset_id": "1.3.7" }
+        },
+        "initial_collateral_ratio": 2000_u16
+    });
+
+    let object: asset_bitasset_data::Object = serde_json::from_value(json!({
+        "id": "2.4.7",
+        "asset_id": "1.3.7",
+        "feeds": [["1.2.17", ["2024-01-02T03:04:05", feed.clone()]]],
+        "median_feed": feed.clone(),
+        "current_feed": feed,
+        "current_feed_publication_time": "2024-01-02T03:04:05",
+        "current_maintenance_collateralization": {
+            "base": { "amount": 175_i64, "asset_id": "1.3.0" },
+            "quote": { "amount": 100_i64, "asset_id": "1.3.7" }
+        },
+        "current_initial_collateralization": {
+            "base": { "amount": 200_i64, "asset_id": "1.3.0" },
+            "quote": { "amount": 100_i64, "asset_id": "1.3.7" }
+        },
+        "options": {
+            "feed_lifetime_sec": 86400_u32,
+            "minimum_feeds": 1_u8,
+            "force_settlement_delay_sec": 3600_u32,
+            "force_settlement_offset_percent": 100_u16,
+            "maximum_force_settlement_volume": 2000_u16,
+            "short_backing_asset": "1.3.0",
+            "extensions": {
+                "initial_collateral_ratio": 2000_u16,
+                "maintenance_collateral_ratio": 1750_u16,
+                "maximum_short_squeeze_ratio": 1100_u16,
+                "margin_call_fee_ratio": 50_u16,
+                "force_settle_fee_percent": 25_u16,
+                "black_swan_response_method": 1_u8
+            }
+        },
+        "force_settled_volume": 123_i64,
+        "is_prediction_market": false,
+        "settlement_price": {
+            "base": { "amount": 0_i64, "asset_id": "1.3.7" },
+            "quote": { "amount": 0_i64, "asset_id": "1.3.0" }
+        },
+        "settlement_fund": 456_i64,
+        "individual_settlement_debt": 7_i64,
+        "individual_settlement_fund": 8_i64,
+        "asset_cer_updated": true,
+        "feed_cer_updated": false
+    }))
+    .expect("asset_bitasset_data object should deserialize with price feeds");
+
+    assert_eq!(object.id.to_string(), "2.4.7");
+    assert_eq!(object.asset_id.to_string(), "1.3.7");
+    assert_eq!(object.feeds[0].0.to_string(), "1.2.17");
+    assert_eq!(object.feeds[0].1.0, "2024-01-02T03:04:05");
+    assert_eq!(object.feeds[0].1.1.initial_collateral_ratio, 2000);
+    assert_eq!(object.median_feed.maintenance_collateral_ratio, 1750);
+    assert_eq!(
+        object
+            .current_feed
+            .core_exchange_rate
+            .quote
+            .asset_id
+            .to_string(),
+        "1.3.7"
+    );
+    assert_eq!(object.options.short_backing_asset.to_string(), "1.3.0");
+    assert_eq!(object.options.extensions.margin_call_fee_ratio, Some(50));
+    assert_eq!(object.force_settled_volume, 123);
+    assert!(!object.is_prediction_market);
+    assert_eq!(object.settlement_fund, 456);
+    assert!(object.asset_cer_updated);
+    assert!(!object.feed_cer_updated);
 }
 
 #[test]
@@ -582,6 +738,63 @@ fn deserializes_force_settlement_object() {
 }
 
 #[test]
+fn deserializes_worker_object_with_refund_worker() {
+    let object: worker::Object = serde_json::from_value(json!({
+        "id": "1.14.3",
+        "worker_account": "1.2.17",
+        "work_begin_date": "2024-01-01T00:00:00",
+        "work_end_date": "2024-12-31T23:59:59",
+        "daily_pay": 1000_i64,
+        "worker": [0_u64, { "total_burned": 25_i64 }],
+        "vote_for": "2:10",
+        "vote_against": "2:11",
+        "total_votes_for": 100_u64,
+        "total_votes_against": 5_u64,
+        "name": "refund worker",
+        "url": "https://worker.example/refund"
+    }))
+    .expect("worker object should deserialize with refund worker type");
+
+    assert_eq!(object.id.to_string(), "1.14.3");
+    assert_eq!(object.worker_account.to_string(), "1.2.17");
+    assert_eq!(object.daily_pay, 1000);
+    let graphene_protocol::WorkerType::Refund(worker) = object.worker else {
+        panic!("expected refund worker");
+    };
+    assert_eq!(worker.total_burned, 25);
+    assert_eq!(object.vote_for, "2:10");
+    assert_eq!(object.vote_against, "2:11");
+    assert_eq!(object.total_votes_for, 100);
+    assert_eq!(object.total_votes_against, 5);
+    assert_eq!(object.name, "refund worker");
+}
+
+#[test]
+fn deserializes_worker_object_with_vesting_balance_worker() {
+    let object: worker::Object = serde_json::from_value(json!({
+        "id": "1.14.4",
+        "worker_account": "1.2.18",
+        "work_begin_date": "2024-01-01T00:00:00",
+        "work_end_date": "2024-12-31T23:59:59",
+        "daily_pay": 2000_i64,
+        "worker": [1_u64, { "balance": "1.13.8" }],
+        "vote_for": "2:12",
+        "vote_against": "2:13",
+        "total_votes_for": 200_u64,
+        "total_votes_against": 10_u64,
+        "name": "vesting worker",
+        "url": "https://worker.example/vesting"
+    }))
+    .expect("worker object should deserialize with vesting balance worker type");
+
+    assert_eq!(object.id.to_string(), "1.14.4");
+    let graphene_protocol::WorkerType::VestingBalance(worker) = object.worker else {
+        panic!("expected vesting balance worker");
+    };
+    assert_eq!(worker.balance.to_string(), "1.13.8");
+}
+
+#[test]
 fn deserializes_witness_object() {
     let signing_key = "BTS1111111111111111111111111111111114T1Anm";
     let object: witness::Object = serde_json::from_value(json!({
@@ -631,6 +844,98 @@ fn deserializes_witness_schedule_object() {
         .map(ToString::to_string)
         .collect::<Vec<_>>();
     assert_eq!(witness_ids, vec!["1.6.5", "1.6.6"]);
+}
+
+fn chain_parameters_json() -> serde_json::Value {
+    json!({
+        "current_fees": { "parameters": [] },
+        "block_interval": 3_u8,
+        "maintenance_interval": 3600_u32,
+        "maintenance_skip_slots": 3_u8,
+        "committee_proposal_review_period": 1209600_u32,
+        "maximum_transaction_size": 2048_u32,
+        "maximum_block_size": 2000000_u32,
+        "maximum_time_until_expiration": 86400_u32,
+        "maximum_proposal_lifetime": 2419200_u32,
+        "maximum_asset_whitelist_authorities": 10_u8,
+        "maximum_asset_feed_publishers": 15_u8,
+        "maximum_witness_count": 1001_u16,
+        "maximum_committee_count": 1001_u16,
+        "maximum_authority_membership": 10_u16,
+        "reserve_percent_of_fee": 2000_u16,
+        "network_percent_of_fee": 2000_u16,
+        "lifetime_referrer_percent_of_fee": 3000_u16,
+        "cashback_vesting_period_seconds": 31536000_u32,
+        "cashback_vesting_threshold": 100000_i64,
+        "count_non_member_votes": true,
+        "allow_non_member_whitelists": false,
+        "witness_pay_per_block": 1000_i64,
+        "worker_budget_per_day": 50000_i64,
+        "max_predicate_opcode": 1_u16,
+        "fee_liquidation_threshold": 1000000_i64,
+        "accounts_per_fee_scale": 1000_u16,
+        "account_fee_scale_bitshifts": 4_u8,
+        "max_authority_depth": 2_u8,
+        "extensions": {
+            "updatable_htlc_options": {
+                "max_timeout_secs": 86400_u32,
+                "max_preimage_size": 1024_u32
+            },
+            "custom_authority_options": {
+                "max_custom_authority_lifetime_seconds": 2592000_u32,
+                "max_custom_authorities_per_account": 10_u32,
+                "max_custom_authorities_per_account_op": 2_u32,
+                "max_custom_authority_restrictions": 5_u32
+            },
+            "market_fee_network_percent": 100_u16,
+            "maker_fee_discount_percent": 50_u16
+        }
+    })
+}
+
+#[test]
+fn deserializes_global_property_object() {
+    let object: global_property::Object = serde_json::from_value(json!({
+        "id": "2.0.0",
+        "parameters": chain_parameters_json(),
+        "pending_parameters": null,
+        "next_available_vote_id": 42_u32,
+        "active_committee_members": ["1.5.1", "1.5.2"],
+        "active_witnesses": ["1.6.3", "1.6.4"]
+    }))
+    .expect("global_property object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.0.0");
+    assert_eq!(object.parameters.block_interval, 3);
+    assert_eq!(object.parameters.cashback_vesting_threshold, 100000);
+    assert_eq!(object.parameters.current_fees.0["parameters"], json!([]));
+    assert_eq!(
+        object
+            .parameters
+            .extensions
+            .updatable_htlc_options
+            .expect("htlc options should be present")
+            .max_preimage_size,
+        1024
+    );
+    assert!(object.pending_parameters.is_none());
+    assert_eq!(object.next_available_vote_id, 42);
+    assert_eq!(
+        object
+            .active_committee_members
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>(),
+        vec!["1.5.1", "1.5.2"]
+    );
+    assert_eq!(
+        object
+            .active_witnesses
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>(),
+        vec!["1.6.3", "1.6.4"]
+    );
 }
 
 #[test]
@@ -882,6 +1187,62 @@ fn deserializes_ticket_object() {
     assert_eq!(object.value, 20000);
     assert_eq!(object.next_auto_update_time, "2024-03-01T00:00:00");
     assert_eq!(object.next_type_downgrade_time, "2024-04-01T00:00:00");
+}
+
+#[test]
+fn deserializes_vesting_balance_object_with_cdd_policy() {
+    let object: vesting_balance::Object = serde_json::from_value(json!({
+        "id": "1.13.8",
+        "owner": "1.2.17",
+        "balance": {
+            "amount": 1000_i64,
+            "asset_id": "1.3.0"
+        },
+        "policy": [
+            1_u64,
+            {
+                "vesting_seconds": 86400_u32,
+                "start_claim": "2024-01-01T00:00:00",
+                "coin_seconds_earned": 123456_u128,
+                "coin_seconds_earned_last_update": "2024-01-02T00:00:00"
+            }
+        ],
+        "balance_type": "cashback"
+    }))
+    .expect("vesting_balance object should deserialize with cdd policy");
+
+    assert_eq!(object.id.to_string(), "1.13.8");
+    assert_eq!(object.owner.to_string(), "1.2.17");
+    assert_eq!(object.balance.amount, 1000);
+    assert_eq!(object.balance.asset_id.to_string(), "1.3.0");
+    let graphene_protocol::VestingPolicy::Cdd(policy) = object.policy else {
+        panic!("expected cdd vesting policy");
+    };
+    assert_eq!(policy.vesting_seconds, 86400);
+    assert_eq!(policy.coin_seconds_earned, 123456);
+    assert_eq!(object.balance_type, "cashback");
+}
+
+#[test]
+fn deserializes_vesting_balance_object_with_instant_policy() {
+    let object: vesting_balance::Object = serde_json::from_value(json!({
+        "id": "1.13.9",
+        "owner": "1.2.18",
+        "balance": {
+            "amount": 5_i64,
+            "asset_id": "1.3.7"
+        },
+        "policy": [2_u64, {}],
+        "balance_type": "market_fee_sharing"
+    }))
+    .expect("vesting_balance object should deserialize with instant policy");
+
+    assert_eq!(object.id.to_string(), "1.13.9");
+    assert!(matches!(
+        object.policy,
+        graphene_protocol::VestingPolicy::Instant(_)
+    ));
+    assert_eq!(object.balance_type, "market_fee_sharing");
 }
 
 #[test]

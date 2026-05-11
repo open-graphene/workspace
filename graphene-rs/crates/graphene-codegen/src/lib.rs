@@ -164,7 +164,19 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "string" => return Some("String".to_owned()),
         "address" => return Some("String".to_owned()),
         "asset" => return Some("graphene_protocol::Asset<crate::types::asset::Id>".to_owned()),
+        "asset_options" => {
+            return Some(
+                "graphene_protocol::AssetOptions<crate::types::account::Id, crate::types::asset::Id>"
+                    .to_owned(),
+            );
+        }
+        "bitasset_options" => {
+            return Some("graphene_protocol::BitAssetOptions<crate::types::asset::Id>".to_owned());
+        }
         "price" => return Some("graphene_protocol::Price<crate::types::asset::Id>".to_owned()),
+        "price_feed_with_icr" => {
+            return Some("graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>".to_owned());
+        }
         "bool" => return Some("bool".to_owned()),
         "uint8_t" => return Some("u8".to_owned()),
         "uint16_t" => return Some("u16".to_owned()),
@@ -177,12 +189,20 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "public_key_type" => return Some("String".to_owned()),
         "fc::uint128_t" | "uint128_t" => return Some("u128".to_owned()),
         "time_point_sec" => return Some("String".to_owned()),
+        "vesting_balance_type" => return Some("String".to_owned()),
+        "vesting_policy" => return Some("graphene_protocol::VestingPolicy".to_owned()),
+        "worker_type" => {
+            return Some(
+                "graphene_protocol::WorkerType<crate::types::vesting_balance::Id>".to_owned(),
+            );
+        }
         "ticket_status" => return Some("String".to_owned()),
         "ticket_type" => return Some("String".to_owned()),
         "vote_id_type" => return Some("String".to_owned()),
         "authority" => {
             return Some("graphene_protocol::Authority<crate::types::account::Id>".to_owned());
         }
+        "chain_parameters" => return Some("graphene_protocol::ChainParameters".to_owned()),
         "immutable_chain_parameters" => {
             return Some("graphene_protocol::ImmutableChainParameters".to_owned());
         }
@@ -212,6 +232,14 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
 
     if let Some(inner) = template_argument(&normalized, "fc::optional") {
         return map_cpp_type_to_rust(inner).map(|rust_type| format!("Option<{rust_type}>"));
+    }
+
+    if let Some(inner) = template_argument(&normalized, "pair") {
+        if let Some((first_type, second_type)) = split_template_pair(inner) {
+            let first_type = map_cpp_type_to_rust(first_type)?;
+            let second_type = map_cpp_type_to_rust(second_type)?;
+            return Some(format!("({first_type}, {second_type})"));
+        }
     }
 
     if let Some(inner) = template_argument(&normalized, "flat_map") {
@@ -352,11 +380,26 @@ fn parse_reflected_field_names(source: &str) -> Vec<String> {
 
 fn class_body<'a>(source: &'a str, class_name: &str) -> Option<&'a str> {
     let class_marker = format!("class {class_name}");
-    let class_start = source.find(&class_marker)?;
-    let after_class = &source[class_start + class_marker.len()..];
-    let open_brace = after_class.find('{')?;
-    let after_open = &after_class[open_brace + 1..];
-    take_balanced_brace_body(after_open).map(|(body, _consumed)| body)
+    let mut search_from = 0usize;
+
+    while let Some(relative_start) = source[search_from..].find(&class_marker) {
+        let class_start = search_from + relative_start;
+        let after_class = &source[class_start + class_marker.len()..];
+        let next_semicolon = after_class.find(';');
+        let Some(open_brace) = after_class.find('{') else {
+            return None;
+        };
+
+        if next_semicolon.is_some_and(|semicolon| semicolon < open_brace) {
+            search_from = class_start + class_marker.len();
+            continue;
+        }
+
+        let after_open = &after_class[open_brace + 1..];
+        return take_balanced_brace_body(after_open).map(|(body, _consumed)| body);
+    }
+
+    None
 }
 
 fn take_balanced_brace_body(source_after_open: &str) -> Option<(&str, usize)> {
@@ -894,6 +937,40 @@ mod tests {
     }
 
     #[test]
+    fn parses_class_body_after_forward_declaration() {
+        let header = r#"
+            class asset_bitasset_data_object;
+
+            class asset_bitasset_data_object : public abstract_object<asset_bitasset_data_object,
+                                                implementation_ids, impl_asset_bitasset_data_object_type>
+            {
+               public:
+                  asset_id_type asset_id;
+                  share_type force_settled_volume;
+            };
+        "#;
+        let reflected_fields = ["asset_id", "force_settled_volume"];
+
+        let cpp_fields =
+            parse_reflected_class_fields(header, "asset_bitasset_data_object", &reflected_fields)
+                .expect("full class body should be parsed after forward declaration");
+
+        assert_eq!(
+            cpp_fields,
+            vec![
+                CppField {
+                    name: "asset_id".to_owned(),
+                    cpp_type: "asset_id_type".to_owned(),
+                },
+                CppField {
+                    name: "force_settled_volume".to_owned(),
+                    cpp_type: "share_type".to_owned(),
+                },
+            ]
+        );
+    }
+
+    #[test]
     fn maps_basic_graphene_cpp_types_to_rust_types() {
         assert_eq!(map_cpp_type_to_rust("bool"), Some("bool".to_owned()));
         assert_eq!(map_cpp_type_to_rust("uint16_t"), Some("u16".to_owned()));
@@ -927,6 +1004,18 @@ mod tests {
             Some("String".to_owned())
         );
         assert_eq!(
+            map_cpp_type_to_rust("vesting_policy"),
+            Some("graphene_protocol::VestingPolicy".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("vesting_balance_type"),
+            Some("String".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("worker_type"),
+            Some("graphene_protocol::WorkerType<crate::types::vesting_balance::Id>".to_owned())
+        );
+        assert_eq!(
             map_cpp_type_to_rust("ticket_type"),
             Some("String".to_owned())
         );
@@ -937,6 +1026,10 @@ mod tests {
         assert_eq!(
             map_cpp_type_to_rust("authority"),
             Some("graphene_protocol::Authority<crate::types::account::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("chain_parameters"),
+            Some("graphene_protocol::ChainParameters".to_owned())
         );
         assert_eq!(
             map_cpp_type_to_rust("immutable_chain_parameters"),
@@ -963,6 +1056,34 @@ mod tests {
         );
         assert_eq!(map_cpp_type_to_rust("address"), Some("String".to_owned()));
         assert_eq!(map_cpp_type_to_rust("unsigned_int"), Some("u64".to_owned()));
+        assert_eq!(
+            map_cpp_type_to_rust("asset_options"),
+            Some(
+                "graphene_protocol::AssetOptions<crate::types::account::Id, crate::types::asset::Id>"
+                    .to_owned()
+            )
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("bitasset_options"),
+            Some("graphene_protocol::BitAssetOptions<crate::types::asset::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("price_feed_with_icr"),
+            Some("graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("pair<time_point_sec,price_feed_with_icr>"),
+            Some(
+                "(String, graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>)".to_owned()
+            )
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("flat_map<account_id_type, pair<time_point_sec,price_feed_with_icr>>"),
+            Some(
+                "Vec<(crate::types::account::Id, (String, graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>))>"
+                    .to_owned()
+            )
+        );
         assert_eq!(
             map_cpp_type_to_rust("restriction"),
             Some("graphene_protocol::Restriction".to_owned())

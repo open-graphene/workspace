@@ -6,3 +6,19 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 3,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub symbol: String,
+    pub precision: u8,
+    pub issuer: crate::types::account::Id,
+    pub options:
+        graphene_protocol::AssetOptions<crate::types::account::Id, crate::types::asset::Id>,
+    pub dynamic_asset_data_id: crate::types::asset_dynamic_data::Id,
+    pub bitasset_data_id: Option<crate::types::asset_bitasset_data::Id>,
+    pub buyback_account: Option<crate::types::account::Id>,
+    pub for_liquidity_pool: Option<crate::types::liquidity_pool::Id>,
+    pub creation_block_num: u32,
+    pub creation_time: String,
+}

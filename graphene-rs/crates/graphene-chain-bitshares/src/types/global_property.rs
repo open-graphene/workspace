@@ -6,3 +6,13 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 0,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub parameters: graphene_protocol::ChainParameters,
+    pub pending_parameters: Option<graphene_protocol::ChainParameters>,
+    pub next_available_vote_id: u32,
+    pub active_committee_members: Vec<crate::types::committee_member::Id>,
+    pub active_witnesses: Vec<crate::types::witness::Id>,
+}

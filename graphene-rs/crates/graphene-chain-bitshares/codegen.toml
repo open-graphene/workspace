@@ -21,6 +21,18 @@ header_path = "libraries/chain/include/graphene/chain/operation_history_object.h
 source_path = "libraries/chain/small_objects.cpp"
 
 [[objects]]
+family_name = "asset"
+cpp_class = "asset_object"
+header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+source_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+
+[[objects]]
+family_name = "asset_bitasset_data"
+cpp_class = "asset_bitasset_data_object"
+header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+source_path = "libraries/chain/asset_object.cpp"
+
+[[objects]]
 family_name = "asset_dynamic_data"
 cpp_class = "asset_dynamic_data_object"
 header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
@@ -117,6 +129,12 @@ header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
 source_path = "libraries/chain/market_object.cpp"
 
 [[objects]]
+family_name = "global_property"
+cpp_class = "global_property_object"
+header_path = "libraries/chain/include/graphene/chain/global_property_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "htlc"
 cpp_class = "htlc_object"
 header_path = "libraries/chain/include/graphene/chain/htlc_object.hpp"
@@ -153,6 +171,12 @@ header_path = "libraries/chain/include/graphene/chain/ticket_object.hpp"
 source_path = "libraries/chain/ticket_object.cpp"
 
 [[objects]]
+family_name = "vesting_balance"
+cpp_class = "vesting_balance_object"
+header_path = "libraries/chain/include/graphene/chain/vesting_balance_object.hpp"
+source_path = "libraries/chain/include/graphene/chain/vesting_balance_object.hpp"
+
+[[objects]]
 family_name = "witness"
 cpp_class = "witness_object"
 header_path = "libraries/chain/include/graphene/chain/witness_object.hpp"
@@ -162,6 +186,12 @@ source_path = "libraries/chain/small_objects.cpp"
 family_name = "witness_schedule"
 cpp_class = "witness_schedule_object"
 header_path = "libraries/chain/include/graphene/chain/witness_schedule_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "worker"
+cpp_class = "worker_object"
+header_path = "libraries/chain/include/graphene/chain/worker_object.hpp"
 source_path = "libraries/chain/small_objects.cpp"
 
 [[objects]]
