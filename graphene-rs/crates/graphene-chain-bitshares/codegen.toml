@@ -1,3 +1,5 @@
+marker_objects = ["base", "null", "reserved0"]
+
 [chain]
 name = "bitshares"
 core_path = "chains/bitshares/bitshares-core"

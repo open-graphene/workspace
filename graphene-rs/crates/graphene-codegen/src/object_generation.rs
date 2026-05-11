@@ -8,6 +8,9 @@ pub struct CodegenConfig {
     pub chain: ChainGenerationConfig,
     /// FC-reflected objects whose Rust `Object` structs should be generated for this chain.
     pub objects: Vec<ObjectGeneration>,
+    /// Object families that exist in the ID space but have no reflected payload beyond `id`.
+    #[serde(default)]
+    pub marker_objects: Vec<String>,
 }
 
 /// Per-chain source metadata.

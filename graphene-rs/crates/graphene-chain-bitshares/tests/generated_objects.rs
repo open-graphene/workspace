@@ -1,12 +1,27 @@
 use graphene_chain_bitshares::types::{
     account, account_balance, account_history, account_statistics, asset, asset_bitasset_data,
-    asset_dynamic_data, balance, blinded_balance, block_summary, buyback, call_order,
+    asset_dynamic_data, balance, base, blinded_balance, block_summary, buyback, call_order,
     chain_property, collateral_bid, committee_member, credit_deal, credit_deal_summary,
     credit_offer, custom_authority, dynamic_global_property, fba_accumulator, force_settlement,
-    global_property, htlc, limit_order, liquidity_pool, samet_fund, special_authority, ticket,
-    vesting_balance, withdraw_permission, witness, witness_schedule, worker,
+    global_property, htlc, limit_order, liquidity_pool, null, reserved0, samet_fund,
+    special_authority, ticket, vesting_balance, withdraw_permission, witness, witness_schedule,
+    worker,
 };
 use serde_json::json;
+
+#[test]
+fn deserializes_marker_objects() {
+    let null_object: null::Object = serde_json::from_value(json!({ "id": "1.0.0" }))
+        .expect("null marker object should deserialize from Graphene JSON");
+    let base_object: base::Object = serde_json::from_value(json!({ "id": "1.1.0" }))
+        .expect("base marker object should deserialize from Graphene JSON");
+    let reserved_object: reserved0::Object = serde_json::from_value(json!({ "id": "2.2.0" }))
+        .expect("reserved0 marker object should deserialize from Graphene JSON");
+
+    assert_eq!(null_object.id.to_string(), "1.0.0");
+    assert_eq!(base_object.id.to_string(), "1.1.0");
+    assert_eq!(reserved_object.id.to_string(), "2.2.0");
+}
 
 #[test]
 fn deserializes_account_balance_object() {

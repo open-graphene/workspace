@@ -14,6 +14,7 @@ struct ChainConfig {
     core_path: String,
     crate_path: PathBuf,
     objects: Vec<ObjectGeneration>,
+    marker_objects: Vec<String>,
 }
 
 struct GeneratedFile {
@@ -64,7 +65,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for chain in &chains {
         let families = read_chain_families(&graphene_v2_root, chain)?;
-        let generated_objects = read_generated_object_fields(&graphene_v2_root, chain)?;
+        let generated_objects = read_generated_object_fields(chain, &graphene_v2_root)?;
         let generated_files = render_chain_files(chain, &families, &generated_objects);
         total_files += generated_files.len();
 
@@ -130,6 +131,7 @@ fn read_chain_configs(
             core_path: config.chain.core_path,
             crate_path,
             objects: config.objects,
+            marker_objects: config.marker_objects,
         });
     }
 
@@ -161,10 +163,14 @@ fn read_chain_families(
 }
 
 fn read_generated_object_fields(
-    graphene_v2_root: &Path,
     chain: &ChainConfig,
+    graphene_v2_root: &Path,
 ) -> Result<BTreeMap<String, Vec<RustField>>, Box<dyn std::error::Error>> {
     let mut generated_objects = BTreeMap::new();
+
+    for marker_object in &chain.marker_objects {
+        generated_objects.insert(marker_object.clone(), Vec::new());
+    }
 
     for object in &chain.objects {
         if let Some(fields) = read_object_fields(graphene_v2_root, chain, object)? {
