@@ -9,6 +9,12 @@ header_path = "libraries/chain/include/graphene/chain/account_object.hpp"
 source_path = "libraries/chain/account_object.cpp"
 
 [[objects]]
+family_name = "account_statistics"
+cpp_class = "account_statistics_object"
+header_path = "libraries/chain/include/graphene/chain/account_object.hpp"
+source_path = "libraries/chain/account_object.cpp"
+
+[[objects]]
 family_name = "account_history"
 cpp_class = "account_history_object"
 header_path = "libraries/chain/include/graphene/chain/operation_history_object.hpp"

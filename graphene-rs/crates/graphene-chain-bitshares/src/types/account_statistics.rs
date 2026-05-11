@@ -6,3 +6,32 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 6,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub owner: crate::types::account::Id,
+    pub name: String,
+    pub most_recent_op: crate::types::account_history::Id,
+    pub total_ops: u64,
+    pub removed_ops: u64,
+    pub total_core_in_orders: i64,
+    pub total_core_inactive: i64,
+    pub total_core_pob: i64,
+    pub total_core_pol: i64,
+    pub total_pob_value: i64,
+    pub total_pol_value: i64,
+    pub core_in_balance: i64,
+    pub has_cashback_vb: bool,
+    pub is_voting: bool,
+    pub last_vote_time: String,
+    pub vp_all: u64,
+    pub vp_active: u64,
+    pub vp_committee: u64,
+    pub vp_witness: u64,
+    pub vp_worker: u64,
+    pub vote_tally_time: String,
+    pub lifetime_fees_paid: i64,
+    pub pending_fees: i64,
+    pub pending_vested_fees: i64,
+}

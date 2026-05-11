@@ -353,6 +353,7 @@ fn parse_top_level_declarations(class_body: &str) -> Vec<CppField> {
     let mut angle_depth = 0usize;
     let mut paren_depth = 0usize;
     let mut brace_depth = 0usize;
+    let mut skipping_inline_function_body = false;
 
     for (index, character) in class_body.char_indices() {
         match character {
@@ -360,8 +361,19 @@ fn parse_top_level_declarations(class_body: &str) -> Vec<CppField> {
             '>' if angle_depth > 0 && brace_depth == 0 && paren_depth == 0 => angle_depth -= 1,
             '(' if brace_depth == 0 => paren_depth += 1,
             ')' if paren_depth > 0 && brace_depth == 0 => paren_depth -= 1,
-            '{' => brace_depth += 1,
-            '}' if brace_depth > 0 => brace_depth -= 1,
+            '{' => {
+                if brace_depth == 0 && class_body[statement_start..index].contains('(') {
+                    skipping_inline_function_body = true;
+                }
+                brace_depth += 1;
+            }
+            '}' if brace_depth > 0 => {
+                brace_depth -= 1;
+                if brace_depth == 0 && skipping_inline_function_body {
+                    statement_start = index + 1;
+                    skipping_inline_function_body = false;
+                }
+            }
             ';' if angle_depth == 0 && paren_depth == 0 && brace_depth == 0 => {
                 let statement = class_body[statement_start..index].trim();
                 if let Some(field) = parse_field_declaration(statement) {
@@ -979,6 +991,49 @@ mod tests {
                 name: "vote_id".to_owned(),
                 cpp_type: "vote_id_type".to_owned(),
             }]
+        );
+    }
+
+    #[test]
+    fn parses_fields_after_inline_method_body() {
+        let header = r#"
+            class account_statistics_object : public abstract_object<account_statistics_object,
+                                               implementation_ids, impl_account_statistics_object_type>
+            {
+               public:
+                  bool is_voting = false;
+
+                  inline bool has_some_core_voting() const
+                  {
+                     return is_voting;
+                  }
+
+                  share_type lifetime_fees_paid;
+                  share_type pending_fees;
+            };
+        "#;
+
+        assert_eq!(
+            parse_reflected_class_fields(
+                header,
+                "account_statistics_object",
+                &["is_voting", "lifetime_fees_paid", "pending_fees"]
+            )
+            .expect("fields after inline method should parse"),
+            vec![
+                CppField {
+                    name: "is_voting".to_owned(),
+                    cpp_type: "bool".to_owned(),
+                },
+                CppField {
+                    name: "lifetime_fees_paid".to_owned(),
+                    cpp_type: "share_type".to_owned(),
+                },
+                CppField {
+                    name: "pending_fees".to_owned(),
+                    cpp_type: "share_type".to_owned(),
+                },
+            ]
         );
     }
 

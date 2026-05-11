@@ -1,7 +1,7 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, asset_dynamic_data, blinded_balance, block_summary, buyback,
-    chain_property, committee_member, dynamic_global_property, fba_accumulator, special_authority,
-    withdraw_permission, witness, witness_schedule,
+    account_balance, account_history, account_statistics, asset_dynamic_data, blinded_balance,
+    block_summary, buyback, chain_property, committee_member, dynamic_global_property,
+    fba_accumulator, special_authority, withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
 
@@ -40,6 +40,64 @@ fn deserializes_account_history_object() {
     assert_eq!(object.operation_id.to_string(), "1.11.55");
     assert_eq!(object.sequence, 7);
     assert_eq!(object.next.to_string(), "2.9.99");
+}
+
+#[test]
+fn deserializes_account_statistics_object() {
+    let object: account_statistics::Object = serde_json::from_value(json!({
+        "id": "2.6.17",
+        "owner": "1.2.17",
+        "name": "alice",
+        "most_recent_op": "2.9.100",
+        "total_ops": 10_u64,
+        "removed_ops": 1_u64,
+        "total_core_in_orders": 2_i64,
+        "total_core_inactive": 3_i64,
+        "total_core_pob": 4_i64,
+        "total_core_pol": 5_i64,
+        "total_pob_value": 6_i64,
+        "total_pol_value": 7_i64,
+        "core_in_balance": 8_i64,
+        "has_cashback_vb": true,
+        "is_voting": true,
+        "last_vote_time": "2024-01-02T03:04:05",
+        "vp_all": 11_u64,
+        "vp_active": 12_u64,
+        "vp_committee": 13_u64,
+        "vp_witness": 14_u64,
+        "vp_worker": 15_u64,
+        "vote_tally_time": "2024-01-02T04:04:05",
+        "lifetime_fees_paid": 16_i64,
+        "pending_fees": 17_i64,
+        "pending_vested_fees": 18_i64
+    }))
+    .expect("account_statistics object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.6.17");
+    assert_eq!(object.owner.to_string(), "1.2.17");
+    assert_eq!(object.name, "alice");
+    assert_eq!(object.most_recent_op.to_string(), "2.9.100");
+    assert_eq!(object.total_ops, 10);
+    assert_eq!(object.removed_ops, 1);
+    assert_eq!(object.total_core_in_orders, 2);
+    assert_eq!(object.total_core_inactive, 3);
+    assert_eq!(object.total_core_pob, 4);
+    assert_eq!(object.total_core_pol, 5);
+    assert_eq!(object.total_pob_value, 6);
+    assert_eq!(object.total_pol_value, 7);
+    assert_eq!(object.core_in_balance, 8);
+    assert!(object.has_cashback_vb);
+    assert!(object.is_voting);
+    assert_eq!(object.last_vote_time, "2024-01-02T03:04:05");
+    assert_eq!(object.vp_all, 11);
+    assert_eq!(object.vp_active, 12);
+    assert_eq!(object.vp_committee, 13);
+    assert_eq!(object.vp_witness, 14);
+    assert_eq!(object.vp_worker, 15);
+    assert_eq!(object.vote_tally_time, "2024-01-02T04:04:05");
+    assert_eq!(object.lifetime_fees_paid, 16);
+    assert_eq!(object.pending_fees, 17);
+    assert_eq!(object.pending_vested_fees, 18);
 }
 
 #[test]
