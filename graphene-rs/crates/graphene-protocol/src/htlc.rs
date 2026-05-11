@@ -60,6 +60,57 @@ impl<'de> Visitor<'de> for HtlcHashVisitor {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::HtlcHash;
+
+    fn parse_htlc_hash(json: &str) -> Result<HtlcHash, serde_json::Error> {
+        serde_json::from_str(json)
+    }
+
+    #[test]
+    fn htlc_hash_deserializes_known_static_variant_tags() {
+        let cases = [
+            (r#"[0,"ripemd"]"#, HtlcHash::Ripemd160("ripemd".to_owned())),
+            (r#"[1,"sha1"]"#, HtlcHash::Sha1("sha1".to_owned())),
+            (r#"[2,"sha256"]"#, HtlcHash::Sha256("sha256".to_owned())),
+            (r#"[3,"hash160"]"#, HtlcHash::Hash160("hash160".to_owned())),
+        ];
+
+        for (json, expected) in cases {
+            assert_eq!(parse_htlc_hash(json).unwrap(), expected);
+        }
+    }
+
+    #[test]
+    fn htlc_hash_reports_unknown_static_variant_tags() {
+        let error = parse_htlc_hash(r#"[4,"future"]"#).unwrap_err();
+
+        assert!(
+            error.to_string().contains("unknown htlc_hash tag 4"),
+            "unexpected error: {error}"
+        );
+    }
+
+    #[test]
+    fn htlc_hash_rejects_malformed_static_variant_shapes() {
+        let cases = [
+            ("[]", "missing tag"),
+            ("[0]", "missing hash"),
+            ("[0,42]", "wrong hash type"),
+            (r#"{"tag":0,"hash":"abc"}"#, "non-sequence input"),
+            (r#"[0,"abc","extra"]"#, "trailing sequence element"),
+        ];
+
+        for (json, description) in cases {
+            assert!(
+                parse_htlc_hash(json).is_err(),
+                "expected {description} to fail for {json}"
+            );
+        }
+    }
+}
+
 /// Hash-lock condition for an HTLC.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
 pub struct HtlcHashLock {

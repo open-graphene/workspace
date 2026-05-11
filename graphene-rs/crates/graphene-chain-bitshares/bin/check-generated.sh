@@ -26,10 +26,6 @@ EXPECTED_UNSUPPORTED = {
     ("blind_transfer_operation", "40", "outputs", "vector<blind_output>"),
     ("transfer_from_blind_operation", "41", "blinding_factor", "blind_factor_type"),
     ("transfer_from_blind_operation", "41", "inputs", "vector<blind_input>"),
-    ("htlc_create_operation", "49", "preimage_hash", "htlc_hash"),
-    ("htlc_create_operation", "49", "extensions", "extension<additional_options_type>"),
-    ("htlc_redeemed_operation", "51", "htlc_preimage_hash", "htlc_hash"),
-    ("htlc_refund_operation", "53", "htlc_preimage_hash", "htlc_hash"),
 }
 
 

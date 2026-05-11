@@ -435,6 +435,18 @@ pub struct AssetUpdateIssuerOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct HtlcCreateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub from: graphene_protocol::ObjectId,
+    pub to: graphene_protocol::ObjectId,
+    pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub preimage_hash: graphene_protocol::HtlcHash,
+    pub preimage_size: u16,
+    pub claim_period_seconds: u32,
+    pub extensions: graphene_protocol::RestrictionArgument,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct HtlcRedeemOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub htlc_id: graphene_protocol::ObjectId,
@@ -444,12 +456,36 @@ pub struct HtlcRedeemOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct HtlcRedeemedOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub htlc_id: graphene_protocol::ObjectId,
+    pub from: graphene_protocol::ObjectId,
+    pub to: graphene_protocol::ObjectId,
+    pub redeemer: graphene_protocol::ObjectId,
+    pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub htlc_preimage_hash: graphene_protocol::HtlcHash,
+    pub htlc_preimage_size: u16,
+    pub preimage: Vec<u8>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct HtlcExtendOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub htlc_id: graphene_protocol::ObjectId,
     pub update_issuer: graphene_protocol::ObjectId,
     pub seconds_to_add: u32,
     pub extensions: Vec<graphene_protocol::RestrictionArgument>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct HtlcRefundOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub htlc_id: graphene_protocol::ObjectId,
+    pub to: graphene_protocol::ObjectId,
+    pub original_htlc_recipient: graphene_protocol::ObjectId,
+    pub htlc_amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub htlc_preimage_hash: graphene_protocol::HtlcHash,
+    pub htlc_preimage_size: u16,
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
@@ -771,8 +807,11 @@ pub enum Operation {
     ExecuteBid(ExecuteBidOperation),
     AssetClaimPool(AssetClaimPoolOperation),
     AssetUpdateIssuer(AssetUpdateIssuerOperation),
+    HtlcCreate(HtlcCreateOperation),
     HtlcRedeem(HtlcRedeemOperation),
+    HtlcRedeemed(HtlcRedeemedOperation),
     HtlcExtend(HtlcExtendOperation),
+    HtlcRefund(HtlcRefundOperation),
     CustomAuthorityCreate(CustomAuthorityCreateOperation),
     CustomAuthorityUpdate(CustomAuthorityUpdateOperation),
     CustomAuthorityDelete(CustomAuthorityDeleteOperation),
@@ -852,8 +891,11 @@ impl Operation {
             Self::ExecuteBid(_) => 46,
             Self::AssetClaimPool(_) => 47,
             Self::AssetUpdateIssuer(_) => 48,
+            Self::HtlcCreate(_) => 49,
             Self::HtlcRedeem(_) => 50,
+            Self::HtlcRedeemed(_) => 51,
             Self::HtlcExtend(_) => 52,
+            Self::HtlcRefund(_) => 53,
             Self::CustomAuthorityCreate(_) => 54,
             Self::CustomAuthorityUpdate(_) => 55,
             Self::CustomAuthorityDelete(_) => 56,
@@ -1051,11 +1093,20 @@ impl<'de> serde::Deserialize<'de> for Operation {
             48 => serde_json::from_value(payload)
                 .map(Self::AssetUpdateIssuer)
                 .map_err(serde::de::Error::custom),
+            49 => serde_json::from_value(payload)
+                .map(Self::HtlcCreate)
+                .map_err(serde::de::Error::custom),
             50 => serde_json::from_value(payload)
                 .map(Self::HtlcRedeem)
                 .map_err(serde::de::Error::custom),
+            51 => serde_json::from_value(payload)
+                .map(Self::HtlcRedeemed)
+                .map_err(serde::de::Error::custom),
             52 => serde_json::from_value(payload)
                 .map(Self::HtlcExtend)
+                .map_err(serde::de::Error::custom),
+            53 => serde_json::from_value(payload)
+                .map(Self::HtlcRefund)
                 .map_err(serde::de::Error::custom),
             54 => serde_json::from_value(payload)
                 .map(Self::CustomAuthorityCreate)

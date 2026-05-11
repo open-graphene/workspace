@@ -582,6 +582,7 @@ fn map_operation_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "block_id_type" => return Some("String".to_owned()),
         "chain_id_type" => return Some("String".to_owned()),
         "transaction_id_type" => return Some("String".to_owned()),
+        "htlc_hash" => return Some("graphene_protocol::HtlcHash".to_owned()),
         "chain_parameters" => return Some("graphene_protocol::ChainParameters".to_owned()),
         "vesting_policy_initializer" => {
             return Some("graphene_protocol::VestingPolicyInitializer".to_owned());
@@ -676,10 +677,6 @@ fn m003_deferred_operation_reason(
     cpp_type: &str,
 ) -> Option<String> {
     let reason = match (operation_name, field_name, cpp_type) {
-        (_, _, "htlc_hash") => "M003 crypto boundary: HTLC hash/preimage support is deferred",
-        ("htlc_create_operation", "extensions", "extension<additional_options_type>") => {
-            "M003 crypto boundary: HTLC additional options extension support is deferred"
-        }
         (_, _, "blind_factor_type" | "vector<blind_input>" | "vector<blind_output>") => {
             "M003 confidential boundary: blind transfer input/output/factor support is deferred"
         }
@@ -712,6 +709,10 @@ fn is_approved_operation_extension_fallback(
                 | ("asset_publish_feed_operation", "extension<ext>")
                 | (
                     "asset_claim_fees_operation",
+                    "extension<additional_options_type>"
+                )
+                | (
+                    "htlc_create_operation",
                     "extension<additional_options_type>"
                 )
                 | ("credit_offer_accept_operation", "extension<ext>")
@@ -2962,25 +2963,46 @@ mod tests {
 
     #[test]
     fn operation_mapper_reports_m003_deferred_crypto_and_confidential_boundaries() {
+        for (operation_name, field_name) in [
+            ("htlc_create_operation", "preimage_hash"),
+            ("htlc_redeemed_operation", "htlc_preimage_hash"),
+            ("htlc_refund_operation", "htlc_preimage_hash"),
+        ] {
+            assert_eq!(
+                map_operation_field_for_operation(
+                    operation_name,
+                    &OperationField {
+                        name: field_name.to_owned(),
+                        cpp_type: "htlc_hash".to_owned(),
+                        source_file: "m003.hpp".to_owned(),
+                        source_line: 1,
+                    },
+                ),
+                OperationFieldClassification::Typed {
+                    rust_type: "graphene_protocol::HtlcHash".to_owned(),
+                },
+                "{operation_name}.{field_name} should map htlc_hash to the shared protocol primitive"
+            );
+        }
+
+        assert_eq!(
+            map_operation_field_for_operation(
+                "htlc_create_operation",
+                &OperationField {
+                    name: "extensions".to_owned(),
+                    cpp_type: "extension<additional_options_type>".to_owned(),
+                    source_file: "m003.hpp".to_owned(),
+                    source_line: 1,
+                },
+            ),
+            OperationFieldClassification::ApprovedRawFallback {
+                rust_type: "graphene_protocol::RestrictionArgument".to_owned(),
+                reason: "approved raw fallback for extension/static-variant payload".to_owned(),
+            },
+            "htlc_create_operation.extensions should use the approved raw fallback boundary"
+        );
+
         for (operation_name, field_name, cpp_type, reason_markers) in [
-            (
-                "htlc_create_operation",
-                "preimage_hash",
-                "htlc_hash",
-                ["M003", "crypto", "HTLC"],
-            ),
-            (
-                "htlc_redeemed_operation",
-                "htlc_preimage_hash",
-                "htlc_hash",
-                ["M003", "crypto", "HTLC"],
-            ),
-            (
-                "htlc_create_operation",
-                "extensions",
-                "extension<additional_options_type>",
-                ["M003", "crypto", "HTLC"],
-            ),
             (
                 "transfer_to_blind_operation",
                 "blinding_factor",

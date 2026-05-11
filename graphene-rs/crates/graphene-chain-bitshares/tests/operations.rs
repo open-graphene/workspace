@@ -7,7 +7,7 @@ use graphene_chain_bitshares::operations::{
     WorkerCreateOperation,
 };
 use graphene_protocol::{
-    LimitOrderAutoAction, Predicate, VestingPolicyInitializer, WorkerInitializer,
+    HtlcHash, LimitOrderAutoAction, Predicate, VestingPolicyInitializer, WorkerInitializer,
 };
 use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet};
@@ -258,7 +258,53 @@ fn htlc_create_payload_json() -> Value {
         "preimage_hash": [2_u64, "00112233445566778899aabbccddeeff00112233"],
         "preimage_size": 20_u16,
         "claim_period_seconds": 3600_u32,
-        "extensions": [{ "htlc_note": "M003 deferred payload remains raw" }]
+        "extensions": [{ "htlc_note": "M003 approved raw fallback remains raw" }]
+    })
+}
+
+fn htlc_redeem_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 133_i64, "asset_id": "1.3.0" },
+        "htlc_id": "1.16.42",
+        "redeemer": "1.2.18",
+        "preimage": [1_u8, 2_u8, 3_u8, 4_u8],
+        "extensions": [[0_u64, { "redeem_note": "raw redeem extension" }]]
+    })
+}
+
+fn htlc_redeemed_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 0_i64, "asset_id": "1.3.0" },
+        "htlc_id": "1.16.42",
+        "from": "1.2.17",
+        "to": "1.2.18",
+        "redeemer": "1.2.18",
+        "amount": { "amount": "4567", "asset_id": "1.3.9" },
+        "htlc_preimage_hash": [3_u64, "abcdef00112233445566778899aabbccddeeff00"],
+        "htlc_preimage_size": 20_u16,
+        "preimage": [9_u8, 8_u8, 7_u8, 6_u8]
+    })
+}
+
+fn htlc_extend_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 134_i64, "asset_id": "1.3.0" },
+        "htlc_id": "1.16.42",
+        "update_issuer": "1.2.17",
+        "seconds_to_add": 7200_u32,
+        "extensions": [[0_u64, { "extend_note": "raw extend extension" }]]
+    })
+}
+
+fn htlc_refund_payload_json() -> Value {
+    json!({
+        "fee": { "amount": 0_i64, "asset_id": "1.3.0" },
+        "htlc_id": "1.16.42",
+        "to": "1.2.17",
+        "original_htlc_recipient": "1.2.18",
+        "htlc_amount": { "amount": "4567", "asset_id": "1.3.9" },
+        "htlc_preimage_hash": [1_u64, "sha1-fixture-hash"],
+        "htlc_preimage_size": 20_u16
     })
 }
 
@@ -401,6 +447,114 @@ fn proposal_create_payload_json() -> Value {
         "review_period_seconds": 3600_u32,
         "extensions": []
     })
+}
+
+#[test]
+fn operations_enum_deserializes_typed_htlc_static_variant_tags() {
+    let htlc_create: Operation =
+        serde_json::from_value(json!([49_u64, htlc_create_payload_json()]))
+            .expect("tag 49 htlc_create should deserialize through typed enum");
+    assert_eq!(htlc_create.tag(), 49);
+    assert!(htlc_create.is_typed());
+    match htlc_create {
+        Operation::HtlcCreate(operation) => {
+            assert_eq!(operation.from.to_string(), "1.2.17");
+            assert_eq!(operation.to.to_string(), "1.2.18");
+            assert_eq!(operation.amount.amount, 4567);
+            assert_eq!(operation.amount.asset_id.to_string(), "1.3.9");
+            assert_eq!(
+                operation.preimage_hash,
+                HtlcHash::Sha256("00112233445566778899aabbccddeeff00112233".to_owned())
+            );
+            assert_eq!(operation.preimage_size, 20);
+            assert_eq!(operation.claim_period_seconds, 3600);
+            assert_eq!(
+                operation.extensions.0,
+                json!([{ "htlc_note": "M003 approved raw fallback remains raw" }])
+            );
+        }
+        other => panic!("unexpected operation variant for tag 49: {other:?}"),
+    }
+
+    let htlc_redeem: Operation =
+        serde_json::from_value(json!([50_u64, htlc_redeem_payload_json()]))
+            .expect("tag 50 htlc_redeem should remain typed");
+    assert_eq!(htlc_redeem.tag(), 50);
+    assert!(htlc_redeem.is_typed());
+    match htlc_redeem {
+        Operation::HtlcRedeem(operation) => {
+            assert_eq!(operation.htlc_id.to_string(), "1.16.42");
+            assert_eq!(operation.redeemer.to_string(), "1.2.18");
+            assert_eq!(operation.preimage, vec![1, 2, 3, 4]);
+            assert_eq!(
+                operation.extensions[0].0,
+                json!([0_u64, { "redeem_note": "raw redeem extension" }])
+            );
+        }
+        other => panic!("unexpected operation variant for tag 50: {other:?}"),
+    }
+
+    let htlc_redeemed: Operation =
+        serde_json::from_value(json!([51_u64, htlc_redeemed_payload_json()]))
+            .expect("tag 51 htlc_redeemed should deserialize through typed enum");
+    assert_eq!(htlc_redeemed.tag(), 51);
+    assert!(htlc_redeemed.is_typed());
+    match htlc_redeemed {
+        Operation::HtlcRedeemed(operation) => {
+            assert_eq!(operation.htlc_id.to_string(), "1.16.42");
+            assert_eq!(operation.from.to_string(), "1.2.17");
+            assert_eq!(operation.to.to_string(), "1.2.18");
+            assert_eq!(operation.redeemer.to_string(), "1.2.18");
+            assert_eq!(operation.amount.amount, 4567);
+            assert_eq!(operation.amount.asset_id.to_string(), "1.3.9");
+            assert_eq!(
+                operation.htlc_preimage_hash,
+                HtlcHash::Hash160("abcdef00112233445566778899aabbccddeeff00".to_owned())
+            );
+            assert_eq!(operation.htlc_preimage_size, 20);
+            assert_eq!(operation.preimage, vec![9, 8, 7, 6]);
+        }
+        other => panic!("unexpected operation variant for tag 51: {other:?}"),
+    }
+
+    let htlc_extend: Operation =
+        serde_json::from_value(json!([52_u64, htlc_extend_payload_json()]))
+            .expect("tag 52 htlc_extend should remain typed");
+    assert_eq!(htlc_extend.tag(), 52);
+    assert!(htlc_extend.is_typed());
+    match htlc_extend {
+        Operation::HtlcExtend(operation) => {
+            assert_eq!(operation.htlc_id.to_string(), "1.16.42");
+            assert_eq!(operation.update_issuer.to_string(), "1.2.17");
+            assert_eq!(operation.seconds_to_add, 7200);
+            assert_eq!(
+                operation.extensions[0].0,
+                json!([0_u64, { "extend_note": "raw extend extension" }])
+            );
+        }
+        other => panic!("unexpected operation variant for tag 52: {other:?}"),
+    }
+
+    let htlc_refund: Operation =
+        serde_json::from_value(json!([53_u64, htlc_refund_payload_json()]))
+            .expect("tag 53 htlc_refund should deserialize through typed enum");
+    assert_eq!(htlc_refund.tag(), 53);
+    assert!(htlc_refund.is_typed());
+    match htlc_refund {
+        Operation::HtlcRefund(operation) => {
+            assert_eq!(operation.htlc_id.to_string(), "1.16.42");
+            assert_eq!(operation.to.to_string(), "1.2.17");
+            assert_eq!(operation.original_htlc_recipient.to_string(), "1.2.18");
+            assert_eq!(operation.htlc_amount.amount, 4567);
+            assert_eq!(operation.htlc_amount.asset_id.to_string(), "1.3.9");
+            assert_eq!(
+                operation.htlc_preimage_hash,
+                HtlcHash::Sha1("sha1-fixture-hash".to_owned())
+            );
+            assert_eq!(operation.htlc_preimage_size, 20);
+        }
+        other => panic!("unexpected operation variant for tag 53: {other:?}"),
+    }
 }
 
 #[test]
@@ -910,7 +1064,7 @@ fn operation_enum_deserializes_typed_s02_static_variant_tags() {
 }
 
 #[test]
-fn operation_enum_deserializes_proposal_create_nested_typed_and_fallback_operations() {
+fn operation_enum_deserializes_proposal_create_nested_htlc_operation_as_typed() {
     let operation: Operation =
         serde_json::from_value(json!([22_u64, proposal_create_payload_json()]))
             .expect("tag 22 proposal_create operation should deserialize through typed enum");
@@ -934,6 +1088,7 @@ fn operation_enum_deserializes_proposal_create_nested_typed_and_fallback_operati
             }
             assert!(proposal.proposed_ops[0].op.is_typed());
 
+            assert_eq!(proposal.proposed_ops[1].op.tag(), 999);
             assert_eq!(
                 proposal.proposed_ops[1].op,
                 Operation::Unsupported {
@@ -943,14 +1098,27 @@ fn operation_enum_deserializes_proposal_create_nested_typed_and_fallback_operati
             );
             assert!(!proposal.proposed_ops[1].op.is_typed());
 
-            assert_eq!(
-                proposal.proposed_ops[2].op,
-                Operation::Unsupported {
-                    tag: 49,
-                    payload: htlc_create_payload_json()
+            let nested_htlc = &proposal.proposed_ops[2].op;
+            assert_eq!(nested_htlc.tag(), 49);
+            assert!(nested_htlc.is_typed());
+            match nested_htlc {
+                Operation::HtlcCreate(operation) => {
+                    assert_eq!(operation.from.to_string(), "1.2.17");
+                    assert_eq!(operation.to.to_string(), "1.2.18");
+                    assert_eq!(operation.amount.amount, 4567);
+                    assert_eq!(operation.amount.asset_id.to_string(), "1.3.9");
+                    assert_eq!(
+                        operation.preimage_hash,
+                        HtlcHash::Sha256("00112233445566778899aabbccddeeff00112233".to_owned())
+                    );
+                    assert_eq!(operation.claim_period_seconds, 3600);
+                    assert_eq!(
+                        operation.extensions.0,
+                        json!([{ "htlc_note": "M003 approved raw fallback remains raw" }])
+                    );
                 }
-            );
-            assert!(!proposal.proposed_ops[2].op.is_typed());
+                other => panic!("nested known tag 49 should be typed htlc_create: {other:?}"),
+            }
         }
         other => panic!("unexpected operation variant: {other:?}"),
     }
@@ -981,6 +1149,81 @@ fn operation_enum_rejects_malformed_proposal_nested_wrappers_instead_of_falling_
 }
 
 #[test]
+fn operations_enum_rejects_malformed_known_htlc_payloads_with_clear_errors() {
+    let mut unknown_create_hash = htlc_create_payload_json();
+    unknown_create_hash["preimage_hash"] = json!([9_u64, "future"]);
+    let unknown_create_hash_error =
+        serde_json::from_value::<Operation>(json!([49_u64, unknown_create_hash]))
+            .expect_err("known tag 49 should reject unknown htlc_hash tags");
+    assert!(
+        unknown_create_hash_error
+            .to_string()
+            .contains("unknown htlc_hash tag 9"),
+        "unexpected error: {unknown_create_hash_error}"
+    );
+
+    let mut missing_claim_period = htlc_create_payload_json();
+    missing_claim_period
+        .as_object_mut()
+        .expect("htlc_create fixture should be an object")
+        .remove("claim_period_seconds");
+    let missing_claim_period_error =
+        serde_json::from_value::<Operation>(json!([49_u64, missing_claim_period]))
+            .expect_err("known tag 49 should reject missing claim_period_seconds");
+    assert!(
+        missing_claim_period_error
+            .to_string()
+            .contains("claim_period_seconds"),
+        "unexpected error: {missing_claim_period_error}"
+    );
+
+    let mut missing_preimage_hash = htlc_create_payload_json();
+    missing_preimage_hash
+        .as_object_mut()
+        .expect("htlc_create fixture should be an object")
+        .remove("preimage_hash");
+    let missing_preimage_hash_error =
+        serde_json::from_value::<Operation>(json!([49_u64, missing_preimage_hash]))
+            .expect_err("known tag 49 should reject missing preimage_hash");
+    assert!(
+        missing_preimage_hash_error
+            .to_string()
+            .contains("preimage_hash"),
+        "unexpected error: {missing_preimage_hash_error}"
+    );
+
+    let mut unknown_redeemed_hash = htlc_redeemed_payload_json();
+    unknown_redeemed_hash["htlc_preimage_hash"] = json!([4_u64, "future"]);
+    let unknown_redeemed_hash_error =
+        serde_json::from_value::<Operation>(json!([51_u64, unknown_redeemed_hash]))
+            .expect_err("known tag 51 should reject unknown htlc_preimage_hash tags");
+    assert!(
+        unknown_redeemed_hash_error
+            .to_string()
+            .contains("unknown htlc_hash tag 4")
+            || unknown_redeemed_hash_error
+                .to_string()
+                .contains("htlc_preimage_hash"),
+        "unexpected error: {unknown_redeemed_hash_error}"
+    );
+
+    let mut malformed_nested_htlc = htlc_create_payload_json();
+    malformed_nested_htlc["preimage_hash"] = json!([9_u64, "future"]);
+    let mut proposal_with_malformed_htlc = proposal_create_payload_json();
+    proposal_with_malformed_htlc["proposed_ops"] =
+        json!([{ "op": [49_u64, malformed_nested_htlc] }]);
+    let malformed_nested_htlc_error =
+        serde_json::from_value::<Operation>(json!([22_u64, proposal_with_malformed_htlc]))
+            .expect_err("known proposal tag 22 should reject nested malformed known HTLC payloads");
+    assert!(
+        malformed_nested_htlc_error
+            .to_string()
+            .contains("unknown htlc_hash tag 9"),
+        "unexpected error: {malformed_nested_htlc_error}"
+    );
+}
+
+#[test]
 fn operation_enum_preserves_unknown_payloads_as_unsupported() {
     let unknown_payload = json!({ "future": "payload", "nested": [1, 2, 3] });
     let unknown: Operation = serde_json::from_value(json!([999_u64, unknown_payload.clone()]))
@@ -994,6 +1237,68 @@ fn operation_enum_preserves_unknown_payloads_as_unsupported() {
             payload: unknown_payload
         }
     );
+}
+
+#[test]
+fn operation_enum_preserves_deferred_blind_confidential_payloads_as_unsupported() {
+    for (tag, payload) in [
+        (
+            39_u16,
+            json!({
+                "inputs": [
+                    {
+                        "commitment": "02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                        "owner": "BTS8HF8Mtr9TjW1LxQcyP9KWf3BMaj2PCt6HN9YRzysjmrTjbeiE5"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "commitment": "03bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                        "range_proof": "synthetic-range-proof",
+                        "memo": { "message": "blind transfer deferred fallback" }
+                    }
+                ],
+                "blinding_factor": "000102030405060708090a0b0c0d0e0f",
+                "deferred_marker": "blind_transfer_operation"
+            }),
+        ),
+        (
+            40_u16,
+            json!({
+                "fee": { "amount": 0_i64, "asset_id": "1.3.0" },
+                "from": "1.2.17",
+                "amount": { "amount": "12345", "asset_id": "1.3.9" },
+                "outputs": [
+                    {
+                        "owner": "BTS8HF8Mtr9TjW1LxQcyP9KWf3BMaj2PCt6HN9YRzysjmrTjbeiE5",
+                        "stealth_memo": [0_u64, { "nonce": "tag-40", "payload": [1_u8, 2_u8, 3_u8] }]
+                    }
+                ],
+                "deferred_marker": "transfer_to_blind_operation"
+            }),
+        ),
+        (
+            41_u16,
+            json!({
+                "fee": { "amount": 1_i64, "asset_id": "1.3.0" },
+                "to": "1.2.18",
+                "amount": { "amount": "67890", "asset_id": "1.3.9" },
+                "inputs": [
+                    {
+                        "commitment": "04cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                        "authority": { "weight_threshold": 1_u32, "key_auths": [], "account_auths": [], "address_auths": [] }
+                    }
+                ],
+                "deferred_marker": "transfer_from_blind_operation"
+            }),
+        ),
+    ] {
+        let operation: Operation = serde_json::from_value(json!([tag, payload.clone()]))
+            .expect("deferred blind/confidential operation should preserve raw payload");
+        assert_eq!(operation.tag(), tag);
+        assert!(!operation.is_typed());
+        assert_eq!(operation, Operation::Unsupported { tag, payload });
+    }
 }
 
 #[test]
@@ -1472,25 +1777,6 @@ fn expected_m003_unsupported_rows() -> BTreeSet<(String, String, String, String)
             "inputs",
             "vector<blind_input>",
         ),
-        ("htlc_create_operation", "49", "preimage_hash", "htlc_hash"),
-        (
-            "htlc_create_operation",
-            "49",
-            "extensions",
-            "extension<additional_options_type>",
-        ),
-        (
-            "htlc_redeemed_operation",
-            "51",
-            "htlc_preimage_hash",
-            "htlc_hash",
-        ),
-        (
-            "htlc_refund_operation",
-            "53",
-            "htlc_preimage_hash",
-            "htlc_hash",
-        ),
     ]
     .into_iter()
     .map(|(operation, tag, field, cpp_type)| {
@@ -1631,6 +1917,9 @@ fn operations_report_names_raw_fallback_and_unsupported_metadata() {
         "| credit_offer_accept_operation | 72 | extensions | `extension<ext>` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/credit_offer.hpp:152 | unsupported |",
         "| limit_order_update_operation | 77 | on_fill | `optional<vector<limit_order_auto_action>>` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/market.hpp:129 | unsupported |",
         "| proposal_create_operation | 22 | proposed_ops | `vector<op_wrapper>` |",
+        "| htlc_create_operation | 49 | preimage_hash | `htlc_hash` |",
+        "| htlc_redeemed_operation | 51 | htlc_preimage_hash | `htlc_hash` |",
+        "| htlc_refund_operation | 53 | htlc_preimage_hash | `htlc_hash` |",
     ] {
         assert!(
             !report.contains(unsupported_s02_row),
@@ -1655,5 +1944,8 @@ fn operations_report_names_raw_fallback_and_unsupported_metadata() {
     assert!(report.contains("| credit_offer_accept_operation | 72 | extensions | `extension<ext>` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/credit_offer.hpp:152 | approved_raw_fallback | approved raw fallback for operation-scoped extension<ext> payload |"));
     assert!(report.contains("| limit_order_update_operation | 77 | extensions | `extensions_type` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/market.hpp:131 | approved_raw_fallback | approved raw fallback for extension/static-variant payload |"));
     assert!(report.contains("| proposal_create_operation | 22 | extensions | `extensions_type` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/proposal.hpp:82 | approved_raw_fallback | approved raw fallback for extension/static-variant payload |"));
+    assert!(report.contains("| htlc_create_operation | 49 | extensions | `extension<additional_options_type>` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/htlc.hpp:72 | approved_raw_fallback | approved raw fallback for extension/static-variant payload |"));
+    assert!(report.contains("| htlc_redeem_operation | 50 | extensions | `extensions_type` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/htlc.hpp:105 | approved_raw_fallback | approved raw fallback for extension/static-variant payload |"));
+    assert!(report.contains("| htlc_extend_operation | 52 | extensions | `extensions_type` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/htlc.hpp:168 | approved_raw_fallback | approved raw fallback for extension/static-variant payload |"));
     assert!(report.contains("| assert_operation | 36 | extensions | `extensions_type` | chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/assert.hpp:101 | approved_raw_fallback | approved raw fallback for extension/static-variant payload |"));
 }
