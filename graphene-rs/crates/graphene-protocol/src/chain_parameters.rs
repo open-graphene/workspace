@@ -46,12 +46,16 @@ pub struct ChainParameters {
     pub network_percent_of_fee: u16,
     pub lifetime_referrer_percent_of_fee: u16,
     pub cashback_vesting_period_seconds: u32,
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub cashback_vesting_threshold: i64,
     pub count_non_member_votes: bool,
     pub allow_non_member_whitelists: bool,
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub witness_pay_per_block: i64,
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub worker_budget_per_day: i64,
     pub max_predicate_opcode: u16,
+    #[serde(deserialize_with = "crate::i64_from_number_or_string")]
     pub fee_liquidation_threshold: i64,
     pub accounts_per_fee_scale: u16,
     pub account_fee_scale_bitshifts: u8,
@@ -66,4 +70,93 @@ pub struct ImmutableChainParameters {
     pub min_witness_count: u16,
     pub num_special_accounts: u32,
     pub num_special_assets: u32,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn chain_parameters_accepts_string_encoded_share_fields() {
+        let parameters: ChainParameters = serde_json::from_str(
+            r#"
+            {
+                "current_fees": {},
+                "block_interval": 3,
+                "maintenance_interval": 3600,
+                "maintenance_skip_slots": 3,
+                "committee_proposal_review_period": 1209600,
+                "maximum_transaction_size": 2048,
+                "maximum_block_size": 2000000,
+                "maximum_time_until_expiration": 86400,
+                "maximum_proposal_lifetime": 2419200,
+                "maximum_asset_whitelist_authorities": 10,
+                "maximum_asset_feed_publishers": 10,
+                "maximum_witness_count": 1001,
+                "maximum_committee_count": 1001,
+                "maximum_authority_membership": 10,
+                "reserve_percent_of_fee": 2000,
+                "network_percent_of_fee": 2000,
+                "lifetime_referrer_percent_of_fee": 3000,
+                "cashback_vesting_period_seconds": 31536000,
+                "cashback_vesting_threshold": "10000000",
+                "count_non_member_votes": true,
+                "allow_non_member_whitelists": false,
+                "witness_pay_per_block": "150000",
+                "worker_budget_per_day": "500000000",
+                "max_predicate_opcode": 2,
+                "fee_liquidation_threshold": "100000000",
+                "accounts_per_fee_scale": 1000,
+                "account_fee_scale_bitshifts": 4,
+                "max_authority_depth": 2,
+                "extensions": {}
+            }
+            "#,
+        )
+        .expect("chain parameters deserialize string-encoded share fields");
+
+        assert_eq!(parameters.cashback_vesting_threshold, 10_000_000);
+        assert_eq!(parameters.witness_pay_per_block, 150_000);
+        assert_eq!(parameters.worker_budget_per_day, 500_000_000);
+        assert_eq!(parameters.fee_liquidation_threshold, 100_000_000);
+    }
+
+    #[test]
+    fn chain_parameters_rejects_malformed_string_encoded_share_fields() {
+        let malformed = r#"
+        {
+            "current_fees": {},
+            "block_interval": 3,
+            "maintenance_interval": 3600,
+            "maintenance_skip_slots": 3,
+            "committee_proposal_review_period": 1209600,
+            "maximum_transaction_size": 2048,
+            "maximum_block_size": 2000000,
+            "maximum_time_until_expiration": 86400,
+            "maximum_proposal_lifetime": 2419200,
+            "maximum_asset_whitelist_authorities": 10,
+            "maximum_asset_feed_publishers": 10,
+            "maximum_witness_count": 1001,
+            "maximum_committee_count": 1001,
+            "maximum_authority_membership": 10,
+            "reserve_percent_of_fee": 2000,
+            "network_percent_of_fee": 2000,
+            "lifetime_referrer_percent_of_fee": 3000,
+            "cashback_vesting_period_seconds": 31536000,
+            "cashback_vesting_threshold": "not-a-number",
+            "count_non_member_votes": true,
+            "allow_non_member_whitelists": false,
+            "witness_pay_per_block": "150000",
+            "worker_budget_per_day": "500000000",
+            "max_predicate_opcode": 2,
+            "fee_liquidation_threshold": "100000000",
+            "accounts_per_fee_scale": 1000,
+            "account_fee_scale_bitshifts": 4,
+            "max_authority_depth": 2,
+            "extensions": {}
+        }
+        "#;
+
+        assert!(serde_json::from_str::<ChainParameters>(malformed).is_err());
+    }
 }

@@ -5,6 +5,7 @@
 //! depend on this crate for shared protocol behavior.
 
 pub mod account;
+pub mod assert;
 pub mod asset;
 pub mod asset_options;
 pub mod authority;
@@ -22,6 +23,9 @@ pub mod worker;
 
 pub use account::{
     AccountOptions, NoSpecialAuthority, SpecialAuthority, TopHoldersSpecialAuthority,
+};
+pub use assert::{
+    AccountNameEqLitPredicate, AssetSymbolEqLitPredicate, BlockIdPredicate, Predicate,
 };
 pub use asset::Asset;
 pub use asset_options::{
@@ -43,5 +47,12 @@ pub use serde_utils::{
     i64_from_number_or_string, u64_from_number_or_string, u128_from_number_or_string,
 };
 pub use transaction::{Operation, OperationResult, SignedTransaction, Transaction};
-pub use vesting::{CddVestingPolicy, InstantVestingPolicy, LinearVestingPolicy, VestingPolicy};
-pub use worker::{BurnWorkerType, RefundWorkerType, VestingBalanceWorkerType, WorkerType};
+pub use vesting::{
+    CddVestingPolicy, CddVestingPolicyInitializer, InstantVestingPolicy,
+    InstantVestingPolicyInitializer, LinearVestingPolicy, LinearVestingPolicyInitializer,
+    VestingPolicy, VestingPolicyInitializer,
+};
+pub use worker::{
+    BurnWorkerInitializer, BurnWorkerType, RefundWorkerInitializer, RefundWorkerType,
+    VestingBalanceWorkerInitializer, VestingBalanceWorkerType, WorkerInitializer, WorkerType,
+};

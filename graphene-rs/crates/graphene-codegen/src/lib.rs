@@ -523,16 +523,32 @@ struct RenderedOperationVariant {
 /// chain-independent protocol models, so all protocol object IDs collapse to
 /// `graphene_protocol::ObjectId` instead of chain crate `crate::types::*::Id` modules.
 pub fn map_operation_field(field: &OperationField) -> OperationFieldClassification {
+    map_operation_field_for_operation("", field)
+}
+
+/// Map a Graphene C++ operation field into a protocol-safe Rust type classification with
+/// operation context for deliberately approved raw fallback payload shapes.
+pub fn map_operation_field_for_operation(
+    operation_name: &str,
+    field: &OperationField,
+) -> OperationFieldClassification {
     let normalized = normalize_cpp_type(&field.cpp_type);
 
-    if is_approved_operation_raw_fallback(&field.name, &normalized) {
+    if let Some(reason) = m003_deferred_operation_reason(operation_name, &field.name, &normalized) {
+        return OperationFieldClassification::Unsupported { reason };
+    }
+
+    if is_approved_operation_raw_fallback(operation_name, &field.name, &normalized) {
         return OperationFieldClassification::ApprovedRawFallback {
             rust_type: approved_operation_raw_fallback_type(&field.name, &normalized),
-            reason: "approved raw fallback for extension/static-variant payload".to_owned(),
+            reason: approved_operation_raw_fallback_reason(&normalized),
         };
     }
 
-    if normalized.contains("future_extensions") || normalized == "extension" {
+    if normalized.contains("future_extensions")
+        || normalized == "extension"
+        || normalized.starts_with("extension<")
+    {
         return OperationFieldClassification::Unsupported {
             reason:
                 "raw fallback is restricted to approved extension/static-variant payload fields"
@@ -566,6 +582,17 @@ fn map_operation_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "block_id_type" => return Some("String".to_owned()),
         "chain_id_type" => return Some("String".to_owned()),
         "transaction_id_type" => return Some("String".to_owned()),
+        "chain_parameters" => return Some("graphene_protocol::ChainParameters".to_owned()),
+        "vesting_policy_initializer" => {
+            return Some("graphene_protocol::VestingPolicyInitializer".to_owned());
+        }
+        "worker_initializer" => return Some("graphene_protocol::WorkerInitializer".to_owned()),
+        "predicate" => {
+            return Some(
+                "graphene_protocol::Predicate<graphene_protocol::ObjectId, graphene_protocol::ObjectId>"
+                    .to_owned(),
+            );
+        }
         "asset" => {
             return Some("graphene_protocol::Asset<graphene_protocol::ObjectId>".to_owned());
         }
@@ -575,8 +602,33 @@ fn map_operation_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "authority" => {
             return Some("graphene_protocol::Authority<graphene_protocol::ObjectId>".to_owned());
         }
+        "account_options" => {
+            return Some(
+                "graphene_protocol::AccountOptions<graphene_protocol::ObjectId>".to_owned(),
+            );
+        }
+        "asset_options" => {
+            return Some(
+                "graphene_protocol::AssetOptions<graphene_protocol::ObjectId, graphene_protocol::ObjectId>"
+                    .to_owned(),
+            );
+        }
+        "bitasset_options" => {
+            return Some(
+                "graphene_protocol::BitAssetOptions<graphene_protocol::ObjectId>".to_owned(),
+            );
+        }
+        "price_feed" => {
+            return Some("graphene_protocol::PriceFeed<graphene_protocol::ObjectId>".to_owned());
+        }
+        "limit_order_auto_action" => {
+            return Some(
+                "graphene_protocol::LimitOrderAutoAction<graphene_protocol::ObjectId>".to_owned(),
+            );
+        }
         "memo_data" => return Some("graphene_protocol::MemoData".to_owned()),
         "restriction" => return Some("graphene_protocol::Restriction".to_owned()),
+        "op_wrapper" => return Some("OperationWrapper".to_owned()),
         "operation" | "operation_result" => {
             return Some("graphene_protocol::RestrictionArgument".to_owned());
         }
@@ -618,10 +670,52 @@ fn map_operation_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
     None
 }
 
-fn is_approved_operation_raw_fallback(field_name: &str, cpp_type: &str) -> bool {
+fn m003_deferred_operation_reason(
+    operation_name: &str,
+    field_name: &str,
+    cpp_type: &str,
+) -> Option<String> {
+    let reason = match (operation_name, field_name, cpp_type) {
+        (_, _, "htlc_hash") => "M003 crypto boundary: HTLC hash/preimage support is deferred",
+        ("htlc_create_operation", "extensions", "extension<additional_options_type>") => {
+            "M003 crypto boundary: HTLC additional options extension support is deferred"
+        }
+        (_, _, "blind_factor_type" | "vector<blind_input>" | "vector<blind_output>") => {
+            "M003 confidential boundary: blind transfer input/output/factor support is deferred"
+        }
+        _ => return None,
+    };
+
+    Some(reason.to_owned())
+}
+
+fn is_approved_operation_raw_fallback(
+    operation_name: &str,
+    field_name: &str,
+    cpp_type: &str,
+) -> bool {
     (field_name == "extensions" && cpp_type == "extensions_type")
-        || cpp_type.starts_with("static_variant<")
-        || cpp_type.starts_with("fc::static_variant<")
+        || is_approved_operation_extension_fallback(operation_name, field_name, cpp_type)
+}
+
+fn is_approved_operation_extension_fallback(
+    operation_name: &str,
+    field_name: &str,
+    cpp_type: &str,
+) -> bool {
+    field_name == "extensions"
+        && matches!(
+            (operation_name, cpp_type),
+            ("account_create_operation", "extension<ext>")
+                | ("account_update_operation", "extension<ext>")
+                | ("asset_update_operation", "extension<ext>")
+                | ("asset_publish_feed_operation", "extension<ext>")
+                | (
+                    "asset_claim_fees_operation",
+                    "extension<additional_options_type>"
+                )
+                | ("credit_offer_accept_operation", "extension<ext>")
+        )
 }
 
 fn approved_operation_raw_fallback_type(field_name: &str, cpp_type: &str) -> String {
@@ -629,6 +723,14 @@ fn approved_operation_raw_fallback_type(field_name: &str, cpp_type: &str) -> Str
         "Vec<graphene_protocol::RestrictionArgument>".to_owned()
     } else {
         "graphene_protocol::RestrictionArgument".to_owned()
+    }
+}
+
+fn approved_operation_raw_fallback_reason(cpp_type: &str) -> String {
+    if cpp_type == "extension<ext>" {
+        "approved raw fallback for operation-scoped extension<ext> payload".to_owned()
+    } else {
+        "approved raw fallback for extension/static-variant payload".to_owned()
     }
 }
 
@@ -653,7 +755,7 @@ pub fn render_operation_structs_module(
         let mut has_unsupported = false;
 
         for field in &declaration.fields {
-            match map_operation_field(field) {
+            match map_operation_field_for_operation(&declaration.name, field) {
                 OperationFieldClassification::Typed { rust_type } => {
                     rendered_fields.push(RustField {
                         name: field.name.clone(),
@@ -708,6 +810,8 @@ pub fn render_operation_structs_module(
     if !source.ends_with("\n\n") {
         source.push('\n');
     }
+    source.push_str(&render_operation_wrapper_struct());
+    source.push('\n');
     source.push_str(&render_operation_enum(&rendered_variants));
 
     OperationStructRender {
@@ -717,6 +821,16 @@ pub fn render_operation_structs_module(
         unsupported_count,
         raw_fallback_count,
     }
+}
+
+fn render_operation_wrapper_struct() -> String {
+    concat!(
+        "#[derive(Clone, Debug, PartialEq, serde::Deserialize)]\n",
+        "pub struct OperationWrapper {\n",
+        "    pub op: Operation,\n",
+        "}\n"
+    )
+    .to_owned()
 }
 
 fn render_operation_enum(variants: &[RenderedOperationVariant]) -> String {
@@ -1669,48 +1783,110 @@ fn parse_family_names(source: &str, object_space: u8) -> Result<Vec<ObjectFamily
 fn static_variant_alias_body<'a>(source: &'a str, alias: &str) -> Result<&'a str, String> {
     let mut search_offset = 0usize;
 
-    while let Some(using_offset) = source[search_offset..].find("using") {
-        let using_index = search_offset + using_offset;
-        if !is_identifier_boundary(source, using_index, "using".len()) {
-            search_offset = using_index + "using".len();
+    while search_offset < source.len() {
+        let using_offset = source[search_offset..].find("using");
+        let typedef_offset = source[search_offset..].find("typedef");
+        let next = match (using_offset, typedef_offset) {
+            (Some(using_offset), Some(typedef_offset)) if using_offset <= typedef_offset => {
+                Some((search_offset + using_offset, "using"))
+            }
+            (Some(_), Some(typedef_offset)) => Some((search_offset + typedef_offset, "typedef")),
+            (Some(using_offset), None) => Some((search_offset + using_offset, "using")),
+            (None, Some(typedef_offset)) => Some((search_offset + typedef_offset, "typedef")),
+            (None, None) => None,
+        };
+
+        let Some((keyword_index, keyword)) = next else {
+            break;
+        };
+        if !is_identifier_boundary(source, keyword_index, keyword.len()) {
+            search_offset = keyword_index + keyword.len();
             continue;
         }
 
-        let mut remainder = &source[using_index + "using".len()..];
-        remainder = remainder.trim_start();
-        if !remainder.starts_with(alias) || !is_prefix_identifier_boundary(remainder, alias.len()) {
-            search_offset = using_index + "using".len();
-            continue;
+        let remainder = &source[keyword_index + keyword.len()..];
+        if keyword == "using" {
+            match using_static_variant_alias_body(remainder, alias)? {
+                Some(body) => return Ok(body),
+                None => search_offset = keyword_index + keyword.len(),
+            }
+        } else {
+            match typedef_static_variant_alias_body(remainder, alias)? {
+                Some(body) => return Ok(body),
+                None => search_offset = keyword_index + keyword.len(),
+            }
         }
-
-        remainder = remainder[alias.len()..].trim_start();
-        if !remainder.starts_with('=') {
-            search_offset = using_index + "using".len();
-            continue;
-        }
-
-        remainder = remainder[1..].trim_start();
-        if !remainder.starts_with("fc::static_variant") {
-            return Err(format!(
-                "using alias {alias} is not assigned from fc::static_variant"
-            ));
-        }
-
-        remainder = remainder["fc::static_variant".len()..].trim_start();
-        if !remainder.starts_with('<') {
-            return Err(format!(
-                "static_variant alias {alias} is missing opening '<'"
-            ));
-        }
-
-        return take_balanced_angle_body(&remainder[1..]).ok_or_else(|| {
-            format!("static_variant alias {alias} has an unterminated variant list")
-        });
     }
 
     Err(format!(
-        "could not find using alias {alias} = fc::static_variant<...>"
+        "could not find static_variant alias {alias} as using or typedef"
     ))
+}
+
+fn using_static_variant_alias_body<'a>(
+    remainder: &'a str,
+    alias: &str,
+) -> Result<Option<&'a str>, String> {
+    let mut remainder = remainder.trim_start();
+    if !remainder.starts_with(alias) || !is_prefix_identifier_boundary(remainder, alias.len()) {
+        return Ok(None);
+    }
+
+    remainder = remainder[alias.len()..].trim_start();
+    if !remainder.starts_with('=') {
+        return Ok(None);
+    }
+
+    remainder = remainder[1..].trim_start();
+    let Some(after_static_variant) = strip_static_variant_prefix(remainder) else {
+        return Err(format!(
+            "using alias {alias} is not assigned from fc::static_variant"
+        ));
+    };
+
+    static_variant_body_after_prefix(after_static_variant, alias).map(Some)
+}
+
+fn typedef_static_variant_alias_body<'a>(
+    remainder: &'a str,
+    alias: &str,
+) -> Result<Option<&'a str>, String> {
+    let remainder = remainder.trim_start();
+    let Some(after_static_variant) = strip_static_variant_prefix(remainder) else {
+        return Ok(None);
+    };
+    let body = static_variant_body_after_prefix(after_static_variant, alias)?;
+    let tail = after_static_variant[1 + body.len() + 1..].trim_start();
+
+    if !tail.starts_with(alias) || !is_prefix_identifier_boundary(tail, alias.len()) {
+        return Ok(None);
+    }
+
+    Ok(Some(body))
+}
+
+fn strip_static_variant_prefix(source: &str) -> Option<&str> {
+    for prefix in ["fc::static_variant", "static_variant"] {
+        if let Some(rest) = source.strip_prefix(prefix) {
+            return Some(rest.trim_start());
+        }
+    }
+
+    None
+}
+
+fn static_variant_body_after_prefix<'a>(
+    remainder: &'a str,
+    alias: &str,
+) -> Result<&'a str, String> {
+    if !remainder.starts_with('<') {
+        return Err(format!(
+            "static_variant alias {alias} is missing opening '<'"
+        ));
+    }
+
+    take_balanced_angle_body(&remainder[1..])
+        .ok_or_else(|| format!("static_variant alias {alias} has an unterminated variant list"))
 }
 
 fn is_identifier_boundary(source: &str, start: usize, len: usize) -> bool {
@@ -1908,11 +2084,11 @@ mod tests {
         CppField, ObjectFamily, OperationDeclaration, OperationDeclarationError, OperationField,
         OperationFieldClassification, OperationModelReportRow, OperationVariant,
         ProtocolHeaderSource, ReflectedObject, RustField, map_cpp_type_to_rust, map_fields_to_rust,
-        map_fields_to_rust_for_chain, map_operation_field, parse_object_families,
-        parse_operation_declarations, parse_operation_variants, parse_reflected_class_fields,
-        parse_reflected_objects, parse_static_variant_alias, render_object_id_module,
-        render_object_struct, render_operation_model_skips_report, render_operation_structs_module,
-        render_operation_variants_module, render_types_mod,
+        map_fields_to_rust_for_chain, map_operation_field, map_operation_field_for_operation,
+        parse_object_families, parse_operation_declarations, parse_operation_variants,
+        parse_reflected_class_fields, parse_reflected_objects, parse_static_variant_alias,
+        render_object_id_module, render_object_struct, render_operation_model_skips_report,
+        render_operation_structs_module, render_operation_variants_module, render_types_mod,
     };
 
     #[test]
@@ -2039,6 +2215,68 @@ mod tests {
             parse_static_variant_alias("using operation = fc::static_variant<>;", "operation")
                 .is_err()
         );
+    }
+
+    #[test]
+    fn static_variant_parser_handles_bitshares_typedef_alias_forms_and_ordering() {
+        let vesting_source = include_str!(
+            "../../../../chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/vesting.hpp"
+        );
+        let worker_source = include_str!(
+            "../../../../chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/worker.hpp"
+        );
+        let assert_source = include_str!(
+            "../../../../chains/bitshares/bitshares-core/libraries/protocol/include/graphene/protocol/assert.hpp"
+        );
+
+        assert_eq!(
+            parse_static_variant_alias(vesting_source, "vesting_policy_initializer")
+                .expect("fc::static_variant typedef should parse")
+                .iter()
+                .map(|variant| (variant.tag, variant.cpp_type.as_str()))
+                .collect::<Vec<_>>(),
+            vec![
+                (0, "linear_vesting_policy_initializer"),
+                (1, "cdd_vesting_policy_initializer"),
+                (2, "instant_vesting_policy_initializer"),
+            ]
+        );
+        assert_eq!(
+            parse_static_variant_alias(worker_source, "worker_initializer")
+                .expect("unqualified static_variant typedef should parse")
+                .iter()
+                .map(|variant| (variant.tag, variant.cpp_type.as_str()))
+                .collect::<Vec<_>>(),
+            vec![
+                (0, "refund_worker_initializer"),
+                (1, "vesting_balance_worker_initializer"),
+                (2, "burn_worker_initializer"),
+            ]
+        );
+        assert_eq!(
+            parse_static_variant_alias(assert_source, "predicate")
+                .expect("predicate typedef should parse")
+                .iter()
+                .map(|variant| (variant.tag, variant.cpp_type.as_str()))
+                .collect::<Vec<_>>(),
+            vec![
+                (0, "account_name_eq_lit_predicate"),
+                (1, "asset_symbol_eq_lit_predicate"),
+                (2, "block_id_predicate"),
+            ]
+        );
+    }
+
+    #[test]
+    fn static_variant_parser_does_not_treat_unsupported_typedefs_as_alias_mappings() {
+        let source = r#"
+            typedef vector<predicate> predicate_list;
+            typedef flat_set<future_extensions> extensions_type;
+        "#;
+
+        let error = parse_static_variant_alias(source, "predicate_list")
+            .expect_err("non-static-variant typedefs should not produce variant mappings");
+        assert!(error.contains("could not find static_variant alias predicate_list"));
     }
 
     #[test]
@@ -2392,6 +2630,399 @@ mod tests {
     }
 
     #[test]
+    fn maps_s04_operation_helpers_to_protocol_safe_types() {
+        for (field_name, cpp_type, rust_type) in [
+            (
+                "new_parameters",
+                "chain_parameters",
+                "graphene_protocol::ChainParameters",
+            ),
+            (
+                "policy",
+                "vesting_policy_initializer",
+                "graphene_protocol::VestingPolicyInitializer",
+            ),
+            (
+                "initializer",
+                "worker_initializer",
+                "graphene_protocol::WorkerInitializer",
+            ),
+            (
+                "predicates",
+                "vector<predicate>",
+                "Vec<graphene_protocol::Predicate<graphene_protocol::ObjectId, graphene_protocol::ObjectId>>",
+            ),
+        ] {
+            assert_eq!(
+                map_operation_field(&OperationField {
+                    name: field_name.to_owned(),
+                    cpp_type: cpp_type.to_owned(),
+                    source_file: "s04.hpp".to_owned(),
+                    source_line: 1,
+                }),
+                OperationFieldClassification::Typed {
+                    rust_type: rust_type.to_owned(),
+                }
+            );
+        }
+    }
+
+    #[test]
+    fn s04_operation_helpers_emit_generated_operation_field_snippets() {
+        let rendered = render_operation_structs_module(&[
+            OperationDeclaration {
+                tag: 31,
+                cpp_type: "committee_member_update_global_parameters_operation".to_owned(),
+                name: "committee_member_update_global_parameters_operation".to_owned(),
+                fields: vec![OperationField {
+                    name: "new_parameters".to_owned(),
+                    cpp_type: "chain_parameters".to_owned(),
+                    source_file: "committee_member.hpp".to_owned(),
+                    source_line: 89,
+                }],
+            },
+            OperationDeclaration {
+                tag: 32,
+                cpp_type: "vesting_balance_create_operation".to_owned(),
+                name: "vesting_balance_create_operation".to_owned(),
+                fields: vec![OperationField {
+                    name: "policy".to_owned(),
+                    cpp_type: "vesting_policy_initializer".to_owned(),
+                    source_file: "vesting.hpp".to_owned(),
+                    source_line: 82,
+                }],
+            },
+            OperationDeclaration {
+                tag: 34,
+                cpp_type: "worker_create_operation".to_owned(),
+                name: "worker_create_operation".to_owned(),
+                fields: vec![OperationField {
+                    name: "initializer".to_owned(),
+                    cpp_type: "worker_initializer".to_owned(),
+                    source_file: "worker.hpp".to_owned(),
+                    source_line: 90,
+                }],
+            },
+            OperationDeclaration {
+                tag: 36,
+                cpp_type: "assert_operation".to_owned(),
+                name: "assert_operation".to_owned(),
+                fields: vec![OperationField {
+                    name: "predicates".to_owned(),
+                    cpp_type: "vector<predicate>".to_owned(),
+                    source_file: "assert.hpp".to_owned(),
+                    source_line: 99,
+                }],
+            },
+        ]);
+
+        assert_eq!(rendered.unsupported_count, 0);
+        assert_eq!(rendered.generated_struct_count, 4);
+        assert!(rendered.source.contains(
+            "pub struct CommitteeMemberUpdateGlobalParametersOperation {\n    pub new_parameters: graphene_protocol::ChainParameters,\n}"
+        ));
+        assert!(rendered.source.contains(
+            "pub struct VestingBalanceCreateOperation {\n    pub policy: graphene_protocol::VestingPolicyInitializer,\n}"
+        ));
+        assert!(rendered.source.contains(
+            "pub struct WorkerCreateOperation {\n    pub initializer: graphene_protocol::WorkerInitializer,\n}"
+        ));
+        assert!(rendered.source.contains(
+            "pub struct AssertOperation {\n    pub predicates: Vec<graphene_protocol::Predicate<graphene_protocol::ObjectId, graphene_protocol::ObjectId>>,\n}"
+        ));
+    }
+
+    #[test]
+    fn maps_s01_operation_option_helpers_to_protocol_safe_types() {
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "options".to_owned(),
+                cpp_type: "account_options".to_owned(),
+                source_file: "account.hpp".to_owned(),
+                source_line: 112,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "graphene_protocol::AccountOptions<graphene_protocol::ObjectId>"
+                    .to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "new_options".to_owned(),
+                cpp_type: "optional<account_options>".to_owned(),
+                source_file: "account.hpp".to_owned(),
+                source_line: 161,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "Option<graphene_protocol::AccountOptions<graphene_protocol::ObjectId>>"
+                    .to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "common_options".to_owned(),
+                cpp_type: "asset_options".to_owned(),
+                source_file: "asset_ops.hpp".to_owned(),
+                source_line: 215,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "graphene_protocol::AssetOptions<graphene_protocol::ObjectId, graphene_protocol::ObjectId>"
+                    .to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "bitasset_opts".to_owned(),
+                cpp_type: "optional<bitasset_options>".to_owned(),
+                source_file: "asset_ops.hpp".to_owned(),
+                source_line: 217,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type:
+                    "Option<graphene_protocol::BitAssetOptions<graphene_protocol::ObjectId>>"
+                        .to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "new_options".to_owned(),
+                cpp_type: "bitasset_options".to_owned(),
+                source_file: "asset_ops.hpp".to_owned(),
+                source_line: 406,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "graphene_protocol::BitAssetOptions<graphene_protocol::ObjectId>"
+                    .to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "feed".to_owned(),
+                cpp_type: "price_feed".to_owned(),
+                source_file: "asset_ops.hpp".to_owned(),
+                source_line: 475,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "graphene_protocol::PriceFeed<graphene_protocol::ObjectId>".to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "on_fill".to_owned(),
+                cpp_type: "optional<vector<limit_order_auto_action>>".to_owned(),
+                source_file: "market.hpp".to_owned(),
+                source_line: 151,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type:
+                    "Option<Vec<graphene_protocol::LimitOrderAutoAction<graphene_protocol::ObjectId>>>"
+                        .to_owned(),
+            }
+        );
+    }
+
+    #[test]
+    fn maps_nested_operation_wrappers_to_chain_local_operation_wrapper() {
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "op".to_owned(),
+                cpp_type: "op_wrapper".to_owned(),
+                source_file: "proposal.hpp".to_owned(),
+                source_line: 88,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "OperationWrapper".to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "proposed_ops".to_owned(),
+                cpp_type: "vector<op_wrapper>".to_owned(),
+                source_file: "proposal.hpp".to_owned(),
+                source_line: 89,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "Vec<OperationWrapper>".to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "argument".to_owned(),
+                cpp_type: "operation".to_owned(),
+                source_file: "restriction.hpp".to_owned(),
+                source_line: 90,
+            }),
+            OperationFieldClassification::Typed {
+                rust_type: "graphene_protocol::RestrictionArgument".to_owned(),
+            }
+        );
+
+        let rendered = render_operation_structs_module(&[OperationDeclaration {
+            tag: 22,
+            cpp_type: "proposal_create_operation".to_owned(),
+            name: "proposal_create_operation".to_owned(),
+            fields: vec![OperationField {
+                name: "proposed_ops".to_owned(),
+                cpp_type: "vector<op_wrapper>".to_owned(),
+                source_file: "proposal.hpp".to_owned(),
+                source_line: 91,
+            }],
+        }])
+        .source;
+
+        assert!(rendered.contains(
+            "#[derive(Clone, Debug, PartialEq, serde::Deserialize)]\npub struct OperationWrapper {\n    pub op: Operation,\n}\n"
+        ));
+        assert!(rendered.contains("    pub proposed_ops: Vec<OperationWrapper>,\n"));
+    }
+
+    #[test]
+    fn operation_extension_raw_fallback_is_scoped_to_approved_operation_fields() {
+        let account_create_extensions = OperationField {
+            name: "extensions".to_owned(),
+            cpp_type: "extension<ext>".to_owned(),
+            source_file: "account.hpp".to_owned(),
+            source_line: 113,
+        };
+        assert_eq!(
+            map_operation_field_for_operation(
+                "account_create_operation",
+                &account_create_extensions
+            ),
+            OperationFieldClassification::ApprovedRawFallback {
+                rust_type: "graphene_protocol::RestrictionArgument".to_owned(),
+                reason: "approved raw fallback for operation-scoped extension<ext> payload"
+                    .to_owned(),
+            }
+        );
+
+        let asset_update_extensions = OperationField {
+            name: "extensions".to_owned(),
+            cpp_type: "extension<ext>".to_owned(),
+            source_file: "asset_ops.hpp".to_owned(),
+            source_line: 377,
+        };
+        assert_eq!(
+            map_operation_field_for_operation("asset_update_operation", &asset_update_extensions),
+            OperationFieldClassification::ApprovedRawFallback {
+                rust_type: "graphene_protocol::RestrictionArgument".to_owned(),
+                reason: "approved raw fallback for operation-scoped extension<ext> payload"
+                    .to_owned(),
+            }
+        );
+
+        for (operation_name, cpp_type, source_line) in [
+            ("asset_publish_feed_operation", "extension<ext>", 476),
+            (
+                "asset_claim_fees_operation",
+                "extension<additional_options_type>",
+                1043,
+            ),
+            ("credit_offer_accept_operation", "extension<ext>", 83),
+        ] {
+            assert_eq!(
+                map_operation_field_for_operation(
+                    operation_name,
+                    &OperationField {
+                        name: "extensions".to_owned(),
+                        cpp_type: cpp_type.to_owned(),
+                        source_file: "asset_ops.hpp".to_owned(),
+                        source_line,
+                    }
+                ),
+                OperationFieldClassification::ApprovedRawFallback {
+                    rust_type: "graphene_protocol::RestrictionArgument".to_owned(),
+                    reason: if cpp_type == "extension<ext>" {
+                        "approved raw fallback for operation-scoped extension<ext> payload"
+                            .to_owned()
+                    } else {
+                        "approved raw fallback for extension/static-variant payload".to_owned()
+                    },
+                }
+            );
+        }
+
+        assert_eq!(
+            map_operation_field_for_operation(
+                "unrelated_operation",
+                &OperationField {
+                    name: "extensions".to_owned(),
+                    cpp_type: "extension<ext>".to_owned(),
+                    source_file: "operations.hpp".to_owned(),
+                    source_line: 999,
+                }
+            ),
+            OperationFieldClassification::Unsupported {
+                reason:
+                    "raw fallback is restricted to approved extension/static-variant payload fields"
+                        .to_owned(),
+            }
+        );
+    }
+
+    #[test]
+    fn operation_mapper_reports_m003_deferred_crypto_and_confidential_boundaries() {
+        for (operation_name, field_name, cpp_type, reason_markers) in [
+            (
+                "htlc_create_operation",
+                "preimage_hash",
+                "htlc_hash",
+                ["M003", "crypto", "HTLC"],
+            ),
+            (
+                "htlc_redeemed_operation",
+                "htlc_preimage_hash",
+                "htlc_hash",
+                ["M003", "crypto", "HTLC"],
+            ),
+            (
+                "htlc_create_operation",
+                "extensions",
+                "extension<additional_options_type>",
+                ["M003", "crypto", "HTLC"],
+            ),
+            (
+                "transfer_to_blind_operation",
+                "blinding_factor",
+                "blind_factor_type",
+                ["M003", "confidential", "blind"],
+            ),
+            (
+                "blind_transfer_operation",
+                "inputs",
+                "vector<blind_input>",
+                ["M003", "confidential", "blind"],
+            ),
+            (
+                "blind_transfer_operation",
+                "outputs",
+                "vector<blind_output>",
+                ["M003", "confidential", "blind"],
+            ),
+        ] {
+            let classification = map_operation_field_for_operation(
+                operation_name,
+                &OperationField {
+                    name: field_name.to_owned(),
+                    cpp_type: cpp_type.to_owned(),
+                    source_file: "m003.hpp".to_owned(),
+                    source_line: 1,
+                },
+            );
+
+            let OperationFieldClassification::Unsupported { reason } = classification else {
+                panic!("{operation_name}.{field_name} should remain unsupported");
+            };
+            for marker in reason_markers {
+                assert!(
+                    reason.contains(marker),
+                    "reason {reason:?} should mention {marker:?} for {operation_name}.{field_name}"
+                );
+            }
+        }
+    }
+
+    #[test]
     fn operation_mapper_distinguishes_raw_fallback_from_unsupported() {
         assert_eq!(
             map_operation_field(&OperationField {
@@ -2427,6 +3058,18 @@ mod tests {
                 reason:
                     "raw fallback is restricted to approved extension/static-variant payload fields"
                         .to_owned(),
+            }
+        );
+        assert_eq!(
+            map_operation_field(&OperationField {
+                name: "mystery_variant".to_owned(),
+                cpp_type: "static_variant<known_type, unknown_type>".to_owned(),
+                source_file: "operations.hpp".to_owned(),
+                source_line: 12,
+            }),
+            OperationFieldClassification::Unsupported {
+                reason: "no protocol-safe operation mapping for C++ type static_variant<known_type, unknown_type>"
+                    .to_owned(),
             }
         );
     }

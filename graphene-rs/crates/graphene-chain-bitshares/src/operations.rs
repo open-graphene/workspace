@@ -50,6 +50,29 @@ pub struct FillOrderOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AccountCreateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub registrar: graphene_protocol::ObjectId,
+    pub referrer: graphene_protocol::ObjectId,
+    pub referrer_percent: u16,
+    pub name: String,
+    pub owner: graphene_protocol::Authority<graphene_protocol::ObjectId>,
+    pub active: graphene_protocol::Authority<graphene_protocol::ObjectId>,
+    pub options: graphene_protocol::AccountOptions<graphene_protocol::ObjectId>,
+    pub extensions: graphene_protocol::RestrictionArgument,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AccountUpdateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub account: graphene_protocol::ObjectId,
+    pub owner: Option<graphene_protocol::Authority<graphene_protocol::ObjectId>>,
+    pub active: Option<graphene_protocol::Authority<graphene_protocol::ObjectId>>,
+    pub new_options: Option<graphene_protocol::AccountOptions<graphene_protocol::ObjectId>>,
+    pub extensions: graphene_protocol::RestrictionArgument,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct AccountWhitelistOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub authorizing_account: graphene_protocol::ObjectId,
@@ -71,6 +94,39 @@ pub struct AccountTransferOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub account_id: graphene_protocol::ObjectId,
     pub new_owner: graphene_protocol::ObjectId,
+    pub extensions: Vec<graphene_protocol::RestrictionArgument>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AssetCreateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub issuer: graphene_protocol::ObjectId,
+    pub symbol: String,
+    pub precision: u8,
+    pub common_options:
+        graphene_protocol::AssetOptions<graphene_protocol::ObjectId, graphene_protocol::ObjectId>,
+    pub bitasset_opts: Option<graphene_protocol::BitAssetOptions<graphene_protocol::ObjectId>>,
+    pub is_prediction_market: bool,
+    pub extensions: Vec<graphene_protocol::RestrictionArgument>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AssetUpdateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub issuer: graphene_protocol::ObjectId,
+    pub asset_to_update: graphene_protocol::ObjectId,
+    pub new_issuer: Option<graphene_protocol::ObjectId>,
+    pub new_options:
+        graphene_protocol::AssetOptions<graphene_protocol::ObjectId, graphene_protocol::ObjectId>,
+    pub extensions: graphene_protocol::RestrictionArgument,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AssetUpdateBitassetOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub issuer: graphene_protocol::ObjectId,
+    pub asset_to_update: graphene_protocol::ObjectId,
+    pub new_options: graphene_protocol::BitAssetOptions<graphene_protocol::ObjectId>,
     pub extensions: Vec<graphene_protocol::RestrictionArgument>,
 }
 
@@ -129,6 +185,15 @@ pub struct AssetGlobalSettleOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AssetPublishFeedOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub publisher: graphene_protocol::ObjectId,
+    pub asset_id: graphene_protocol::ObjectId,
+    pub feed: graphene_protocol::PriceFeed<graphene_protocol::ObjectId>,
+    pub extensions: graphene_protocol::RestrictionArgument,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct WitnessCreateOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub witness_account: graphene_protocol::ObjectId,
@@ -143,6 +208,16 @@ pub struct WitnessUpdateOperation {
     pub witness_account: graphene_protocol::ObjectId,
     pub new_url: Option<String>,
     pub new_signing_key: Option<String>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct ProposalCreateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub fee_paying_account: graphene_protocol::ObjectId,
+    pub expiration_time: String,
+    pub proposed_ops: Vec<OperationWrapper>,
+    pub review_period_seconds: Option<u32>,
+    pub extensions: Vec<graphene_protocol::RestrictionArgument>,
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
@@ -225,11 +300,39 @@ pub struct CommitteeMemberUpdateOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct CommitteeMemberUpdateGlobalParametersOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub new_parameters: graphene_protocol::ChainParameters,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct VestingBalanceCreateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub creator: graphene_protocol::ObjectId,
+    pub owner: graphene_protocol::ObjectId,
+    pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub policy: graphene_protocol::VestingPolicyInitializer,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct VestingBalanceWithdrawOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub vesting_balance: graphene_protocol::ObjectId,
     pub owner: graphene_protocol::ObjectId,
     pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct WorkerCreateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub owner: graphene_protocol::ObjectId,
+    pub work_begin_date: String,
+    pub work_end_date: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
+    pub daily_pay: i64,
+    pub name: String,
+    pub url: String,
+    pub initializer: graphene_protocol::WorkerInitializer,
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
@@ -239,6 +342,16 @@ pub struct CustomOperation {
     pub required_auths: Vec<graphene_protocol::ObjectId>,
     pub id: u16,
     pub data: Vec<u8>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AssertOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub fee_paying_account: graphene_protocol::ObjectId,
+    pub predicates:
+        Vec<graphene_protocol::Predicate<graphene_protocol::ObjectId, graphene_protocol::ObjectId>>,
+    pub required_auths: Vec<graphene_protocol::ObjectId>,
+    pub extensions: Vec<graphene_protocol::RestrictionArgument>,
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
@@ -267,6 +380,14 @@ pub struct AssetSettleCancelOperation {
     pub settlement: graphene_protocol::ObjectId,
     pub account: graphene_protocol::ObjectId,
     pub amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct AssetClaimFeesOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub issuer: graphene_protocol::ObjectId,
+    pub amount_to_claim: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub extensions: graphene_protocol::RestrictionArgument,
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
@@ -533,6 +654,18 @@ pub struct CreditOfferUpdateOperation {
 }
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct CreditOfferAcceptOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub borrower: graphene_protocol::ObjectId,
+    pub offer_id: graphene_protocol::ObjectId,
+    pub borrow_amount: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub collateral: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub max_fee_rate: u32,
+    pub min_duration_seconds: u32,
+    pub extensions: graphene_protocol::RestrictionArgument,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct CreditDealRepayOperation {
     pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
     pub account: graphene_protocol::ObjectId,
@@ -573,6 +706,23 @@ pub struct CreditDealUpdateOperation {
     pub extensions: Vec<graphene_protocol::RestrictionArgument>,
 }
 
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct LimitOrderUpdateOperation {
+    pub fee: graphene_protocol::Asset<graphene_protocol::ObjectId>,
+    pub seller: graphene_protocol::ObjectId,
+    pub order: graphene_protocol::ObjectId,
+    pub new_price: Option<graphene_protocol::Price<graphene_protocol::ObjectId>>,
+    pub delta_amount_to_sell: Option<graphene_protocol::Asset<graphene_protocol::ObjectId>>,
+    pub new_expiration: Option<String>,
+    pub on_fill: Option<Vec<graphene_protocol::LimitOrderAutoAction<graphene_protocol::ObjectId>>>,
+    pub extensions: Vec<graphene_protocol::RestrictionArgument>,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
+pub struct OperationWrapper {
+    pub op: Operation,
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum Operation {
     Transfer(TransferOperation),
@@ -580,17 +730,24 @@ pub enum Operation {
     LimitOrderCancel(LimitOrderCancelOperation),
     CallOrderUpdate(CallOrderUpdateOperation),
     FillOrder(FillOrderOperation),
+    AccountCreate(AccountCreateOperation),
+    AccountUpdate(AccountUpdateOperation),
     AccountWhitelist(AccountWhitelistOperation),
     AccountUpgrade(AccountUpgradeOperation),
     AccountTransfer(AccountTransferOperation),
+    AssetCreate(AssetCreateOperation),
+    AssetUpdate(AssetUpdateOperation),
+    AssetUpdateBitasset(AssetUpdateBitassetOperation),
     AssetUpdateFeedProducers(AssetUpdateFeedProducersOperation),
     AssetIssue(AssetIssueOperation),
     AssetReserve(AssetReserveOperation),
     AssetFundFeePool(AssetFundFeePoolOperation),
     AssetSettle(AssetSettleOperation),
     AssetGlobalSettle(AssetGlobalSettleOperation),
+    AssetPublishFeed(AssetPublishFeedOperation),
     WitnessCreate(WitnessCreateOperation),
     WitnessUpdate(WitnessUpdateOperation),
+    ProposalCreate(ProposalCreateOperation),
     ProposalUpdate(ProposalUpdateOperation),
     ProposalDelete(ProposalDeleteOperation),
     WithdrawPermissionCreate(WithdrawPermissionCreateOperation),
@@ -599,11 +756,16 @@ pub enum Operation {
     WithdrawPermissionDelete(WithdrawPermissionDeleteOperation),
     CommitteeMemberCreate(CommitteeMemberCreateOperation),
     CommitteeMemberUpdate(CommitteeMemberUpdateOperation),
+    CommitteeMemberUpdateGlobalParameters(CommitteeMemberUpdateGlobalParametersOperation),
+    VestingBalanceCreate(VestingBalanceCreateOperation),
     VestingBalanceWithdraw(VestingBalanceWithdrawOperation),
+    WorkerCreate(WorkerCreateOperation),
     Custom(CustomOperation),
+    Assert(AssertOperation),
     BalanceClaim(BalanceClaimOperation),
     OverrideTransfer(OverrideTransferOperation),
     AssetSettleCancel(AssetSettleCancelOperation),
+    AssetClaimFees(AssetClaimFeesOperation),
     FbaDistribute(FbaDistributeOperation),
     BidCollateral(BidCollateralOperation),
     ExecuteBid(ExecuteBidOperation),
@@ -629,10 +791,12 @@ pub enum Operation {
     CreditOfferCreate(CreditOfferCreateOperation),
     CreditOfferDelete(CreditOfferDeleteOperation),
     CreditOfferUpdate(CreditOfferUpdateOperation),
+    CreditOfferAccept(CreditOfferAcceptOperation),
     CreditDealRepay(CreditDealRepayOperation),
     CreditDealExpired(CreditDealExpiredOperation),
     LiquidityPoolUpdate(LiquidityPoolUpdateOperation),
     CreditDealUpdate(CreditDealUpdateOperation),
+    LimitOrderUpdate(LimitOrderUpdateOperation),
     Unsupported {
         tag: u16,
         payload: serde_json::Value,
@@ -647,17 +811,24 @@ impl Operation {
             Self::LimitOrderCancel(_) => 2,
             Self::CallOrderUpdate(_) => 3,
             Self::FillOrder(_) => 4,
+            Self::AccountCreate(_) => 5,
+            Self::AccountUpdate(_) => 6,
             Self::AccountWhitelist(_) => 7,
             Self::AccountUpgrade(_) => 8,
             Self::AccountTransfer(_) => 9,
+            Self::AssetCreate(_) => 10,
+            Self::AssetUpdate(_) => 11,
+            Self::AssetUpdateBitasset(_) => 12,
             Self::AssetUpdateFeedProducers(_) => 13,
             Self::AssetIssue(_) => 14,
             Self::AssetReserve(_) => 15,
             Self::AssetFundFeePool(_) => 16,
             Self::AssetSettle(_) => 17,
             Self::AssetGlobalSettle(_) => 18,
+            Self::AssetPublishFeed(_) => 19,
             Self::WitnessCreate(_) => 20,
             Self::WitnessUpdate(_) => 21,
+            Self::ProposalCreate(_) => 22,
             Self::ProposalUpdate(_) => 23,
             Self::ProposalDelete(_) => 24,
             Self::WithdrawPermissionCreate(_) => 25,
@@ -666,11 +837,16 @@ impl Operation {
             Self::WithdrawPermissionDelete(_) => 28,
             Self::CommitteeMemberCreate(_) => 29,
             Self::CommitteeMemberUpdate(_) => 30,
+            Self::CommitteeMemberUpdateGlobalParameters(_) => 31,
+            Self::VestingBalanceCreate(_) => 32,
             Self::VestingBalanceWithdraw(_) => 33,
+            Self::WorkerCreate(_) => 34,
             Self::Custom(_) => 35,
+            Self::Assert(_) => 36,
             Self::BalanceClaim(_) => 37,
             Self::OverrideTransfer(_) => 38,
             Self::AssetSettleCancel(_) => 42,
+            Self::AssetClaimFees(_) => 43,
             Self::FbaDistribute(_) => 44,
             Self::BidCollateral(_) => 45,
             Self::ExecuteBid(_) => 46,
@@ -696,10 +872,12 @@ impl Operation {
             Self::CreditOfferCreate(_) => 69,
             Self::CreditOfferDelete(_) => 70,
             Self::CreditOfferUpdate(_) => 71,
+            Self::CreditOfferAccept(_) => 72,
             Self::CreditDealRepay(_) => 73,
             Self::CreditDealExpired(_) => 74,
             Self::LiquidityPoolUpdate(_) => 75,
             Self::CreditDealUpdate(_) => 76,
+            Self::LimitOrderUpdate(_) => 77,
             Self::Unsupported { tag, .. } => *tag,
         }
     }
@@ -750,6 +928,12 @@ impl<'de> serde::Deserialize<'de> for Operation {
             4 => serde_json::from_value(payload)
                 .map(Self::FillOrder)
                 .map_err(serde::de::Error::custom),
+            5 => serde_json::from_value(payload)
+                .map(Self::AccountCreate)
+                .map_err(serde::de::Error::custom),
+            6 => serde_json::from_value(payload)
+                .map(Self::AccountUpdate)
+                .map_err(serde::de::Error::custom),
             7 => serde_json::from_value(payload)
                 .map(Self::AccountWhitelist)
                 .map_err(serde::de::Error::custom),
@@ -758,6 +942,15 @@ impl<'de> serde::Deserialize<'de> for Operation {
                 .map_err(serde::de::Error::custom),
             9 => serde_json::from_value(payload)
                 .map(Self::AccountTransfer)
+                .map_err(serde::de::Error::custom),
+            10 => serde_json::from_value(payload)
+                .map(Self::AssetCreate)
+                .map_err(serde::de::Error::custom),
+            11 => serde_json::from_value(payload)
+                .map(Self::AssetUpdate)
+                .map_err(serde::de::Error::custom),
+            12 => serde_json::from_value(payload)
+                .map(Self::AssetUpdateBitasset)
                 .map_err(serde::de::Error::custom),
             13 => serde_json::from_value(payload)
                 .map(Self::AssetUpdateFeedProducers)
@@ -777,11 +970,17 @@ impl<'de> serde::Deserialize<'de> for Operation {
             18 => serde_json::from_value(payload)
                 .map(Self::AssetGlobalSettle)
                 .map_err(serde::de::Error::custom),
+            19 => serde_json::from_value(payload)
+                .map(Self::AssetPublishFeed)
+                .map_err(serde::de::Error::custom),
             20 => serde_json::from_value(payload)
                 .map(Self::WitnessCreate)
                 .map_err(serde::de::Error::custom),
             21 => serde_json::from_value(payload)
                 .map(Self::WitnessUpdate)
+                .map_err(serde::de::Error::custom),
+            22 => serde_json::from_value(payload)
+                .map(Self::ProposalCreate)
                 .map_err(serde::de::Error::custom),
             23 => serde_json::from_value(payload)
                 .map(Self::ProposalUpdate)
@@ -807,11 +1006,23 @@ impl<'de> serde::Deserialize<'de> for Operation {
             30 => serde_json::from_value(payload)
                 .map(Self::CommitteeMemberUpdate)
                 .map_err(serde::de::Error::custom),
+            31 => serde_json::from_value(payload)
+                .map(Self::CommitteeMemberUpdateGlobalParameters)
+                .map_err(serde::de::Error::custom),
+            32 => serde_json::from_value(payload)
+                .map(Self::VestingBalanceCreate)
+                .map_err(serde::de::Error::custom),
             33 => serde_json::from_value(payload)
                 .map(Self::VestingBalanceWithdraw)
                 .map_err(serde::de::Error::custom),
+            34 => serde_json::from_value(payload)
+                .map(Self::WorkerCreate)
+                .map_err(serde::de::Error::custom),
             35 => serde_json::from_value(payload)
                 .map(Self::Custom)
+                .map_err(serde::de::Error::custom),
+            36 => serde_json::from_value(payload)
+                .map(Self::Assert)
                 .map_err(serde::de::Error::custom),
             37 => serde_json::from_value(payload)
                 .map(Self::BalanceClaim)
@@ -821,6 +1032,9 @@ impl<'de> serde::Deserialize<'de> for Operation {
                 .map_err(serde::de::Error::custom),
             42 => serde_json::from_value(payload)
                 .map(Self::AssetSettleCancel)
+                .map_err(serde::de::Error::custom),
+            43 => serde_json::from_value(payload)
+                .map(Self::AssetClaimFees)
                 .map_err(serde::de::Error::custom),
             44 => serde_json::from_value(payload)
                 .map(Self::FbaDistribute)
@@ -897,6 +1111,9 @@ impl<'de> serde::Deserialize<'de> for Operation {
             71 => serde_json::from_value(payload)
                 .map(Self::CreditOfferUpdate)
                 .map_err(serde::de::Error::custom),
+            72 => serde_json::from_value(payload)
+                .map(Self::CreditOfferAccept)
+                .map_err(serde::de::Error::custom),
             73 => serde_json::from_value(payload)
                 .map(Self::CreditDealRepay)
                 .map_err(serde::de::Error::custom),
@@ -908,6 +1125,9 @@ impl<'de> serde::Deserialize<'de> for Operation {
                 .map_err(serde::de::Error::custom),
             76 => serde_json::from_value(payload)
                 .map(Self::CreditDealUpdate)
+                .map_err(serde::de::Error::custom),
+            77 => serde_json::from_value(payload)
+                .map(Self::LimitOrderUpdate)
                 .map_err(serde::de::Error::custom),
             _ => Ok(Self::Unsupported { tag, payload }),
         }

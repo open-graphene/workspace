@@ -28,7 +28,9 @@ After regeneration, run the freshness check:
 bash graphene-v2/graphene-rs/crates/graphene-chain-bitshares/bin/check-generated.sh
 ```
 
-The script regenerates with `--write` and then runs a path-scoped `git diff --exit-code` over the generated BitShares outputs. A failure means the working tree contains stale generated files; the diff paths show which generated artifacts need to be committed or which generator change caused drift.
+The script regenerates with `--write`, checks the operation coverage boundary, and then runs a path-scoped `git diff --exit-code` over the generated BitShares outputs. A failure means either the coverage report no longer matches the post-M002 contract or the working tree contains stale generated files. The stderr details and diff paths show which generated artifacts need to be committed or which generator change caused drift.
+
+The coverage gate is intentionally exact: after M002, every remaining `unsupported` row must be one of the M003-deferred HTLC or blind/confidential fields. If a new non-M003 unsupported row appears, add a safe mapping backed by the BitShares source and regenerate. Update the boundary only when doing the M003 HTLC or blind/confidential work that intentionally changes those deferred rows.
 
 If you need to inspect manually, use `git diff -- graphene-v2/graphene-rs/crates/graphene-chain-bitshares/src/operation_variants.rs graphene-v2/graphene-rs/crates/graphene-chain-bitshares/src/operations.rs graphene-v2/graphene-rs/crates/graphene-chain-bitshares/src/operation_model_skips.md graphene-v2/graphene-rs/crates/graphene-chain-bitshares/src/types`.
 
@@ -37,10 +39,16 @@ If you need to inspect manually, use `git diff -- graphene-v2/graphene-rs/crates
 Run these checks before claiming a generator or generated-model change is complete:
 
 ```sh
-cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test operations
-cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test transaction
-cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test fixtures deserializes_all_captured_live_rpc_fixtures
-cargo fmt --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-codegen -p graphene-chain-bitshares -- --check
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-codegen operation -- --nocapture
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-codegen -- --nocapture
+bash graphene-v2/graphene-rs/crates/graphene-chain-bitshares/bin/gen.sh --write
+bash graphene-v2/graphene-rs/crates/graphene-chain-bitshares/bin/check-generated.sh
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test operations -- --nocapture
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test transaction -- --nocapture
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test fixtures deserializes_all_captured_live_rpc_fixtures -- --nocapture
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-chain-bitshares --test generated_objects -- --nocapture
+cargo test --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-protocol -- --nocapture
+cargo fmt --manifest-path graphene-v2/graphene-rs/Cargo.toml -p graphene-codegen -p graphene-chain-bitshares -p graphene-protocol -- --check
 ```
 
 Use generator stdout/stderr, cargo diagnostics, and `git diff --exit-code` output as the primary local failure signals. The fixture tests prove serde compatibility against tracked samples without contacting a live chain.
@@ -49,9 +57,11 @@ Use generator stdout/stderr, cargo diagnostics, and `git diff --exit-code` outpu
 
 Typed BitShares operations should be generated whenever the BitShares C++ source can be mapped to protocol-safe Rust types. If a static-variant operation tag has a generated model, deserialization should produce the typed `Operation` variant and `Operation::is_typed()` should be true.
 
-Raw field fallback is acceptable only for approved extension or static-variant payload shapes where preserving the Graphene JSON value is intentional. These rows are reported as `approved_raw_fallback` in `operation_model_skips.md` and usually preserve extension payloads through shared raw wrapper primitives.
+Post-M002 coverage has a strict boundary: all non-HTLC and non-blind/confidential operations should now be either typed or an explicit approved raw fallback. Treat any other `unsupported` row as a bug in the mapping, parser, or source model until proven otherwise.
 
-`Operation::Unsupported` is the explicit fallback for skipped or unknown operation tags. It preserves the numeric tag and original payload so callers do not lose data, but it is not a substitute for generator work when the C++ type can be mapped safely. If a known operation row is classified as `unsupported`, add or fix the generator mapping and regenerate instead of manually editing the report.
+Raw field fallback is acceptable only for approved extension or static-variant payload shapes where preserving the Graphene JSON value is intentional. These rows are reported as `approved_raw_fallback` in `operation_model_skips.md` and usually preserve extension payloads through shared raw wrapper primitives. An approved raw fallback is still part of a generated typed operation; it does not skip the operation.
+
+`unsupported` is different. It means the generator found a field that has no protocol-safe mapping, skipped the containing operation struct, and left that operation tag to deserialize as `Operation::Unsupported`. `Operation::Unsupported` preserves the numeric tag and original payload so callers do not lose data, but it is not a substitute for generator work when the C++ type can be mapped safely. After M002, the only expected unsupported rows are the M003 HTLC crypto fields and blind/confidential transfer fields. If any other known operation row is classified as `unsupported`, add or fix the generator mapping and regenerate instead of manually editing the report.
 
 ## Operation coverage report
 
@@ -59,8 +69,10 @@ Raw field fallback is acceptable only for approved extension or static-variant p
 
 Read the classification column first:
 
-- `approved_raw_fallback` means the generator intentionally preserved a raw extension/static-variant payload.
+- `approved_raw_fallback` means the generator intentionally preserved a raw extension/static-variant payload inside an otherwise generated operation model.
 - `unsupported` means at least one field has no protocol-safe mapping yet, so the containing operation struct is skipped and that operation tag falls back to `Operation::Unsupported`.
+
+When the coverage gate fails, inspect the printed operation, tag, field, normalized C++ type, source, classification, and reason. For a non-M003 unsupported row, update the source-backed mapping or generator support, regenerate, and rerun the gate. For M003 HTLC or blind/confidential work, update the expected boundary together with the mapping change so the report continues to describe the intentional deferment accurately.
 
 To change the report, change the C++ source inputs or generator mappings, run the regeneration command, then run the freshness and proof commands.
 
