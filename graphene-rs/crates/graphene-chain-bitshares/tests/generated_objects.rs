@@ -2,7 +2,7 @@ use graphene_chain_bitshares::types::{
     account_balance, account_history, account_statistics, asset_dynamic_data, balance,
     blinded_balance, block_summary, buyback, call_order, chain_property, collateral_bid,
     committee_member, credit_deal, credit_deal_summary, credit_offer, custom_authority,
-    dynamic_global_property, fba_accumulator, force_settlement, limit_order, liquidity_pool,
+    dynamic_global_property, fba_accumulator, force_settlement, htlc, limit_order, liquidity_pool,
     samet_fund, special_authority, ticket, withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
@@ -631,6 +631,83 @@ fn deserializes_witness_schedule_object() {
         .map(ToString::to_string)
         .collect::<Vec<_>>();
     assert_eq!(witness_ids, vec!["1.6.5", "1.6.6"]);
+}
+
+#[test]
+fn deserializes_htlc_object_with_memo() {
+    let object: htlc::Object = serde_json::from_value(json!({
+        "id": "1.16.5",
+        "transfer": {
+            "from": "1.2.17",
+            "to": "1.2.18",
+            "amount": 5000_i64,
+            "asset_id": "1.3.7"
+        },
+        "conditions": {
+            "hash_lock": {
+                "preimage_hash": [2_u64, "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"],
+                "preimage_size": 32_u16
+            },
+            "time_lock": {
+                "expiration": "2024-08-01T00:00:00"
+            }
+        },
+        "memo": {
+            "from": "BTS1111111111111111111111111111111114T1Anm",
+            "to": "BTS2222222222222222222222222222222226mYc3t",
+            "nonce": 42_u64,
+            "message": "deadbeef"
+        }
+    }))
+    .expect("htlc object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.16.5");
+    assert_eq!(object.transfer.from.to_string(), "1.2.17");
+    assert_eq!(object.transfer.to.to_string(), "1.2.18");
+    assert_eq!(object.transfer.amount, 5000);
+    assert_eq!(object.transfer.asset_id.to_string(), "1.3.7");
+    assert!(matches!(
+        object.conditions.hash_lock.preimage_hash,
+        graphene_protocol::HtlcHash::Sha256(_)
+    ));
+    assert_eq!(object.conditions.hash_lock.preimage_size, 32);
+    assert_eq!(
+        object.conditions.time_lock.expiration,
+        "2024-08-01T00:00:00"
+    );
+    let memo = object.memo.expect("memo should be present");
+    assert_eq!(memo.nonce, 42);
+}
+
+#[test]
+fn deserializes_htlc_object_without_memo() {
+    let object: htlc::Object = serde_json::from_value(json!({
+        "id": "1.16.6",
+        "transfer": {
+            "from": "1.2.17",
+            "to": "1.2.18",
+            "amount": 5000_i64,
+            "asset_id": "1.3.7"
+        },
+        "conditions": {
+            "hash_lock": {
+                "preimage_hash": [0_u64, "0123456789abcdef0123456789abcdef01234567"],
+                "preimage_size": 20_u16
+            },
+            "time_lock": {
+                "expiration": "2024-08-01T00:00:00"
+            }
+        },
+        "memo": null
+    }))
+    .expect("htlc object should deserialize without memo");
+
+    assert_eq!(object.id.to_string(), "1.16.6");
+    assert!(matches!(
+        object.conditions.hash_lock.preimage_hash,
+        graphene_protocol::HtlcHash::Ripemd160(_)
+    ));
+    assert!(object.memo.is_none());
 }
 
 #[test]

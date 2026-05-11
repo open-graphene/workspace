@@ -7,6 +7,7 @@
 pub mod asset;
 pub mod authority;
 pub mod chain_parameters;
+pub mod htlc;
 pub mod market;
 pub mod object_id;
 pub mod price;
@@ -16,6 +17,7 @@ pub mod vesting;
 pub use asset::Asset;
 pub use authority::Authority;
 pub use chain_parameters::ImmutableChainParameters;
+pub use htlc::{HtlcConditions, HtlcHash, HtlcHashLock, HtlcTimeLock, HtlcTransfer, MemoData};
 pub use market::{CreateTakeProfitOrderAction, LimitOrderAutoAction};
 pub use object_id::{ObjectId, ObjectIdParseError};
 pub use price::Price;

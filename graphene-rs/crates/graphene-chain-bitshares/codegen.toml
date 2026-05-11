@@ -117,6 +117,12 @@ header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
 source_path = "libraries/chain/market_object.cpp"
 
 [[objects]]
+family_name = "htlc"
+cpp_class = "htlc_object"
+header_path = "libraries/chain/include/graphene/chain/htlc_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "liquidity_pool"
 cpp_class = "liquidity_pool_object"
 header_path = "libraries/chain/include/graphene/chain/liquidity_pool_object.hpp"

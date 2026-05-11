@@ -186,6 +186,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "immutable_chain_parameters" => {
             return Some("graphene_protocol::ImmutableChainParameters".to_owned());
         }
+        "condition_info" => return Some("graphene_protocol::HtlcConditions".to_owned()),
         "limit_order_auto_action" => {
             return Some(
                 "graphene_protocol::LimitOrderAutoAction<crate::types::asset::Id>".to_owned(),
@@ -194,12 +195,22 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "linear_vesting_policy" => {
             return Some("graphene_protocol::LinearVestingPolicy".to_owned());
         }
+        "memo_data" => return Some("graphene_protocol::MemoData".to_owned()),
         "restriction" => return Some("graphene_protocol::Restriction".to_owned()),
+        "transfer_info" => {
+            return Some(
+                "graphene_protocol::HtlcTransfer<crate::types::account::Id, crate::types::asset::Id>".to_owned(),
+            );
+        }
         "account_options" => return Some("Options".to_owned()),
         _ => {}
     }
 
     if let Some(inner) = template_argument(&normalized, "optional") {
+        return map_cpp_type_to_rust(inner).map(|rust_type| format!("Option<{rust_type}>"));
+    }
+
+    if let Some(inner) = template_argument(&normalized, "fc::optional") {
         return map_cpp_type_to_rust(inner).map(|rust_type| format!("Option<{rust_type}>"));
     }
 
@@ -934,6 +945,21 @@ mod tests {
         assert_eq!(
             map_cpp_type_to_rust("limit_order_auto_action"),
             Some("graphene_protocol::LimitOrderAutoAction<crate::types::asset::Id>".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("transfer_info"),
+            Some(
+                "graphene_protocol::HtlcTransfer<crate::types::account::Id, crate::types::asset::Id>"
+                    .to_owned()
+            )
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("condition_info"),
+            Some("graphene_protocol::HtlcConditions".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("fc::optional<memo_data>"),
+            Some("Option<graphene_protocol::MemoData>".to_owned())
         );
         assert_eq!(map_cpp_type_to_rust("address"), Some("String".to_owned()));
         assert_eq!(map_cpp_type_to_rust("unsigned_int"), Some("u64".to_owned()));
