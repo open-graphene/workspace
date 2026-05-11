@@ -6,3 +6,12 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 5,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub committee_member_account: crate::types::account::Id,
+    pub vote_id: graphene_protocol::VoteId,
+    pub total_votes: u64,
+    pub url: String,
+}

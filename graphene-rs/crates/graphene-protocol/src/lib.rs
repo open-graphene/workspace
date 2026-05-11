@@ -10,6 +10,95 @@ use core::str::FromStr;
 /// Minimal placeholder for Graphene `time_point_sec` values.
 pub type TimePointSec = String;
 
+/// Graphene vote id in `type:instance` JSON form.
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct VoteId {
+    vote_type: u8,
+    instance: u32,
+}
+
+impl VoteId {
+    /// Creates a vote id from its two JSON components.
+    pub const fn new(vote_type: u8, instance: u32) -> Self {
+        Self {
+            vote_type,
+            instance,
+        }
+    }
+
+    /// Returns the vote type component.
+    pub const fn vote_type(self) -> u8 {
+        self.vote_type
+    }
+
+    /// Returns the vote instance component.
+    pub const fn instance(self) -> u32 {
+        self.instance
+    }
+}
+
+impl fmt::Display for VoteId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}:{}", self.vote_type, self.instance)
+    }
+}
+
+impl FromStr for VoteId {
+    type Err = VoteIdParseError;
+
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
+        let mut parts = value.split(':');
+        let Some(vote_type) = parts.next() else {
+            return Err(VoteIdParseError::WrongPartCount);
+        };
+        let Some(instance) = parts.next() else {
+            return Err(VoteIdParseError::WrongPartCount);
+        };
+        if parts.next().is_some() {
+            return Err(VoteIdParseError::WrongPartCount);
+        }
+
+        Ok(Self {
+            vote_type: vote_type
+                .parse()
+                .map_err(|_| VoteIdParseError::InvalidInteger)?,
+            instance: instance
+                .parse()
+                .map_err(|_| VoteIdParseError::InvalidInteger)?,
+        })
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for VoteId {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        use serde::de::Error as _;
+
+        let value = String::deserialize(deserializer)?;
+        value.parse::<Self>().map_err(D::Error::custom)
+    }
+}
+
+/// Error returned when parsing a Graphene vote id fails.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum VoteIdParseError {
+    /// The id did not contain exactly two colon-separated parts.
+    WrongPartCount,
+    /// One id component was not a valid integer for its target range.
+    InvalidInteger,
+}
+
+impl fmt::Display for VoteIdParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::WrongPartCount => write!(f, "vote id must have type:instance parts"),
+            Self::InvalidInteger => write!(f, "vote id contains an invalid integer component"),
+        }
+    }
+}
+
 /// Untyped Graphene object id in `space.type.instance` form.
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct ObjectId {

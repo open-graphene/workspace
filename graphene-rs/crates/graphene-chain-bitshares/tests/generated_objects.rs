@@ -1,4 +1,6 @@
-use graphene_chain_bitshares::types::{account_balance, asset_dynamic_data, fba_accumulator};
+use graphene_chain_bitshares::types::{
+    account_balance, asset_dynamic_data, committee_member, fba_accumulator,
+};
 use serde_json::json;
 
 #[test]
@@ -38,6 +40,26 @@ fn deserializes_asset_dynamic_data_object() {
     assert_eq!(object.accumulated_fees, 10);
     assert_eq!(object.accumulated_collateral_fees, 20);
     assert_eq!(object.fee_pool, 30);
+}
+
+#[test]
+fn deserializes_committee_member_object() {
+    let object: committee_member::Object = serde_json::from_value(json!({
+        "id": "1.5.2",
+        "committee_member_account": "1.2.17",
+        "vote_id": "0:12",
+        "total_votes": 88_u64,
+        "url": "https://committee.example"
+    }))
+    .expect("committee_member object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.5.2");
+    assert_eq!(object.committee_member_account.to_string(), "1.2.17");
+    assert_eq!(object.vote_id.to_string(), "0:12");
+    assert_eq!(object.vote_id.vote_type(), 0);
+    assert_eq!(object.vote_id.instance(), 12);
+    assert_eq!(object.total_votes, 88);
+    assert_eq!(object.url, "https://committee.example");
 }
 
 #[test]
