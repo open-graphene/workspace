@@ -4,6 +4,8 @@
 //! reads C++ sources and emits Rust files belongs in `graphene-codegen`; the generated Rust should
 //! depend on this crate for shared protocol behavior.
 
+pub mod asset;
 pub mod object_id;
 
+pub use asset::Asset;
 pub use object_id::{ObjectId, ObjectIdParseError};

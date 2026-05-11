@@ -1,6 +1,6 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, asset_dynamic_data, block_summary, buyback, committee_member,
-    dynamic_global_property, fba_accumulator, witness, witness_schedule,
+    dynamic_global_property, fba_accumulator, withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
 
@@ -234,6 +234,34 @@ fn deserializes_witness_schedule_object() {
         .map(ToString::to_string)
         .collect::<Vec<_>>();
     assert_eq!(witness_ids, vec!["1.6.5", "1.6.6"]);
+}
+
+#[test]
+fn deserializes_withdraw_permission_object() {
+    let object: withdraw_permission::Object = serde_json::from_value(json!({
+        "id": "1.12.9",
+        "withdraw_from_account": "1.2.17",
+        "authorized_account": "1.2.18",
+        "withdrawal_limit": {
+            "amount": 5000_i64,
+            "asset_id": "1.3.0"
+        },
+        "withdrawal_period_sec": 3600_u32,
+        "period_start_time": "2024-01-02T03:04:05",
+        "expiration": "2024-02-02T03:04:05",
+        "claimed_this_period": 250_i64
+    }))
+    .expect("withdraw_permission object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.12.9");
+    assert_eq!(object.withdraw_from_account.to_string(), "1.2.17");
+    assert_eq!(object.authorized_account.to_string(), "1.2.18");
+    assert_eq!(object.withdrawal_limit.amount, 5000);
+    assert_eq!(object.withdrawal_limit.asset_id.to_string(), "1.3.0");
+    assert_eq!(object.withdrawal_period_sec, 3600);
+    assert_eq!(object.period_start_time, "2024-01-02T03:04:05");
+    assert_eq!(object.expiration, "2024-02-02T03:04:05");
+    assert_eq!(object.claimed_this_period, 250);
 }
 
 #[test]

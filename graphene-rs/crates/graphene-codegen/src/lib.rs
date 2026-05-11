@@ -156,6 +156,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
 
     match normalized.as_str() {
         "string" => return Some("String".to_owned()),
+        "asset" => return Some("graphene_protocol::Asset<crate::types::asset::Id>".to_owned()),
         "bool" => return Some("bool".to_owned()),
         "uint8_t" => return Some("u8".to_owned()),
         "uint16_t" => return Some("u16".to_owned()),
@@ -835,6 +836,10 @@ mod tests {
         assert_eq!(map_cpp_type_to_rust("bool"), Some("bool".to_owned()));
         assert_eq!(map_cpp_type_to_rust("uint16_t"), Some("u16".to_owned()));
         assert_eq!(map_cpp_type_to_rust("share_type"), Some("i64".to_owned()));
+        assert_eq!(
+            map_cpp_type_to_rust("asset"),
+            Some("graphene_protocol::Asset<crate::types::asset::Id>".to_owned())
+        );
         assert_eq!(
             map_cpp_type_to_rust("block_id_type"),
             Some("String".to_owned())
