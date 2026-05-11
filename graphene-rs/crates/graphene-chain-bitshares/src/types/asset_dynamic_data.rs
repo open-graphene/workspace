@@ -7,7 +7,7 @@ graphene_protocol::define_object_id_type! {
     type_id: 3,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
     #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]

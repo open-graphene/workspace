@@ -7,7 +7,7 @@ graphene_protocol::define_object_id_type! {
     type_id: 21,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
     pub owner_account: crate::types::account::Id,
@@ -22,6 +22,9 @@ pub struct Object {
     pub min_deal_amount: i64,
     pub enabled: bool,
     pub auto_disable_time: String,
-    pub acceptable_collateral: Vec<(crate::types::asset::Id, graphene_protocol::Price<crate::types::asset::Id>)>,
+    pub acceptable_collateral: Vec<(
+        crate::types::asset::Id,
+        graphene_protocol::Price<crate::types::asset::Id>,
+    )>,
     pub acceptable_borrowers: Vec<(crate::types::account::Id, i64)>,
 }

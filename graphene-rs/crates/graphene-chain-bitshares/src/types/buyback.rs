@@ -7,7 +7,7 @@ graphene_protocol::define_object_id_type! {
     type_id: 15,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
     pub asset_to_buy: crate::types::asset::Id,

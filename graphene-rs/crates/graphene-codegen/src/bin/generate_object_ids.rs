@@ -2,9 +2,10 @@ use std::collections::BTreeMap;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use graphene_codegen::{
-    ObjectFamily, ObjectGeneration, RustField, load_codegen_config, map_fields_to_rust,
+    ObjectFamily, ObjectGeneration, RustField, load_codegen_config, map_fields_to_rust_for_chain,
     parse_object_families, parse_reflected_class_fields, parse_reflected_objects,
     render_object_id_module, render_object_struct, render_types_mod,
 };
@@ -57,6 +58,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let chains = read_chain_configs(&graphene_v2_root, args.config_path.as_deref())?;
 
     let mut total_files = 0usize;
+    let mut written_rust_files = Vec::new();
     println!(
         "graphene-codegen object-id generation ({})",
         if args.write { "write" } else { "dry-run" }
@@ -82,15 +84,44 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     fs::create_dir_all(parent)?;
                 }
                 fs::write(&generated_file.path, generated_file.contents)?;
+                if generated_file
+                    .path
+                    .extension()
+                    .is_some_and(|extension| extension == "rs")
+                {
+                    written_rust_files.push(generated_file.path.clone());
+                }
             }
             println!("  {}", generated_file.path.display());
         }
     }
 
-    if !args.write {
+    if args.write {
+        format_generated_rust_files(&written_rust_files)?;
+    } else {
         println!("dry-run only; pass --write to update generated files");
     }
     println!("planned files: {total_files}");
+
+    Ok(())
+}
+
+fn format_generated_rust_files(paths: &[PathBuf]) -> Result<(), Box<dyn std::error::Error>> {
+    if paths.is_empty() {
+        return Ok(());
+    }
+
+    let status = Command::new("rustfmt")
+        .arg("--edition")
+        .arg("2024")
+        .args(paths)
+        .status()?;
+
+    if !status.success() {
+        return Err(
+            format!("rustfmt failed for generated object files with status {status}").into(),
+        );
+    }
 
     Ok(())
 }
@@ -213,7 +244,10 @@ fn read_object_fields(
     let cpp_fields =
         parse_reflected_class_fields(&header_source, &object.cpp_class, &reflected_fields)?;
 
-    Ok(Some(map_fields_to_rust(&cpp_fields)?))
+    Ok(Some(map_fields_to_rust_for_chain(
+        &chain.name,
+        &cpp_fields,
+    )?))
 }
 
 fn render_chain_files(

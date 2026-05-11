@@ -1,11 +1,16 @@
-use graphene_chain_bitshares::types::{
-    account, account_balance, account_history, account_statistics, asset, asset_bitasset_data,
-    asset_dynamic_data, balance, base, blinded_balance, block_summary, budget_record, buyback,
-    call_order, chain_property, collateral_bid, committee_member, credit_deal, credit_deal_summary,
-    credit_offer, custom, custom_authority, dynamic_global_property, fba_accumulator,
-    force_settlement, global_property, htlc, limit_order, liquidity_pool, null, operation_history,
-    proposal, reserved0, samet_fund, special_authority, ticket, transaction_history,
-    vesting_balance, withdraw_permission, witness, witness_schedule, worker,
+use graphene_chain_bitshares::{
+    operations::Operation,
+    transaction::OperationResult,
+    types::{
+        account, account_balance, account_history, account_statistics, asset, asset_bitasset_data,
+        asset_dynamic_data, balance, base, blinded_balance, block_summary, budget_record, buyback,
+        call_order, chain_property, collateral_bid, committee_member, credit_deal,
+        credit_deal_summary, credit_offer, custom, custom_authority, dynamic_global_property,
+        fba_accumulator, force_settlement, global_property, htlc, limit_order, liquidity_pool,
+        null, operation_history, proposal, reserved0, samet_fund, special_authority, ticket,
+        transaction_history, vesting_balance, withdraw_permission, witness, witness_schedule,
+        worker,
+    },
 };
 use serde_json::json;
 
@@ -58,7 +63,7 @@ fn deserializes_budget_record_object() {
 }
 
 #[test]
-fn deserializes_operation_history_object_with_raw_operation_payloads() {
+fn deserializes_operation_history_object_with_typed_operation_payloads() {
     let object: operation_history::Object = serde_json::from_value(json!({
         "id": "1.11.9",
         "op": [0, {
@@ -76,9 +81,15 @@ fn deserializes_operation_history_object_with_raw_operation_payloads() {
         "is_virtual": false,
         "block_time": "2024-01-02T03:04:05"
     }))
-    .expect("operation_history object should deserialize with raw operation payloads");
+    .expect("operation_history object should deserialize with typed operation payloads");
 
     assert_eq!(object.id.to_string(), "1.11.9");
+    assert!(matches!(object.op, Operation::Transfer(_)));
+    assert_eq!(object.op.tag(), 0);
+    assert!(object.op.is_typed());
+    assert_eq!(object.result, OperationResult::Void);
+    assert_eq!(object.result.tag(), 0);
+    assert!(object.result.is_typed());
     assert_eq!(object.block_num, 123);
     assert_eq!(object.trx_in_block, 1);
     assert_eq!(object.op_in_trx, 2);
@@ -87,7 +98,7 @@ fn deserializes_operation_history_object_with_raw_operation_payloads() {
 }
 
 #[test]
-fn deserializes_proposal_object_with_raw_transaction_payload() {
+fn deserializes_proposal_object_with_typed_transaction_payload() {
     let object: proposal::Object = serde_json::from_value(json!({
         "id": "1.10.5",
         "expiration_time": "2024-01-03T00:00:00",
@@ -113,9 +124,16 @@ fn deserializes_proposal_object_with_raw_transaction_payload() {
         "proposer": "1.2.17",
         "fail_reason": ""
     }))
-    .expect("proposal object should deserialize with raw transaction payload");
+    .expect("proposal object should deserialize with typed transaction payload");
 
     assert_eq!(object.id.to_string(), "1.10.5");
+    assert_eq!(object.proposed_transaction.ref_block_num, 42);
+    assert_eq!(object.proposed_transaction.operations.len(), 1);
+    assert!(matches!(
+        object.proposed_transaction.operations[0],
+        Operation::Transfer(_)
+    ));
+    assert_eq!(object.proposed_transaction.operations[0].tag(), 0);
     assert_eq!(object.review_period_time, None);
     assert_eq!(object.required_active_approvals[0].to_string(), "1.2.17");
     assert_eq!(
@@ -126,22 +144,36 @@ fn deserializes_proposal_object_with_raw_transaction_payload() {
 }
 
 #[test]
-fn deserializes_transaction_history_object_with_raw_signed_transaction_payload() {
+fn deserializes_transaction_history_object_with_typed_signed_transaction_payload() {
     let object: transaction_history::Object = serde_json::from_value(json!({
         "id": "2.7.5",
         "trx": {
             "ref_block_num": 42_u16,
             "ref_block_prefix": 123456_u32,
             "expiration": "2024-01-03T00:00:00",
-            "operations": [],
+            "operations": [[0, {
+                "fee": { "amount": 10_i64, "asset_id": "1.3.0" },
+                "from": "1.2.17",
+                "to": "1.2.18",
+                "amount": { "amount": 100_i64, "asset_id": "1.3.0" },
+                "extensions": []
+            }]],
             "extensions": [],
             "signatures": ["1f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"]
         },
         "trx_id": "abcdef0123456789abcdef0123456789abcdef01"
     }))
-    .expect("transaction_history object should deserialize with raw signed transaction payload");
+    .expect("transaction_history object should deserialize with typed signed transaction payload");
 
     assert_eq!(object.id.to_string(), "2.7.5");
+    assert_eq!(object.trx.transaction.ref_block_num, 42);
+    assert_eq!(object.trx.transaction.operations.len(), 1);
+    assert!(matches!(
+        object.trx.transaction.operations[0],
+        Operation::Transfer(_)
+    ));
+    assert_eq!(object.trx.transaction.operations[0].tag(), 0);
+    assert_eq!(object.trx.signatures.len(), 1);
     assert_eq!(object.trx_id, "abcdef0123456789abcdef0123456789abcdef01");
 }
 

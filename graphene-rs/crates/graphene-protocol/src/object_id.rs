@@ -69,6 +69,18 @@ impl FromStr for ObjectId {
     }
 }
 
+impl<'de> serde::Deserialize<'de> for ObjectId {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        use serde::de::Error as _;
+
+        let value = String::deserialize(deserializer)?;
+        value.parse::<Self>().map_err(D::Error::custom)
+    }
+}
+
 fn parse_u8_part(value: &str) -> Result<u8, ObjectIdParseError> {
     value
         .parse()
@@ -204,4 +216,62 @@ macro_rules! define_object_id_type {
             }
         }
     };
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ObjectId;
+
+    mod account_id {
+        crate::define_object_id_type!(
+            name: "account",
+            object_space: 1,
+            type_id: 2,
+        );
+    }
+
+    #[test]
+    fn deserializes_untyped_object_id_from_string() {
+        let id: ObjectId = serde_json::from_str(r#""1.2.345""#).expect("object id deserializes");
+
+        assert_eq!(id, ObjectId::new(1, 2, 345));
+    }
+
+    #[test]
+    fn deserializes_untyped_object_id_boundaries_from_strings() {
+        let zero: ObjectId = serde_json::from_str(r#""0.0.0""#).expect("zero id deserializes");
+        let large: ObjectId = serde_json::from_str(r#""1.2.18446744073709551615""#)
+            .expect("large instance id deserializes");
+
+        assert_eq!(zero, ObjectId::new(0, 0, 0));
+        assert_eq!(large, ObjectId::new(1, 2, u64::MAX));
+    }
+
+    #[test]
+    fn rejects_malformed_untyped_object_id_strings() {
+        for malformed in [r#""1.2""#, r#""1.2.3.4""#, r#""1.x.3""#] {
+            let error =
+                serde_json::from_str::<ObjectId>(malformed).expect_err("malformed id fails");
+
+            assert!(!error.to_string().is_empty());
+        }
+    }
+
+    #[test]
+    fn rejects_non_string_untyped_object_id_json() {
+        let error = serde_json::from_str::<ObjectId>("123").expect_err("numeric id json fails");
+
+        assert!(error.to_string().contains("string"));
+    }
+
+    #[test]
+    fn keeps_typed_object_id_deserialization_validation() {
+        let id: account_id::Id = serde_json::from_str(r#""1.2.345""#)
+            .expect("typed object id still deserializes matching family");
+        let wrong_type = serde_json::from_str::<account_id::Id>(r#""1.3.345""#)
+            .expect_err("typed object id still rejects wrong family");
+
+        assert_eq!(id.instance(), 345);
+        assert!(wrong_type.to_string().contains("not a account id"));
+    }
 }

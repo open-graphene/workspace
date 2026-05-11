@@ -7,11 +7,11 @@ graphene_protocol::define_object_id_type! {
     type_id: 11,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
-    pub op: graphene_protocol::Operation,
-    pub result: graphene_protocol::OperationResult,
+    pub op: crate::operations::Operation,
+    pub result: crate::transaction::OperationResult,
     pub block_num: u32,
     pub trx_in_block: u16,
     pub op_in_trx: u16,

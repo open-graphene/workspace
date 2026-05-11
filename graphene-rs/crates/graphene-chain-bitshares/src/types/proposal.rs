@@ -7,12 +7,12 @@ graphene_protocol::define_object_id_type! {
     type_id: 10,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
     pub expiration_time: String,
     pub review_period_time: Option<String>,
-    pub proposed_transaction: graphene_protocol::Transaction,
+    pub proposed_transaction: crate::transaction::Transaction,
     pub required_active_approvals: Vec<crate::types::account::Id>,
     pub available_active_approvals: Vec<crate::types::account::Id>,
     pub required_owner_approvals: Vec<crate::types::account::Id>,

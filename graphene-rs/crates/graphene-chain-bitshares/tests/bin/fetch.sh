@@ -117,6 +117,11 @@ if not isinstance(results, list):
 found = next((item for item in results if item is not None), None)
 envelope["object_id"] = found.get("id") if isinstance(found, dict) else None
 envelope["object"] = found
+if found is None:
+    envelope["skip_reason"] = (
+        f"No {family} object returned for object ID prefix {prefix} "
+        f"within probe range 0..{max_probe}."
+    )
 Path(output_path).write_text(json.dumps(envelope, indent=2, sort_keys=True) + "\n")
 print(f"{family}: {envelope['object_id'] or 'not found'} -> {output_path}")
 PY
