@@ -81,6 +81,24 @@ header_path = "libraries/chain/include/graphene/chain/custom_authority_object.hp
 source_path = "libraries/chain/small_objects.cpp"
 
 [[objects]]
+family_name = "credit_deal"
+cpp_class = "credit_deal_object"
+header_path = "libraries/chain/include/graphene/chain/credit_offer_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "credit_deal_summary"
+cpp_class = "credit_deal_summary_object"
+header_path = "libraries/chain/include/graphene/chain/credit_offer_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "credit_offer"
+cpp_class = "credit_offer_object"
+header_path = "libraries/chain/include/graphene/chain/credit_offer_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "dynamic_global_property"
 cpp_class = "dynamic_global_property_object"
 header_path = "libraries/chain/include/graphene/chain/global_property_object.hpp"
@@ -99,10 +117,34 @@ header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
 source_path = "libraries/chain/market_object.cpp"
 
 [[objects]]
+family_name = "liquidity_pool"
+cpp_class = "liquidity_pool_object"
+header_path = "libraries/chain/include/graphene/chain/liquidity_pool_object.hpp"
+source_path = "libraries/chain/include/graphene/chain/liquidity_pool_object.hpp"
+
+[[objects]]
+family_name = "limit_order"
+cpp_class = "limit_order_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
+family_name = "samet_fund"
+cpp_class = "samet_fund_object"
+header_path = "libraries/chain/include/graphene/chain/samet_fund_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "special_authority"
 cpp_class = "special_authority_object"
 header_path = "libraries/chain/include/graphene/chain/special_authority_object.hpp"
 source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "ticket"
+cpp_class = "ticket_object"
+header_path = "libraries/chain/include/graphene/chain/ticket_object.hpp"
+source_path = "libraries/chain/ticket_object.cpp"
 
 [[objects]]
 family_name = "witness"

@@ -6,3 +6,18 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 7,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub expiration: String,
+    pub seller: crate::types::account::Id,
+    pub for_sale: i64,
+    pub sell_price: graphene_protocol::Price<crate::types::asset::Id>,
+    pub filled_amount: u128,
+    pub deferred_fee: i64,
+    pub deferred_paid_fee: graphene_protocol::Asset<crate::types::asset::Id>,
+    pub is_settled_debt: bool,
+    pub on_fill: Vec<graphene_protocol::LimitOrderAutoAction<crate::types::asset::Id>>,
+    pub take_profit_order_id: Option<crate::types::limit_order::Id>,
+}

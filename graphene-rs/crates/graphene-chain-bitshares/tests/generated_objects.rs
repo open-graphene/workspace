@@ -1,8 +1,9 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, account_statistics, asset_dynamic_data, balance,
     blinded_balance, block_summary, buyback, call_order, chain_property, collateral_bid,
-    committee_member, custom_authority, dynamic_global_property, fba_accumulator, force_settlement,
-    special_authority, withdraw_permission, witness, witness_schedule,
+    committee_member, credit_deal, credit_deal_summary, credit_offer, custom_authority,
+    dynamic_global_property, fba_accumulator, force_settlement, limit_order, liquidity_pool,
+    samet_fund, special_authority, ticket, withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
 
@@ -335,6 +336,108 @@ fn deserializes_collateral_bid_object() {
 }
 
 #[test]
+fn deserializes_credit_deal_object() {
+    let object: credit_deal::Object = serde_json::from_value(json!({
+        "id": "1.22.8",
+        "borrower": "1.2.17",
+        "offer_id": "1.21.4",
+        "offer_owner": "1.2.18",
+        "debt_asset": "1.3.7",
+        "debt_amount": 9000_i64,
+        "collateral_asset": "1.3.0",
+        "collateral_amount": 18000_i64,
+        "fee_rate": 250_u32,
+        "latest_repay_time": "2024-05-01T00:00:00",
+        "auto_repay": 1_u8
+    }))
+    .expect("credit_deal object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.22.8");
+    assert_eq!(object.borrower.to_string(), "1.2.17");
+    assert_eq!(object.offer_id.to_string(), "1.21.4");
+    assert_eq!(object.offer_owner.to_string(), "1.2.18");
+    assert_eq!(object.debt_asset.to_string(), "1.3.7");
+    assert_eq!(object.debt_amount, 9000);
+    assert_eq!(object.collateral_asset.to_string(), "1.3.0");
+    assert_eq!(object.collateral_amount, 18000);
+    assert_eq!(object.fee_rate, 250);
+    assert_eq!(object.latest_repay_time, "2024-05-01T00:00:00");
+    assert_eq!(object.auto_repay, 1);
+}
+
+#[test]
+fn deserializes_credit_deal_summary_object() {
+    let object: credit_deal_summary::Object = serde_json::from_value(json!({
+        "id": "2.18.3",
+        "borrower": "1.2.17",
+        "offer_id": "1.21.4",
+        "offer_owner": "1.2.18",
+        "debt_asset": "1.3.7",
+        "total_debt_amount": 9000_i64
+    }))
+    .expect("credit_deal_summary object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.18.3");
+    assert_eq!(object.borrower.to_string(), "1.2.17");
+    assert_eq!(object.offer_id.to_string(), "1.21.4");
+    assert_eq!(object.offer_owner.to_string(), "1.2.18");
+    assert_eq!(object.debt_asset.to_string(), "1.3.7");
+    assert_eq!(object.total_debt_amount, 9000);
+}
+
+#[test]
+fn deserializes_credit_offer_object() {
+    let object: credit_offer::Object = serde_json::from_value(json!({
+        "id": "1.21.4",
+        "owner_account": "1.2.18",
+        "asset_type": "1.3.7",
+        "total_balance": 50000_i64,
+        "current_balance": 30000_i64,
+        "fee_rate": 250_u32,
+        "max_duration_seconds": 86400_u32,
+        "min_deal_amount": 1000_i64,
+        "enabled": true,
+        "auto_disable_time": "2024-06-01T00:00:00",
+        "acceptable_collateral": [[
+            "1.3.0",
+            {
+                "base": { "amount": 2_i64, "asset_id": "1.3.0" },
+                "quote": { "amount": 1_i64, "asset_id": "1.3.7" }
+            }
+        ]],
+        "acceptable_borrowers": [["1.2.17", 10000_i64]]
+    }))
+    .expect("credit_offer object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.21.4");
+    assert_eq!(object.owner_account.to_string(), "1.2.18");
+    assert_eq!(object.asset_type.to_string(), "1.3.7");
+    assert_eq!(object.total_balance, 50000);
+    assert_eq!(object.current_balance, 30000);
+    assert_eq!(object.fee_rate, 250);
+    assert_eq!(object.max_duration_seconds, 86400);
+    assert_eq!(object.min_deal_amount, 1000);
+    assert!(object.enabled);
+    assert_eq!(object.auto_disable_time, "2024-06-01T00:00:00");
+    assert_eq!(object.acceptable_collateral.len(), 1);
+    assert_eq!(object.acceptable_collateral[0].0.to_string(), "1.3.0");
+    assert_eq!(object.acceptable_collateral[0].1.base.amount, 2);
+    assert_eq!(
+        object.acceptable_collateral[0].1.base.asset_id.to_string(),
+        "1.3.0"
+    );
+    assert_eq!(object.acceptable_collateral[0].1.quote.amount, 1);
+    assert_eq!(
+        object.acceptable_collateral[0].1.quote.asset_id.to_string(),
+        "1.3.7"
+    );
+    assert_eq!(
+        object.acceptable_borrowers,
+        vec![("1.2.17".parse().unwrap(), 10000)]
+    );
+}
+
+#[test]
 fn deserializes_custom_authority_object() {
     let key = "BTS1111111111111111111111111111111114T1Anm";
     let object: custom_authority::Object = serde_json::from_value(json!({
@@ -531,6 +634,138 @@ fn deserializes_witness_schedule_object() {
 }
 
 #[test]
+fn deserializes_limit_order_object_with_auto_action() {
+    let object: limit_order::Object = serde_json::from_value(json!({
+        "id": "1.7.9",
+        "expiration": "2024-07-01T00:00:00",
+        "seller": "1.2.17",
+        "for_sale": 1000_i64,
+        "sell_price": {
+            "base": { "amount": 2_i64, "asset_id": "1.3.0" },
+            "quote": { "amount": 1_i64, "asset_id": "1.3.7" }
+        },
+        "filled_amount": 25_u128,
+        "deferred_fee": 3_i64,
+        "deferred_paid_fee": { "amount": 4_i64, "asset_id": "1.3.0" },
+        "is_settled_debt": false,
+        "on_fill": [[
+            0_u64,
+            {
+                "fee_asset_id": "1.3.0",
+                "spread_percent": 100_u16,
+                "size_percent": 5000_u16,
+                "expiration_seconds": 3600_u32,
+                "repeat": true,
+                "extensions": []
+            }
+        ]],
+        "take_profit_order_id": "1.7.10"
+    }))
+    .expect("limit_order object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.7.9");
+    assert_eq!(object.expiration, "2024-07-01T00:00:00");
+    assert_eq!(object.seller.to_string(), "1.2.17");
+    assert_eq!(object.for_sale, 1000);
+    assert_eq!(object.sell_price.base.amount, 2);
+    assert_eq!(object.sell_price.base.asset_id.to_string(), "1.3.0");
+    assert_eq!(object.sell_price.quote.amount, 1);
+    assert_eq!(object.sell_price.quote.asset_id.to_string(), "1.3.7");
+    assert_eq!(object.filled_amount, 25);
+    assert_eq!(object.deferred_fee, 3);
+    assert_eq!(object.deferred_paid_fee.amount, 4);
+    assert_eq!(object.deferred_paid_fee.asset_id.to_string(), "1.3.0");
+    assert!(!object.is_settled_debt);
+    assert_eq!(object.on_fill.len(), 1);
+    let graphene_protocol::LimitOrderAutoAction::CreateTakeProfitOrder(action) = &object.on_fill[0];
+    assert_eq!(action.fee_asset_id.to_string(), "1.3.0");
+    assert_eq!(action.spread_percent, 100);
+    assert_eq!(action.size_percent, 5000);
+    assert_eq!(action.expiration_seconds, 3600);
+    assert!(action.repeat);
+    assert!(action.extensions.is_empty());
+    assert_eq!(
+        object
+            .take_profit_order_id
+            .expect("take profit order id should be present")
+            .to_string(),
+        "1.7.10"
+    );
+}
+
+#[test]
+fn deserializes_limit_order_object_without_auto_action() {
+    let object: limit_order::Object = serde_json::from_value(json!({
+        "id": "1.7.11",
+        "expiration": "2024-07-01T00:00:00",
+        "seller": "1.2.17",
+        "for_sale": 1000_i64,
+        "sell_price": {
+            "base": { "amount": 2_i64, "asset_id": "1.3.0" },
+            "quote": { "amount": 1_i64, "asset_id": "1.3.7" }
+        },
+        "filled_amount": 0_u128,
+        "deferred_fee": 0_i64,
+        "deferred_paid_fee": { "amount": 0_i64, "asset_id": "1.3.0" },
+        "is_settled_debt": false,
+        "on_fill": [],
+        "take_profit_order_id": null
+    }))
+    .expect("limit_order object should deserialize without auto action");
+
+    assert_eq!(object.id.to_string(), "1.7.11");
+    assert!(object.on_fill.is_empty());
+    assert!(object.take_profit_order_id.is_none());
+}
+
+#[test]
+fn deserializes_liquidity_pool_object() {
+    let virtual_value = 2_000_000_u128;
+    let object: liquidity_pool::Object = serde_json::from_value(json!({
+        "id": "1.19.2",
+        "asset_a": "1.3.0",
+        "asset_b": "1.3.7",
+        "balance_a": 1000_i64,
+        "balance_b": 2000_i64,
+        "share_asset": "1.3.9",
+        "taker_fee_percent": 30_u16,
+        "withdrawal_fee_percent": 15_u16,
+        "virtual_value": virtual_value
+    }))
+    .expect("liquidity_pool object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.19.2");
+    assert_eq!(object.asset_a.to_string(), "1.3.0");
+    assert_eq!(object.asset_b.to_string(), "1.3.7");
+    assert_eq!(object.balance_a, 1000);
+    assert_eq!(object.balance_b, 2000);
+    assert_eq!(object.share_asset.to_string(), "1.3.9");
+    assert_eq!(object.taker_fee_percent, 30);
+    assert_eq!(object.withdrawal_fee_percent, 15);
+    assert_eq!(object.virtual_value, virtual_value);
+}
+
+#[test]
+fn deserializes_samet_fund_object() {
+    let object: samet_fund::Object = serde_json::from_value(json!({
+        "id": "1.20.6",
+        "owner_account": "1.2.17",
+        "asset_type": "1.3.7",
+        "balance": 100000_i64,
+        "fee_rate": 250_u32,
+        "unpaid_amount": 500_i64
+    }))
+    .expect("samet_fund object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.20.6");
+    assert_eq!(object.owner_account.to_string(), "1.2.17");
+    assert_eq!(object.asset_type.to_string(), "1.3.7");
+    assert_eq!(object.balance, 100000);
+    assert_eq!(object.fee_rate, 250);
+    assert_eq!(object.unpaid_amount, 500);
+}
+
+#[test]
 fn deserializes_special_authority_object() {
     let object: special_authority::Object = serde_json::from_value(json!({
         "id": "2.14.3",
@@ -540,6 +775,36 @@ fn deserializes_special_authority_object() {
 
     assert_eq!(object.id.to_string(), "2.14.3");
     assert_eq!(object.account.to_string(), "1.2.17");
+}
+
+#[test]
+fn deserializes_ticket_object() {
+    let object: ticket::Object = serde_json::from_value(json!({
+        "id": "1.18.4",
+        "account": "1.2.17",
+        "target_type": "lock_360_days",
+        "amount": {
+            "amount": 10000_i64,
+            "asset_id": "1.3.0"
+        },
+        "current_type": "lock_180_days",
+        "status": "charging",
+        "value": 20000_i64,
+        "next_auto_update_time": "2024-03-01T00:00:00",
+        "next_type_downgrade_time": "2024-04-01T00:00:00"
+    }))
+    .expect("ticket object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.18.4");
+    assert_eq!(object.account.to_string(), "1.2.17");
+    assert_eq!(object.target_type, "lock_360_days");
+    assert_eq!(object.amount.amount, 10000);
+    assert_eq!(object.amount.asset_id.to_string(), "1.3.0");
+    assert_eq!(object.current_type, "lock_180_days");
+    assert_eq!(object.status, "charging");
+    assert_eq!(object.value, 20000);
+    assert_eq!(object.next_auto_update_time, "2024-03-01T00:00:00");
+    assert_eq!(object.next_type_downgrade_time, "2024-04-01T00:00:00");
 }
 
 #[test]
