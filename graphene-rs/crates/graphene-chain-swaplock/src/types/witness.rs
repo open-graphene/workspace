@@ -11,12 +11,15 @@ graphene_protocol::define_object_id_type! {
 pub struct Object {
     pub id: Id,
     pub witness_account: crate::types::account::Id,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub last_aslot: u64,
     pub signing_key: String,
     pub pay_vb: Option<crate::types::vesting_balance::Id>,
     pub vote_id: String,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub total_votes: u64,
     pub url: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub total_missed: i64,
     pub last_confirmed_block_num: u32,
 }

@@ -16,5 +16,6 @@ pub struct Object {
     pub withdrawal_period_sec: u32,
     pub period_start_time: String,
     pub expiration: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
     pub claimed_this_period: i64,
 }

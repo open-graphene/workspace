@@ -6,3 +6,20 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 22,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub borrower: crate::types::account::Id,
+    pub offer_id: crate::types::credit_offer::Id,
+    pub offer_owner: crate::types::account::Id,
+    pub debt_asset: crate::types::asset::Id,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
+    pub debt_amount: i64,
+    pub collateral_asset: crate::types::asset::Id,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
+    pub collateral_amount: i64,
+    pub fee_rate: u32,
+    pub latest_repay_time: String,
+    pub auto_repay: u8,
+}

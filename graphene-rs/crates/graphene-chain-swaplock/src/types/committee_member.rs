@@ -12,6 +12,7 @@ pub struct Object {
     pub id: Id,
     pub committee_member_account: crate::types::account::Id,
     pub vote_id: String,
+    #[serde(deserialize_with = "graphene_protocol::u64_from_number_or_string")]
     pub total_votes: u64,
     pub url: String,
 }

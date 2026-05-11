@@ -6,3 +6,10 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 13,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub time: String,
+    pub record: graphene_protocol::BudgetRecord,
+}

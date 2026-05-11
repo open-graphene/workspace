@@ -6,3 +6,17 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 18,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub account: crate::types::account::Id,
+    pub target_type: String,
+    pub amount: graphene_protocol::Asset<crate::types::asset::Id>,
+    pub current_type: String,
+    pub status: String,
+    #[serde(deserialize_with = "graphene_protocol::i64_from_number_or_string")]
+    pub value: i64,
+    pub next_auto_update_time: String,
+    pub next_type_downgrade_time: String,
+}

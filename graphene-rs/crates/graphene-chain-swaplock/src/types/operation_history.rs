@@ -6,3 +6,16 @@ graphene_protocol::define_object_id_type! {
     object_space: 1,
     type_id: 11,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub op: graphene_protocol::Operation,
+    pub result: graphene_protocol::OperationResult,
+    pub block_num: u32,
+    pub trx_in_block: u16,
+    pub op_in_trx: u16,
+    pub virtual_op: u32,
+    pub is_virtual: bool,
+    pub block_time: String,
+}
