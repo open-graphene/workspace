@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/graphene-chain-acta",
+    "crates/graphene-chain-bitshares",
+    "crates/graphene-chain-rsquared",
+    "crates/graphene-chain-swaplock",
+    "crates/graphene-codec",
+    "crates/graphene-crypto",
+    "crates/graphene-protocol",
+    "crates/graphene-transaction",
+    "crates/graphene-transport",
+]
