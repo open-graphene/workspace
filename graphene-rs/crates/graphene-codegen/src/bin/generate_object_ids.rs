@@ -35,6 +35,12 @@ const GENERATED_OBJECTS: &[ObjectGeneration] = &[
         source_path: "libraries/chain/account_object.cpp",
     },
     ObjectGeneration {
+        family_name: "account_history",
+        cpp_class: "account_history_object",
+        header_path: "libraries/chain/include/graphene/chain/operation_history_object.hpp",
+        source_path: "libraries/chain/small_objects.cpp",
+    },
+    ObjectGeneration {
         family_name: "asset_dynamic_data",
         cpp_class: "asset_dynamic_data_object",
         header_path: "libraries/chain/include/graphene/chain/asset_object.hpp",

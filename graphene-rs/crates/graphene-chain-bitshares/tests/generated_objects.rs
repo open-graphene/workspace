@@ -1,5 +1,5 @@
 use graphene_chain_bitshares::types::{
-    account_balance, asset_dynamic_data, committee_member, fba_accumulator,
+    account_balance, account_history, asset_dynamic_data, committee_member, fba_accumulator,
 };
 use serde_json::json;
 
@@ -20,6 +20,24 @@ fn deserializes_account_balance_object() {
     assert_eq!(object.asset_type.to_string(), "1.3.0");
     assert_eq!(object.balance, 123456789);
     assert!(!object.maintenance_flag);
+}
+
+#[test]
+fn deserializes_account_history_object() {
+    let object: account_history::Object = serde_json::from_value(json!({
+        "id": "2.9.100",
+        "account": "1.2.17",
+        "operation_id": "1.11.55",
+        "sequence": 7_u64,
+        "next": "2.9.99"
+    }))
+    .expect("account_history object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.9.100");
+    assert_eq!(object.account.to_string(), "1.2.17");
+    assert_eq!(object.operation_id.to_string(), "1.11.55");
+    assert_eq!(object.sequence, 7);
+    assert_eq!(object.next.to_string(), "2.9.99");
 }
 
 #[test]
