@@ -1,5 +1,6 @@
 use graphene_chain_bitshares::types::{
-    account_balance, account_history, asset_dynamic_data, committee_member, fba_accumulator,
+    account_balance, account_history, asset_dynamic_data, block_summary, committee_member,
+    fba_accumulator,
 };
 use serde_json::json;
 
@@ -58,6 +59,19 @@ fn deserializes_asset_dynamic_data_object() {
     assert_eq!(object.accumulated_fees, 10);
     assert_eq!(object.accumulated_collateral_fees, 20);
     assert_eq!(object.fee_pool, 30);
+}
+
+#[test]
+fn deserializes_block_summary_object() {
+    let block_id = "0000000a4f3d2c1b000000000000000000000000";
+    let object: block_summary::Object = serde_json::from_value(json!({
+        "id": "2.8.10",
+        "block_id": block_id
+    }))
+    .expect("block_summary object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.8.10");
+    assert_eq!(object.block_id, block_id);
 }
 
 #[test]
