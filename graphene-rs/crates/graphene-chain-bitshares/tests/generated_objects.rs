@@ -1,7 +1,8 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, account_statistics, asset_dynamic_data, blinded_balance,
     block_summary, buyback, chain_property, committee_member, dynamic_global_property,
-    fba_accumulator, special_authority, withdraw_permission, witness, witness_schedule,
+    fba_accumulator, force_settlement, special_authority, withdraw_permission, witness,
+    witness_schedule,
 };
 use serde_json::json;
 
@@ -292,6 +293,26 @@ fn deserializes_fba_accumulator_object_without_designated_asset() {
     assert_eq!(object.id.to_string(), "2.16.4");
     assert_eq!(object.accumulated_fba_fees, -5);
     assert!(object.designated_asset.is_none());
+}
+
+#[test]
+fn deserializes_force_settlement_object() {
+    let object: force_settlement::Object = serde_json::from_value(json!({
+        "id": "1.4.3",
+        "owner": "1.2.17",
+        "balance": {
+            "amount": 5000_i64,
+            "asset_id": "1.3.7"
+        },
+        "settlement_date": "2024-01-03T05:06:07"
+    }))
+    .expect("force_settlement object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.4.3");
+    assert_eq!(object.owner.to_string(), "1.2.17");
+    assert_eq!(object.balance.amount, 5000);
+    assert_eq!(object.balance.asset_id.to_string(), "1.3.7");
+    assert_eq!(object.settlement_date, "2024-01-03T05:06:07");
 }
 
 #[test]

@@ -69,6 +69,12 @@ header_path = "libraries/chain/include/graphene/chain/fba_object.hpp"
 source_path = "libraries/chain/small_objects.cpp"
 
 [[objects]]
+family_name = "force_settlement"
+cpp_class = "force_settlement_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
 family_name = "special_authority"
 cpp_class = "special_authority_object"
 header_path = "libraries/chain/include/graphene/chain/special_authority_object.hpp"
