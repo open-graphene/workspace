@@ -11,13 +11,7 @@ graphene_protocol::define_object_id_type! {
 pub struct Object {
     pub id: Id,
     pub asset_id: crate::types::asset::Id,
-    pub feeds: Vec<(
-        crate::types::account::Id,
-        (
-            String,
-            graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>,
-        ),
-    )>,
+    pub feeds: Vec<(crate::types::account::Id, (String, graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>))>,
     pub median_feed: graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>,
     pub current_feed: graphene_protocol::PriceFeedWithIcr<crate::types::asset::Id>,
     pub current_feed_publication_time: String,

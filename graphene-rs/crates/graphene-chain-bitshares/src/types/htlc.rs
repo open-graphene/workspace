@@ -10,8 +10,7 @@ graphene_protocol::define_object_id_type! {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
 pub struct Object {
     pub id: Id,
-    pub transfer:
-        graphene_protocol::HtlcTransfer<crate::types::account::Id, crate::types::asset::Id>,
+    pub transfer: graphene_protocol::HtlcTransfer<crate::types::account::Id, crate::types::asset::Id>,
     pub conditions: graphene_protocol::HtlcConditions,
     pub memo: Option<graphene_protocol::MemoData>,
 }

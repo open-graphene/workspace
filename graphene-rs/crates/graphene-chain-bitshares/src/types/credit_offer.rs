@@ -22,9 +22,6 @@ pub struct Object {
     pub min_deal_amount: i64,
     pub enabled: bool,
     pub auto_disable_time: String,
-    pub acceptable_collateral: Vec<(
-        crate::types::asset::Id,
-        graphene_protocol::Price<crate::types::asset::Id>,
-    )>,
+    pub acceptable_collateral: Vec<(crate::types::asset::Id, graphene_protocol::Price<crate::types::asset::Id>)>,
     pub acceptable_borrowers: Vec<(crate::types::account::Id, i64)>,
 }

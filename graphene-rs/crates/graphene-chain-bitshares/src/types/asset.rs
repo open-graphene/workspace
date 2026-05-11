@@ -13,8 +13,7 @@ pub struct Object {
     pub symbol: String,
     pub precision: u8,
     pub issuer: crate::types::account::Id,
-    pub options:
-        graphene_protocol::AssetOptions<crate::types::account::Id, crate::types::asset::Id>,
+    pub options: graphene_protocol::AssetOptions<crate::types::account::Id, crate::types::asset::Id>,
     pub dynamic_asset_data_id: crate::types::asset_dynamic_data::Id,
     pub bitasset_data_id: Option<crate::types::asset_bitasset_data::Id>,
     pub buyback_account: Option<crate::types::account::Id>,
