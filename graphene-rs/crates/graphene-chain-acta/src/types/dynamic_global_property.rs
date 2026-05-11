@@ -6,3 +6,23 @@ graphene_protocol::define_object_id_type! {
     object_space: 2,
     type_id: 1,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct Object {
+    pub id: Id,
+    pub head_block_number: u32,
+    pub head_block_id: String,
+    pub time: graphene_protocol::TimePointSec,
+    pub current_witness: crate::types::witness::Id,
+    pub next_maintenance_time: graphene_protocol::TimePointSec,
+    pub last_budget_time: graphene_protocol::TimePointSec,
+    pub witness_budget: i64,
+    pub total_pob: i64,
+    pub total_inactive: i64,
+    pub accounts_registered_this_interval: u32,
+    pub recently_missed_count: u32,
+    pub current_aslot: u64,
+    pub recent_slots_filled: graphene_protocol::Uint128,
+    pub dynamic_flags: u32,
+    pub last_irreversible_block_num: u32,
+}

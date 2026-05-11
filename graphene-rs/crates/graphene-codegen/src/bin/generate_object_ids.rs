@@ -59,6 +59,12 @@ const GENERATED_OBJECTS: &[ObjectGeneration] = &[
         source_path: "libraries/chain/small_objects.cpp",
     },
     ObjectGeneration {
+        family_name: "dynamic_global_property",
+        cpp_class: "dynamic_global_property_object",
+        header_path: "libraries/chain/include/graphene/chain/global_property_object.hpp",
+        source_path: "libraries/chain/small_objects.cpp",
+    },
+    ObjectGeneration {
         family_name: "fba_accumulator",
         cpp_class: "fba_accumulator_object",
         header_path: "libraries/chain/include/graphene/chain/fba_object.hpp",

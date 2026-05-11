@@ -163,6 +163,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "uint64_t" => return Some("u64".to_owned()),
         "int64_t" | "share_type" => return Some("i64".to_owned()),
         "block_id_type" => return Some("String".to_owned()),
+        "fc::uint128_t" | "uint128_t" => return Some("graphene_protocol::Uint128".to_owned()),
         "time_point_sec" => return Some("graphene_protocol::TimePointSec".to_owned()),
         "vote_id_type" => return Some("graphene_protocol::VoteId".to_owned()),
         "authority" => return Some("Authority".to_owned()),
@@ -836,6 +837,10 @@ mod tests {
         assert_eq!(
             map_cpp_type_to_rust("block_id_type"),
             Some("String".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("fc::uint128_t"),
+            Some("graphene_protocol::Uint128".to_owned())
         );
         assert_eq!(
             map_cpp_type_to_rust("vote_id_type"),

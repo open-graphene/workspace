@@ -1,6 +1,6 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, asset_dynamic_data, block_summary, committee_member,
-    fba_accumulator,
+    dynamic_global_property, fba_accumulator,
 };
 use serde_json::json;
 
@@ -95,6 +95,53 @@ fn deserializes_committee_member_object() {
 }
 
 #[test]
+fn deserializes_dynamic_global_property_object() {
+    let recent_slots_filled = "340282366920938463463374607431768211455";
+    let object: dynamic_global_property::Object = serde_json::from_value(json!({
+        "id": "2.1.0",
+        "head_block_number": 123_u32,
+        "head_block_id": "0000007b4f3d2c1b000000000000000000000000",
+        "time": "2024-01-02T03:04:05",
+        "current_witness": "1.6.5",
+        "next_maintenance_time": "2024-01-02T04:00:00",
+        "last_vote_tally_time": "2024-01-01T00:00:00",
+        "last_budget_time": "2024-01-02T02:00:00",
+        "witness_budget": -10_i64,
+        "total_pob": 20_i64,
+        "total_inactive": 30_i64,
+        "accounts_registered_this_interval": 4_u32,
+        "recently_missed_count": 5_u32,
+        "current_aslot": 6_u64,
+        "recent_slots_filled": recent_slots_filled,
+        "dynamic_flags": 1_u32,
+        "last_irreversible_block_num": 122_u32
+    }))
+    .expect("dynamic_global_property object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "2.1.0");
+    assert_eq!(object.head_block_number, 123);
+    assert_eq!(
+        object.head_block_id,
+        "0000007b4f3d2c1b000000000000000000000000"
+    );
+    assert_eq!(object.time, "2024-01-02T03:04:05");
+    assert_eq!(object.current_witness.to_string(), "1.6.5");
+    assert_eq!(object.next_maintenance_time, "2024-01-02T04:00:00");
+    assert_eq!(object.last_vote_tally_time, "2024-01-01T00:00:00");
+    assert_eq!(object.last_budget_time, "2024-01-02T02:00:00");
+    assert_eq!(object.witness_budget, -10);
+    assert_eq!(object.total_pob, 20);
+    assert_eq!(object.total_inactive, 30);
+    assert_eq!(object.accounts_registered_this_interval, 4);
+    assert_eq!(object.recently_missed_count, 5);
+    assert_eq!(object.current_aslot, 6);
+    assert_eq!(object.recent_slots_filled.to_string(), recent_slots_filled);
+    assert_eq!(object.recent_slots_filled.value(), u128::MAX);
+    assert_eq!(object.dynamic_flags, 1);
+    assert_eq!(object.last_irreversible_block_num, 122);
+}
+
+#[test]
 fn deserializes_fba_accumulator_object_with_designated_asset() {
     let object: fba_accumulator::Object = serde_json::from_value(json!({
         "id": "2.16.3",
@@ -126,6 +173,17 @@ fn deserializes_fba_accumulator_object_without_designated_asset() {
     assert_eq!(object.id.to_string(), "2.16.4");
     assert_eq!(object.accumulated_fba_fees, -5);
     assert!(object.designated_asset.is_none());
+}
+
+#[test]
+fn deserializes_uint128_from_json_number_and_string() {
+    let from_number: graphene_protocol::Uint128 = serde_json::from_value(json!(123_u64))
+        .expect("Uint128 should deserialize from JSON number");
+    let from_string: graphene_protocol::Uint128 = serde_json::from_value(json!("456"))
+        .expect("Uint128 should deserialize from decimal string");
+
+    assert_eq!(from_number.value(), 123);
+    assert_eq!(from_string.value(), 456);
 }
 
 #[test]

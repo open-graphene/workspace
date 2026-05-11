@@ -10,6 +10,94 @@ use core::str::FromStr;
 /// Minimal placeholder for Graphene `time_point_sec` values.
 pub type TimePointSec = String;
 
+/// Unsigned 128-bit integer serialized by Graphene JSON as either a number or decimal string.
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct Uint128(u128);
+
+impl Uint128 {
+    /// Creates a 128-bit integer wrapper.
+    pub const fn new(value: u128) -> Self {
+        Self(value)
+    }
+
+    /// Returns the raw integer value.
+    pub const fn value(self) -> u128 {
+        self.0
+    }
+}
+
+impl fmt::Display for Uint128 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+impl FromStr for Uint128 {
+    type Err = Uint128ParseError;
+
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
+        value
+            .parse()
+            .map(Self)
+            .map_err(|_| Uint128ParseError::InvalidInteger)
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for Uint128 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        struct Uint128Visitor;
+
+        impl serde::de::Visitor<'_> for Uint128Visitor {
+            type Value = Uint128;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+                formatter.write_str("a u128 integer or decimal string")
+            }
+
+            fn visit_u64<E>(self, value: u64) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Ok(Uint128(u128::from(value)))
+            }
+
+            fn visit_u128<E>(self, value: u128) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Ok(Uint128(value))
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                value.parse::<Uint128>().map_err(E::custom)
+            }
+        }
+
+        deserializer.deserialize_any(Uint128Visitor)
+    }
+}
+
+/// Error returned when parsing a Graphene unsigned 128-bit integer fails.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Uint128ParseError {
+    /// The value was not a valid unsigned 128-bit integer.
+    InvalidInteger,
+}
+
+impl fmt::Display for Uint128ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::InvalidInteger => write!(f, "value is not a valid unsigned 128-bit integer"),
+        }
+    }
+}
+
 /// Graphene vote id in `type:instance` JSON form.
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct VoteId {
