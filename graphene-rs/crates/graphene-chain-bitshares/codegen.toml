@@ -75,6 +75,12 @@ header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
 source_path = "libraries/chain/market_object.cpp"
 
 [[objects]]
+family_name = "custom_authority"
+cpp_class = "custom_authority_object"
+header_path = "libraries/chain/include/graphene/chain/custom_authority_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
 family_name = "dynamic_global_property"
 cpp_class = "dynamic_global_property_object"
 header_path = "libraries/chain/include/graphene/chain/global_property_object.hpp"

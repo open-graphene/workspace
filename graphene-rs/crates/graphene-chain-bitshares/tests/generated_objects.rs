@@ -1,7 +1,7 @@
 use graphene_chain_bitshares::types::{
     account_balance, account_history, account_statistics, asset_dynamic_data, balance,
     blinded_balance, block_summary, buyback, call_order, chain_property, collateral_bid,
-    committee_member, dynamic_global_property, fba_accumulator, force_settlement,
+    committee_member, custom_authority, dynamic_global_property, fba_accumulator, force_settlement,
     special_authority, withdraw_permission, witness, witness_schedule,
 };
 use serde_json::json;
@@ -332,6 +332,50 @@ fn deserializes_collateral_bid_object() {
     assert_eq!(object.inv_swan_price.base.asset_id.to_string(), "1.3.7");
     assert_eq!(object.inv_swan_price.quote.amount, 2);
     assert_eq!(object.inv_swan_price.quote.asset_id.to_string(), "1.3.0");
+}
+
+#[test]
+fn deserializes_custom_authority_object() {
+    let key = "BTS1111111111111111111111111111111114T1Anm";
+    let object: custom_authority::Object = serde_json::from_value(json!({
+        "id": "1.17.2",
+        "account": "1.2.17",
+        "enabled": true,
+        "valid_from": "2024-01-01T00:00:00",
+        "valid_to": "2024-02-01T00:00:00",
+        "operation_type": 0_u64,
+        "auth": {
+            "weight_threshold": 1_u32,
+            "account_auths": [],
+            "key_auths": [[key, 1_u16]],
+            "address_auths": []
+        },
+        "restrictions": [[
+            0_u16,
+            {
+                "member_index": 1_u64,
+                "restriction_type": 0_u64,
+                "argument": [1_u64, true],
+                "extensions": []
+            }
+        ]],
+        "restriction_counter": 1_u16
+    }))
+    .expect("custom_authority object should deserialize from Graphene JSON");
+
+    assert_eq!(object.id.to_string(), "1.17.2");
+    assert_eq!(object.account.to_string(), "1.2.17");
+    assert!(object.enabled);
+    assert_eq!(object.valid_from, "2024-01-01T00:00:00");
+    assert_eq!(object.valid_to, "2024-02-01T00:00:00");
+    assert_eq!(object.operation_type, 0);
+    assert_eq!(object.auth.weight_threshold, 1);
+    assert_eq!(object.auth.key_auths, vec![(key.to_owned(), 1)]);
+    assert_eq!(object.restrictions.len(), 1);
+    assert_eq!(object.restrictions[0].0, 0);
+    assert_eq!(object.restrictions[0].1.member_index, 1);
+    assert_eq!(object.restrictions[0].1.restriction_type, 0);
+    assert_eq!(object.restriction_counter, 1);
 }
 
 #[test]

@@ -169,7 +169,7 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "uint8_t" => return Some("u8".to_owned()),
         "uint16_t" => return Some("u16".to_owned()),
         "uint32_t" => return Some("u32".to_owned()),
-        "uint64_t" => return Some("u64".to_owned()),
+        "uint64_t" | "unsigned_int" => return Some("u64".to_owned()),
         "int64_t" | "share_type" => return Some("i64".to_owned()),
         "block_id_type" => return Some("String".to_owned()),
         "chain_id_type" => return Some("String".to_owned()),
@@ -187,12 +187,21 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         "linear_vesting_policy" => {
             return Some("graphene_protocol::LinearVestingPolicy".to_owned());
         }
+        "restriction" => return Some("graphene_protocol::Restriction".to_owned()),
         "account_options" => return Some("Options".to_owned()),
         _ => {}
     }
 
     if let Some(inner) = template_argument(&normalized, "optional") {
         return map_cpp_type_to_rust(inner).map(|rust_type| format!("Option<{rust_type}>"));
+    }
+
+    if let Some(inner) = template_argument(&normalized, "flat_map") {
+        if let Some((key_type, value_type)) = split_template_pair(inner) {
+            let key_type = map_cpp_type_to_rust(key_type)?;
+            let value_type = map_cpp_type_to_rust(value_type)?;
+            return Some(format!("Vec<({key_type}, {value_type})>"));
+        }
     }
 
     for container in ["flat_set", "set", "vector"] {
@@ -472,6 +481,11 @@ fn template_argument<'a>(cpp_type: &'a str, template: &str) -> Option<&'a str> {
         .strip_prefix(&prefix)
         .and_then(|rest| rest.strip_suffix('>'))
         .map(str::trim)
+}
+
+fn split_template_pair(arguments: &str) -> Option<(&str, &str)> {
+    let comma = find_next_code_comma(arguments, 0)?;
+    Some((arguments[..comma].trim(), arguments[comma + 1..].trim()))
 }
 
 fn parse_define_ids_body(body: &str) -> Result<Vec<ObjectFamily>, String> {
@@ -903,6 +917,15 @@ mod tests {
             Some("graphene_protocol::ImmutableChainParameters".to_owned())
         );
         assert_eq!(map_cpp_type_to_rust("address"), Some("String".to_owned()));
+        assert_eq!(map_cpp_type_to_rust("unsigned_int"), Some("u64".to_owned()));
+        assert_eq!(
+            map_cpp_type_to_rust("restriction"),
+            Some("graphene_protocol::Restriction".to_owned())
+        );
+        assert_eq!(
+            map_cpp_type_to_rust("flat_map<uint16_t, restriction>"),
+            Some("Vec<(u16, graphene_protocol::Restriction)>".to_owned())
+        );
         assert_eq!(
             map_cpp_type_to_rust("optional<linear_vesting_policy>"),
             Some("Option<graphene_protocol::LinearVestingPolicy>".to_owned())
