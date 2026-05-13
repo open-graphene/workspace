@@ -4,6 +4,10 @@ marker_objects = ["base", "custom", "null", "reserved0"]
 name = "bitshares"
 core_path = "chains/bitshares/bitshares-core"
 
+[wallet_api]
+header_path = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+output_path = "src/wallet_api.rs"
+
 [[objects]]
 family_name = "account"
 cpp_class = "account_object"

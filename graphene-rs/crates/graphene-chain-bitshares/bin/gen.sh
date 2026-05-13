@@ -28,6 +28,7 @@ has_write_arg() {
 run_generator generate_object_ids "$@"
 run_generator generate_operation_tags "$@"
 run_generator generate_operations "$@"
+run_generator generate_wallet_api "$@"
 
 if has_write_arg "$@"; then
   cargo fmt \

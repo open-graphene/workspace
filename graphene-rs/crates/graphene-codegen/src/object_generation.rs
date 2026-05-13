@@ -11,6 +11,9 @@ pub struct CodegenConfig {
     /// Object families that exist in the ID space but have no reflected payload beyond `id`.
     #[serde(default)]
     pub marker_objects: Vec<String>,
+    /// Optional wallet API surface whose signatures should be generated as SDK reference data.
+    #[serde(default)]
+    pub wallet_api: Option<WalletApiGeneration>,
 }
 
 /// Per-chain source metadata.
@@ -33,6 +36,15 @@ pub struct ObjectGeneration {
     pub header_path: String,
     /// C++ source path containing FC reflection, relative to a chain core root.
     pub source_path: String,
+}
+
+/// Optional wallet API generation configuration for a chain crate.
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize)]
+pub struct WalletApiGeneration {
+    /// Header path relative to a chain core root.
+    pub header_path: String,
+    /// Rust source path relative to the chain crate root.
+    pub output_path: String,
 }
 
 /// Load one per-chain code-generation config from TOML.

@@ -10,6 +10,7 @@ trap 'rm -rf "$SNAPSHOT_DIR"' EXIT
 cp "$CRATE_DIR/src/operation_variants.rs" "$SNAPSHOT_DIR/operation_variants.rs"
 cp "$CRATE_DIR/src/operations.rs" "$SNAPSHOT_DIR/operations.rs"
 cp "$REPORT_PATH" "$SNAPSHOT_DIR/operation_model_skips.md"
+cp "$CRATE_DIR/src/wallet_api.rs" "$SNAPSHOT_DIR/wallet_api.rs"
 cp -R "$CRATE_DIR/src/types" "$SNAPSHOT_DIR/types"
 
 "$SCRIPT_DIR/gen.sh" --write
@@ -116,4 +117,5 @@ PY
 diff -u "$SNAPSHOT_DIR/operation_variants.rs" "$CRATE_DIR/src/operation_variants.rs"
 diff -u "$SNAPSHOT_DIR/operations.rs" "$CRATE_DIR/src/operations.rs"
 diff -u "$SNAPSHOT_DIR/operation_model_skips.md" "$REPORT_PATH"
+diff -u "$SNAPSHOT_DIR/wallet_api.rs" "$CRATE_DIR/src/wallet_api.rs"
 diff -ru "$SNAPSHOT_DIR/types" "$CRATE_DIR/src/types"

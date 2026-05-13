@@ -7,7 +7,8 @@
 mod object_generation;
 
 pub use object_generation::{
-    ChainGenerationConfig, CodegenConfig, ObjectGeneration, load_codegen_config,
+    ChainGenerationConfig, CodegenConfig, ObjectGeneration, WalletApiGeneration,
+    load_codegen_config,
 };
 
 /// One object-id family discovered from a Graphene `GRAPHENE_DEFINE_IDS(...)` macro.
@@ -289,12 +290,12 @@ pub fn parse_static_variant_alias(
             )
         })?;
 
-        if let Some(comment_tag) = parse_variant_tag_comment(raw_item) {
-            if comment_tag != tag {
-                return Err(format!(
-                    "static_variant alias {alias} variant {cpp_type}: comment tag {comment_tag} disagrees with declaration order {tag}"
-                ));
-            }
+        if let Some(comment_tag) = parse_variant_tag_comment(raw_item)
+            && comment_tag != tag
+        {
+            return Err(format!(
+                "static_variant alias {alias} variant {cpp_type}: comment tag {comment_tag} disagrees with declaration order {tag}"
+            ));
         }
 
         variants.push(OperationVariant {
@@ -969,11 +970,10 @@ fn format_long_rust_type(rust_type: &str, indent: &str) -> String {
     if let Some(inner) = rust_type
         .strip_prefix("Vec<(")
         .and_then(|inner| inner.strip_suffix(")>"))
+        && let Some((first, second)) = split_template_pair(inner)
     {
-        if let Some((first, second)) = split_template_pair(inner) {
-            let child_indent = format!("{indent}    ");
-            return format!("Vec<(\n{child_indent}{first},\n{child_indent}{second},\n{indent})>");
-        }
+        let child_indent = format!("{indent}    ");
+        return format!("Vec<(\n{child_indent}{first},\n{child_indent}{second},\n{indent})>");
     }
 
     rust_type.to_owned()
@@ -1139,20 +1139,20 @@ pub fn map_cpp_type_to_rust(cpp_type: &str) -> Option<String> {
         return map_cpp_type_to_rust(inner).map(|rust_type| format!("Option<{rust_type}>"));
     }
 
-    if let Some(inner) = template_argument(&normalized, "pair") {
-        if let Some((first_type, second_type)) = split_template_pair(inner) {
-            let first_type = map_cpp_type_to_rust(first_type)?;
-            let second_type = map_cpp_type_to_rust(second_type)?;
-            return Some(format!("({first_type}, {second_type})"));
-        }
+    if let Some(inner) = template_argument(&normalized, "pair")
+        && let Some((first_type, second_type)) = split_template_pair(inner)
+    {
+        let first_type = map_cpp_type_to_rust(first_type)?;
+        let second_type = map_cpp_type_to_rust(second_type)?;
+        return Some(format!("({first_type}, {second_type})"));
     }
 
-    if let Some(inner) = template_argument(&normalized, "flat_map") {
-        if let Some((key_type, value_type)) = split_template_pair(inner) {
-            let key_type = map_cpp_type_to_rust(key_type)?;
-            let value_type = map_cpp_type_to_rust(value_type)?;
-            return Some(format!("Vec<({key_type}, {value_type})>"));
-        }
+    if let Some(inner) = template_argument(&normalized, "flat_map")
+        && let Some((key_type, value_type)) = split_template_pair(inner)
+    {
+        let key_type = map_cpp_type_to_rust(key_type)?;
+        let value_type = map_cpp_type_to_rust(value_type)?;
+        return Some(format!("Vec<({key_type}, {value_type})>"));
     }
 
     for container in ["flat_set", "set", "vector"] {
@@ -1346,9 +1346,7 @@ fn class_or_struct_body<'a>(source: &'a str, type_name: &str) -> Option<BodySpan
 
             let after_type = &source[type_start + marker.len()..];
             let next_semicolon = after_type.find(';');
-            let Some(open_brace) = after_type.find('{') else {
-                return None;
-            };
+            let open_brace = after_type.find('{')?;
 
             if next_semicolon.is_some_and(|semicolon| semicolon < open_brace) {
                 search_from = type_start + marker.len();
@@ -1369,8 +1367,25 @@ fn class_or_struct_body<'a>(source: &'a str, type_name: &str) -> Option<BodySpan
 
 fn take_balanced_brace_body(source_after_open: &str) -> Option<(&str, usize)> {
     let mut depth = 1usize;
+    let mut index = 0usize;
 
-    for (index, character) in source_after_open.char_indices() {
+    while index < source_after_open.len() {
+        let remaining = &source_after_open[index..];
+        if remaining.starts_with("//") {
+            if let Some(newline_offset) = remaining.find('\n') {
+                index += newline_offset + 1;
+            } else {
+                return None;
+            }
+            continue;
+        }
+        if remaining.starts_with("/*") {
+            let comment_end = remaining.find("*/")?;
+            index += comment_end + 2;
+            continue;
+        }
+
+        let character = remaining.chars().next()?;
         match character {
             '{' => depth += 1,
             '}' => {
@@ -1381,6 +1396,7 @@ fn take_balanced_brace_body(source_after_open: &str) -> Option<(&str, usize)> {
             }
             _ => {}
         }
+        index += character.len_utf8();
     }
 
     None
@@ -1560,12 +1576,12 @@ fn strip_cpp_comments(source: &str) -> String {
     let mut index = 0usize;
 
     while index < source.len() {
-        if source[index..].starts_with("/*") {
-            if let Some(comment_end) = source[index + 2..].find("*/") {
-                index += comment_end + 4;
-                output.push(' ');
-                continue;
-            }
+        if source[index..].starts_with("/*")
+            && let Some(comment_end) = source[index + 2..].find("*/")
+        {
+            index += comment_end + 4;
+            output.push(' ');
+            continue;
         }
 
         if source[index..].starts_with("//") {
@@ -1590,15 +1606,15 @@ fn strip_cpp_comments_preserving_layout(source: &str) -> String {
     let mut index = 0usize;
 
     while index < source.len() {
-        if source[index..].starts_with("/*") {
-            if let Some(comment_end) = source[index + 2..].find("*/") {
-                let comment = &source[index..index + comment_end + 4];
-                for character in comment.chars() {
-                    output.push(if character == '\n' { '\n' } else { ' ' });
-                }
-                index += comment_end + 4;
-                continue;
+        if source[index..].starts_with("/*")
+            && let Some(comment_end) = source[index + 2..].find("*/")
+        {
+            let comment = &source[index..index + comment_end + 4];
+            for character in comment.chars() {
+                output.push(if character == '\n' { '\n' } else { ' ' });
             }
+            index += comment_end + 4;
+            continue;
         }
 
         if source[index..].starts_with("//") {
@@ -1742,12 +1758,12 @@ fn parse_family_names(source: &str, object_space: u8) -> Result<Vec<ObjectFamily
                 let name = source[index + 1..index + 1 + close_offset].trim();
                 if is_family_name(name) {
                     let type_id = next_type_id;
-                    if let Some(comment_type_id) = pending_comment_type_id {
-                        if comment_type_id != type_id {
-                            return Err(format!(
-                                "GRAPHENE_DEFINE_IDS comment type id for {name} ({comment_type_id}) disagrees with declaration order ({type_id})"
-                            ));
-                        }
+                    if let Some(comment_type_id) = pending_comment_type_id
+                        && comment_type_id != type_id
+                    {
+                        return Err(format!(
+                            "GRAPHENE_DEFINE_IDS comment type id for {name} ({comment_type_id}) disagrees with declaration order ({type_id})"
+                        ));
                     }
                     families.push(ObjectFamily {
                         object_space,
@@ -2067,6 +2083,510 @@ fn take_balanced_parentheses_body(source_after_open: &str) -> Option<(&str, usiz
     None
 }
 
+/// One public BitShares wallet API parameter parsed from `wallet.hpp`.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct WalletApiParam {
+    /// Parameter name from the C++ declaration.
+    pub name: String,
+    /// C++ type text preserved as source-derived reference data.
+    pub cpp_type: String,
+    /// C++ default value text, when present.
+    pub default_value: Option<String>,
+}
+
+/// One public BitShares wallet API method parsed from `wallet.hpp` and exported by `FC_API`.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct WalletApiMethod {
+    /// Method name as exported by `FC_API`.
+    pub name: String,
+    /// C++ return type text preserved as source-derived reference data.
+    pub return_cpp_type: String,
+    /// Ordered C++ parameters.
+    pub params: Vec<WalletApiParam>,
+    /// Whether the declaration is a const method.
+    pub is_const: bool,
+    /// Header path used in generated source metadata.
+    pub source_file: String,
+    /// 1-based line where the declaration starts.
+    pub source_line: usize,
+    /// Raw Doxygen block immediately attached to the declaration, normalized to text.
+    pub doc: String,
+}
+
+/// Parse the public wallet API surface exported by `FC_API(graphene::wallet::wallet_api, ...)`.
+pub fn parse_wallet_api_methods(
+    source: &str,
+    source_file: &str,
+) -> Result<Vec<WalletApiMethod>, String> {
+    let exports = parse_wallet_api_exports(source)?;
+    let mut methods = Vec::with_capacity(exports.len());
+
+    for exported_name in exports {
+        methods.push(parse_wallet_api_declaration_by_name(
+            source,
+            source_file,
+            &exported_name,
+        )?);
+    }
+
+    Ok(methods)
+}
+
+fn parse_wallet_api_declaration_by_name(
+    source: &str,
+    source_file: &str,
+    name: &str,
+) -> Result<WalletApiMethod, String> {
+    let body = class_or_struct_body(source, "wallet_api")
+        .ok_or_else(|| "could not find wallet_api class body".to_owned())?;
+    let scan_body = strip_cpp_comments_preserving_layout(body.body);
+    let mut matches = Vec::new();
+    let mut search_from = 0usize;
+
+    while let Some(relative_name_index) = scan_body[search_from..].find(name) {
+        let name_index = search_from + relative_name_index;
+        if !is_identifier_boundary(&scan_body, name_index, name.len()) {
+            search_from = name_index + name.len();
+            continue;
+        }
+        let after_name = &scan_body[name_index + name.len()..];
+        let leading_ws = after_name.len() - after_name.trim_start().len();
+        if !after_name[leading_ws..].starts_with('(') {
+            search_from = name_index + name.len();
+            continue;
+        }
+
+        let line_start = scan_body[..name_index]
+            .rfind('\n')
+            .map(|index| index + 1)
+            .unwrap_or(0);
+        let left = scan_body[line_start..name_index].trim();
+        if left.is_empty()
+            || left.starts_with('*')
+            || left.contains('=')
+            || left.contains("return")
+            || left.contains("FC_API")
+        {
+            search_from = name_index + name.len();
+            continue;
+        }
+
+        let params_open = name_index + name.len() + leading_ws;
+        let Some((params_source, consumed)) =
+            take_balanced_parentheses_body(&body.body[params_open + 1..])
+        else {
+            return Err(format!(
+                "wallet API declaration {name} has unterminated parameter list"
+            ));
+        };
+        let tail_start = params_open + 1 + consumed;
+        let tail = body.body[tail_start..].lines().next().unwrap_or("").trim();
+        let is_const = tail.contains("const");
+        let params = parse_wallet_api_params(params_source)
+            .map_err(|error| format!("wallet API declaration {name}: {error}"))?;
+        let doc = attached_doc_before(body.body, line_start);
+        let source_line = body.start_line + body.body[..line_start].matches('\n').count();
+
+        matches.push(WalletApiMethod {
+            name: name.to_owned(),
+            return_cpp_type: normalize_cpp_type(left),
+            params,
+            is_const,
+            source_file: source_file.to_owned(),
+            source_line,
+            doc,
+        });
+        search_from = name_index + name.len();
+    }
+
+    match matches.len() {
+        1 => Ok(matches.remove(0)),
+        0 => Err(format!(
+            "wallet API export {name} has no matching wallet_api declaration"
+        )),
+        _ => Err(format!(
+            "wallet API export {name} has multiple matching wallet_api declarations"
+        )),
+    }
+}
+
+fn attached_doc_before(class_body: &str, line_start: usize) -> String {
+    let prefix = &class_body[..line_start];
+    let Some(comment_start) = prefix.rfind("/**") else {
+        return String::new();
+    };
+    let Some(comment_end_offset) = class_body[comment_start + 3..].find("*/") else {
+        return String::new();
+    };
+    let comment_end = comment_start + 3 + comment_end_offset + 2;
+    if comment_end > line_start {
+        return String::new();
+    }
+    let between = class_body[comment_end..line_start].trim();
+    if between.contains(';') || between.contains('}') {
+        return String::new();
+    }
+    normalize_doc_comment(&class_body[comment_start..comment_end])
+}
+
+fn parse_wallet_api_exports(source: &str) -> Result<Vec<String>, String> {
+    let Some(macro_start) = source.find("FC_API") else {
+        return Err("could not find FC_API macro for wallet API".to_owned());
+    };
+    let after_macro = &source[macro_start + "FC_API".len()..];
+    let Some(open_paren) = after_macro.find('(') else {
+        return Err("FC_API macro is missing opening parenthesis".to_owned());
+    };
+    let after_open = &after_macro[open_paren + 1..];
+    let Some((body, _consumed)) = take_balanced_parentheses_body(after_open) else {
+        return Err("FC_API macro has unterminated body".to_owned());
+    };
+    let Some(first_comma) = find_next_code_comma(body, 0) else {
+        return Err("FC_API macro is missing method list".to_owned());
+    };
+    let method_list = &body[first_comma + 1..];
+    let mut methods = Vec::new();
+    let mut index = 0usize;
+    let bytes = method_list.as_bytes();
+
+    while index < bytes.len() {
+        if bytes[index] == b'(' {
+            if let Some(close_offset) = method_list[index + 1..].find(')') {
+                let name = method_list[index + 1..index + 1 + close_offset].trim();
+                if is_family_name(name) {
+                    methods.push(name.to_owned());
+                }
+                index += close_offset + 2;
+                continue;
+            }
+            return Err("FC_API method list has unterminated method entry".to_owned());
+        }
+        index += 1;
+    }
+
+    if methods.is_empty() {
+        return Err("FC_API wallet API method list is empty".to_owned());
+    }
+
+    Ok(methods)
+}
+
+fn normalize_doc_comment(comment: &str) -> String {
+    comment
+        .trim()
+        .trim_start_matches("/**")
+        .trim_end_matches("*/")
+        .lines()
+        .map(|line| line.trim().trim_start_matches('*').trim())
+        .filter(|line| !line.is_empty())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+fn parse_wallet_api_params(source: &str) -> Result<Vec<WalletApiParam>, String> {
+    let source = strip_cpp_comments(source);
+    let source = source.trim();
+    if source.is_empty() || source == "void" {
+        return Ok(Vec::new());
+    }
+
+    split_top_level(source, ',')
+        .into_iter()
+        .map(parse_wallet_api_param)
+        .collect()
+}
+
+fn parse_wallet_api_param(source: &str) -> Result<WalletApiParam, String> {
+    let (declaration, default_value) = match find_top_level_char(source, '=') {
+        Some(index) => (
+            &source[..index],
+            Some(source[index + 1..].trim().to_owned()),
+        ),
+        None => (source, None),
+    };
+    let declaration = declaration.trim();
+    let mut parts = declaration.rsplitn(2, char::is_whitespace);
+    let Some(raw_name) = parts.next() else {
+        return Err(format!("could not parse parameter {source:?}"));
+    };
+    let Some(raw_type) = parts.next() else {
+        return Err(format!("could not parse parameter {source:?}"));
+    };
+    let name = raw_name.trim().trim_start_matches(['*', '&']).trim();
+    let mut cpp_type = raw_type.trim().to_owned();
+
+    while cpp_type.ends_with(' ') {
+        cpp_type.pop();
+    }
+    if raw_name.trim_start().starts_with('&') && !cpp_type.ends_with('&') {
+        cpp_type.push('&');
+    }
+    if raw_name.trim_start().starts_with('*') && !cpp_type.ends_with('*') {
+        cpp_type.push('*');
+    }
+
+    if !is_family_name(name) || cpp_type.is_empty() {
+        return Err(format!("could not parse parameter {source:?}"));
+    }
+
+    Ok(WalletApiParam {
+        name: name.to_owned(),
+        cpp_type: normalize_cpp_type(&cpp_type),
+        default_value,
+    })
+}
+
+fn split_top_level(source: &str, separator: char) -> Vec<&str> {
+    let mut parts = Vec::new();
+    let mut start = 0usize;
+    let mut angle_depth = 0usize;
+    let mut paren_depth = 0usize;
+    let mut bracket_depth = 0usize;
+    let mut brace_depth = 0usize;
+
+    for (index, character) in source.char_indices() {
+        match character {
+            '<' if paren_depth == 0 && bracket_depth == 0 && brace_depth == 0 => angle_depth += 1,
+            '>' if angle_depth > 0
+                && paren_depth == 0
+                && bracket_depth == 0
+                && brace_depth == 0 =>
+            {
+                angle_depth -= 1;
+            }
+            '(' => paren_depth += 1,
+            ')' if paren_depth > 0 => paren_depth -= 1,
+            '[' => bracket_depth += 1,
+            ']' if bracket_depth > 0 => bracket_depth -= 1,
+            '{' => brace_depth += 1,
+            '}' if brace_depth > 0 => brace_depth -= 1,
+            character
+                if character == separator
+                    && angle_depth == 0
+                    && paren_depth == 0
+                    && bracket_depth == 0
+                    && brace_depth == 0 =>
+            {
+                parts.push(source[start..index].trim());
+                start = index + character.len_utf8();
+            }
+            _ => {}
+        }
+    }
+
+    let tail = source[start..].trim();
+    if !tail.is_empty() {
+        parts.push(tail);
+    }
+    parts
+}
+
+fn find_top_level_char(source: &str, needle: char) -> Option<usize> {
+    let mut angle_depth = 0usize;
+    let mut paren_depth = 0usize;
+    let mut bracket_depth = 0usize;
+    let mut brace_depth = 0usize;
+
+    for (index, character) in source.char_indices() {
+        match character {
+            '<' if paren_depth == 0 && bracket_depth == 0 && brace_depth == 0 => angle_depth += 1,
+            '>' if angle_depth > 0
+                && paren_depth == 0
+                && bracket_depth == 0
+                && brace_depth == 0 =>
+            {
+                angle_depth -= 1;
+            }
+            '(' => paren_depth += 1,
+            ')' if paren_depth > 0 => paren_depth -= 1,
+            '[' => bracket_depth += 1,
+            ']' if bracket_depth > 0 => bracket_depth -= 1,
+            '{' => brace_depth += 1,
+            '}' if brace_depth > 0 => brace_depth -= 1,
+            character
+                if character == needle
+                    && angle_depth == 0
+                    && paren_depth == 0
+                    && bracket_depth == 0
+                    && brace_depth == 0 =>
+            {
+                return Some(index);
+            }
+            _ => {}
+        }
+    }
+
+    None
+}
+
+fn wallet_api_params_struct_name(method_name: &str) -> String {
+    format!("{}Params", operation_rust_struct_name(method_name))
+}
+
+fn wallet_api_rust_param_type(cpp_type: &str) -> &'static str {
+    let normalized = cpp_type
+        .trim()
+        .trim_start_matches("const ")
+        .trim_end_matches('&')
+        .trim_end_matches('*')
+        .trim();
+
+    match normalized {
+        "string"
+        | "public_key_type"
+        | "object_id_type"
+        | "htlc_id_type"
+        | "limit_order_id_type"
+        | "time_point_sec" => "String",
+        "bool" => "bool",
+        "uint8_t" => "u8",
+        "uint16_t" => "u16",
+        "uint32_t" | "transaction_handle_type" => "u32",
+        "uint64_t" => "u64",
+        "int32_t" => "i32",
+        "share_type" => "i64",
+        "optional<string>" => "Option<String>",
+        "optional<limit_order_id_type>" => "Option<String>",
+        "flat_set<string>" | "vector<string>" => "Vec<String>",
+        "flat_set<uint16_t>" => "Vec<u16>",
+        "vector<public_key_type>" => "Vec<String>",
+        "vector<pair<string, string>>" => "Vec<(String, String)>",
+        "flat_map<string, optional<string>>" => "Vec<(String, Option<String>)>",
+        "optional<price>" | "optional<bitasset_options>" => "Option<serde_json::Value>",
+        _ => "serde_json::Value",
+    }
+}
+
+/// Render the source module containing BitShares wallet API reference metadata.
+pub fn render_wallet_api_spec_module(chain_name: &str, methods: &[WalletApiMethod]) -> String {
+    let const_name = wallet_api_const_name(chain_name);
+    let mut output = String::new();
+    output.push_str("// @generated by graphene-codegen; do not edit by hand.\n");
+    output.push_str(&format!(
+        "// Source chain: {chain_name} wallet API surface\n\n"
+    ));
+    output.push_str("pub trait WalletApiParams {\n");
+    output.push_str("    const METHOD: &'static str;\n");
+    output.push_str("    const RETURN_CPP_TYPE: &'static str;\n\n");
+    output.push_str("    fn into_positional_params(self) -> Vec<serde_json::Value>;\n");
+    output.push_str("}\n\n");
+    output.push_str("#[derive(Clone, Copy, Debug, Eq, PartialEq)]\n");
+    output.push_str("pub struct WalletApiParamSpec {\n");
+    output.push_str("    pub name: &'static str,\n");
+    output.push_str("    pub cpp_type: &'static str,\n");
+    output.push_str("    pub default_value: Option<&'static str>,\n");
+    output.push_str("}\n\n");
+    output.push_str("#[derive(Clone, Copy, Debug, Eq, PartialEq)]\n");
+    output.push_str("pub struct WalletApiMethodSpec {\n");
+    output.push_str("    pub name: &'static str,\n");
+    output.push_str("    pub return_cpp_type: &'static str,\n");
+    output.push_str("    pub params: &'static [WalletApiParamSpec],\n");
+    output.push_str("    pub is_const: bool,\n");
+    output.push_str("    pub source_file: &'static str,\n");
+    output.push_str("    pub source_line: usize,\n");
+    output.push_str("    pub doc: &'static str,\n");
+    output.push_str("}\n\n");
+    output.push_str(&format!(
+        "pub const {const_name}: &[WalletApiMethodSpec] = &[\n"
+    ));
+
+    for method in methods {
+        output.push_str("    WalletApiMethodSpec {\n");
+        output.push_str(&format!("        name: {:?},\n", method.name));
+        output.push_str(&format!(
+            "        return_cpp_type: {:?},\n",
+            method.return_cpp_type
+        ));
+        output.push_str("        params: &[\n");
+        for param in &method.params {
+            output.push_str("            WalletApiParamSpec {\n");
+            output.push_str(&format!("                name: {:?},\n", param.name));
+            output.push_str(&format!(
+                "                cpp_type: {:?},\n",
+                param.cpp_type
+            ));
+            match &param.default_value {
+                Some(default_value) => output.push_str(&format!(
+                    "                default_value: Some({default_value:?}),\n"
+                )),
+                None => output.push_str("                default_value: None,\n"),
+            }
+            output.push_str("            },\n");
+        }
+        output.push_str("        ],\n");
+        output.push_str(&format!("        is_const: {},\n", method.is_const));
+        output.push_str(&format!("        source_file: {:?},\n", method.source_file));
+        output.push_str(&format!("        source_line: {},\n", method.source_line));
+        output.push_str(&format!("        doc: {:?},\n", method.doc));
+        output.push_str("    },\n");
+    }
+
+    output.push_str("];\n\n");
+
+    for method in methods {
+        let struct_name = wallet_api_params_struct_name(&method.name);
+        if method.params.is_empty() {
+            output.push_str("#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]\n");
+            output.push_str(&format!("pub struct {struct_name};\n\n"));
+        } else {
+            output.push_str("#[derive(Clone, Debug, PartialEq)]\n");
+            output.push_str(&format!("pub struct {struct_name} {{\n"));
+            for param in &method.params {
+                output.push_str(&format!(
+                    "    pub {}: {},\n",
+                    param.name,
+                    wallet_api_rust_param_type(&param.cpp_type)
+                ));
+            }
+            output.push_str("}\n\n");
+        }
+
+        output.push_str(&format!("impl WalletApiParams for {struct_name} {{\n"));
+        output.push_str(&format!(
+            "    const METHOD: &'static str = {:?};\n",
+            method.name
+        ));
+        output.push_str(&format!(
+            "    const RETURN_CPP_TYPE: &'static str = {:?};\n\n",
+            method.return_cpp_type
+        ));
+        output.push_str("    fn into_positional_params(self) -> Vec<serde_json::Value> {\n");
+        if method.params.is_empty() {
+            output.push_str("        Vec::new()\n");
+        } else {
+            output.push_str("        vec![\n");
+            for param in &method.params {
+                output.push_str(&format!(
+                    "            serde_json::json!(self.{}),\n",
+                    param.name
+                ));
+            }
+            output.push_str("        ]\n");
+        }
+        output.push_str("    }\n");
+        output.push_str("}\n\n");
+    }
+
+    output
+}
+
+fn wallet_api_const_name(chain_name: &str) -> String {
+    let mut const_name = String::new();
+    for character in chain_name.chars() {
+        if character.is_ascii_alphanumeric() {
+            const_name.push(character.to_ascii_uppercase());
+        } else if !const_name.ends_with('_') {
+            const_name.push('_');
+        }
+    }
+    let const_name = const_name.trim_matches('_');
+    if const_name.is_empty() {
+        "WALLET_API_METHODS".to_owned()
+    } else {
+        format!("{const_name}_WALLET_API_METHODS")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
@@ -2076,9 +2596,155 @@ mod tests {
         map_fields_to_rust_for_chain, map_operation_field, map_operation_field_for_operation,
         parse_object_families, parse_operation_declarations, parse_operation_variants,
         parse_reflected_class_fields, parse_reflected_objects, parse_static_variant_alias,
-        render_object_id_module, render_object_struct, render_operation_model_skips_report,
-        render_operation_structs_module, render_operation_variants_module, render_types_mod,
+        parse_wallet_api_methods, render_object_id_module, render_object_struct,
+        render_operation_model_skips_report, render_operation_structs_module,
+        render_operation_variants_module, render_types_mod, render_wallet_api_spec_module,
     };
+
+    #[test]
+    fn parses_wallet_api_exports_and_declarations_from_fixture() {
+        let source = r#"
+            class wallet_api
+            {
+               public:
+                  /** Returns runtime info. */
+                  variant info()const;
+                  /** Transfer funds.
+                   * @param from source account
+                   */
+                  signed_transaction transfer( const string& from,
+                                               const string& to,
+                                               const string& amount,
+                                               const string& asset_symbol_or_id,
+                                               const string& memo,
+                                               bool broadcast = false )const;
+                  transaction_id_type get_transaction_id( const signed_transaction& trx )const { return trx.id(); }
+                  void helper_only()const;
+            };
+            FC_API( graphene::wallet::wallet_api,
+                    (info)
+                    (transfer)(get_transaction_id)
+                  )
+        "#;
+
+        let methods =
+            parse_wallet_api_methods(source, "wallet.hpp").expect("wallet API should parse");
+        assert_eq!(
+            methods
+                .iter()
+                .map(|method| method.name.as_str())
+                .collect::<Vec<_>>(),
+            vec!["info", "transfer", "get_transaction_id"]
+        );
+        let transfer = methods
+            .iter()
+            .find(|method| method.name == "transfer")
+            .expect("transfer method");
+        assert_eq!(transfer.return_cpp_type, "signed_transaction");
+        assert!(transfer.is_const);
+        assert_eq!(transfer.source_file, "wallet.hpp");
+        assert!(transfer.doc.contains("Transfer funds."));
+        assert_eq!(
+            transfer
+                .params
+                .iter()
+                .map(|param| (
+                    param.name.as_str(),
+                    param.cpp_type.as_str(),
+                    param.default_value.as_deref()
+                ))
+                .collect::<Vec<_>>(),
+            vec![
+                ("from", "const string&", None),
+                ("to", "const string&", None),
+                ("amount", "const string&", None),
+                ("asset_symbol_or_id", "const string&", None),
+                ("memo", "const string&", None),
+                ("broadcast", "bool", Some("false")),
+            ]
+        );
+    }
+
+    #[test]
+    fn parses_bitshares_wallet_header_contract_boundaries() {
+        let source = include_str!(
+            "../../../../chains/bitshares/bitshares-core/libraries/wallet/include/graphene/wallet/wallet.hpp"
+        );
+        let methods = parse_wallet_api_methods(source, "wallet.hpp")
+            .expect("BitShares wallet API should parse");
+
+        assert!(methods.len() > 100, "expected broad wallet API surface");
+        assert!(methods.iter().any(|method| method.name == "transfer"));
+        assert!(
+            methods
+                .iter()
+                .any(|method| method.name == "sign_transaction")
+        );
+        assert!(
+            methods
+                .iter()
+                .any(|method| method.name == "broadcast_transaction")
+        );
+        assert!(
+            !methods
+                .iter()
+                .any(|method| method.name == "copy_wallet_file")
+        );
+        assert!(
+            !methods
+                .iter()
+                .any(|method| method.name == "derive_private_key")
+        );
+
+        let transfer = methods
+            .iter()
+            .find(|method| method.name == "transfer")
+            .expect("transfer should be exported");
+        assert_eq!(
+            transfer
+                .params
+                .iter()
+                .map(|param| param.name.as_str())
+                .collect::<Vec<_>>(),
+            vec![
+                "from",
+                "to",
+                "amount",
+                "asset_symbol_or_id",
+                "memo",
+                "broadcast"
+            ]
+        );
+        assert_eq!(
+            transfer
+                .params
+                .last()
+                .and_then(|param| param.default_value.as_deref()),
+            Some("false")
+        );
+    }
+
+    #[test]
+    fn renders_wallet_api_spec_module_with_static_metadata() {
+        let source = r#"
+            class wallet_api
+            {
+               public:
+                  /** Returns runtime info. */
+                  variant info()const;
+            };
+            FC_API( graphene::wallet::wallet_api, (info) )
+        "#;
+        let methods =
+            parse_wallet_api_methods(source, "wallet.hpp").expect("wallet API should parse");
+        let rendered = render_wallet_api_spec_module("bitshares", &methods);
+
+        assert!(rendered.starts_with("// @generated by graphene-codegen; do not edit by hand.\n"));
+        assert!(rendered.contains("pub const BITSHARES_WALLET_API_METHODS"));
+        assert!(rendered.contains("name: \"info\""));
+        assert!(rendered.contains("return_cpp_type: \"variant\""));
+        assert!(rendered.contains("doc: \"Returns runtime info.\""));
+    }
 
     #[test]
     fn parses_operation_variant_tags_from_declaration_order() {
