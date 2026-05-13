@@ -15,7 +15,7 @@ chains/                         # per-chain generation configs
   rsquared.toml
   swaplock.toml
 crates/graphene-codegen/
-  src/bin/graphene-codegen.rs   # Rust coordinator for the generation pipeline
+  src/bin/graphene-codegen.rs   # Rust coordinator for generate/audit
   src/bin/openrpc-typify.rs     # typify backend: schema.json -> types.rs
   openrpc/                      # script backends spawned by graphene-codegen
     gen_wallet_openrpc.sh       # wallet.hpp + C++ headers -> OpenRPC spec
@@ -48,7 +48,8 @@ From this directory:
 bin/gen.sh
 ```
 
-This regenerates BitShares, Acta, RSquared, and Swaplock, then runs:
+This regenerates BitShares, Acta, RSquared, and Swaplock, audits each generated
+binding set, then runs:
 
 ```text
 cargo fmt
@@ -64,16 +65,33 @@ C++ wallet/core headers
   -> Rust static variants
   -> Rust RPC params
   -> Rust schema types
+  -> generated-output audit
 ```
 
 The underlying Rust coordinator can also be run directly for one chain:
 
 ```sh
 cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/bitshares.toml
-cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/acta.toml
-cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/rsquared.toml
-cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/swaplock.toml
+cargo run -p graphene-codegen --bin graphene-codegen -- audit chains/bitshares.toml
 ```
+
+Swap the config path for `chains/acta.toml`, `chains/rsquared.toml`, or
+`chains/swaplock.toml` to target another chain.
+
+## Audit checks
+
+`graphene-codegen audit <config.toml>` compares the generated files with the
+OpenRPC spec referenced by that config. It checks:
+
+- every schema has a generated Rust type or static-variant enum,
+- every method has a generated params struct and `OpenRpcParams` impl,
+- every static-variant schema has an enum and `variants.names` entry,
+- generated `rpc.rs` imports `graphene_rpc::OpenRpcParams` and does not define a
+  local copy,
+- TODO placeholders and `serde_json::Value` RPC fallbacks are reported.
+
+TODO placeholders are warnings for now because Acta and RSquared still expose
+known unresolved C++ reflection debt.
 
 ## Individual backend stages
 
@@ -92,7 +110,6 @@ cargo run -p graphene-codegen --bin openrpc-typify -- \
 
 ## Next steps
 
-1. Add a repeatable generated-output audit command under `graphene-codegen`.
-2. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
-3. Add a concrete HTTP or WebSocket `RpcTransport` implementation.
-4. Port the Python Rust-facing backend stages into Rust modules incrementally.
+1. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
+2. Add a concrete HTTP or WebSocket `RpcTransport` implementation.
+3. Port the Python Rust-facing backend stages into Rust modules incrementally.
