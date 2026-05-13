@@ -77,7 +77,12 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
         return "()"
 
     if "$ref" in schema:
-        return snake_to_pascal(ref_name(schema["$ref"]))
+        target = ref_name(schema["$ref"])
+        if target == "GrapheneTimePointSec":
+            return "::graphene_rpc::GrapheneTimePointSec"
+        if target == "GrapheneUInt64":
+            return "::graphene_rpc::GrapheneUInt64"
+        return snake_to_pascal(target)
 
     if "oneOf" in schema and isinstance(schema["oneOf"], list):
         variants = schema["oneOf"]
@@ -99,7 +104,7 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
         return "bool"
     if ty == "string":
         if schema.get("format") == "date-time":
-            return "chrono::DateTime<chrono::Utc>"
+            return "::graphene_rpc::GrapheneTimePointSec"
         return "String"
     if ty == "integer":
         return INT_FORMAT_MAP.get(schema.get("format", ""), "i64")
@@ -132,6 +137,18 @@ def emit(spec: dict[str, Any], source_label: str) -> str:
         "use graphene_rpc::OpenRpcParams;",
         "",
     ]
+
+    method_names = [
+        method.get("name")
+        for method in methods
+        if isinstance(method.get("name"), str) and method.get("name")
+    ]
+    out.append("/// OpenRPC method names generated for this chain crate.")
+    out.append("pub const OPENRPC_METHODS: &[&str] = &[")
+    for name in method_names:
+        out.append(f"    {json.dumps(name)},")
+    out.append("];")
+    out.append("")
 
     used_structs: set[str] = set()
     for method in methods:

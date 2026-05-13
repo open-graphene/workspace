@@ -2036,9 +2036,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "removed_ops": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "total_core_in_orders": {
@@ -2062,9 +2060,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "total_ops": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "total_pob_value": {
@@ -2094,12 +2090,12 @@ pub struct AccountStatisticsObject {
     pub owner: AccountStatisticsObjectOwner,
     pub pending_fees: i64,
     pub pending_vested_fees: i64,
-    pub removed_ops: u64,
+    pub removed_ops: ::graphene_rpc::GrapheneUInt64,
     pub total_core_in_orders: i64,
     pub total_core_inactive: i64,
     pub total_core_pob: i64,
     pub total_core_pol: i64,
-    pub total_ops: u64,
+    pub total_ops: ::graphene_rpc::GrapheneUInt64,
     pub total_pob_value: i64,
     pub total_pol_value: i64,
 }
@@ -11251,9 +11247,7 @@ for CommitteeMemberCreateOperationFeeParamsT {
 ///      "x-cpp-type": "account_id_type"
 ///    },
 ///    "total_votes": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "url": {
@@ -11272,7 +11266,7 @@ for CommitteeMemberCreateOperationFeeParamsT {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CommitteeMemberObject {
     pub committee_member_account: CommitteeMemberObjectCommitteeMemberAccount,
-    pub total_votes: u64,
+    pub total_votes: ::graphene_rpc::GrapheneUInt64,
     pub url: ::std::string::String,
     pub vote_id: VoteIdType,
 }
@@ -12057,9 +12051,7 @@ impl ::std::convert::From<::serde_json::Value> for ContentCardIdType {
 ///      "x-cpp-type": "account_id_type"
 ///    },
 ///    "timestamp": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "type": {
@@ -12084,7 +12076,7 @@ pub struct ContentCardObject {
     pub room: ::std::option::Option<RoomIdType>,
     pub storage_data: ::std::string::String,
     pub subject_account: ContentCardObjectSubjectAccount,
-    pub timestamp: u64,
+    pub timestamp: ::graphene_rpc::GrapheneUInt64,
     #[serde(rename = "type")]
     pub type_: ::std::string::String,
     pub url: ::std::string::String,
@@ -13803,9 +13795,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "current_aslot": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "current_witness": {
@@ -13882,7 +13872,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct DynamicGlobalPropertyObject {
     pub accounts_registered_this_interval: u32,
-    pub current_aslot: u64,
+    pub current_aslot: ::graphene_rpc::GrapheneUInt64,
     pub current_witness: DynamicGlobalPropertyObjectCurrentWitness,
     pub dynamic_flags: u32,
     pub head_block_id: BlockIdType,
@@ -20023,9 +20013,7 @@ impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyQuote {
 ///      "x-cpp-type": "vector<char>"
 ///    },
 ///    "nonce": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "to": {
@@ -20041,7 +20029,7 @@ impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyQuote {
 pub struct MemoData {
     pub from: ::std::string::String,
     pub message: ::std::vec::Vec<MemoDataMessageItem>,
-    pub nonce: u64,
+    pub nonce: ::graphene_rpc::GrapheneUInt64,
     pub to: ::std::string::String,
 }
 impl ::std::convert::From<&MemoData> for MemoData {
@@ -21779,9 +21767,7 @@ impl ::std::convert::From<::serde_json::Value> for PermissionIdType {
 ///      "x-cpp-type": "account_id_type"
 ///    },
 ///    "timestamp": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -21796,7 +21782,7 @@ pub struct PermissionObject {
     pub operator_account: PermissionObjectOperatorAccount,
     pub permission_type: ::std::string::String,
     pub subject_account: PermissionObjectSubjectAccount,
-    pub timestamp: u64,
+    pub timestamp: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&PermissionObject> for PermissionObject {
     fn from(value: &PermissionObject) -> Self {
@@ -24966,9 +24952,7 @@ for RestrictionVariantAssertArgumentType {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "value": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "witness_key": {
@@ -24985,7 +24969,7 @@ pub struct RevealCreateOperation {
     pub account: RevealCreateOperationAccount,
     pub fee: Asset,
     pub maintenance_time: u32,
-    pub value: u64,
+    pub value: ::graphene_rpc::GrapheneUInt64,
     pub witness_key: ::std::string::String,
 }
 impl ::std::convert::From<&RevealCreateOperation> for RevealCreateOperation {
@@ -25775,9 +25759,7 @@ impl<'de> ::serde::Deserialize<'de> for RoomKeyEpochObjectParticipant {
 ///      "x-cpp-type": "string"
 ///    },
 ///    "timestamp": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -25791,7 +25773,7 @@ pub struct RoomObject {
     pub name: ::std::string::String,
     pub owner: RoomObjectOwner,
     pub room_key: ::std::string::String,
-    pub timestamp: u64,
+    pub timestamp: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&RoomObject> for RoomObject {
     fn from(value: &RoomObject) -> Self {
@@ -25953,9 +25935,7 @@ impl ::std::convert::From<::serde_json::Value> for RoomParticipantIdType {
 ///      "x-cpp-type": "room_id_type"
 ///    },
 ///    "timestamp": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -25969,7 +25949,7 @@ pub struct RoomParticipantObject {
     pub participant: RoomParticipantObjectParticipant,
     pub permission_flags: u16,
     pub room: RoomIdType,
-    pub timestamp: u64,
+    pub timestamp: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&RoomParticipantObject> for RoomParticipantObject {
     fn from(value: &RoomParticipantObject) -> Self {
@@ -31031,9 +31011,7 @@ impl<'de> ::serde::Deserialize<'de> for WitnessCreateOperationWitnessAccount {
 ///  ],
 ///  "properties": {
 ///    "last_aslot": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "last_confirmed_block_num": {
@@ -31060,9 +31038,7 @@ impl<'de> ::serde::Deserialize<'de> for WitnessCreateOperationWitnessAccount {
 ///      "x-cpp-type": "int64_t"
 ///    },
 ///    "total_votes": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "url": {
@@ -31085,12 +31061,12 @@ impl<'de> ::serde::Deserialize<'de> for WitnessCreateOperationWitnessAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WitnessObject {
-    pub last_aslot: u64,
+    pub last_aslot: ::graphene_rpc::GrapheneUInt64,
     pub last_confirmed_block_num: u32,
     pub pay_vb: ::std::option::Option<WitnessObjectPayVb>,
     pub signing_key: ::std::string::String,
     pub total_missed: i64,
-    pub total_votes: u64,
+    pub total_votes: ::graphene_rpc::GrapheneUInt64,
     pub url: ::std::string::String,
     pub vote_id: VoteIdType,
     pub witness_account: WitnessObjectWitnessAccount,
@@ -33110,12 +33086,18 @@ pub mod builder {
         >,
         pending_fees: ::std::result::Result<i64, ::std::string::String>,
         pending_vested_fees: ::std::result::Result<i64, ::std::string::String>,
-        removed_ops: ::std::result::Result<u64, ::std::string::String>,
+        removed_ops: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         total_core_in_orders: ::std::result::Result<i64, ::std::string::String>,
         total_core_inactive: ::std::result::Result<i64, ::std::string::String>,
         total_core_pob: ::std::result::Result<i64, ::std::string::String>,
         total_core_pol: ::std::result::Result<i64, ::std::string::String>,
-        total_ops: ::std::result::Result<u64, ::std::string::String>,
+        total_ops: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         total_pob_value: ::std::result::Result<i64, ::std::string::String>,
         total_pol_value: ::std::result::Result<i64, ::std::string::String>,
     }
@@ -33282,7 +33264,7 @@ pub mod builder {
         }
         pub fn removed_ops<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.removed_ops = value
@@ -33346,7 +33328,7 @@ pub mod builder {
         }
         pub fn total_ops<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.total_ops = value
@@ -39384,7 +39366,10 @@ pub mod builder {
             super::CommitteeMemberObjectCommitteeMemberAccount,
             ::std::string::String,
         >,
-        total_votes: ::std::result::Result<u64, ::std::string::String>,
+        total_votes: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         url: ::std::result::Result<::std::string::String, ::std::string::String>,
         vote_id: ::std::result::Result<super::VoteIdType, ::std::string::String>,
     }
@@ -39420,7 +39405,7 @@ pub mod builder {
         }
         pub fn total_votes<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.total_votes = value
@@ -39843,7 +39828,10 @@ pub mod builder {
             super::ContentCardObjectSubjectAccount,
             ::std::string::String,
         >,
-        timestamp: ::std::result::Result<u64, ::std::string::String>,
+        timestamp: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         type_: ::std::result::Result<::std::string::String, ::std::string::String>,
         url: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
@@ -39948,7 +39936,7 @@ pub mod builder {
         }
         pub fn timestamp<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.timestamp = value
@@ -41030,7 +41018,10 @@ pub mod builder {
             u32,
             ::std::string::String,
         >,
-        current_aslot: ::std::result::Result<u64, ::std::string::String>,
+        current_aslot: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         current_witness: ::std::result::Result<
             super::DynamicGlobalPropertyObjectCurrentWitness,
             ::std::string::String,
@@ -41115,7 +41106,7 @@ pub mod builder {
         }
         pub fn current_aslot<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.current_aslot = value
@@ -44546,7 +44537,10 @@ pub mod builder {
             ::std::vec::Vec<super::MemoDataMessageItem>,
             ::std::string::String,
         >,
-        nonce: ::std::result::Result<u64, ::std::string::String>,
+        nonce: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         to: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for MemoData {
@@ -44584,7 +44578,7 @@ pub mod builder {
         }
         pub fn nonce<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.nonce = value
@@ -45814,7 +45808,10 @@ pub mod builder {
             super::PermissionObjectSubjectAccount,
             ::std::string::String,
         >,
-        timestamp: ::std::result::Result<u64, ::std::string::String>,
+        timestamp: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for PermissionObject {
         fn default() -> Self {
@@ -45901,7 +45898,7 @@ pub mod builder {
         }
         pub fn timestamp<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.timestamp = value
@@ -47544,7 +47541,10 @@ pub mod builder {
         >,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
         maintenance_time: ::std::result::Result<u32, ::std::string::String>,
-        value: ::std::result::Result<u64, ::std::string::String>,
+        value: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         witness_key: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for RevealCreateOperation {
@@ -47599,7 +47599,7 @@ pub mod builder {
         }
         pub fn value<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.value = value
@@ -47985,7 +47985,10 @@ pub mod builder {
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
         owner: ::std::result::Result<super::RoomObjectOwner, ::std::string::String>,
         room_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        timestamp: ::std::result::Result<u64, ::std::string::String>,
+        timestamp: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for RoomObject {
         fn default() -> Self {
@@ -48047,7 +48050,7 @@ pub mod builder {
         }
         pub fn timestamp<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.timestamp = value
@@ -48092,7 +48095,10 @@ pub mod builder {
         >,
         permission_flags: ::std::result::Result<u16, ::std::string::String>,
         room: ::std::result::Result<super::RoomIdType, ::std::string::String>,
-        timestamp: ::std::result::Result<u64, ::std::string::String>,
+        timestamp: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for RoomParticipantObject {
         fn default() -> Self {
@@ -48158,7 +48164,7 @@ pub mod builder {
         }
         pub fn timestamp<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.timestamp = value
@@ -50980,7 +50986,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WitnessObject {
-        last_aslot: ::std::result::Result<u64, ::std::string::String>,
+        last_aslot: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         last_confirmed_block_num: ::std::result::Result<u32, ::std::string::String>,
         pay_vb: ::std::result::Result<
             ::std::option::Option<super::WitnessObjectPayVb>,
@@ -50988,7 +50997,10 @@ pub mod builder {
         >,
         signing_key: ::std::result::Result<::std::string::String, ::std::string::String>,
         total_missed: ::std::result::Result<i64, ::std::string::String>,
-        total_votes: ::std::result::Result<u64, ::std::string::String>,
+        total_votes: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         url: ::std::result::Result<::std::string::String, ::std::string::String>,
         vote_id: ::std::result::Result<super::VoteIdType, ::std::string::String>,
         witness_account: ::std::result::Result<
@@ -51016,7 +51028,7 @@ pub mod builder {
     impl WitnessObject {
         pub fn last_aslot<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.last_aslot = value
@@ -51079,7 +51091,7 @@ pub mod builder {
         }
         pub fn total_votes<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.total_votes = value

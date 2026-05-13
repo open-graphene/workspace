@@ -426,15 +426,11 @@ impl AccountCreateOperationExt {
 ///  ],
 ///  "properties": {
 ///    "basic_fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "premium_fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -450,8 +446,8 @@ impl AccountCreateOperationExt {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AccountCreateOperationFeeParamsT {
-    pub basic_fee: u64,
-    pub premium_fee: u64,
+    pub basic_fee: ::graphene_rpc::GrapheneUInt64,
+    pub premium_fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&AccountCreateOperationFeeParamsT>
@@ -2073,9 +2069,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "removed_ops": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "total_core_in_orders": {
@@ -2099,9 +2093,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "total_ops": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "total_pob_value": {
@@ -2119,33 +2111,23 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "vp_active": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "vp_all": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "vp_committee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "vp_witness": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "vp_worker": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -2165,20 +2147,20 @@ pub struct AccountStatisticsObject {
     pub owner: AccountStatisticsObjectOwner,
     pub pending_fees: i64,
     pub pending_vested_fees: i64,
-    pub removed_ops: u64,
+    pub removed_ops: ::graphene_rpc::GrapheneUInt64,
     pub total_core_in_orders: i64,
     pub total_core_inactive: i64,
     pub total_core_pob: i64,
     pub total_core_pol: i64,
-    pub total_ops: u64,
+    pub total_ops: ::graphene_rpc::GrapheneUInt64,
     pub total_pob_value: i64,
     pub total_pol_value: i64,
     pub vote_tally_time: ::graphene_rpc::GrapheneTimePointSec,
-    pub vp_active: u64,
-    pub vp_all: u64,
-    pub vp_committee: u64,
-    pub vp_witness: u64,
-    pub vp_worker: u64,
+    pub vp_active: ::graphene_rpc::GrapheneUInt64,
+    pub vp_all: ::graphene_rpc::GrapheneUInt64,
+    pub vp_committee: ::graphene_rpc::GrapheneUInt64,
+    pub vp_witness: ::graphene_rpc::GrapheneUInt64,
+    pub vp_worker: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AccountStatisticsObject> for AccountStatisticsObject {
     fn from(value: &AccountStatisticsObject) -> Self {
@@ -2642,9 +2624,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountTransferOperationAccountId {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -2654,7 +2634,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountTransferOperationAccountId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AccountTransferOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AccountTransferOperationFeeParamsT>
 for AccountTransferOperationFeeParamsT {
@@ -3178,15 +3158,11 @@ impl<'de> ::serde::Deserialize<'de> for AccountUpgradeOperationAccountToUpgrade 
 ///  ],
 ///  "properties": {
 ///    "membership_annual_fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "membership_lifetime_fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -3196,8 +3172,8 @@ impl<'de> ::serde::Deserialize<'de> for AccountUpgradeOperationAccountToUpgrade 
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AccountUpgradeOperationFeeParamsT {
-    pub membership_annual_fee: u64,
-    pub membership_lifetime_fee: u64,
+    pub membership_annual_fee: ::graphene_rpc::GrapheneUInt64,
+    pub membership_lifetime_fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AccountUpgradeOperationFeeParamsT>
 for AccountUpgradeOperationFeeParamsT {
@@ -3918,9 +3894,7 @@ impl AssertOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -3930,7 +3904,7 @@ impl AssertOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssertOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssertOperationFeeParamsT> for AssertOperationFeeParamsT {
     fn from(value: &AssertOperationFeeParamsT) -> Self {
@@ -4653,9 +4627,7 @@ for AssetClaimFeesOperationAdditionalOptionsTypeClaimFromAssetId {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -4665,7 +4637,7 @@ for AssetClaimFeesOperationAdditionalOptionsTypeClaimFromAssetId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetClaimFeesOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetClaimFeesOperationFeeParamsT>
 for AssetClaimFeesOperationFeeParamsT {
@@ -4912,9 +4884,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetClaimPoolOperationAssetId {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -4924,7 +4894,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetClaimPoolOperationAssetId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetClaimPoolOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetClaimPoolOperationFeeParamsT>
 for AssetClaimPoolOperationFeeParamsT {
@@ -5119,9 +5089,7 @@ impl AssetCreateOperation {
 ///  ],
 ///  "properties": {
 ///    "long_symbol": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -5131,15 +5099,11 @@ impl AssetCreateOperation {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "symbol3": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "symbol4": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -5149,10 +5113,10 @@ impl AssetCreateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetCreateOperationFeeParamsT {
-    pub long_symbol: u64,
+    pub long_symbol: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
-    pub symbol3: u64,
-    pub symbol4: u64,
+    pub symbol3: ::graphene_rpc::GrapheneUInt64,
+    pub symbol4: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetCreateOperationFeeParamsT>
 for AssetCreateOperationFeeParamsT {
@@ -5401,9 +5365,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetFundFeePoolOperationAssetId {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -5413,7 +5375,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetFundFeePoolOperationAssetId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetFundFeePoolOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetFundFeePoolOperationFeeParamsT>
 for AssetFundFeePoolOperationFeeParamsT {
@@ -5666,9 +5628,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetGlobalSettleOperationAssetToSettle 
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -5678,7 +5638,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetGlobalSettleOperationAssetToSettle 
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetGlobalSettleOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetGlobalSettleOperationFeeParamsT>
 for AssetGlobalSettleOperationFeeParamsT {
@@ -5860,9 +5820,7 @@ impl AssetIssueOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -5878,7 +5836,7 @@ impl AssetIssueOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetIssueOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&AssetIssueOperationFeeParamsT>
@@ -6708,9 +6666,7 @@ impl AssetPublishFeedOperationExt {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -6720,7 +6676,7 @@ impl AssetPublishFeedOperationExt {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetPublishFeedOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetPublishFeedOperationFeeParamsT>
 for AssetPublishFeedOperationFeeParamsT {
@@ -6881,9 +6837,7 @@ impl AssetReserveOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -6893,7 +6847,7 @@ impl AssetReserveOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetReserveOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetReserveOperationFeeParamsT>
 for AssetReserveOperationFeeParamsT {
@@ -7394,9 +7348,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetSettleOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -7406,7 +7358,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetSettleOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetSettleOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetSettleOperationFeeParamsT>
 for AssetSettleOperationFeeParamsT {
@@ -7700,9 +7652,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateBitassetOperationAssetToUpdat
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -7712,7 +7662,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateBitassetOperationAssetToUpdat
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetUpdateBitassetOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetUpdateBitassetOperationFeeParamsT>
 for AssetUpdateBitassetOperationFeeParamsT {
@@ -7970,9 +7920,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateFeedProducersOperationAssetTo
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -7982,7 +7930,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateFeedProducersOperationAssetTo
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetUpdateFeedProducersOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetUpdateFeedProducersOperationFeeParamsT>
 for AssetUpdateFeedProducersOperationFeeParamsT {
@@ -8321,9 +8269,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateIssuerOperationAssetToUpdate 
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -8333,7 +8279,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateIssuerOperationAssetToUpdate 
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetUpdateIssuerOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&AssetUpdateIssuerOperationFeeParamsT>
 for AssetUpdateIssuerOperationFeeParamsT {
@@ -8727,9 +8673,7 @@ impl AssetUpdateOperationExt {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -8745,7 +8689,7 @@ impl AssetUpdateOperationExt {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct AssetUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&AssetUpdateOperationFeeParamsT>
@@ -9411,9 +9355,7 @@ impl<'de> ::serde::Deserialize<'de> for BidCollateralOperationBidder {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -9423,7 +9365,7 @@ impl<'de> ::serde::Deserialize<'de> for BidCollateralOperationBidder {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct BidCollateralOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&BidCollateralOperationFeeParamsT>
 for BidCollateralOperationFeeParamsT {
@@ -10099,9 +10041,7 @@ impl BlindTransferOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_output": {
@@ -10117,7 +10057,7 @@ impl BlindTransferOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct BlindTransferOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_output: u32,
 }
 impl ::std::convert::From<&BlindTransferOperationFeeParamsT>
@@ -10972,9 +10912,7 @@ for CallOrderUpdateOperationExtensionsType {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -10984,7 +10922,7 @@ for CallOrderUpdateOperationExtensionsType {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CallOrderUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CallOrderUpdateOperationFeeParamsT>
 for CallOrderUpdateOperationFeeParamsT {
@@ -11855,9 +11793,7 @@ for CommitteeMemberCreateOperationCommitteeMemberAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -11867,7 +11803,7 @@ for CommitteeMemberCreateOperationCommitteeMemberAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CommitteeMemberCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CommitteeMemberCreateOperationFeeParamsT>
 for CommitteeMemberCreateOperationFeeParamsT {
@@ -11900,9 +11836,7 @@ impl CommitteeMemberCreateOperationFeeParamsT {
 ///      "x-cpp-type": "account_id_type"
 ///    },
 ///    "total_votes": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "url": {
@@ -11921,7 +11855,7 @@ impl CommitteeMemberCreateOperationFeeParamsT {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CommitteeMemberObject {
     pub committee_member_account: CommitteeMemberObjectCommitteeMemberAccount,
-    pub total_votes: u64,
+    pub total_votes: ::graphene_rpc::GrapheneUInt64,
     pub url: ::std::string::String,
     pub vote_id: VoteIdType,
 }
@@ -12072,9 +12006,7 @@ impl CommitteeMemberUpdateGlobalParametersOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -12084,7 +12016,7 @@ impl CommitteeMemberUpdateGlobalParametersOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CommitteeMemberUpdateGlobalParametersOperationFeeParamsT>
 for CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
@@ -12337,9 +12269,7 @@ for CommitteeMemberUpdateOperationCommitteeMemberAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -12349,7 +12279,7 @@ for CommitteeMemberUpdateOperationCommitteeMemberAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CommitteeMemberUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CommitteeMemberUpdateOperationFeeParamsT>
 for CommitteeMemberUpdateOperationFeeParamsT {
@@ -13215,9 +13145,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditDealRepayOperationDealId {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -13227,7 +13155,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditDealRepayOperationDealId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditDealRepayOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CreditDealRepayOperationFeeParamsT>
 for CreditDealRepayOperationFeeParamsT {
@@ -13479,9 +13407,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditDealUpdateOperationDealId {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -13491,7 +13417,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditDealUpdateOperationDealId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditDealUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CreditDealUpdateOperationFeeParamsT>
 for CreditDealUpdateOperationFeeParamsT {
@@ -13721,9 +13647,7 @@ impl CreditOfferAcceptOperationExt {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -13733,7 +13657,7 @@ impl CreditOfferAcceptOperationExt {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferAcceptOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CreditOfferAcceptOperationFeeParamsT>
 for CreditOfferAcceptOperationFeeParamsT {
@@ -14041,9 +13965,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferCreateOperationAssetType {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -14059,7 +13981,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferCreateOperationAssetType {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&CreditOfferCreateOperationFeeParamsT>
@@ -14223,9 +14145,7 @@ impl CreditOfferDeleteOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -14235,7 +14155,7 @@ impl CreditOfferDeleteOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferDeleteOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CreditOfferDeleteOperationFeeParamsT>
 for CreditOfferDeleteOperationFeeParamsT {
@@ -14578,9 +14498,7 @@ impl CreditOfferUpdateOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -14596,7 +14514,7 @@ impl CreditOfferUpdateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&CreditOfferUpdateOperationFeeParamsT>
@@ -14964,9 +14882,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityCreateOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "basic_fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_byte": {
@@ -14982,7 +14898,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityCreateOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CustomAuthorityCreateOperationFeeParamsT {
-    pub basic_fee: u64,
+    pub basic_fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_byte: u32,
 }
 impl ::std::convert::From<&CustomAuthorityCreateOperationFeeParamsT>
@@ -15231,9 +15147,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityDeleteOperationAuthorityT
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -15243,7 +15157,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityDeleteOperationAuthorityT
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CustomAuthorityDeleteOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&CustomAuthorityDeleteOperationFeeParamsT>
 for CustomAuthorityDeleteOperationFeeParamsT {
@@ -15621,9 +15535,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityUpdateOperationAuthorityT
 ///  ],
 ///  "properties": {
 ///    "basic_fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_byte": {
@@ -15639,7 +15551,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityUpdateOperationAuthorityT
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CustomAuthorityUpdateOperationFeeParamsT {
-    pub basic_fee: u64,
+    pub basic_fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_byte: u32,
 }
 impl ::std::convert::From<&CustomAuthorityUpdateOperationFeeParamsT>
@@ -15818,9 +15730,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationDataItem {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -15836,7 +15746,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationDataItem {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CustomOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&CustomOperationFeeParamsT> for CustomOperationFeeParamsT {
@@ -16044,9 +15954,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "current_aslot": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "current_witness": {
@@ -16127,7 +16035,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct DynamicGlobalPropertyObject {
     pub accounts_registered_this_interval: u32,
-    pub current_aslot: u64,
+    pub current_aslot: ::graphene_rpc::GrapheneUInt64,
     pub current_witness: DynamicGlobalPropertyObjectCurrentWitness,
     pub dynamic_flags: u32,
     pub head_block_id: BlockIdType,
@@ -19510,15 +19418,11 @@ impl HtlcCreateOperationAdditionalOptionsType {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "fee_per_day": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -19528,8 +19432,8 @@ impl HtlcCreateOperationAdditionalOptionsType {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct HtlcCreateOperationFeeParamsT {
-    pub fee: u64,
-    pub fee_per_day: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub fee_per_day: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&HtlcCreateOperationFeeParamsT>
 for HtlcCreateOperationFeeParamsT {
@@ -19777,15 +19681,11 @@ impl HtlcExtendOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "fee_per_day": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -19795,8 +19695,8 @@ impl HtlcExtendOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct HtlcExtendOperationFeeParamsT {
-    pub fee: u64,
-    pub fee_per_day: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub fee_per_day: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&HtlcExtendOperationFeeParamsT>
 for HtlcExtendOperationFeeParamsT {
@@ -20561,15 +20461,11 @@ impl HtlcRedeemOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "fee_per_kb": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -20579,8 +20475,8 @@ impl HtlcRedeemOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct HtlcRedeemOperationFeeParamsT {
-    pub fee: u64,
-    pub fee_per_kb: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub fee_per_kb: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&HtlcRedeemOperationFeeParamsT>
 for HtlcRedeemOperationFeeParamsT {
@@ -21886,9 +21782,7 @@ impl LimitOrderCancelOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -21898,7 +21792,7 @@ impl LimitOrderCancelOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LimitOrderCancelOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LimitOrderCancelOperationFeeParamsT>
 for LimitOrderCancelOperationFeeParamsT {
@@ -22200,9 +22094,7 @@ for LimitOrderCreateOperationExtensionsType {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -22212,7 +22104,7 @@ for LimitOrderCreateOperationExtensionsType {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LimitOrderCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LimitOrderCreateOperationFeeParamsT>
 for LimitOrderCreateOperationFeeParamsT {
@@ -22811,9 +22703,7 @@ impl LimitOrderUpdateOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -22823,7 +22713,7 @@ impl LimitOrderUpdateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LimitOrderUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LimitOrderUpdateOperationFeeParamsT>
 for LimitOrderUpdateOperationFeeParamsT {
@@ -23454,9 +23344,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolCreateOperationAssetB {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -23466,7 +23354,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolCreateOperationAssetB {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LiquidityPoolCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LiquidityPoolCreateOperationFeeParamsT>
 for LiquidityPoolCreateOperationFeeParamsT {
@@ -23714,9 +23602,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolDeleteOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -23726,7 +23612,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolDeleteOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LiquidityPoolDeleteOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LiquidityPoolDeleteOperationFeeParamsT>
 for LiquidityPoolDeleteOperationFeeParamsT {
@@ -23985,9 +23871,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolDepositOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -23997,7 +23881,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolDepositOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LiquidityPoolDepositOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LiquidityPoolDepositOperationFeeParamsT>
 for LiquidityPoolDepositOperationFeeParamsT {
@@ -24256,9 +24140,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolExchangeOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -24268,7 +24150,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolExchangeOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LiquidityPoolExchangeOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LiquidityPoolExchangeOperationFeeParamsT>
 for LiquidityPoolExchangeOperationFeeParamsT {
@@ -24537,9 +24419,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolUpdateOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -24549,7 +24429,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolUpdateOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LiquidityPoolUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LiquidityPoolUpdateOperationFeeParamsT>
 for LiquidityPoolUpdateOperationFeeParamsT {
@@ -24802,9 +24682,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolWithdrawOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -24814,7 +24692,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolWithdrawOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LiquidityPoolWithdrawOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&LiquidityPoolWithdrawOperationFeeParamsT>
 for LiquidityPoolWithdrawOperationFeeParamsT {
@@ -25925,9 +25803,7 @@ impl OverrideTransferOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -25943,7 +25819,7 @@ impl OverrideTransferOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct OverrideTransferOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&OverrideTransferOperationFeeParamsT>
@@ -26446,9 +26322,7 @@ impl ProposalCreateOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -26464,7 +26338,7 @@ impl ProposalCreateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ProposalCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&ProposalCreateOperationFeeParamsT>
@@ -26634,9 +26508,7 @@ impl ProposalDeleteOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -26646,7 +26518,7 @@ impl ProposalDeleteOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ProposalDeleteOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&ProposalDeleteOperationFeeParamsT>
 for ProposalDeleteOperationFeeParamsT {
@@ -27660,9 +27532,7 @@ for ProposalUpdateOperationActiveApprovalsToRemoveItem {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -27678,7 +27548,7 @@ for ProposalUpdateOperationActiveApprovalsToRemoveItem {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ProposalUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&ProposalUpdateOperationFeeParamsT>
@@ -28333,9 +28203,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundBorrowOperationBorrower {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -28345,7 +28213,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundBorrowOperationBorrower {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SametFundBorrowOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&SametFundBorrowOperationFeeParamsT>
 for SametFundBorrowOperationFeeParamsT {
@@ -28603,9 +28471,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundCreateOperationAssetType {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -28615,7 +28481,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundCreateOperationAssetType {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SametFundCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&SametFundCreateOperationFeeParamsT>
 for SametFundCreateOperationFeeParamsT {
@@ -28778,9 +28644,7 @@ impl SametFundDeleteOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -28790,7 +28654,7 @@ impl SametFundDeleteOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SametFundDeleteOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&SametFundDeleteOperationFeeParamsT>
 for SametFundDeleteOperationFeeParamsT {
@@ -29127,9 +28991,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundRepayOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -29139,7 +29001,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundRepayOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SametFundRepayOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&SametFundRepayOperationFeeParamsT>
 for SametFundRepayOperationFeeParamsT {
@@ -29323,9 +29185,7 @@ impl SametFundUpdateOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -29335,7 +29195,7 @@ impl SametFundUpdateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SametFundUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&SametFundUpdateOperationFeeParamsT>
 for SametFundUpdateOperationFeeParamsT {
@@ -30098,9 +29958,7 @@ impl<'de> ::serde::Deserialize<'de> for TicketCreateOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -30110,7 +29968,7 @@ impl<'de> ::serde::Deserialize<'de> for TicketCreateOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct TicketCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&TicketCreateOperationFeeParamsT>
 for TicketCreateOperationFeeParamsT {
@@ -30292,9 +30150,7 @@ impl<'de> ::serde::Deserialize<'de> for TicketUpdateOperationAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -30304,7 +30160,7 @@ impl<'de> ::serde::Deserialize<'de> for TicketUpdateOperationAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct TicketUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&TicketUpdateOperationFeeParamsT>
 for TicketUpdateOperationFeeParamsT {
@@ -30785,9 +30641,7 @@ impl TransferFromBlindOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -30797,7 +30651,7 @@ impl TransferFromBlindOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct TransferFromBlindOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&TransferFromBlindOperationFeeParamsT>
 for TransferFromBlindOperationFeeParamsT {
@@ -30977,9 +30831,7 @@ impl TransferOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -30995,7 +30847,7 @@ impl TransferOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct TransferOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&TransferOperationFeeParamsT> for TransferOperationFeeParamsT {
@@ -31243,9 +31095,7 @@ impl TransferToBlindOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_output": {
@@ -31261,7 +31111,7 @@ impl TransferToBlindOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct TransferToBlindOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_output: u32,
 }
 impl ::std::convert::From<&TransferToBlindOperationFeeParamsT>
@@ -31513,9 +31363,7 @@ impl<'de> ::serde::Deserialize<'de> for VestingBalanceCreateOperationCreator {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -31525,7 +31373,7 @@ impl<'de> ::serde::Deserialize<'de> for VestingBalanceCreateOperationCreator {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct VestingBalanceCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&VestingBalanceCreateOperationFeeParamsT>
 for VestingBalanceCreateOperationFeeParamsT {
@@ -32067,9 +31915,7 @@ impl VestingBalanceWithdrawOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -32079,7 +31925,7 @@ impl VestingBalanceWithdrawOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct VestingBalanceWithdrawOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&VestingBalanceWithdrawOperationFeeParamsT>
 for VestingBalanceWithdrawOperationFeeParamsT {
@@ -32499,9 +32345,7 @@ impl WithdrawPermissionClaimOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "price_per_kbyte": {
@@ -32517,7 +32361,7 @@ impl WithdrawPermissionClaimOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WithdrawPermissionClaimOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
     pub price_per_kbyte: u32,
 }
 impl ::std::convert::From<&WithdrawPermissionClaimOperationFeeParamsT>
@@ -32964,9 +32808,7 @@ for WithdrawPermissionCreateOperationAuthorizedAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -32976,7 +32818,7 @@ for WithdrawPermissionCreateOperationAuthorizedAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WithdrawPermissionCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&WithdrawPermissionCreateOperationFeeParamsT>
 for WithdrawPermissionCreateOperationFeeParamsT {
@@ -33229,9 +33071,7 @@ for WithdrawPermissionDeleteOperationAuthorizedAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -33241,7 +33081,7 @@ for WithdrawPermissionDeleteOperationAuthorizedAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WithdrawPermissionDeleteOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&WithdrawPermissionDeleteOperationFeeParamsT>
 for WithdrawPermissionDeleteOperationFeeParamsT {
@@ -33851,9 +33691,7 @@ for WithdrawPermissionUpdateOperationAuthorizedAccount {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -33863,7 +33701,7 @@ for WithdrawPermissionUpdateOperationAuthorizedAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WithdrawPermissionUpdateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&WithdrawPermissionUpdateOperationFeeParamsT>
 for WithdrawPermissionUpdateOperationFeeParamsT {
@@ -34113,9 +33951,7 @@ impl WitnessCreateOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -34125,7 +33961,7 @@ impl WitnessCreateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WitnessCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&WitnessCreateOperationFeeParamsT>
 for WitnessCreateOperationFeeParamsT {
@@ -34242,9 +34078,7 @@ impl<'de> ::serde::Deserialize<'de> for WitnessCreateOperationWitnessAccount {
 ///  ],
 ///  "properties": {
 ///    "last_aslot": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "last_confirmed_block_num": {
@@ -34271,9 +34105,7 @@ impl<'de> ::serde::Deserialize<'de> for WitnessCreateOperationWitnessAccount {
 ///      "x-cpp-type": "int64_t"
 ///    },
 ///    "total_votes": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    },
 ///    "url": {
@@ -34296,12 +34128,12 @@ impl<'de> ::serde::Deserialize<'de> for WitnessCreateOperationWitnessAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WitnessObject {
-    pub last_aslot: u64,
+    pub last_aslot: ::graphene_rpc::GrapheneUInt64,
     pub last_confirmed_block_num: u32,
     pub pay_vb: ::std::option::Option<WitnessObjectPayVb>,
     pub signing_key: ::std::string::String,
     pub total_missed: i64,
-    pub total_votes: u64,
+    pub total_votes: ::graphene_rpc::GrapheneUInt64,
     pub url: ::std::string::String,
     pub vote_id: VoteIdType,
     pub witness_account: WitnessObjectWitnessAccount,
@@ -34833,9 +34665,7 @@ impl WorkerCreateOperation {
 ///  ],
 ///  "properties": {
 ///    "fee": {
-///      "type": "integer",
-///      "format": "uint64",
-///      "minimum": 0.0,
+///      "$ref": "#/$defs/GrapheneUInt64",
 ///      "x-cpp-type": "uint64_t"
 ///    }
 ///  },
@@ -34845,7 +34675,7 @@ impl WorkerCreateOperation {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WorkerCreateOperationFeeParamsT {
-    pub fee: u64,
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
 impl ::std::convert::From<&WorkerCreateOperationFeeParamsT>
 for WorkerCreateOperationFeeParamsT {
@@ -35640,8 +35470,14 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AccountCreateOperationFeeParamsT {
-        basic_fee: ::std::result::Result<u64, ::std::string::String>,
-        premium_fee: ::std::result::Result<u64, ::std::string::String>,
+        basic_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        premium_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for AccountCreateOperationFeeParamsT {
@@ -35656,7 +35492,7 @@ pub mod builder {
     impl AccountCreateOperationFeeParamsT {
         pub fn basic_fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.basic_fee = value
@@ -35668,7 +35504,7 @@ pub mod builder {
         }
         pub fn premium_fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.premium_fee = value
@@ -36528,23 +36364,44 @@ pub mod builder {
         >,
         pending_fees: ::std::result::Result<i64, ::std::string::String>,
         pending_vested_fees: ::std::result::Result<i64, ::std::string::String>,
-        removed_ops: ::std::result::Result<u64, ::std::string::String>,
+        removed_ops: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         total_core_in_orders: ::std::result::Result<i64, ::std::string::String>,
         total_core_inactive: ::std::result::Result<i64, ::std::string::String>,
         total_core_pob: ::std::result::Result<i64, ::std::string::String>,
         total_core_pol: ::std::result::Result<i64, ::std::string::String>,
-        total_ops: ::std::result::Result<u64, ::std::string::String>,
+        total_ops: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         total_pob_value: ::std::result::Result<i64, ::std::string::String>,
         total_pol_value: ::std::result::Result<i64, ::std::string::String>,
         vote_tally_time: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
-        vp_active: ::std::result::Result<u64, ::std::string::String>,
-        vp_all: ::std::result::Result<u64, ::std::string::String>,
-        vp_committee: ::std::result::Result<u64, ::std::string::String>,
-        vp_witness: ::std::result::Result<u64, ::std::string::String>,
-        vp_worker: ::std::result::Result<u64, ::std::string::String>,
+        vp_active: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        vp_all: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        vp_committee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        vp_witness: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        vp_worker: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AccountStatisticsObject {
         fn default() -> Self {
@@ -36719,7 +36576,7 @@ pub mod builder {
         }
         pub fn removed_ops<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.removed_ops = value
@@ -36783,7 +36640,7 @@ pub mod builder {
         }
         pub fn total_ops<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.total_ops = value
@@ -36831,7 +36688,7 @@ pub mod builder {
         }
         pub fn vp_active<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.vp_active = value
@@ -36843,7 +36700,7 @@ pub mod builder {
         }
         pub fn vp_all<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.vp_all = value
@@ -36855,7 +36712,7 @@ pub mod builder {
         }
         pub fn vp_committee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.vp_committee = value
@@ -36867,7 +36724,7 @@ pub mod builder {
         }
         pub fn vp_witness<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.vp_witness = value
@@ -36879,7 +36736,7 @@ pub mod builder {
         }
         pub fn vp_worker<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.vp_worker = value
@@ -37147,7 +37004,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AccountTransferOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AccountTransferOperationFeeParamsT {
         fn default() -> Self {
@@ -37159,7 +37019,7 @@ pub mod builder {
     impl AccountTransferOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -37576,8 +37436,14 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AccountUpgradeOperationFeeParamsT {
-        membership_annual_fee: ::std::result::Result<u64, ::std::string::String>,
-        membership_lifetime_fee: ::std::result::Result<u64, ::std::string::String>,
+        membership_annual_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        membership_lifetime_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AccountUpgradeOperationFeeParamsT {
         fn default() -> Self {
@@ -37594,7 +37460,7 @@ pub mod builder {
     impl AccountUpgradeOperationFeeParamsT {
         pub fn membership_annual_fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.membership_annual_fee = value
@@ -37609,7 +37475,7 @@ pub mod builder {
         }
         pub fn membership_lifetime_fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.membership_lifetime_fee = value
@@ -38189,7 +38055,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssertOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssertOperationFeeParamsT {
         fn default() -> Self {
@@ -38201,7 +38070,7 @@ pub mod builder {
     impl AssertOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -38809,7 +38678,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetClaimFeesOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetClaimFeesOperationFeeParamsT {
         fn default() -> Self {
@@ -38821,7 +38693,7 @@ pub mod builder {
     impl AssetClaimFeesOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -38961,7 +38833,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetClaimPoolOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetClaimPoolOperationFeeParamsT {
         fn default() -> Self {
@@ -38973,7 +38848,7 @@ pub mod builder {
     impl AssetClaimPoolOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -39164,10 +39039,19 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetCreateOperationFeeParamsT {
-        long_symbol: ::std::result::Result<u64, ::std::string::String>,
+        long_symbol: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
-        symbol3: ::std::result::Result<u64, ::std::string::String>,
-        symbol4: ::std::result::Result<u64, ::std::string::String>,
+        symbol3: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        symbol4: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -39184,7 +39068,7 @@ pub mod builder {
     impl AssetCreateOperationFeeParamsT {
         pub fn long_symbol<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.long_symbol = value
@@ -39208,7 +39092,7 @@ pub mod builder {
         }
         pub fn symbol3<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.symbol3 = value
@@ -39220,7 +39104,7 @@ pub mod builder {
         }
         pub fn symbol4<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.symbol4 = value
@@ -39370,7 +39254,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetFundFeePoolOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetFundFeePoolOperationFeeParamsT {
         fn default() -> Self {
@@ -39382,7 +39269,7 @@ pub mod builder {
     impl AssetFundFeePoolOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -39522,7 +39409,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetGlobalSettleOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetGlobalSettleOperationFeeParamsT {
         fn default() -> Self {
@@ -39534,7 +39424,7 @@ pub mod builder {
     impl AssetGlobalSettleOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -39691,7 +39581,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetIssueOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for AssetIssueOperationFeeParamsT {
@@ -39705,7 +39598,7 @@ pub mod builder {
     impl AssetIssueOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -40177,7 +40070,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetPublishFeedOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetPublishFeedOperationFeeParamsT {
         fn default() -> Self {
@@ -40189,7 +40085,7 @@ pub mod builder {
     impl AssetPublishFeedOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -40311,7 +40207,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetReserveOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetReserveOperationFeeParamsT {
         fn default() -> Self {
@@ -40323,7 +40222,7 @@ pub mod builder {
     impl AssetReserveOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -40536,7 +40435,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetSettleOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetSettleOperationFeeParamsT {
         fn default() -> Self {
@@ -40548,7 +40450,7 @@ pub mod builder {
     impl AssetSettleOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -40754,7 +40656,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetUpdateBitassetOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetUpdateBitassetOperationFeeParamsT {
         fn default() -> Self {
@@ -40766,7 +40671,7 @@ pub mod builder {
     impl AssetUpdateBitassetOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -40917,7 +40822,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetUpdateFeedProducersOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetUpdateFeedProducersOperationFeeParamsT {
         fn default() -> Self {
@@ -40929,7 +40837,7 @@ pub mod builder {
     impl AssetUpdateFeedProducersOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -41072,7 +40980,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetUpdateIssuerOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for AssetUpdateIssuerOperationFeeParamsT {
         fn default() -> Self {
@@ -41084,7 +40995,7 @@ pub mod builder {
     impl AssetUpdateIssuerOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -41317,7 +41228,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct AssetUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for AssetUpdateOperationFeeParamsT {
@@ -41331,7 +41245,7 @@ pub mod builder {
     impl AssetUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -41726,7 +41640,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct BidCollateralOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for BidCollateralOperationFeeParamsT {
         fn default() -> Self {
@@ -41738,7 +41655,7 @@ pub mod builder {
     impl BidCollateralOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -42742,7 +42659,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct BlindTransferOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_output: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for BlindTransferOperationFeeParamsT {
@@ -42758,7 +42678,7 @@ pub mod builder {
     impl BlindTransferOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -43439,7 +43359,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CallOrderUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CallOrderUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -43451,7 +43374,7 @@ pub mod builder {
     impl CallOrderUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -44560,7 +44483,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CommitteeMemberCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CommitteeMemberCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -44572,7 +44498,7 @@ pub mod builder {
     impl CommitteeMemberCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -44602,7 +44528,10 @@ pub mod builder {
             super::CommitteeMemberObjectCommitteeMemberAccount,
             ::std::string::String,
         >,
-        total_votes: ::std::result::Result<u64, ::std::string::String>,
+        total_votes: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         url: ::std::result::Result<::std::string::String, ::std::string::String>,
         vote_id: ::std::result::Result<super::VoteIdType, ::std::string::String>,
     }
@@ -44638,7 +44567,7 @@ pub mod builder {
         }
         pub fn total_votes<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.total_votes = value
@@ -44758,7 +44687,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default
     for CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
@@ -44771,7 +44703,7 @@ pub mod builder {
     impl CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -44913,7 +44845,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CommitteeMemberUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CommitteeMemberUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -44925,7 +44860,7 @@ pub mod builder {
     impl CommitteeMemberUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -45376,7 +45311,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreditDealRepayOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CreditDealRepayOperationFeeParamsT {
         fn default() -> Self {
@@ -45388,7 +45326,7 @@ pub mod builder {
     impl CreditDealRepayOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -45526,7 +45464,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreditDealUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CreditDealUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -45538,7 +45479,7 @@ pub mod builder {
     impl CreditDealUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -45778,7 +45719,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreditOfferAcceptOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CreditOfferAcceptOperationFeeParamsT {
         fn default() -> Self {
@@ -45790,7 +45734,7 @@ pub mod builder {
     impl CreditOfferAcceptOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -46072,7 +46016,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreditOfferCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for CreditOfferCreateOperationFeeParamsT {
@@ -46086,7 +46033,7 @@ pub mod builder {
     impl CreditOfferCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -46226,7 +46173,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreditOfferDeleteOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CreditOfferDeleteOperationFeeParamsT {
         fn default() -> Self {
@@ -46238,7 +46188,7 @@ pub mod builder {
     impl CreditOfferDeleteOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -46545,7 +46495,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreditOfferUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for CreditOfferUpdateOperationFeeParamsT {
@@ -46559,7 +46512,7 @@ pub mod builder {
     impl CreditOfferUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -46783,7 +46736,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CustomAuthorityCreateOperationFeeParamsT {
-        basic_fee: ::std::result::Result<u64, ::std::string::String>,
+        basic_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_byte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for CustomAuthorityCreateOperationFeeParamsT {
@@ -46797,7 +46753,7 @@ pub mod builder {
     impl CustomAuthorityCreateOperationFeeParamsT {
         pub fn basic_fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.basic_fee = value
@@ -46945,7 +46901,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CustomAuthorityDeleteOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CustomAuthorityDeleteOperationFeeParamsT {
         fn default() -> Self {
@@ -46957,7 +46916,7 @@ pub mod builder {
     impl CustomAuthorityDeleteOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -47348,7 +47307,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CustomAuthorityUpdateOperationFeeParamsT {
-        basic_fee: ::std::result::Result<u64, ::std::string::String>,
+        basic_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_byte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for CustomAuthorityUpdateOperationFeeParamsT {
@@ -47362,7 +47324,7 @@ pub mod builder {
     impl CustomAuthorityUpdateOperationFeeParamsT {
         pub fn basic_fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.basic_fee = value
@@ -47514,7 +47476,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CustomOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for CustomOperationFeeParamsT {
@@ -47528,7 +47493,7 @@ pub mod builder {
     impl CustomOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -47576,7 +47541,10 @@ pub mod builder {
             u32,
             ::std::string::String,
         >,
-        current_aslot: ::std::result::Result<u64, ::std::string::String>,
+        current_aslot: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         current_witness: ::std::result::Result<
             super::DynamicGlobalPropertyObjectCurrentWitness,
             ::std::string::String,
@@ -47668,7 +47636,7 @@ pub mod builder {
         }
         pub fn current_aslot<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.current_aslot = value
@@ -49763,8 +49731,14 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct HtlcCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
-        fee_per_day: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        fee_per_day: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for HtlcCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -49777,7 +49751,7 @@ pub mod builder {
     impl HtlcCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -49787,7 +49761,7 @@ pub mod builder {
         }
         pub fn fee_per_day<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee_per_day = value
@@ -49931,8 +49905,14 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct HtlcExtendOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
-        fee_per_day: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        fee_per_day: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for HtlcExtendOperationFeeParamsT {
         fn default() -> Self {
@@ -49945,7 +49925,7 @@ pub mod builder {
     impl HtlcExtendOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -49955,7 +49935,7 @@ pub mod builder {
         }
         pub fn fee_per_day<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee_per_day = value
@@ -50522,8 +50502,14 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct HtlcRedeemOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
-        fee_per_kb: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        fee_per_kb: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for HtlcRedeemOperationFeeParamsT {
         fn default() -> Self {
@@ -50536,7 +50522,7 @@ pub mod builder {
     impl HtlcRedeemOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -50546,7 +50532,7 @@ pub mod builder {
         }
         pub fn fee_per_kb<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee_per_kb = value
@@ -51026,7 +51012,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LimitOrderCancelOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LimitOrderCancelOperationFeeParamsT {
         fn default() -> Self {
@@ -51038,7 +51027,7 @@ pub mod builder {
     impl LimitOrderCancelOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -51211,7 +51200,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LimitOrderCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LimitOrderCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -51223,7 +51215,7 @@ pub mod builder {
     impl LimitOrderCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -51687,7 +51679,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LimitOrderUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LimitOrderUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -51699,7 +51694,7 @@ pub mod builder {
     impl LimitOrderUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -52096,7 +52091,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LiquidityPoolCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LiquidityPoolCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -52108,7 +52106,7 @@ pub mod builder {
     impl LiquidityPoolCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -52228,7 +52226,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LiquidityPoolDeleteOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LiquidityPoolDeleteOperationFeeParamsT {
         fn default() -> Self {
@@ -52240,7 +52241,7 @@ pub mod builder {
     impl LiquidityPoolDeleteOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -52392,7 +52393,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LiquidityPoolDepositOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LiquidityPoolDepositOperationFeeParamsT {
         fn default() -> Self {
@@ -52404,7 +52408,7 @@ pub mod builder {
     impl LiquidityPoolDepositOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -52556,7 +52560,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LiquidityPoolExchangeOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LiquidityPoolExchangeOperationFeeParamsT {
         fn default() -> Self {
@@ -52568,7 +52575,7 @@ pub mod builder {
     impl LiquidityPoolExchangeOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -52735,7 +52742,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LiquidityPoolUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LiquidityPoolUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -52747,7 +52757,7 @@ pub mod builder {
     impl LiquidityPoolUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -52883,7 +52893,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct LiquidityPoolWithdrawOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for LiquidityPoolWithdrawOperationFeeParamsT {
         fn default() -> Self {
@@ -52895,7 +52908,7 @@ pub mod builder {
     impl LiquidityPoolWithdrawOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -54057,7 +54070,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct OverrideTransferOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for OverrideTransferOperationFeeParamsT {
@@ -54071,7 +54087,7 @@ pub mod builder {
     impl OverrideTransferOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -54553,7 +54569,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct ProposalCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for ProposalCreateOperationFeeParamsT {
@@ -54567,7 +54586,7 @@ pub mod builder {
     impl ProposalCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -54732,7 +54751,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct ProposalDeleteOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for ProposalDeleteOperationFeeParamsT {
         fn default() -> Self {
@@ -54744,7 +54766,7 @@ pub mod builder {
     impl ProposalDeleteOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -55279,7 +55301,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct ProposalUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for ProposalUpdateOperationFeeParamsT {
@@ -55293,7 +55318,7 @@ pub mod builder {
     impl ProposalUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -55546,7 +55571,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct SametFundBorrowOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for SametFundBorrowOperationFeeParamsT {
         fn default() -> Self {
@@ -55558,7 +55586,7 @@ pub mod builder {
     impl SametFundBorrowOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -55712,7 +55740,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct SametFundCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for SametFundCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -55724,7 +55755,7 @@ pub mod builder {
     impl SametFundCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -55846,7 +55877,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct SametFundDeleteOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for SametFundDeleteOperationFeeParamsT {
         fn default() -> Self {
@@ -55858,7 +55892,7 @@ pub mod builder {
     impl SametFundDeleteOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -56012,7 +56046,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct SametFundRepayOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for SametFundRepayOperationFeeParamsT {
         fn default() -> Self {
@@ -56024,7 +56061,7 @@ pub mod builder {
     impl SametFundRepayOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -56184,7 +56221,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct SametFundUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for SametFundUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -56196,7 +56236,7 @@ pub mod builder {
     impl SametFundUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -56902,7 +56942,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct TicketCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for TicketCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -56914,7 +56957,7 @@ pub mod builder {
     impl TicketCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -57075,7 +57118,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct TicketUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for TicketUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -57087,7 +57133,7 @@ pub mod builder {
     impl TicketUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -57407,7 +57453,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct TransferFromBlindOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for TransferFromBlindOperationFeeParamsT {
         fn default() -> Self {
@@ -57419,7 +57468,7 @@ pub mod builder {
     impl TransferFromBlindOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -57562,7 +57611,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct TransferOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for TransferOperationFeeParamsT {
@@ -57576,7 +57628,7 @@ pub mod builder {
     impl TransferOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -57735,7 +57787,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct TransferToBlindOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_output: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for TransferToBlindOperationFeeParamsT {
@@ -57751,7 +57806,7 @@ pub mod builder {
     impl TransferToBlindOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -57912,7 +57967,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct VestingBalanceCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for VestingBalanceCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -57924,7 +57982,7 @@ pub mod builder {
     impl VestingBalanceCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -58286,7 +58344,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct VestingBalanceWithdrawOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for VestingBalanceWithdrawOperationFeeParamsT {
         fn default() -> Self {
@@ -58298,7 +58359,7 @@ pub mod builder {
     impl VestingBalanceWithdrawOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -58566,7 +58627,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WithdrawPermissionClaimOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
     }
     impl ::std::default::Default for WithdrawPermissionClaimOperationFeeParamsT {
@@ -58580,7 +58644,7 @@ pub mod builder {
     impl WithdrawPermissionClaimOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -58802,7 +58866,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WithdrawPermissionCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for WithdrawPermissionCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -58814,7 +58881,7 @@ pub mod builder {
     impl WithdrawPermissionCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -58959,7 +59026,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WithdrawPermissionDeleteOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for WithdrawPermissionDeleteOperationFeeParamsT {
         fn default() -> Self {
@@ -58971,7 +59041,7 @@ pub mod builder {
     impl WithdrawPermissionDeleteOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -59380,7 +59450,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WithdrawPermissionUpdateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for WithdrawPermissionUpdateOperationFeeParamsT {
         fn default() -> Self {
@@ -59392,7 +59465,7 @@ pub mod builder {
     impl WithdrawPermissionUpdateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -59515,7 +59588,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WitnessCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for WitnessCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -59527,7 +59603,7 @@ pub mod builder {
     impl WitnessCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value
@@ -59553,7 +59629,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WitnessObject {
-        last_aslot: ::std::result::Result<u64, ::std::string::String>,
+        last_aslot: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         last_confirmed_block_num: ::std::result::Result<u32, ::std::string::String>,
         pay_vb: ::std::result::Result<
             ::std::option::Option<super::WitnessObjectPayVb>,
@@ -59561,7 +59640,10 @@ pub mod builder {
         >,
         signing_key: ::std::result::Result<::std::string::String, ::std::string::String>,
         total_missed: ::std::result::Result<i64, ::std::string::String>,
-        total_votes: ::std::result::Result<u64, ::std::string::String>,
+        total_votes: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
         url: ::std::result::Result<::std::string::String, ::std::string::String>,
         vote_id: ::std::result::Result<super::VoteIdType, ::std::string::String>,
         witness_account: ::std::result::Result<
@@ -59589,7 +59671,7 @@ pub mod builder {
     impl WitnessObject {
         pub fn last_aslot<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.last_aslot = value
@@ -59652,7 +59734,7 @@ pub mod builder {
         }
         pub fn total_votes<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.total_votes = value
@@ -60052,7 +60134,10 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct WorkerCreateOperationFeeParamsT {
-        fee: ::std::result::Result<u64, ::std::string::String>,
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for WorkerCreateOperationFeeParamsT {
         fn default() -> Self {
@@ -60064,7 +60149,7 @@ pub mod builder {
     impl WorkerCreateOperationFeeParamsT {
         pub fn fee<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u64>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
             T::Error: ::std::fmt::Display,
         {
             self.fee = value

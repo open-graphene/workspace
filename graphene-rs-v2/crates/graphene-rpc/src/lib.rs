@@ -7,6 +7,103 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::{json, Value};
 
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct GrapheneUInt64(u64);
+
+impl GrapheneUInt64 {
+    pub fn new(value: u64) -> Self {
+        Self(value)
+    }
+
+    pub fn as_u64(self) -> u64 {
+        self.0
+    }
+}
+
+impl fmt::Display for GrapheneUInt64 {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(formatter, "{}", self.0)
+    }
+}
+
+impl From<GrapheneUInt64> for u64 {
+    fn from(value: GrapheneUInt64) -> Self {
+        value.0
+    }
+}
+
+impl From<u64> for GrapheneUInt64 {
+    fn from(value: u64) -> Self {
+        Self(value)
+    }
+}
+
+impl FromStr for GrapheneUInt64 {
+    type Err = std::num::ParseIntError;
+
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
+        value.parse::<u64>().map(Self)
+    }
+}
+
+impl TryFrom<&str> for GrapheneUInt64 {
+    type Error = std::num::ParseIntError;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl TryFrom<String> for GrapheneUInt64 {
+    type Error = std::num::ParseIntError;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+
+impl Serialize for GrapheneUInt64 {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_u64(self.0)
+    }
+}
+
+impl<'de> Deserialize<'de> for GrapheneUInt64 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct Visitor;
+
+        impl serde::de::Visitor<'_> for Visitor {
+            type Value = GrapheneUInt64;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+                formatter.write_str("a u64 number or decimal string")
+            }
+
+            fn visit_u64<E>(self, value: u64) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Ok(GrapheneUInt64(value))
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                value.parse().map_err(E::custom)
+            }
+        }
+
+        deserializer.deserialize_any(Visitor)
+    }
+}
+
 /// Graphene wire-format timestamp.
 ///
 /// Graphene APIs serialize `fc::time_point_sec` values as UTC timestamps without
@@ -342,8 +439,8 @@ impl Error for RpcError {
 #[cfg(test)]
 mod tests {
     use super::{
-        build_json_rpc_request, parse_json_rpc_response, GrapheneTimePointSec, OpenRpcParams,
-        RpcClient, RpcError, RpcTransport,
+        build_json_rpc_request, parse_json_rpc_response, GrapheneTimePointSec, GrapheneUInt64,
+        OpenRpcParams, RpcClient, RpcError, RpcTransport,
     };
     use chrono::NaiveDate;
     use serde::Deserialize;
@@ -455,6 +552,21 @@ mod tests {
         assert_eq!(
             serde_json::to_value(value).unwrap(),
             json!("2026-05-13T14:44:57")
+        );
+    }
+
+    #[test]
+    fn graphene_uint64_deserializes_number_and_decimal_string() {
+        let from_number: GrapheneUInt64 = serde_json::from_value(json!(50_000_000_000_u64))
+            .expect("Graphene uint64 should parse from JSON number");
+        let from_string: GrapheneUInt64 = serde_json::from_value(json!("50000000000"))
+            .expect("Graphene uint64 should parse from decimal string");
+
+        assert_eq!(from_number.as_u64(), 50_000_000_000);
+        assert_eq!(from_string.as_u64(), 50_000_000_000);
+        assert_eq!(
+            serde_json::to_value(from_string).unwrap(),
+            json!(50_000_000_000_u64)
         );
     }
 

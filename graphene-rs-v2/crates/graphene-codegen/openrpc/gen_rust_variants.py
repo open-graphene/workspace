@@ -106,6 +106,8 @@ def payload_rust_type(payload: dict) -> str:
         target = payload["$ref"].split("/")[-1]
         if target == "GrapheneTimePointSec":
             return "::graphene_rpc::GrapheneTimePointSec"
+        if target == "GrapheneUInt64":
+            return "::graphene_rpc::GrapheneUInt64"
         return snake_to_pascal(target)
 
     ty = payload.get("type")

@@ -583,7 +583,7 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "uint8_t":  {"type": "integer", "format": "uint8",  "minimum": 0},
     "uint16_t": {"type": "integer", "format": "uint16", "minimum": 0},
     "uint32_t": {"type": "integer", "format": "uint32", "minimum": 0},
-    "uint64_t": {"type": "integer", "format": "uint64", "minimum": 0},
+    "uint64_t": {"$ref": "#/components/schemas/GrapheneUInt64"},
     "float":    {"type": "number", "format": "float"},
     "double":   {"type": "number", "format": "double"},
     "share_type":   {"type": "integer", "format": "int64"},
@@ -1037,6 +1037,18 @@ def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
             "crate": "graphene-rpc",
             "version": "0.1.0",
             "path": "graphene_rpc::GrapheneTimePointSec",
+        },
+    })
+    schemas.setdefault("GrapheneUInt64", {
+        "oneOf": [
+            {"type": "integer", "format": "uint64", "minimum": 0},
+            {"type": "string", "pattern": r"^\d+$"},
+        ],
+        "description": "Graphene uint64_t serialized as either a JSON number or a decimal string.",
+        "x-rust-type": {
+            "crate": "graphene-rpc",
+            "version": "0.1.0",
+            "path": "graphene_rpc::GrapheneUInt64",
         },
     })
 

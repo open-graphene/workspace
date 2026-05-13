@@ -3,6 +3,154 @@
 
 use graphene_rpc::OpenRpcParams;
 
+/// OpenRPC method names generated for this chain crate.
+pub const OPENRPC_METHODS: &[&str] = &[
+    "about",
+    "account_store_map",
+    "add_operation_to_builder_transaction",
+    "add_transaction_signature",
+    "approve_proposal",
+    "begin_builder_transaction",
+    "bid_collateral",
+    "blind_history",
+    "blind_transfer",
+    "borrow_asset",
+    "borrow_asset_ext",
+    "broadcast_transaction",
+    "cancel_order",
+    "claim_asset_fee_pool",
+    "create_account_with_brain_key",
+    "create_asset",
+    "create_blind_account",
+    "create_committee_member",
+    "create_witness",
+    "create_worker",
+    "dbg_generate_blocks",
+    "dbg_make_mia",
+    "dbg_make_uia",
+    "dbg_push_blocks",
+    "dbg_stream_json_objects",
+    "dbg_update_object",
+    "derive_owner_keys_from_brain_key",
+    "dump_private_keys",
+    "flood_network",
+    "fund_asset_fee_pool",
+    "get_account",
+    "get_account_count",
+    "get_account_history",
+    "get_account_history_by_operations",
+    "get_account_id",
+    "get_account_limit_orders",
+    "get_account_name",
+    "get_account_storage",
+    "get_asset",
+    "get_asset_count",
+    "get_asset_id",
+    "get_asset_name",
+    "get_asset_symbol",
+    "get_bitasset_data",
+    "get_blind_accounts",
+    "get_blind_balances",
+    "get_block",
+    "get_call_orders",
+    "get_collateral_bids",
+    "get_committee_member",
+    "get_dynamic_global_properties",
+    "get_full_account",
+    "get_global_properties",
+    "get_htlc",
+    "get_key_label",
+    "get_key_references",
+    "get_limit_orders",
+    "get_market_history",
+    "get_my_blind_accounts",
+    "get_object",
+    "get_order_book",
+    "get_private_key",
+    "get_prototype_operation",
+    "get_public_key",
+    "get_relative_account_history",
+    "get_settle_orders",
+    "get_transaction_id",
+    "get_transaction_signers",
+    "get_vesting_balances",
+    "get_witness",
+    "gethelp",
+    "global_settle_asset",
+    "help",
+    "htlc_create",
+    "htlc_extend",
+    "htlc_redeem",
+    "import_account_keys",
+    "import_accounts",
+    "import_balance",
+    "import_key",
+    "info",
+    "is_locked",
+    "is_new",
+    "is_public_key_registered",
+    "issue_asset",
+    "list_account_balances",
+    "list_accounts",
+    "list_assets",
+    "list_committee_members",
+    "list_my_accounts",
+    "list_witnesses",
+    "load_wallet_file",
+    "lock",
+    "network_add_nodes",
+    "network_get_connected_peers",
+    "normalize_brain_key",
+    "preview_builder_transaction",
+    "propose_builder_transaction",
+    "propose_builder_transaction2",
+    "propose_fee_change",
+    "propose_parameter_change",
+    "publish_asset_feed",
+    "quit",
+    "read_memo",
+    "receive_blind_transfer",
+    "register_account",
+    "remove_builder_transaction",
+    "replace_operation_in_builder_transaction",
+    "reserve_asset",
+    "save_wallet_file",
+    "sell_asset",
+    "serialize_transaction",
+    "set_desired_witness_and_committee_member_count",
+    "set_fees_on_builder_transaction",
+    "set_key_label",
+    "set_password",
+    "set_voting_proxy",
+    "settle_asset",
+    "sign_builder_transaction",
+    "sign_builder_transaction2",
+    "sign_memo",
+    "sign_message",
+    "sign_transaction",
+    "sign_transaction2",
+    "suggest_brain_key",
+    "transfer",
+    "transfer2",
+    "transfer_from_blind",
+    "transfer_to_blind",
+    "unlock",
+    "update_asset",
+    "update_asset_feed_producers",
+    "update_asset_issuer",
+    "update_bitasset",
+    "update_witness",
+    "update_worker_votes",
+    "upgrade_account",
+    "verify_encapsulated_message",
+    "verify_message",
+    "verify_signed_message",
+    "vote_for_committee_member",
+    "vote_for_witness",
+    "whitelist_account",
+    "withdraw_vesting",
+];
+
 /// Returns info such as client version, git version of graphene/fc, version of boost, openssl.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct AboutParams;
@@ -494,9 +642,9 @@ pub struct CreateWorkerParams {
     /// The account which owns the worker and will be paid
     pub owner_account: String,
     /// When the work begins
-    pub work_begin_date: chrono::DateTime<chrono::Utc>,
+    pub work_begin_date: ::graphene_rpc::GrapheneTimePointSec,
     /// When the work ends
-    pub work_end_date: chrono::DateTime<chrono::Utc>,
+    pub work_end_date: ::graphene_rpc::GrapheneTimePointSec,
     /// Amount of pay per day (NOT per maint interval)
     pub daily_pay: i64,
     /// Any text
@@ -1236,9 +1384,9 @@ pub struct GetMarketHistoryParams {
     /// length of each time bucket in seconds.
     pub bucket: u32,
     /// the start of a time range, E.G. "2018-01-01T00:00:00"
-    pub start: chrono::DateTime<chrono::Utc>,
+    pub start: ::graphene_rpc::GrapheneTimePointSec,
     /// the end of the time range
-    pub end: chrono::DateTime<chrono::Utc>,
+    pub end: ::graphene_rpc::GrapheneTimePointSec,
 }
 
 impl OpenRpcParams for GetMarketHistoryParams {
@@ -2058,7 +2206,7 @@ pub struct ProposeBuilderTransactionParams {
     /// handle of the transaction builder
     pub handle: TransactionHandleType,
     /// when the proposal will expire
-    pub expiration: chrono::DateTime<chrono::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     /// review period of the proposal in seconds
     pub review_period_seconds: u32,
     /// whether to broadcast the signed transaction to the network
@@ -2087,7 +2235,7 @@ pub struct ProposeBuilderTransaction2Params {
     /// name or ID of the account who would pay fees for creating the proposal
     pub account_name_or_id: String,
     /// when the proposal will expire
-    pub expiration: chrono::DateTime<chrono::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     /// review period of the proposal in seconds
     pub review_period_seconds: u32,
     /// whether to broadcast the signed transaction to the network
@@ -2115,7 +2263,7 @@ pub struct ProposeFeeChangeParams {
     /// The account paying the fee to propose the tx
     pub proposing_account: String,
     /// Timestamp specifying when the proposal will either take effect or expire.
-    pub expiration_time: chrono::DateTime<chrono::Utc>,
+    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
     /// Map of operation type to new fee. Operations may be specified by name or ID. The "scale" key changes the scale. All other operations will maintain current values.
     pub changed_values: serde_json::Value,
     /// true if you wish to broadcast the transaction
@@ -2144,7 +2292,7 @@ pub struct ProposeParameterChangeParams {
     /// The account paying the fee to propose the tx
     pub proposing_account: String,
     /// Timestamp specifying when the proposal will either take effect or expire.
-    pub expiration_time: chrono::DateTime<chrono::Utc>,
+    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
     /// The values to change. All other chain parameters are filled in with default values
     pub changed_values: serde_json::Value,
     /// true if you wish to broadcast the transaction
