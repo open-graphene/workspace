@@ -1,0 +1,24 @@
+# Config that writes generated Swaplock Rust modules into the experimental
+# `graphene-chain-swaplock` crate.
+
+[chain]
+name = "swaplock"
+core_root = "/Users/lunacrafts/workspaces/mirrorboards/boards/boards-swaplock/swaplock-core"
+
+[openrpc]
+wallet_header = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+output = "../target/generated/swaplock/spec.json"
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[rust]
+schema_output = "../target/generated/swaplock/schema.json"
+variants_rs = "../crates/graphene-chain-swaplock/src/generated/variants.rs"
+variants_names = "../crates/graphene-chain-swaplock/src/generated/variants.names"
+types_rs = "../crates/graphene-chain-swaplock/src/generated/types.rs"
+schema_title = "swaplock_types_root"

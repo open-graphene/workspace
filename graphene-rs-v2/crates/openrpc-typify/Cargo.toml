@@ -1,0 +1,12 @@
+[package]
+name = "openrpc-typify"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[dependencies]
+prettyplease.workspace = true
+schemars.workspace = true
+serde_json.workspace = true
+syn.workspace = true
+typify.workspace = true

@@ -44,3 +44,7 @@ tmp/
 
 !graphene-rs
 !graphene-rs/**
+!graphene-rs-v2
+!graphene-rs-v2/**
+graphene-rs-v2/target/
+graphene-rs-v2/target/**
