@@ -110,6 +110,43 @@ pub const OPENRPC_METHODS: &[&str] = &[
     "verify_authority",
 ];
 
+/// Typed object union returned by `get_objects`.
+///
+/// Graphene `get_objects` accepts arbitrary object IDs and returns the
+/// corresponding concrete chain object. Missing objects may be returned as
+/// JSON `null` by some nodes.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[serde(untagged)]
+pub enum GetObjectResult {
+    AccountBalanceObject(AccountBalanceObject),
+    AccountObject(AccountObject),
+    AccountStatisticsObject(AccountStatisticsObject),
+    BalanceObject(BalanceObject),
+    BlindedBalanceObject(BlindedBalanceObject),
+    CallOrderObject(CallOrderObject),
+    ChainPropertyObject(ChainPropertyObject),
+    CollateralBidObject(CollateralBidObject),
+    CommitteeMemberObject(CommitteeMemberObject),
+    CreditDealObject(CreditDealObject),
+    CreditOfferObject(CreditOfferObject),
+    DynamicGlobalPropertyObject(DynamicGlobalPropertyObject),
+    ExtendedAssetObject(ExtendedAssetObject),
+    ExtendedLiquidityPoolObject(ExtendedLiquidityPoolObject),
+    ForceSettlementObject(ForceSettlementObject),
+    GlobalPropertyObject(GlobalPropertyObject),
+    HtlcObject(HtlcObject),
+    LimitOrderObject(LimitOrderObject),
+    MarketHistoryLiquidityPoolTickerObject(MarketHistoryLiquidityPoolTickerObject),
+    ProposalObject(ProposalObject),
+    SametFundObject(SametFundObject),
+    TicketObject(TicketObject),
+    VestingBalanceObject(VestingBalanceObject),
+    WithdrawPermissionObject(WithdrawPermissionObject),
+    WitnessObject(WitnessObject),
+    WorkerObject(WorkerObject),
+    Null(()),
+}
+
 /// Typed fee result returned by `get_required_fees`.
 ///
 /// Normal operations return a single `asset` fee. Proposal-create operations
@@ -1218,7 +1255,7 @@ pub struct GetObjectsParams {
 
 impl OpenRpcParams for GetObjectsParams {
     const METHOD: &'static str = "get_objects";
-    type Response = Vec<serde_json::Value>;
+    type Response = Vec<GetObjectResult>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![

@@ -1,6 +1,7 @@
 use graphene_chain_swaplock::{
-    GetBlockHeaderBatchParams, GetBlockParams, GetRequiredFeesParams, LookupVoteIdObject,
-    LookupVoteIdsParams, MaybeSignedBlockHeader, Operation, RequiredFee, SignedBlock,
+    GetBlockHeaderBatchParams, GetBlockParams, GetObjectResult, GetObjectsParams,
+    GetRequiredFeesParams, LookupVoteIdObject, LookupVoteIdsParams, MaybeSignedBlockHeader,
+    Operation, RequiredFee, SignedBlock,
 };
 use graphene_rpc::{GrapheneTimePointSec, OpenRpcParams};
 use serde_json::json;
@@ -65,6 +66,57 @@ fn get_block_header_batch_decodes_fc_map_as_array_pairs() {
             .unwrap()
     );
     assert!(header.witness.starts_with("1.6."));
+}
+
+#[test]
+fn get_objects_decodes_known_chain_objects_and_nulls() {
+    fn assert_response_type<T: OpenRpcParams<Response = Vec<GetObjectResult>>>() {}
+    assert_response_type::<GetObjectsParams>();
+
+    let params = GetObjectsParams {
+        ids: vec!["2.1.0".to_owned()],
+        subscribe: Some(false),
+    };
+
+    assert_eq!(GetObjectsParams::METHOD, "get_objects");
+    assert_eq!(
+        params.into_positional_params(),
+        vec![json!(["2.1.0"]), json!(false)]
+    );
+
+    let decoded: <GetObjectsParams as OpenRpcParams>::Response = serde_json::from_value(json!([
+        {
+            "id": "2.1.0",
+            "head_block_number": 326683,
+            "head_block_id": "0004fc1b0d5fd1eb62e0257230849b1d1d10882a",
+            "time": "2026-05-13T17:10:15",
+            "current_witness": "1.6.3",
+            "next_maintenance_time": "2026-05-13T18:00:00",
+            "last_budget_time": "2026-05-13T17:00:00",
+            "witness_budget": 0,
+            "accounts_registered_this_interval": 0,
+            "recently_missed_count": 0,
+            "current_aslot": 326683,
+            "recent_slots_filled": "340282366920938463463374607431768211455",
+            "dynamic_flags": 0,
+            "last_irreversible_block_num": 326680,
+            "last_vote_tally_time": "2026-05-13T17:00:00",
+            "total_inactive": 0,
+            "total_pob": 0
+        },
+        null
+    ]))
+    .expect("get_objects should decode known objects and null placeholders");
+
+    assert_eq!(decoded.len(), 2);
+    match &decoded[0] {
+        GetObjectResult::DynamicGlobalPropertyObject(dynamic) => {
+            assert_eq!(dynamic.head_block_number, 326683);
+            assert!(dynamic.current_witness.starts_with("1.6."));
+        }
+        other => panic!("expected dynamic global property object, got {other:#?}"),
+    }
+    assert!(matches!(decoded[1], GetObjectResult::Null(())));
 }
 
 #[test]

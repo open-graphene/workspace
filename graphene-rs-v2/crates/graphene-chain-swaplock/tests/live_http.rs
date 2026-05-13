@@ -4,7 +4,7 @@ use graphene_chain_swaplock::{
     GetAccountCountParams, GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams,
     GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
     GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
-    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectsParams,
+    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams,
     GetRequiredFeesParams, GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams,
     LookupAccountsParams, LookupAssetSymbolsParams, LookupCommitteeMemberAccountsParams,
     LookupVoteIdObject, LookupVoteIdsParams, LookupWitnessAccountsParams, Operation, RequiredFee,
@@ -346,10 +346,13 @@ fn live_decodes_read_only_rpc_methods_over_http() {
         .unwrap();
     println!("get_objects([2.1.0], false) => {objects:#?}");
     assert_eq!(objects.len(), 1);
-    assert_eq!(
-        objects[0].get("id").and_then(|value| value.as_str()),
-        Some("2.1.0")
-    );
+    match &objects[0] {
+        GetObjectResult::DynamicGlobalPropertyObject(object_dynamic) => {
+            assert_eq!(object_dynamic.head_block_number, dynamic.head_block_number);
+            assert!(object_dynamic.current_witness.starts_with("1.6."));
+        }
+        other => panic!("expected dynamic global property object, got {other:#?}"),
+    }
 
     let transfer = serde_json::from_value::<Operation>(serde_json::json!([
         0,

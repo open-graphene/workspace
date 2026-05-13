@@ -129,12 +129,45 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
 
 
 def method_result_type(method: dict[str, Any]) -> str:
+    if method.get("name") == "get_objects":
+        return "Vec<GetObjectResult>"
     if method.get("name") == "get_required_fees":
         return "Vec<RequiredFee>"
     if method.get("name") == "lookup_vote_ids":
         return "Vec<LookupVoteIdObject>"
     result = method.get("result") or {}
     return schema_rust_type(result.get("schema"))
+
+
+def emit_get_object_result(spec: dict[str, Any]) -> list[str]:
+    schemas = spec.get("components", {}).get("schemas", {})
+    if not isinstance(schemas, dict):
+        schemas = {}
+    object_schema_names = sorted(
+        name
+        for name, schema in schemas.items()
+        if isinstance(schema, dict) and str(schema.get("x-cpp-type", "")).endswith("_object")
+    )
+
+    out = [
+        "/// Typed object union returned by `get_objects`.",
+        "///",
+        "/// Graphene `get_objects` accepts arbitrary object IDs and returns the",
+        "/// corresponding concrete chain object. Missing objects may be returned as",
+        "/// JSON `null` by some nodes.",
+        "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]",
+        "#[serde(untagged)]",
+        "pub enum GetObjectResult {",
+    ]
+    for schema_name in object_schema_names:
+        rust_name = snake_to_pascal(schema_name)
+        out.append(f"    {rust_name}({rust_name}),")
+    out.extend([
+        "    Null(()),",
+        "}",
+        "",
+    ])
+    return out
 
 
 def emit_required_fee() -> list[str]:
@@ -197,6 +230,8 @@ def emit(spec: dict[str, Any], source_label: str) -> str:
     out.append("];")
     out.append("")
 
+    if "get_objects" in method_names:
+        out.extend(emit_get_object_result(spec))
     if "get_required_fees" in method_names:
         out.extend(emit_required_fee())
     if "lookup_vote_ids" in method_names:
