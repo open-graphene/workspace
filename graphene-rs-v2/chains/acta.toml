@@ -1,0 +1,22 @@
+[chain]
+name = "acta"
+core_root = "../../chains/acta-network/acta-network-core"
+
+[openrpc]
+wallet_header = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+output = "../target/generated/acta/spec.json"
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[rust]
+schema_output = "../target/generated/acta/schema.json"
+variants_rs = "../target/generated/acta/variants.rs"
+variants_names = "../target/generated/acta/variants.names"
+types_rs = "../target/generated/acta/types.rs"
+rpc_rs = "../target/generated/acta/rpc.rs"
+schema_title = "acta_types_root"

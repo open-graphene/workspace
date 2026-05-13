@@ -1,0 +1,22 @@
+[chain]
+name = "rsquared"
+core_root = "../../chains/rsquared/R-Squared-core"
+
+[openrpc]
+wallet_header = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+output = "../target/generated/rsquared/spec.json"
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[rust]
+schema_output = "../target/generated/rsquared/schema.json"
+variants_rs = "../target/generated/rsquared/variants.rs"
+variants_names = "../target/generated/rsquared/variants.names"
+types_rs = "../target/generated/rsquared/types.rs"
+rpc_rs = "../target/generated/rsquared/rpc.rs"
+schema_title = "rsquared_types_root"

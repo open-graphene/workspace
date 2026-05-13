@@ -8,6 +8,10 @@ publish.workspace = true
 path = "src/lib.rs"
 
 [[bin]]
+name = "graphene-codegen"
+path = "src/bin/graphene-codegen.rs"
+
+[[bin]]
 name = "openrpc-typify"
 path = "src/bin/openrpc-typify.rs"
 
@@ -16,4 +20,5 @@ prettyplease.workspace = true
 schemars.workspace = true
 serde_json.workspace = true
 syn.workspace = true
+toml.workspace = true
 typify.workspace = true

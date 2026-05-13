@@ -1,38 +1,42 @@
-# OpenRPC codegen scripts
+# OpenRPC codegen backend stages
 
-These scripts are the project-owned, generic form of the Swaplock POC pipeline.
-They live under `crates/graphene-codegen` because they define generation policy
-for Rust chain crates, even though several stages are still Python/shell while
-we validate behavior.
+These scripts are backend stages for the `graphene-codegen` Rust coordinator.
+They are the project-owned, generic form of the Swaplock POC pipeline.
+
+Normal generation should use the Rust coordinator, not these scripts directly:
+
+```sh
+cargo run -p graphene-codegen --bin graphene-codegen -- \
+  generate chains/swaplock.toml
+```
+
+Or the project-local shortcut:
+
+```sh
+bin/gen.sh
+```
 
 ## Boundary
 
-This directory owns two related but separate phases:
+This directory contains process backends for two related phases:
 
 1. **Upstream import:** C++ wallet/core metadata -> OpenRPC spec.
-2. **Rust generation:** OpenRPC spec -> schema JSON, static variants, RPC params,
-   and typify-generated Rust schema types.
+2. **Rust generation helpers:** OpenRPC spec -> schema JSON, static variants,
+   and RPC params.
 
-The typify backend now lives in the same crate as the `openrpc-typify` binary:
+The typify backend lives in the same crate as the `openrpc-typify` binary:
 
 ```sh
 cargo run -p graphene-codegen --bin openrpc-typify -- --help
 ```
 
-Longer term, the rest of the Rust generation phase should move into Rust modules
-inside `graphene-codegen`. The C++/Doxygen import phase may remain script-like
-because it is an adapter to upstream source layout and external tools.
+Longer term, the Rust generation helpers should move into Rust modules inside
+`graphene-codegen`. The C++/Doxygen import phase may remain script-like because
+it adapts to upstream source layout and external tools.
 
 ## Pipeline
 
-Run all current stages from TOML:
-
-```sh
-./crates/graphene-codegen/openrpc/generate_from_config.py \
-  --config examples/swaplock-openrpc.toml
-```
-
-Individual stages:
+The Rust coordinator runs these stages:
 
 ```text
 wallet.hpp + Doxygen
@@ -58,24 +62,13 @@ OpenRPC methods
   -> Rust params structs with method constants and response types
 ```
 
-## What is generic now
-
-- Core root is a CLI/config argument.
-- Chain name is a CLI/config argument.
-- Wallet header can be overridden.
-- Header roots are repeatable CLI/config arguments.
-- OpenRPC spec path is a CLI/config argument.
-- Rust output paths are CLI/config arguments.
-- `generate_from_config.py` runs the stages from a TOML config and supports
-  `--skip-openrpc` for reusing an existing spec during iteration.
-
 ## What is still POC-level
 
 - `gen_wallet_spec.py` is still wallet-api oriented and looks for
   `graphene::wallet::wallet_api`.
 - `gen_types_spec.py` is a pragmatic C++ text parser, not a full C++ parser.
-- The Rust-facing generators other than the typify backend are still scripts;
-  they should migrate into this crate once their behavior stabilizes.
+- `gen_rust_variants.py`, `gen_rust_rpc.py`, and `extract_typify_schema.py` are
+  still Python backends spawned by the Rust coordinator.
 
 ## Tool dependencies
 

@@ -1,0 +1,22 @@
+[chain]
+name = "bitshares"
+core_root = "../../chains/bitshares/bitshares-core"
+
+[openrpc]
+wallet_header = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+output = "../target/generated/bitshares/spec.json"
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[rust]
+schema_output = "../target/generated/bitshares/schema.json"
+variants_rs = "../target/generated/bitshares/variants.rs"
+variants_names = "../target/generated/bitshares/variants.names"
+types_rs = "../target/generated/bitshares/types.rs"
+rpc_rs = "../target/generated/bitshares/rpc.rs"
+schema_title = "bitshares_types_root"
