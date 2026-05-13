@@ -450,7 +450,7 @@ pub struct GetBlockHeaderBatchParams {
 
 impl OpenRpcParams for GetBlockHeaderBatchParams {
     const METHOD: &'static str = "get_block_header_batch";
-    type Response = std::collections::BTreeMap<String, Option<MaybeSignedBlockHeader>>;
+    type Response = Vec<(u32, Option<MaybeSignedBlockHeader>)>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1193,7 +1193,7 @@ pub struct GetObjectsParams {
 
 impl OpenRpcParams for GetObjectsParams {
     const METHOD: &'static str = "get_objects";
-    type Response = Vec<()>;
+    type Response = Vec<serde_json::Value>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1307,7 +1307,7 @@ pub struct GetRequiredFeesParams {
 
 impl OpenRpcParams for GetRequiredFeesParams {
     const METHOD: &'static str = "get_required_fees";
-    type Response = Vec<()>;
+    type Response = Vec<serde_json::Value>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1540,7 +1540,7 @@ pub struct GetTradeHistoryBySequenceParams {
     /// symbol or ID of the quote asset
     pub quote: String,
     /// Start sequence as an Integer, the latest transaction to retrieve
-    pub start: i64,
+    pub start: ::graphene_rpc::GrapheneInt64,
     /// Stop time as a UNIX timestamp, the earliest transactions to retrieve
     pub stop: ::graphene_rpc::GrapheneTimePointSec,
     /// Maximum quantity of transactions to retrieve, capped at the configured value of api_limit_get_trade_history_by_sequence
@@ -2020,12 +2020,12 @@ impl OpenRpcParams for LookupCommitteeMemberAccountsParams {
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct LookupVoteIdsParams {
     /// a list of vote IDs, the quantity should not be greater than the configured value of api_limit_lookup_vote_ids
-    pub votes: Vec<VoteIdType>,
+    pub votes: Vec<String>,
 }
 
 impl OpenRpcParams for LookupVoteIdsParams {
     const METHOD: &'static str = "lookup_vote_ids";
-    type Response = Vec<()>;
+    type Response = Vec<serde_json::Value>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![

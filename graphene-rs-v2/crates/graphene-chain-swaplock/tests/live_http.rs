@@ -1,10 +1,12 @@
 use std::collections::BTreeSet;
 
 use graphene_chain_swaplock::{
-    GetAccountCountParams, GetAssetCountParams, GetBlockParams, GetChainIdParams,
-    GetChainPropertiesParams, GetCommitteeCountParams, GetConfigParams,
-    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetWitnessCountParams,
-    GetWorkerCountParams, OPENRPC_METHODS,
+    GetAccountCountParams, GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams,
+    GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
+    GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
+    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectsParams,
+    GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams, LookupAssetSymbolsParams,
+    LookupVoteIdsParams, OPENRPC_METHODS,
 };
 use graphene_rpc::{GrapheneUInt64, HttpTransport, RpcClient};
 
@@ -19,15 +21,23 @@ const DEFAULT_SWAPLOCK_RPC_URL: &str = "https://node01.swaplock.chainpool.online
 const TYPED_LIVE_METHODS: &[&str] = &[
     "get_account_count",
     "get_asset_count",
+    "get_assets",
     "get_block",
+    "get_block_header",
+    "get_block_header_batch",
     "get_chain_id",
     "get_chain_properties",
     "get_committee_count",
+    "get_committee_members",
     "get_config",
     "get_dynamic_global_properties",
     "get_global_properties",
+    "get_objects",
     "get_witness_count",
+    "get_witnesses",
     "get_worker_count",
+    "lookup_asset_symbols",
+    "lookup_vote_ids",
 ];
 
 /// Generated database RPC methods not yet executed against the public node.
@@ -46,17 +56,13 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "get_accounts",
     "get_all_workers",
     "get_asset_id_from_string",
-    "get_assets",
     "get_assets_by_issuer",
     "get_balance_objects",
     "get_blinded_balances",
-    "get_block_header",
-    "get_block_header_batch",
     "get_call_orders",
     "get_call_orders_by_account",
     "get_collateral_bids",
     "get_committee_member_by_account",
-    "get_committee_members",
     "get_credit_deals_by_borrower",
     "get_credit_deals_by_collateral_asset",
     "get_credit_deals_by_debt_asset",
@@ -81,7 +87,6 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "get_margin_positions",
     "get_named_account_balances",
     "get_next_object_id",
-    "get_objects",
     "get_order_book",
     "get_potential_address_signatures",
     "get_potential_signatures",
@@ -107,7 +112,6 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "get_withdraw_permissions_by_giver",
     "get_withdraw_permissions_by_recipient",
     "get_witness_by_account",
-    "get_witnesses",
     "get_workers_by_account",
     "is_public_key_registered",
     "list_assets",
@@ -119,9 +123,7 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "list_tickets",
     "lookup_account_names",
     "lookup_accounts",
-    "lookup_asset_symbols",
     "lookup_committee_member_accounts",
-    "lookup_vote_ids",
     "lookup_witness_accounts",
     "set_auto_subscription",
     "unsubscribe_from_market",
@@ -184,13 +186,80 @@ fn live_decodes_read_only_rpc_methods_over_http() {
     println!("get_asset_count => {asset_count}");
     assert_positive(asset_count, "get_asset_count");
 
+    let assets = client
+        .call(GetAssetsParams {
+            asset_symbols_or_ids: vec!["1.3.0".to_owned()],
+            subscribe: Some(false),
+        })
+        .unwrap();
+    println!("get_assets([1.3.0], false) => {assets:#?}");
+    assert_eq!(assets.len(), 1);
+    let core_asset = assets[0].as_ref().expect("core asset should exist");
+    assert_eq!(core_asset.symbol, "BTS");
+
+    let lookup_assets = client
+        .call(LookupAssetSymbolsParams {
+            symbols_or_ids: vec!["BTS".to_owned()],
+        })
+        .unwrap();
+    println!("lookup_asset_symbols([BTS]) => {lookup_assets:#?}");
+    assert_eq!(lookup_assets.len(), 1);
+    let looked_up_core_asset = lookup_assets[0]
+        .as_ref()
+        .expect("core asset symbol should resolve");
+    assert_eq!(looked_up_core_asset.symbol, "BTS");
+
     let committee_count = client.call(GetCommitteeCountParams).unwrap();
     println!("get_committee_count => {committee_count}");
     assert_positive(committee_count, "get_committee_count");
 
+    let committee_members = client
+        .call(GetCommitteeMembersParams {
+            committee_member_ids: vec!["1.5.0".to_owned()],
+        })
+        .unwrap();
+    println!("get_committee_members([1.5.0]) => {committee_members:#?}");
+    assert_eq!(committee_members.len(), 1);
+    let committee_member = committee_members[0]
+        .as_ref()
+        .expect("committee member should exist");
+    assert!(committee_member
+        .committee_member_account
+        .starts_with("1.2."));
+
     let witness_count = client.call(GetWitnessCountParams).unwrap();
     println!("get_witness_count => {witness_count}");
     assert_positive(witness_count, "get_witness_count");
+
+    let witnesses = client
+        .call(GetWitnessesParams {
+            witness_ids: vec!["1.6.1".to_owned()],
+        })
+        .unwrap();
+    println!("get_witnesses([1.6.1]) => {witnesses:#?}");
+    assert_eq!(witnesses.len(), 1);
+    let witness = witnesses[0].as_ref().expect("witness should exist");
+    assert!(witness.witness_account.starts_with("1.2."));
+
+    let vote_objects = client
+        .call(LookupVoteIdsParams {
+            votes: vec!["0:5".to_owned(), "1:0".to_owned()],
+        })
+        .unwrap();
+    println!("lookup_vote_ids([0:5, 1:0]) => {vote_objects:#?}");
+    assert_eq!(vote_objects.len(), 2);
+    assert_eq!(
+        vote_objects[0]
+            .get("committee_member_account")
+            .and_then(|value| value.as_str()),
+        Some("1.2.102")
+    );
+    assert_eq!(
+        vote_objects[1]
+            .get("witness_account")
+            .and_then(|value| value.as_str()),
+        Some("1.2.102")
+    );
 
     let worker_count = client.call(GetWorkerCountParams).unwrap();
     println!("get_worker_count => {worker_count}");
@@ -214,11 +283,59 @@ fn live_decodes_read_only_rpc_methods_over_http() {
     println!("get_dynamic_global_properties => {dynamic:#?}");
     assert!(dynamic.head_block_number > 0);
 
+    let objects = client
+        .call(GetObjectsParams {
+            ids: vec!["2.1.0".to_owned()],
+            subscribe: Some(false),
+        })
+        .unwrap();
+    println!("get_objects([2.1.0], false) => {objects:#?}");
+    assert_eq!(objects.len(), 1);
+    assert_eq!(
+        objects[0].get("id").and_then(|value| value.as_str()),
+        Some("2.1.0")
+    );
+
     let global = client.call(GetGlobalPropertiesParams).unwrap();
     println!("get_global_properties => {global:#?}");
     assert!(!global.active_witnesses.is_empty());
 
     let block_num = dynamic.head_block_number.saturating_sub(1);
+
+    let block_header = client
+        .call(GetBlockHeaderParams {
+            block_num,
+            with_witness_signature: Some(true),
+        })
+        .unwrap()
+        .expect("recent block header should be available");
+    println!("get_block_header({block_num}, true) => {block_header:#?}");
+    assert!(block_header.witness.starts_with("1.6."));
+    assert!(block_header
+        .witness_signature
+        .as_ref()
+        .is_some_and(|signature| !signature.is_empty()));
+
+    let block_headers = client
+        .call(GetBlockHeaderBatchParams {
+            block_nums: vec![block_num],
+            with_witness_signatures: Some(true),
+        })
+        .unwrap();
+    println!("get_block_header_batch([{block_num}], true) => {block_headers:#?}");
+    let (_, batch_header) = block_headers
+        .iter()
+        .find(|(header_block_num, _)| *header_block_num == block_num)
+        .expect("block header batch should contain queried block");
+    let batch_header = batch_header
+        .as_ref()
+        .expect("recent block header in batch should be available");
+    assert_eq!(batch_header.previous, block_header.previous);
+    assert!(batch_header
+        .witness_signature
+        .as_ref()
+        .is_some_and(|signature| !signature.is_empty()));
+
     let block = client
         .call(GetBlockParams { block_num })
         .unwrap()

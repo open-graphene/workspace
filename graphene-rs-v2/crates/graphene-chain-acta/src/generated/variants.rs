@@ -441,7 +441,7 @@ pub enum RestrictionArgumentType {
     /// Wire index `1` — C++ `bool`
     Bool(bool),
     /// Wire index `2` — C++ `int64_t`
-    Int64T(i64),
+    Int64T(::graphene_rpc::GrapheneInt64),
     /// Wire index `3` — C++ `string`
     String(::std::string::String),
     /// Wire index `4` — C++ `time_point_sec`
@@ -479,7 +479,7 @@ pub enum RestrictionArgumentType {
     /// Wire index `20` — C++ `flat_set<bool>`
     FlatSetBool(::std::vec::Vec<bool>),
     /// Wire index `21` — C++ `flat_set<int64_t>`
-    FlatSetInt64T(::std::vec::Vec<i64>),
+    FlatSetInt64T(::std::vec::Vec<::graphene_rpc::GrapheneInt64>),
     /// Wire index `22` — C++ `flat_set<string>`
     FlatSetString(::std::vec::Vec<::std::string::String>),
     /// Wire index `23` — C++ `flat_set<time_point_sec>`

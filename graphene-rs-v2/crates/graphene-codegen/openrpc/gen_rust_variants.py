@@ -106,6 +106,8 @@ def payload_rust_type(payload: dict) -> str:
         target = payload["$ref"].split("/")[-1]
         if target == "GrapheneTimePointSec":
             return "::graphene_rpc::GrapheneTimePointSec"
+        if target == "GrapheneInt64":
+            return "::graphene_rpc::GrapheneInt64"
         if target == "GrapheneUInt64":
             return "::graphene_rpc::GrapheneUInt64"
         return snake_to_pascal(target)
@@ -129,6 +131,9 @@ def payload_rust_type(payload: dict) -> str:
     if ty == "number":
         return "f32" if payload.get("format") == "float" else "f64"
     if ty == "array":
+        prefix_items = payload.get("prefixItems")
+        if isinstance(prefix_items, list):
+            return f"({', '.join(payload_rust_type(item) for item in prefix_items)})"
         items = payload.get("items", {})
         return f"::std::vec::Vec<{payload_rust_type(items)}>"
     if ty == "null":

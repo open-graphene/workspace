@@ -165,19 +165,20 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "int8_t":   {"type": "integer", "format": "int8"},
     "int16_t":  {"type": "integer", "format": "int16"},
     "int32_t":  {"type": "integer", "format": "int32"},
-    "int64_t":  {"type": "integer", "format": "int64"},
+    "int64_t":  {"$ref": "#/components/schemas/GrapheneInt64"},
     "uint8_t":  {"type": "integer", "format": "uint8",  "minimum": 0},
     "uint16_t": {"type": "integer", "format": "uint16", "minimum": 0},
     "uint32_t": {"type": "integer", "format": "uint32", "minimum": 0},
     "uint64_t": {"$ref": "#/components/schemas/GrapheneUInt64"},
     "float":    {"type": "number", "format": "float"},
     "double":   {"type": "number", "format": "double"},
-    "share_type": {"type": "integer", "format": "int64"},
+    "share_type": {"$ref": "#/components/schemas/GrapheneInt64"},
     "time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "fc::time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "fc::time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "object_id_type": {"type": "string", "pattern": r"^\d+\.\d+\.\d+$"},
+    "vote_id_type": {"type": "string", "pattern": r"^\d+:\d+$"},
     "public_key_type": {"type": "string"},
     "private_key_type": {"type": "string"},
     "signature_type": {"type": "string"},
@@ -230,7 +231,18 @@ def clean_type(raw: str) -> str:
 # Container patterns: (regex, schema_builder taking inner schemas)
 def _array(inner: dict) -> dict:           return {"type": "array", "items": inner}
 def _set_array(inner: dict) -> dict:       return {"type": "array", "items": inner, "uniqueItems": True}
-def _map_object(_k: dict, v: dict) -> dict: return {"type": "object", "additionalProperties": v}
+def _map_object(k: dict, v: dict) -> dict:
+    if k.get("type") == "string":
+        return {"type": "object", "additionalProperties": v}
+    return {
+        "type": "array",
+        "items": {
+            "type": "array",
+            "prefixItems": [k, v],
+            "minItems": 2,
+            "maxItems": 2,
+        },
+    }
 def _nullable(inner: dict) -> dict:
     if "$ref" in inner:
         return {"oneOf": [inner, {"type": "null"}]}

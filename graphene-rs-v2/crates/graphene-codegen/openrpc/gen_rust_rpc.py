@@ -80,6 +80,8 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
         target = ref_name(schema["$ref"])
         if target == "GrapheneTimePointSec":
             return "::graphene_rpc::GrapheneTimePointSec"
+        if target == "GrapheneInt64":
+            return "::graphene_rpc::GrapheneInt64"
         if target == "GrapheneUInt64":
             return "::graphene_rpc::GrapheneUInt64"
         return snake_to_pascal(target)
@@ -111,7 +113,13 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
     if ty == "number":
         return "f32" if schema.get("format") == "float" else "f64"
     if ty == "array":
-        return f"Vec<{schema_rust_type(schema.get('items', {}))}>"
+        prefix_items = schema.get("prefixItems")
+        if isinstance(prefix_items, list):
+            return f"({', '.join(schema_rust_type(item) for item in prefix_items)})"
+        items = schema.get("items", {})
+        if items == {}:
+            return "Vec<serde_json::Value>"
+        return f"Vec<{schema_rust_type(items)}>"
     if ty == "object":
         additional = schema.get("additionalProperties")
         if isinstance(additional, dict):

@@ -579,20 +579,21 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "int8_t":   {"type": "integer", "format": "int8"},
     "int16_t":  {"type": "integer", "format": "int16"},
     "int32_t":  {"type": "integer", "format": "int32"},
-    "int64_t":  {"type": "integer", "format": "int64"},
+    "int64_t":  {"$ref": "#/components/schemas/GrapheneInt64"},
     "uint8_t":  {"type": "integer", "format": "uint8",  "minimum": 0},
     "uint16_t": {"type": "integer", "format": "uint16", "minimum": 0},
     "uint32_t": {"type": "integer", "format": "uint32", "minimum": 0},
     "uint64_t": {"$ref": "#/components/schemas/GrapheneUInt64"},
     "float":    {"type": "number", "format": "float"},
     "double":   {"type": "number", "format": "double"},
-    "share_type":   {"type": "integer", "format": "int64"},
+    "share_type":   {"$ref": "#/components/schemas/GrapheneInt64"},
     "weight_type":  {"type": "integer", "format": "uint16", "minimum": 0},
     "time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "fc::time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "fc::time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "object_id_type": {"type": "string", "pattern": r"^\d+\.\d+\.\d+$"},
+    "vote_id_type": {"type": "string", "pattern": r"^\d+:\d+$"},
     "public_key_type": {"type": "string"},
     "private_key_type": {"type": "string"},
     "signature_type": {"type": "string"},
@@ -839,7 +840,20 @@ def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
         if outer_stripped == "extension" and len(inner) == 1:
             return map_type(inner[0], reg, pending, owner=owner)
         if outer_stripped in ("map", "flat_map", "unordered_map") and len(inner) >= 2:
-            return {"type": "object", "additionalProperties": map_type(inner[1], reg, pending, owner=owner)}
+            key_schema = map_type(inner[0], reg, pending, owner=owner)
+            value_schema = map_type(inner[1], reg, pending, owner=owner)
+            if key_schema.get("type") == "string":
+                return {"type": "object", "additionalProperties": value_schema}
+            return {
+                "type": "array",
+                "items": {
+                    "type": "array",
+                    "prefixItems": [key_schema, value_schema],
+                    "minItems": 2,
+                    "maxItems": 2,
+                },
+                "x-fc-container": outer_stripped,
+            }
         if outer_stripped == "pair" and len(inner) == 2:
             return {
                 "type": "array",
@@ -1037,6 +1051,18 @@ def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
             "crate": "graphene-rpc",
             "version": "0.1.0",
             "path": "graphene_rpc::GrapheneTimePointSec",
+        },
+    })
+    schemas.setdefault("GrapheneInt64", {
+        "oneOf": [
+            {"type": "integer", "format": "int64"},
+            {"type": "string", "pattern": r"^-?\d+$"},
+        ],
+        "description": "Graphene int64_t/share_type serialized as either a JSON number or a decimal string.",
+        "x-rust-type": {
+            "crate": "graphene-rpc",
+            "version": "0.1.0",
+            "path": "graphene_rpc::GrapheneInt64",
         },
     })
     schemas.setdefault("GrapheneUInt64", {

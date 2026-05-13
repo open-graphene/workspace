@@ -215,14 +215,8 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
         .collect::<Vec<_>>();
 
     let todo_placeholders = count_todo_descriptions(&spec);
-    let rpc_value_fields = rpc_rs
-        .lines()
-        .filter(|line| line.trim_start().starts_with("pub ") && line.contains("serde_json::Value"))
-        .count();
-    let rpc_value_responses = rpc_rs
-        .lines()
-        .filter(|line| line.trim() == "type Response = serde_json::Value;")
-        .count();
+    let rpc_value_fields = collect_rpc_value_fields(&rpc_rs);
+    let rpc_value_responses = collect_rpc_value_responses(&rpc_rs);
 
     let mut failures = Vec::new();
     if !rpc_rs.contains("use graphene_rpc::OpenRpcParams;") {
@@ -266,8 +260,14 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
     println!("  missing variant enums: {}", missing_variant_enums.len());
     println!("  missing variant names: {}", missing_variant_names.len());
     println!("  TODO placeholders: {todo_placeholders}");
-    println!("  rpc Value fields: {rpc_value_fields}");
-    println!("  rpc Value responses: {rpc_value_responses}");
+    println!("  rpc Value fields: {}", rpc_value_fields.len());
+    for field in &rpc_value_fields {
+        println!("    - {field}");
+    }
+    println!("  rpc Value responses: {}", rpc_value_responses.len());
+    for response in &rpc_value_responses {
+        println!("    - {response}");
+    }
 
     if failures.is_empty() {
         if todo_placeholders == 0 {
@@ -283,6 +283,56 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
         }
         Err(format!("audit failed for {}", config.chain_name).into())
     }
+}
+
+fn collect_rpc_value_fields(rpc_rs: &str) -> Vec<String> {
+    let mut fields = Vec::new();
+    let mut current_struct: Option<String> = None;
+
+    for line in rpc_rs.lines() {
+        let trimmed = line.trim();
+        if let Some(rest) = trimmed.strip_prefix("pub struct ") {
+            current_struct = rest.split_whitespace().next().map(str::to_owned);
+            continue;
+        }
+        if trimmed == "}" {
+            current_struct = None;
+            continue;
+        }
+        if trimmed.starts_with("pub ") && trimmed.contains("serde_json::Value") {
+            if let Some(struct_name) = &current_struct {
+                fields.push(format!("{struct_name}::{trimmed}"));
+            } else {
+                fields.push(trimmed.to_owned());
+            }
+        }
+    }
+
+    fields
+}
+
+fn collect_rpc_value_responses(rpc_rs: &str) -> Vec<String> {
+    let mut responses = Vec::new();
+    let mut current_method: Option<String> = None;
+
+    for line in rpc_rs.lines() {
+        let trimmed = line.trim();
+        if let Some(method_literal) = trimmed.strip_prefix("const METHOD: &'static str = ") {
+            current_method = Some(
+                method_literal
+                    .trim_end_matches(';')
+                    .trim_matches('"')
+                    .to_owned(),
+            );
+            continue;
+        }
+        if trimmed.starts_with("type Response =") && trimmed.contains("serde_json::Value") {
+            let method = current_method.as_deref().unwrap_or("<unknown method>");
+            responses.push(format!("{method}: {trimmed}"));
+        }
+    }
+
+    responses
 }
 
 fn load_config(
