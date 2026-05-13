@@ -171,6 +171,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "graphene-codec"
+version = "0.1.0"
+
+[[package]]
 name = "graphene-codegen"
 version = "0.1.0"
 dependencies = [

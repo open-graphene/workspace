@@ -5,6 +5,7 @@ members = [
     "crates/graphene-chain-rsquared",
     "crates/graphene-chain-swaplock",
     "crates/graphene-codegen",
+    "crates/graphene-codec",
     "crates/graphene-rpc",
 ]
 resolver = "2"
@@ -16,6 +17,7 @@ publish = false
 
 [workspace.dependencies]
 chrono = { version = "0.4", default-features = false, features = ["serde", "alloc"] }
+graphene-codec = { path = "crates/graphene-codec" }
 graphene-rpc = { path = "crates/graphene-rpc" }
 prettyplease = "0.2"
 regress = "0.10"
