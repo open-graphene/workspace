@@ -12,5 +12,10 @@ for chain in bitshares acta rsquared swaplock; do
     audit "chains/${chain}.toml"
 done
 
+cargo run -p graphene-codegen --bin graphene-codegen -- \
+  generate chains/swaplock-broadcast.toml
+cargo run -p graphene-codegen --bin graphene-codegen -- \
+  audit chains/swaplock-broadcast.toml
+
 cargo fmt
 cargo test

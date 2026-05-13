@@ -84,6 +84,8 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
             return "::graphene_rpc::GrapheneInt64"
         if target == "GrapheneUInt64":
             return "::graphene_rpc::GrapheneUInt64"
+        if target == "precomputable_transaction":
+            return "SignedTransaction"
         return snake_to_pascal(target)
 
     if "oneOf" in schema and isinstance(schema["oneOf"], list):
@@ -136,6 +138,8 @@ def method_result_type(method: dict[str, Any]) -> str:
     if method.get("name") == "lookup_vote_ids":
         return "Vec<LookupVoteIdObject>"
     result = method.get("result") or {}
+    if result.get("x-cpp-type") in {"fc::variant", "variant"}:
+        return "serde_json::Value"
     return schema_rust_type(result.get("schema"))
 
 

@@ -19,6 +19,16 @@ pub mod generated {
     include!("generated/rpc.rs");
 }
 
+pub mod broadcast {
+    use super::generated::*;
+    include!("generated/broadcast_rpc.rs");
+}
+
 mod codec;
+mod transaction;
 
 pub use generated::*;
+pub use transaction::{
+    broadcast_signed_transaction, broadcast_signed_transaction_synchronous, sign_transaction,
+    validate_signed_transaction, SignTransactionError, SignedTransactionEnvelope,
+};

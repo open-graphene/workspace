@@ -7,6 +7,7 @@ publish.workspace = true
 [dependencies]
 graphene-codec.workspace = true
 graphene-rpc.workspace = true
+graphene-signing.workspace = true
 chrono.workspace = true
 regress.workspace = true
 serde.workspace = true

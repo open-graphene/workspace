@@ -1,18 +1,26 @@
 use std::collections::BTreeSet;
 
 use graphene_chain_swaplock::{
-    GetAccountCountParams, GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams,
-    GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
-    GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
+    broadcast_signed_transaction_synchronous, sign_transaction, Asset, AssetAssetId,
+    ExtensionsType, GetAccountCountParams, GetAssetCountParams, GetAssetsParams,
+    GetBlockHeaderBatchParams, GetBlockHeaderParams, GetBlockParams, GetChainIdParams,
+    GetChainPropertiesParams, GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
     GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams,
-    GetRequiredFeesParams, GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams,
-    LookupAccountsParams, LookupAssetSymbolsParams, LookupCommitteeMemberAccountsParams,
-    LookupVoteIdObject, LookupVoteIdsParams, LookupWitnessAccountsParams, Operation, RequiredFee,
-    OPENRPC_METHODS,
+    GetRequiredFeesParams, GetTransactionHexWithoutSigParams, GetWitnessCountParams,
+    GetWitnessesParams, GetWorkerCountParams, LookupAccountsParams, LookupAssetSymbolsParams,
+    LookupCommitteeMemberAccountsParams, LookupVoteIdObject, LookupVoteIdsParams,
+    LookupWitnessAccountsParams, Operation, RequiredFee, Transaction, TransferOperation,
+    TransferOperationFrom, TransferOperationTo, OPENRPC_METHODS,
 };
-use graphene_rpc::{GrapheneUInt64, HttpTransport, RpcClient};
+use graphene_codec::to_graphene_bytes;
+use graphene_rpc::{
+    GrapheneInt64, GrapheneTimePointSec, GrapheneUInt64, GrapheneWebSocketTransport, HttpTransport,
+    RpcClient,
+};
+use graphene_signing::{ChainId, WifSigner};
 
 const DEFAULT_SWAPLOCK_RPC_URL: &str = "https://node01.swaplock.chainpool.online:8090";
+const DEFAULT_SWAPLOCK_WS_URL: &str = "wss://node01.swaplock.chainpool.online:8090";
 
 /// Methods currently exercised end-to-end against the public Swaplock database RPC node.
 ///
@@ -36,6 +44,7 @@ const TYPED_LIVE_METHODS: &[&str] = &[
     "get_global_properties",
     "get_objects",
     "get_required_fees",
+    "get_transaction_hex_without_sig",
     "get_witness_count",
     "get_witnesses",
     "get_worker_count",
@@ -111,7 +120,6 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "get_trade_history_by_sequence",
     "get_transaction",
     "get_transaction_hex",
-    "get_transaction_hex_without_sig",
     "get_vested_balances",
     "get_vesting_balances",
     "get_withdraw_permissions_by_giver",
@@ -140,6 +148,19 @@ fn live_client() -> RpcClient<HttpTransport> {
     RpcClient::new(HttpTransport::new(endpoint))
 }
 
+fn live_broadcast_client() -> RpcClient<GrapheneWebSocketTransport> {
+    let endpoint =
+        std::env::var("SWAPLOCK_WS_URL").unwrap_or_else(|_| DEFAULT_SWAPLOCK_WS_URL.to_owned());
+    let api_id = std::env::var("SWAPLOCK_BROADCAST_API_ID")
+        .ok()
+        .and_then(|value| value.parse::<u64>().ok());
+    let transport = match api_id {
+        Some(api_id) => GrapheneWebSocketTransport::new(endpoint, api_id),
+        None => GrapheneWebSocketTransport::login_api(endpoint, "network_broadcast"),
+    };
+    RpcClient::new(transport)
+}
+
 fn assert_positive(value: GrapheneUInt64, method: &str) {
     assert!(
         value.as_u64() > 0,
@@ -152,6 +173,81 @@ fn assert_id_like(value: &str, prefix: &str, method: &str) {
         value.starts_with(prefix),
         "{method} should return an id starting with {prefix}, got {value}"
     );
+}
+
+fn unsigned_transfer_transaction_fixture() -> Transaction {
+    serde_json::from_value(serde_json::json!({
+        "ref_block_num": 4660,
+        "ref_block_prefix": 2309737967u32,
+        "expiration": "2023-11-14T22:13:20",
+        "operations": [[0, {
+            "fee": { "amount": 200000, "asset_id": "1.3.0" },
+            "from": "1.2.100",
+            "to": "1.2.101",
+            "amount": { "amount": 12345, "asset_id": "1.3.0" },
+            "memo": null,
+            "extensions": []
+        }]],
+        "extensions": []
+    }))
+    .expect("unsigned transfer transaction fixture should decode")
+}
+
+fn bytes_to_hex(bytes: &[u8]) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut out = String::with_capacity(bytes.len() * 2);
+    for &byte in bytes {
+        out.push(HEX[(byte >> 4) as usize] as char);
+        out.push(HEX[(byte & 0x0f) as usize] as char);
+    }
+    out
+}
+
+fn hex_to_bytes(value: &str) -> Vec<u8> {
+    assert!(
+        value.len() % 2 == 0,
+        "hex string should contain an even number of chars"
+    );
+    value
+        .as_bytes()
+        .chunks_exact(2)
+        .map(|chunk| (hex_nibble(chunk[0]) << 4) | hex_nibble(chunk[1]))
+        .collect()
+}
+
+fn hex_nibble(byte: u8) -> u8 {
+    match byte {
+        b'0'..=b'9' => byte - b'0',
+        b'a'..=b'f' => byte - b'a' + 10,
+        b'A'..=b'F' => byte - b'A' + 10,
+        _ => panic!("invalid hex byte in node-provided id"),
+    }
+}
+
+fn ref_block_prefix(block_id: &str) -> u32 {
+    let bytes = hex_to_bytes(block_id);
+    assert!(
+        bytes.len() >= 8,
+        "block id should contain at least 8 bytes, got {}",
+        bytes.len()
+    );
+    u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]])
+}
+
+fn exact_account_id(client: &RpcClient<HttpTransport>, account_name: &str) -> String {
+    let accounts = client
+        .call(LookupAccountsParams {
+            lower_bound_name: account_name.to_owned(),
+            limit: 1,
+            subscribe: Some(false),
+        })
+        .expect("account lookup should succeed");
+    let (name, id) = accounts
+        .iter()
+        .next()
+        .expect("account lookup should return at least one account");
+    assert_eq!(name, account_name, "live account fixture should exist");
+    id.clone()
 }
 
 #[test]
@@ -180,6 +276,115 @@ fn every_generated_method_has_a_live_test_decision() {
         unknown.is_empty(),
         "live-test classification contains unknown generated methods: {unknown:?}"
     );
+}
+
+#[test]
+#[ignore = "requires network access to the Swaplock testnet RPC endpoint"]
+fn live_node_transaction_hex_without_sig_matches_local_binary_codec() {
+    let client = live_client();
+    let trx = unsigned_transfer_transaction_fixture();
+    let local_hex = bytes_to_hex(
+        &to_graphene_bytes(&trx).expect("unsigned transaction fixture should encode locally"),
+    );
+
+    let node_hex = client
+        .call(GetTransactionHexWithoutSigParams { trx })
+        .expect("node should serialize unsigned transaction to hex");
+
+    println!("local transaction hex without signatures => {local_hex}");
+    println!("node transaction hex without signatures  => {node_hex}");
+    assert_eq!(node_hex, local_hex);
+}
+
+#[test]
+#[ignore = "requires network access, SWAPLOCK_WIF, and SWAPLOCK_LIVE_BROADCAST=1"]
+fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
+    assert_eq!(
+        std::env::var("SWAPLOCK_LIVE_BROADCAST").as_deref(),
+        Ok("1"),
+        "set SWAPLOCK_LIVE_BROADCAST=1 to acknowledge this mutates the testnet"
+    );
+    let wif = std::env::var("SWAPLOCK_WIF").expect("SWAPLOCK_WIF must be set for live broadcast");
+    let signer = WifSigner::from_wif(&wif).expect("SWAPLOCK_WIF should be a compressed WIF key");
+    drop(wif);
+
+    let client = live_client();
+    let from_account = std::env::var("SWAPLOCK_FROM_ACCOUNT").unwrap_or_else(|_| "swaplock".into());
+    let to_account =
+        std::env::var("SWAPLOCK_TO_ACCOUNT").unwrap_or_else(|_| "committee-account".into());
+    let from = exact_account_id(&client, &from_account);
+    let to = exact_account_id(&client, &to_account);
+    assert_ne!(from, to, "live transfer requires distinct accounts");
+
+    let dynamic = client
+        .call(GetDynamicGlobalPropertiesParams)
+        .expect("dynamic global properties should decode");
+    let chain_id = client
+        .call(GetChainIdParams)
+        .expect("chain id should decode");
+    let chain_id = ChainId::try_from(chain_id.as_str()).expect("chain id should parse");
+    let expiration =
+        GrapheneTimePointSec::new(dynamic.time.naive_utc() + chrono::Duration::minutes(5));
+
+    let mut transfer = TransferOperation {
+        fee: Asset {
+            amount: GrapheneInt64::new(0),
+            asset_id: AssetAssetId::try_from("1.3.0").expect("core asset id should parse"),
+        },
+        from: TransferOperationFrom::try_from(from.as_str()).expect("from account id should parse"),
+        to: TransferOperationTo::try_from(to.as_str()).expect("to account id should parse"),
+        amount: Asset {
+            amount: GrapheneInt64::new(1),
+            asset_id: AssetAssetId::try_from("1.3.0").expect("core asset id should parse"),
+        },
+        memo: None,
+        extensions: ExtensionsType(vec![]),
+    };
+
+    let required_fees = client
+        .call(GetRequiredFeesParams {
+            ops: vec![Operation::Transfer(transfer.clone())],
+            asset_symbol_or_id: "1.3.0".to_owned(),
+        })
+        .expect("required fee lookup should succeed");
+    let RequiredFee::Asset(required_fee) = &required_fees[0] else {
+        panic!(
+            "transfer fee should be an asset, got {:#?}",
+            required_fees[0]
+        );
+    };
+    transfer.fee = required_fee.clone();
+
+    let transaction = Transaction {
+        ref_block_num: (dynamic.head_block_number & 0xffff) as u16,
+        ref_block_prefix: ref_block_prefix(&dynamic.head_block_id),
+        expiration,
+        operations: vec![Operation::Transfer(transfer)],
+        extensions: ExtensionsType(vec![]),
+    };
+    let signed =
+        sign_transaction(&chain_id, transaction, &signer).expect("transaction should sign");
+    let broadcast_client = live_broadcast_client();
+    let response = broadcast_signed_transaction_synchronous(&broadcast_client, signed)
+        .expect("signed transfer should broadcast synchronously");
+
+    let tx_id = response
+        .get("id")
+        .and_then(serde_json::Value::as_str)
+        .expect("synchronous broadcast response should include transaction id");
+    let block_num = response
+        .get("block_num")
+        .and_then(serde_json::Value::as_u64)
+        .expect("synchronous broadcast response should include block number");
+    let trx_num = response
+        .get("trx_num")
+        .and_then(serde_json::Value::as_u64)
+        .expect("synchronous broadcast response should include transaction number");
+
+    println!(
+        "broadcast_transaction_synchronous => id={tx_id}, block_num={block_num}, trx_num={trx_num}"
+    );
+    assert!(!tx_id.is_empty());
 }
 
 #[test]
