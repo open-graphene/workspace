@@ -913,7 +913,7 @@ pub enum RestrictionArgumentType {
     /// Wire index `3` — C++ `string`
     String(::std::string::String),
     /// Wire index `4` — C++ `time_point_sec`
-    TimePointSec(::chrono::DateTime<::chrono::Utc>),
+    TimePointSec(::graphene_rpc::GrapheneTimePointSec),
     /// Wire index `5` — C++ `public_key_type`
     PublicKeyType(::std::string::String),
     /// Wire index `6` — C++ `fc::sha256`
@@ -951,7 +951,7 @@ pub enum RestrictionArgumentType {
     /// Wire index `22` — C++ `flat_set<string>`
     FlatSetString(::std::vec::Vec<::std::string::String>),
     /// Wire index `23` — C++ `flat_set<time_point_sec>`
-    FlatSetTimePointSec(::std::vec::Vec<::chrono::DateTime<::chrono::Utc>>),
+    FlatSetTimePointSec(::std::vec::Vec<::graphene_rpc::GrapheneTimePointSec>),
     /// Wire index `24` — C++ `flat_set<public_key_type>`
     FlatSetPublicKeyType(::std::vec::Vec<::std::string::String>),
     /// Wire index `25` — C++ `flat_set<fc::sha256>`

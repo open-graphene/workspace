@@ -588,10 +588,10 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "double":   {"type": "number", "format": "double"},
     "share_type":   {"type": "integer", "format": "int64"},
     "weight_type":  {"type": "integer", "format": "uint16", "minimum": 0},
-    "time_point_sec": {"type": "string", "format": "date-time"},
-    "fc::time_point_sec": {"type": "string", "format": "date-time"},
-    "time_point": {"type": "string", "format": "date-time"},
-    "fc::time_point": {"type": "string", "format": "date-time"},
+    "time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
+    "fc::time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
+    "time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
+    "fc::time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "object_id_type": {"type": "string", "pattern": r"^\d+\.\d+\.\d+$"},
     "public_key_type": {"type": "string"},
     "private_key_type": {"type": "string"},
@@ -1029,6 +1029,16 @@ def build_registry(headers: list[Path]) -> Registry:
 
 def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
     schemas: dict[str, dict] = spec.setdefault("components", {}).setdefault("schemas", {})
+    schemas.setdefault("GrapheneTimePointSec", {
+        "type": "string",
+        "pattern": r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$",
+        "description": "Graphene fc::time_point_sec serialized as UTC without a timezone suffix.",
+        "x-rust-type": {
+            "crate": "graphene-rpc",
+            "version": "0.1.0",
+            "path": "graphene_rpc::GrapheneTimePointSec",
+        },
+    })
 
     # Start with existing placeholders — their `x-cpp-type` carries the type
     # name to resolve.

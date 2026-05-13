@@ -158,9 +158,17 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
         .filter_map(|(name, schema)| is_static_variant_schema(schema).then_some(name.as_str()))
         .collect::<Vec<_>>();
 
+    let external_schema_types = schemas
+        .iter()
+        .filter(|(_name, schema)| has_x_rust_type(schema))
+        .count();
+
     let missing_schema_types = schemas
-        .keys()
-        .filter_map(|name| {
+        .iter()
+        .filter_map(|(name, schema)| {
+            if has_x_rust_type(schema) {
+                return None;
+            }
             let rust_name = snake_to_pascal(name);
             (!rust_type_exists(&rust_name, &types_rs, &variants_rs)).then_some((name, rust_name))
         })
@@ -242,6 +250,7 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
     println!("  schemas: {}", schemas.len());
     println!("  methods: {}", methods.len());
     println!("  static variants: {}", static_variants.len());
+    println!("  external schema types: {external_schema_types}");
     println!("  missing schema types: {}", missing_schema_types.len());
     println!("  missing RPC params: {}", missing_rpc_params.len());
     println!("  missing variant enums: {}", missing_variant_enums.len());
@@ -337,6 +346,13 @@ fn is_static_variant_schema(schema: &JsonValue) -> bool {
                     .and_then(JsonValue::as_array)
                     .is_some_and(|items| items.len() == 2 && items[0].get("const").is_some())
         })
+}
+
+fn has_x_rust_type(schema: &JsonValue) -> bool {
+    schema
+        .get("x-rust-type")
+        .and_then(JsonValue::as_object)
+        .is_some()
 }
 
 fn rust_type_exists(rust_name: &str, types_rs: &str, variants_rs: &str) -> bool {

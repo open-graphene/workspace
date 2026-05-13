@@ -37,8 +37,24 @@ Python/shell backend stages, but the orchestration entrypoint is Rust. `gen.sh`
 is intentionally only a small project-local convenience wrapper.
 
 `graphene-rpc` is the first hand-written SDK/runtime layer. It owns the shared
-`OpenRpcParams` trait, `RpcTransport`, `RpcClient`, and `RpcError`; generated
-chain crates implement that shared trait instead of defining their own copy.
+`OpenRpcParams` trait, `RpcTransport`, `RpcClient`, `RpcError`, and a blocking
+`HttpTransport`; generated chain crates implement the shared trait instead of
+defining their own copy.
+
+## Typed RPC usage shape
+
+```rust
+use graphene_chain_swaplock::AboutParams;
+use graphene_rpc::{HttpTransport, RpcClient};
+
+let transport = HttpTransport::new("http://127.0.0.1:8090");
+let client = RpcClient::new(transport);
+let about = client.call(AboutParams)?;
+```
+
+`HttpTransport` handles the JSON-RPC request/response envelope. Chain-specific
+method names, positional params, and response types come from generated
+`OpenRpcParams` implementations.
 
 ## Generate all configured chains
 
@@ -111,5 +127,5 @@ cargo run -p graphene-codegen --bin openrpc-typify -- \
 ## Next steps
 
 1. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
-2. Add a concrete HTTP or WebSocket `RpcTransport` implementation.
+2. Add a live/ignored HTTP smoke test or example against a local wallet/node.
 3. Port the Python Rust-facing backend stages into Rust modules incrementally.

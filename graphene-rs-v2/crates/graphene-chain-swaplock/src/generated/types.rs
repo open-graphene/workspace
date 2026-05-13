@@ -893,8 +893,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountNameEqLitPredicateAccountId {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "creation_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "lifetime_referrer": {
@@ -909,8 +908,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountNameEqLitPredicateAccountId {
 ///      "x-cpp-type": "uint16_t"
 ///    },
 ///    "membership_expiration_date": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "name": {
@@ -1000,10 +998,10 @@ pub struct AccountObject {
     pub blacklisting_accounts: Vec<AccountObjectBlacklistingAccountsItem>,
     pub cashback_vb: ::std::option::Option<AccountObjectCashbackVb>,
     pub creation_block_num: u32,
-    pub creation_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub creation_time: ::graphene_rpc::GrapheneTimePointSec,
     pub lifetime_referrer: AccountObjectLifetimeReferrer,
     pub lifetime_referrer_fee_percentage: u16,
-    pub membership_expiration_date: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub membership_expiration_date: ::graphene_rpc::GrapheneTimePointSec,
     pub name: ::std::string::String,
     pub network_fee_percentage: u16,
     pub num_committee_voted: u16,
@@ -2042,8 +2040,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "bool"
 ///    },
 ///    "last_vote_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "lifetime_fees_paid": {
@@ -2118,8 +2115,7 @@ impl<'de> ::serde::Deserialize<'de> for AccountOptionsVotingAccount {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "vote_tally_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "vp_active": {
@@ -2162,7 +2158,7 @@ pub struct AccountStatisticsObject {
     pub core_in_balance: i64,
     pub has_cashback_vb: bool,
     pub is_voting: bool,
-    pub last_vote_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub last_vote_time: ::graphene_rpc::GrapheneTimePointSec,
     pub lifetime_fees_paid: i64,
     pub most_recent_op: AccountStatisticsObjectMostRecentOp,
     pub name: ::std::string::String,
@@ -2177,7 +2173,7 @@ pub struct AccountStatisticsObject {
     pub total_ops: u64,
     pub total_pob_value: i64,
     pub total_pol_value: i64,
-    pub vote_tally_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub vote_tally_time: ::graphene_rpc::GrapheneTimePointSec,
     pub vp_active: u64,
     pub vp_all: u64,
     pub vp_committee: u64,
@@ -4272,8 +4268,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetAssetId {
 ///      "x-cpp-type": "price_feed_with_icr"
 ///    },
 ///    "current_feed_publication_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "current_initial_collateralization": {
@@ -4296,8 +4291,7 @@ impl<'de> ::serde::Deserialize<'de> for AssetAssetId {
 ///        "minItems": 2,
 ///        "prefixItems": [
 ///          {
-///            "format": "date-time",
-///            "type": "string"
+///            "$ref": "#/$defs/GrapheneTimePointSec"
 ///          },
 ///          {
 ///            "$ref": "#/$defs/price_feed_with_icr"
@@ -4352,7 +4346,7 @@ pub struct AssetBitassetDataObject {
     pub asset_cer_updated: bool,
     pub asset_id: AssetBitassetDataObjectAssetId,
     pub current_feed: PriceFeedWithIcr,
-    pub current_feed_publication_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub current_feed_publication_time: ::graphene_rpc::GrapheneTimePointSec,
     pub current_initial_collateralization: Price,
     pub current_maintenance_collateralization: Price,
     pub feed_cer_updated: bool,
@@ -9950,8 +9944,7 @@ impl BlindOutput {
 ///      "x-cpp-type": "stealth_confirmation::memo_data"
 ///    },
 ///    "date": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point"
 ///    },
 ///    "from_key": {
@@ -9989,7 +9982,7 @@ pub struct BlindReceipt {
     pub conf: StealthConfirmation,
     pub control_authority: Authority,
     pub data: StealthConfirmationMemoData,
-    pub date: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub date: ::graphene_rpc::GrapheneTimePointSec,
     pub from_key: ::std::string::String,
     pub from_label: ::std::string::String,
     pub memo: ::std::string::String,
@@ -11075,13 +11068,11 @@ impl<'de> ::serde::Deserialize<'de> for CallOrderUpdateOperationFundingAccount {
 ///      "x-cpp-type": "fc::uint128_t"
 ///    },
 ///    "coin_seconds_earned_last_update": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "start_claim": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "vesting_seconds": {
@@ -11099,8 +11090,8 @@ impl<'de> ::serde::Deserialize<'de> for CallOrderUpdateOperationFundingAccount {
 pub struct CddVestingPolicy {
     ///Unsigned 128-bit integer serialized as a decimal string.
     pub coin_seconds_earned: CddVestingPolicyCoinSecondsEarned,
-    pub coin_seconds_earned_last_update: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub start_claim: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub coin_seconds_earned_last_update: ::graphene_rpc::GrapheneTimePointSec,
+    pub start_claim: ::graphene_rpc::GrapheneTimePointSec,
     pub vesting_seconds: u32,
 }
 impl ::std::convert::From<&CddVestingPolicy> for CddVestingPolicy {
@@ -11210,8 +11201,7 @@ impl<'de> ::serde::Deserialize<'de> for CddVestingPolicyCoinSecondsEarned {
 ///  ],
 ///  "properties": {
 ///    "start_claim": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "vesting_seconds": {
@@ -11227,7 +11217,7 @@ impl<'de> ::serde::Deserialize<'de> for CddVestingPolicyCoinSecondsEarned {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CddVestingPolicyInitializer {
-    pub start_claim: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub start_claim: ::graphene_rpc::GrapheneTimePointSec,
     pub vesting_seconds: u32,
 }
 impl ::std::convert::From<&CddVestingPolicyInitializer> for CddVestingPolicyInitializer {
@@ -13848,8 +13838,7 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferAcceptOperationOfferId {
 ///      "x-cpp-type": "asset_id_type"
 ///    },
 ///    "auto_disable_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "balance": {
@@ -13901,7 +13890,7 @@ pub struct CreditOfferCreateOperation {
     pub acceptable_borrowers: ::std::collections::HashMap<::std::string::String, i64>,
     pub acceptable_collateral: ::std::collections::HashMap<::std::string::String, Price>,
     pub asset_type: CreditOfferCreateOperationAssetType,
-    pub auto_disable_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub auto_disable_time: ::graphene_rpc::GrapheneTimePointSec,
     pub balance: i64,
     pub enabled: bool,
     pub extensions: ExtensionsType,
@@ -14436,11 +14425,14 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferDeleteOperationOwnerAccount {
 ///      "x-cpp-type": "optional<flat_map<asset_id_type, price>>"
 ///    },
 ///    "auto_disable_time": {
-///      "type": [
-///        "string",
-///        "null"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/GrapheneTimePointSec"
+///        },
+///        {
+///          "type": "null"
+///        }
 ///      ],
-///      "format": "date-time",
 ///      "x-cpp-type": "optional<time_point_sec>"
 ///    },
 ///    "delta_amount": {
@@ -14518,9 +14510,7 @@ pub struct CreditOfferUpdateOperation {
     pub acceptable_collateral: ::std::option::Option<
         ::std::collections::HashMap<::std::string::String, Price>,
     >,
-    pub auto_disable_time: ::std::option::Option<
-        ::chrono::DateTime<::chrono::offset::Utc>,
-    >,
+    pub auto_disable_time: ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
     pub delta_amount: ::std::option::Option<Asset>,
     pub enabled: ::std::option::Option<bool>,
     pub extensions: ExtensionsType,
@@ -14807,13 +14797,11 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferUpdateOperationOwnerAccount {
 ///      "x-cpp-type": "vector<restriction>"
 ///    },
 ///    "valid_from": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "valid_to": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    }
 ///  },
@@ -14831,8 +14819,8 @@ pub struct CustomAuthorityCreateOperation {
     ///FC varint.
     pub operation_type: u64,
     pub restrictions: ::std::vec::Vec<Restriction>,
-    pub valid_from: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub valid_to: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub valid_from: ::graphene_rpc::GrapheneTimePointSec,
+    pub valid_to: ::graphene_rpc::GrapheneTimePointSec,
 }
 impl ::std::convert::From<&CustomAuthorityCreateOperation>
 for CustomAuthorityCreateOperation {
@@ -15351,19 +15339,25 @@ impl CustomAuthorityOptionsType {
 ///      "x-cpp-type": "optional<bool>"
 ///    },
 ///    "new_valid_from": {
-///      "type": [
-///        "string",
-///        "null"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/GrapheneTimePointSec"
+///        },
+///        {
+///          "type": "null"
+///        }
 ///      ],
-///      "format": "date-time",
 ///      "x-cpp-type": "optional<time_point_sec>"
 ///    },
 ///    "new_valid_to": {
-///      "type": [
-///        "string",
-///        "null"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/GrapheneTimePointSec"
+///        },
+///        {
+///          "type": "null"
+///        }
 ///      ],
-///      "format": "date-time",
 ///      "x-cpp-type": "optional<time_point_sec>"
 ///    },
 ///    "restrictions_to_add": {
@@ -15396,8 +15390,8 @@ pub struct CustomAuthorityUpdateOperation {
     pub fee: Asset,
     pub new_auth: ::std::option::Option<Authority>,
     pub new_enabled: ::std::option::Option<bool>,
-    pub new_valid_from: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub new_valid_to: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub new_valid_from: ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
+    pub new_valid_to: ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
     pub restrictions_to_add: ::std::vec::Vec<Restriction>,
     pub restrictions_to_remove: Vec<u16>,
 }
@@ -16043,8 +16037,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "last_budget_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "last_irreversible_block_num": {
@@ -16054,13 +16047,11 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "last_vote_tally_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "next_maintenance_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "recent_slots_filled": {
@@ -16076,8 +16067,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "total_inactive": {
@@ -16108,14 +16098,14 @@ pub struct DynamicGlobalPropertyObject {
     pub dynamic_flags: u32,
     pub head_block_id: BlockIdType,
     pub head_block_number: u32,
-    pub last_budget_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub last_budget_time: ::graphene_rpc::GrapheneTimePointSec,
     pub last_irreversible_block_num: u32,
-    pub last_vote_tally_time: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub next_maintenance_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub last_vote_tally_time: ::graphene_rpc::GrapheneTimePointSec,
+    pub next_maintenance_time: ::graphene_rpc::GrapheneTimePointSec,
     ///Unsigned 128-bit integer serialized as a decimal string.
     pub recent_slots_filled: DynamicGlobalPropertyObjectRecentSlotsFilled,
     pub recently_missed_count: u32,
-    pub time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub time: ::graphene_rpc::GrapheneTimePointSec,
     pub total_inactive: i64,
     pub total_pob: i64,
     pub witness_budget: i64,
@@ -17017,8 +17007,7 @@ impl<'de> ::serde::Deserialize<'de> for ExtendableOperationResultDtlUpdatedObjec
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "creation_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "dynamic_asset_data_id": {
@@ -17079,7 +17068,7 @@ pub struct ExtendedAssetObject {
     pub bitasset_data_id: ::std::option::Option<ExtendedAssetObjectBitassetDataId>,
     pub buyback_account: ::std::option::Option<ExtendedAssetObjectBuybackAccount>,
     pub creation_block_num: u32,
-    pub creation_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub creation_time: ::graphene_rpc::GrapheneTimePointSec,
     pub dynamic_asset_data_id: ExtendedAssetObjectDynamicAssetDataId,
     pub for_liquidity_pool: ::std::option::Option<ExtendedAssetObjectForLiquidityPool>,
     pub issuer: ExtendedAssetObjectIssuer,
@@ -18145,8 +18134,7 @@ impl<'de> ::serde::Deserialize<'de> for FillOrderOperationOrderId {
 ///      "x-cpp-type": "account_id_type"
 ///    },
 ///    "settlement_date": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    }
 ///  },
@@ -18158,7 +18146,7 @@ impl<'de> ::serde::Deserialize<'de> for FillOrderOperationOrderId {
 pub struct ForceSettlementObject {
     pub balance: Asset,
     pub owner: ForceSettlementObjectOwner,
-    pub settlement_date: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub settlement_date: ::graphene_rpc::GrapheneTimePointSec,
 }
 impl ::std::convert::From<&ForceSettlementObject> for ForceSettlementObject {
     fn from(value: &ForceSettlementObject) -> Self {
@@ -20097,8 +20085,7 @@ impl HtlcObjectConditionInfoHashLockInfo {
 ///  ],
 ///  "properties": {
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    }
 ///  },
@@ -20108,7 +20095,7 @@ impl HtlcObjectConditionInfoHashLockInfo {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct HtlcObjectConditionInfoTimeLockInfo {
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
 }
 impl ::std::convert::From<&HtlcObjectConditionInfoTimeLockInfo>
 for HtlcObjectConditionInfoTimeLockInfo {
@@ -22077,8 +22064,7 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderCancelOperationOrder {
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "extensions": {
@@ -22110,7 +22096,7 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderCancelOperationOrder {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LimitOrderCreateOperation {
     pub amount_to_sell: Asset,
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     pub extensions: LimitOrderCreateOperationExtensionsType,
     pub fee: Asset,
     pub fill_or_kill: bool,
@@ -22358,8 +22344,7 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderCreateOperationSeller {
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "filled_amount": {
@@ -22410,7 +22395,7 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderCreateOperationSeller {
 pub struct LimitOrderObject {
     pub deferred_fee: i64,
     pub deferred_paid_fee: Asset,
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     ///Unsigned 128-bit integer serialized as a decimal string.
     pub filled_amount: LimitOrderObjectFilledAmount,
     pub for_sale: i64,
@@ -22713,11 +22698,14 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderObjectTakeProfitOrderId {
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "new_expiration": {
-///      "type": [
-///        "string",
-///        "null"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/GrapheneTimePointSec"
+///        },
+///        {
+///          "type": "null"
+///        }
 ///      ],
-///      "format": "date-time",
 ///      "x-cpp-type": "optional<time_point_sec>"
 ///    },
 ///    "new_price": {
@@ -22761,7 +22749,7 @@ pub struct LimitOrderUpdateOperation {
     pub delta_amount_to_sell: ::std::option::Option<Asset>,
     pub extensions: ExtensionsType,
     pub fee: Asset,
-    pub new_expiration: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub new_expiration: ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
     pub new_price: ::std::option::Option<Price>,
     pub on_fill: ::std::option::Option<::std::vec::Vec<LimitOrderAutoAction>>,
     pub order: LimitOrderUpdateOperationOrder,
@@ -22997,8 +22985,7 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderUpdateOperationSeller {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "begin_timestamp": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "vesting_cliff_seconds": {
@@ -23021,7 +23008,7 @@ impl<'de> ::serde::Deserialize<'de> for LimitOrderUpdateOperationSeller {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LinearVestingPolicy {
     pub begin_balance: i64,
-    pub begin_timestamp: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub begin_timestamp: ::graphene_rpc::GrapheneTimePointSec,
     pub vesting_cliff_seconds: u32,
     pub vesting_duration_seconds: u32,
 }
@@ -23049,8 +23036,7 @@ impl LinearVestingPolicy {
 ///  ],
 ///  "properties": {
 ///    "begin_timestamp": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "vesting_cliff_seconds": {
@@ -23072,7 +23058,7 @@ impl LinearVestingPolicy {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct LinearVestingPolicyInitializer {
-    pub begin_timestamp: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub begin_timestamp: ::graphene_rpc::GrapheneTimePointSec,
     pub vesting_cliff_seconds: u32,
     pub vesting_duration_seconds: u32,
 }
@@ -24910,8 +24896,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolWithdrawOperationPool {
 ///      "x-cpp-type": "asset_id_type"
 ///    },
 ///    "open": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "quote": {
@@ -24933,7 +24918,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolWithdrawOperationPool {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct MarketHistoryBucketKey {
     pub base: MarketHistoryBucketKeyBase,
-    pub open: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub open: ::graphene_rpc::GrapheneTimePointSec,
     pub quote: MarketHistoryBucketKeyQuote,
     pub seconds: u32,
 }
@@ -25464,8 +25449,7 @@ impl OperationDetailEx {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "block_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "is_virtual": {
@@ -25506,7 +25490,7 @@ impl OperationDetailEx {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct OperationHistoryObject {
     pub block_num: u32,
-    pub block_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub block_time: ::graphene_rpc::GrapheneTimePointSec,
     pub is_virtual: bool,
     pub op: Operation,
     pub op_in_trx: u16,
@@ -25546,8 +25530,7 @@ impl OperationHistoryObject {
 ///      "x-cpp-type": "string"
 ///    },
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "id": {
@@ -25580,7 +25563,7 @@ impl OperationHistoryObject {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct Order {
     pub base: ::std::string::String,
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     pub id: OrderId,
     pub owner_id: OrderOwnerId,
     pub owner_name: ::std::string::String,
@@ -26360,8 +26343,7 @@ impl PriceFeedWithIcr {
 ///  ],
 ///  "properties": {
 ///    "expiration_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "extensions": {
@@ -26400,7 +26382,7 @@ impl PriceFeedWithIcr {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ProposalCreateOperation {
-    pub expiration_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
     pub extensions: ExtensionsType,
     pub fee: Asset,
     pub fee_paying_account: ProposalCreateOperationFeePayingAccount,
@@ -26856,8 +26838,7 @@ impl<'de> ::serde::Deserialize<'de> for ProposalDeleteOperationProposal {
 ///      "x-cpp-type": "flat_set<account_id_type>"
 ///    },
 ///    "expiration_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "fail_reason": {
@@ -26892,11 +26873,14 @@ impl<'de> ::serde::Deserialize<'de> for ProposalDeleteOperationProposal {
 ///      "x-cpp-type": "flat_set<account_id_type>"
 ///    },
 ///    "review_period_time": {
-///      "type": [
-///        "string",
-///        "null"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/GrapheneTimePointSec"
+///        },
+///        {
+///          "type": "null"
+///        }
 ///      ],
-///      "format": "date-time",
 ///      "x-cpp-type": "optional<time_point_sec>"
 ///    }
 ///  },
@@ -26909,15 +26893,13 @@ pub struct ProposalObject {
     pub available_active_approvals: Vec<ProposalObjectAvailableActiveApprovalsItem>,
     pub available_key_approvals: Vec<::std::string::String>,
     pub available_owner_approvals: Vec<ProposalObjectAvailableOwnerApprovalsItem>,
-    pub expiration_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
     pub fail_reason: ::std::string::String,
     pub proposed_transaction: Transaction,
     pub proposer: ProposalObjectProposer,
     pub required_active_approvals: Vec<ProposalObjectRequiredActiveApprovalsItem>,
     pub required_owner_approvals: Vec<ProposalObjectRequiredOwnerApprovalsItem>,
-    pub review_period_time: ::std::option::Option<
-        ::chrono::DateTime<::chrono::offset::Utc>,
-    >,
+    pub review_period_time: ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
 }
 impl ::std::convert::From<&ProposalObject> for ProposalObject {
     fn from(value: &ProposalObject) -> Self {
@@ -29666,8 +29648,7 @@ impl SignedMessageMeta {
 ///  ],
 ///  "properties": {
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "extensions": {
@@ -29707,7 +29688,7 @@ impl SignedMessageMeta {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SignedTransaction {
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     pub extensions: ExtensionsType,
     pub operations: ::std::vec::Vec<Operation>,
     pub ref_block_num: u16,
@@ -30557,8 +30538,7 @@ impl<'de> ::serde::Deserialize<'de> for TopHoldersSpecialAuthorityAsset {
 ///  ],
 ///  "properties": {
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "extensions": {
@@ -30591,7 +30571,7 @@ impl<'de> ::serde::Deserialize<'de> for TopHoldersSpecialAuthorityAsset {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct Transaction {
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
     pub extensions: ExtensionsType,
     pub operations: ::std::vec::Vec<Operation>,
     pub ref_block_num: u16,
@@ -31795,8 +31775,7 @@ impl<'de> ::serde::Deserialize<'de> for VestingBalanceObjectOwner {
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "allowed_withdraw_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "balance": {
@@ -31824,7 +31803,7 @@ impl<'de> ::serde::Deserialize<'de> for VestingBalanceObjectOwner {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct VestingBalanceObjectWithInfo {
     pub allowed_withdraw: Asset,
-    pub allowed_withdraw_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub allowed_withdraw_time: ::graphene_rpc::GrapheneTimePointSec,
     pub balance: Asset,
     pub balance_type: VestingBalanceType,
     pub owner: VestingBalanceObjectWithInfoOwner,
@@ -32837,8 +32816,7 @@ for WithdrawPermissionClaimOperationWithdrawToAccount {
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "period_start_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "periods_until_expiration": {
@@ -32871,7 +32849,7 @@ for WithdrawPermissionClaimOperationWithdrawToAccount {
 pub struct WithdrawPermissionCreateOperation {
     pub authorized_account: WithdrawPermissionCreateOperationAuthorizedAccount,
     pub fee: Asset,
-    pub period_start_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub period_start_time: ::graphene_rpc::GrapheneTimePointSec,
     pub periods_until_expiration: u32,
     pub withdraw_from_account: WithdrawPermissionCreateOperationWithdrawFromAccount,
     pub withdrawal_limit: Asset,
@@ -33476,13 +33454,11 @@ for WithdrawPermissionDeleteOperationWithdrawalPermission {
 ///      "x-cpp-type": "share_type"
 ///    },
 ///    "expiration": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "period_start_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "withdraw_from_account": {
@@ -33509,8 +33485,8 @@ for WithdrawPermissionDeleteOperationWithdrawalPermission {
 pub struct WithdrawPermissionObject {
     pub authorized_account: WithdrawPermissionObjectAuthorizedAccount,
     pub claimed_this_period: i64,
-    pub expiration: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub period_start_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
+    pub period_start_time: ::graphene_rpc::GrapheneTimePointSec,
     pub withdraw_from_account: WithdrawPermissionObjectWithdrawFromAccount,
     pub withdrawal_limit: Asset,
     pub withdrawal_period_sec: u32,
@@ -33721,8 +33697,7 @@ impl<'de> ::serde::Deserialize<'de> for WithdrawPermissionObjectWithdrawFromAcco
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "period_start_time": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "periods_until_expiration": {
@@ -33760,7 +33735,7 @@ impl<'de> ::serde::Deserialize<'de> for WithdrawPermissionObjectWithdrawFromAcco
 pub struct WithdrawPermissionUpdateOperation {
     pub authorized_account: WithdrawPermissionUpdateOperationAuthorizedAccount,
     pub fee: Asset,
-    pub period_start_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub period_start_time: ::graphene_rpc::GrapheneTimePointSec,
     pub periods_until_expiration: u32,
     pub permission_to_update: WithdrawPermissionUpdateOperationPermissionToUpdate,
     pub withdraw_from_account: WithdrawPermissionUpdateOperationWithdrawFromAccount,
@@ -34813,13 +34788,11 @@ impl<'de> ::serde::Deserialize<'de> for WitnessUpdateOperationWitnessAccount {
 ///      "x-cpp-type": "string"
 ///    },
 ///    "work_begin_date": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    },
 ///    "work_end_date": {
-///      "type": "string",
-///      "format": "date-time",
+///      "$ref": "#/$defs/GrapheneTimePointSec",
 ///      "x-cpp-type": "time_point_sec"
 ///    }
 ///  },
@@ -34835,8 +34808,8 @@ pub struct WorkerCreateOperation {
     pub name: ::std::string::String,
     pub owner: WorkerCreateOperationOwner,
     pub url: ::std::string::String,
-    pub work_begin_date: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub work_end_date: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub work_begin_date: ::graphene_rpc::GrapheneTimePointSec,
+    pub work_end_date: ::graphene_rpc::GrapheneTimePointSec,
 }
 impl ::std::convert::From<&WorkerCreateOperation> for WorkerCreateOperation {
     fn from(value: &WorkerCreateOperation) -> Self {
@@ -35906,7 +35879,7 @@ pub mod builder {
         >,
         creation_block_num: ::std::result::Result<u32, ::std::string::String>,
         creation_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         lifetime_referrer: ::std::result::Result<
@@ -35918,7 +35891,7 @@ pub mod builder {
             ::std::string::String,
         >,
         membership_expiration_date: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
@@ -36114,7 +36087,7 @@ pub mod builder {
         }
         pub fn creation_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.creation_time = value
@@ -36155,7 +36128,7 @@ pub mod builder {
         }
         pub fn membership_expiration_date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.membership_expiration_date = value
@@ -36540,7 +36513,7 @@ pub mod builder {
         has_cashback_vb: ::std::result::Result<bool, ::std::string::String>,
         is_voting: ::std::result::Result<bool, ::std::string::String>,
         last_vote_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         lifetime_fees_paid: ::std::result::Result<i64, ::std::string::String>,
@@ -36564,7 +36537,7 @@ pub mod builder {
         total_pob_value: ::std::result::Result<i64, ::std::string::String>,
         total_pol_value: ::std::result::Result<i64, ::std::string::String>,
         vote_tally_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         vp_active: ::std::result::Result<u64, ::std::string::String>,
@@ -36660,7 +36633,7 @@ pub mod builder {
         }
         pub fn last_vote_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.last_vote_time = value
@@ -36846,7 +36819,7 @@ pub mod builder {
         }
         pub fn vote_tally_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.vote_tally_time = value
@@ -38322,7 +38295,7 @@ pub mod builder {
             ::std::string::String,
         >,
         current_feed_publication_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         current_initial_collateralization: ::std::result::Result<
@@ -38439,7 +38412,7 @@ pub mod builder {
         }
         pub fn current_feed_publication_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.current_feed_publication_time = value
@@ -42496,7 +42469,7 @@ pub mod builder {
             ::std::string::String,
         >,
         date: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         from_key: ::std::result::Result<::std::string::String, ::std::string::String>,
@@ -42574,7 +42547,7 @@ pub mod builder {
         }
         pub fn date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.date = value
@@ -43509,11 +43482,11 @@ pub mod builder {
             ::std::string::String,
         >,
         coin_seconds_earned_last_update: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         start_claim: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         vesting_seconds: ::std::result::Result<u32, ::std::string::String>,
@@ -43549,7 +43522,7 @@ pub mod builder {
         }
         pub fn coin_seconds_earned_last_update<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.coin_seconds_earned_last_update = value
@@ -43564,7 +43537,7 @@ pub mod builder {
         }
         pub fn start_claim<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.start_claim = value
@@ -43615,7 +43588,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct CddVestingPolicyInitializer {
         start_claim: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         vesting_seconds: ::std::result::Result<u32, ::std::string::String>,
@@ -43631,7 +43604,7 @@ pub mod builder {
     impl CddVestingPolicyInitializer {
         pub fn start_claim<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.start_claim = value
@@ -45856,7 +45829,7 @@ pub mod builder {
             ::std::string::String,
         >,
         auto_disable_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         balance: ::std::result::Result<i64, ::std::string::String>,
@@ -45947,7 +45920,7 @@ pub mod builder {
         }
         pub fn auto_disable_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.auto_disable_time = value
@@ -46304,7 +46277,7 @@ pub mod builder {
             ::std::string::String,
         >,
         auto_disable_time: ::std::result::Result<
-            ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+            ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             ::std::string::String,
         >,
         delta_amount: ::std::result::Result<
@@ -46407,7 +46380,7 @@ pub mod builder {
         pub fn auto_disable_time<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+                ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             >,
             T::Error: ::std::fmt::Display,
         {
@@ -46644,11 +46617,11 @@ pub mod builder {
             ::std::string::String,
         >,
         valid_from: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         valid_to: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
     }
@@ -46750,7 +46723,7 @@ pub mod builder {
         }
         pub fn valid_from<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.valid_from = value
@@ -46762,7 +46735,7 @@ pub mod builder {
         }
         pub fn valid_to<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.valid_to = value
@@ -47168,11 +47141,11 @@ pub mod builder {
             ::std::string::String,
         >,
         new_valid_from: ::std::result::Result<
-            ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+            ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             ::std::string::String,
         >,
         new_valid_to: ::std::result::Result<
-            ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+            ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             ::std::string::String,
         >,
         restrictions_to_add: ::std::result::Result<
@@ -47281,7 +47254,7 @@ pub mod builder {
         pub fn new_valid_from<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+                ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             >,
             T::Error: ::std::fmt::Display,
         {
@@ -47295,7 +47268,7 @@ pub mod builder {
         pub fn new_valid_to<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+                ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             >,
             T::Error: ::std::fmt::Display,
         {
@@ -47612,16 +47585,16 @@ pub mod builder {
         head_block_id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
         head_block_number: ::std::result::Result<u32, ::std::string::String>,
         last_budget_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         last_irreversible_block_num: ::std::result::Result<u32, ::std::string::String>,
         last_vote_tally_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         next_maintenance_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         recent_slots_filled: ::std::result::Result<
@@ -47630,7 +47603,7 @@ pub mod builder {
         >,
         recently_missed_count: ::std::result::Result<u32, ::std::string::String>,
         time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         total_inactive: ::std::result::Result<i64, ::std::string::String>,
@@ -47757,7 +47730,7 @@ pub mod builder {
         }
         pub fn last_budget_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.last_budget_time = value
@@ -47786,7 +47759,7 @@ pub mod builder {
         }
         pub fn last_vote_tally_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.last_vote_tally_time = value
@@ -47800,7 +47773,7 @@ pub mod builder {
         }
         pub fn next_maintenance_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.next_maintenance_time = value
@@ -47846,7 +47819,7 @@ pub mod builder {
         }
         pub fn time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.time = value
@@ -48237,7 +48210,7 @@ pub mod builder {
         >,
         creation_block_num: ::std::result::Result<u32, ::std::string::String>,
         creation_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         dynamic_asset_data_id: ::std::result::Result<
@@ -48343,7 +48316,7 @@ pub mod builder {
         }
         pub fn creation_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.creation_time = value
@@ -48805,7 +48778,7 @@ pub mod builder {
             ::std::string::String,
         >,
         settlement_date: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
     }
@@ -48845,7 +48818,7 @@ pub mod builder {
         }
         pub fn settlement_date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.settlement_date = value
@@ -50226,7 +50199,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct HtlcObjectConditionInfoTimeLockInfo {
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
     }
@@ -50240,7 +50213,7 @@ pub mod builder {
     impl HtlcObjectConditionInfoTimeLockInfo {
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -51093,7 +51066,7 @@ pub mod builder {
     pub struct LimitOrderCreateOperation {
         amount_to_sell: ::std::result::Result<super::Asset, ::std::string::String>,
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         extensions: ::std::result::Result<
@@ -51136,7 +51109,7 @@ pub mod builder {
         }
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -51324,7 +51297,7 @@ pub mod builder {
         deferred_fee: ::std::result::Result<i64, ::std::string::String>,
         deferred_paid_fee: ::std::result::Result<super::Asset, ::std::string::String>,
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         filled_amount: ::std::result::Result<
@@ -51398,7 +51371,7 @@ pub mod builder {
         }
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -51541,7 +51514,7 @@ pub mod builder {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
         new_expiration: ::std::result::Result<
-            ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+            ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             ::std::string::String,
         >,
         new_price: ::std::result::Result<
@@ -51617,7 +51590,7 @@ pub mod builder {
         pub fn new_expiration<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+                ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             >,
             T::Error: ::std::fmt::Display,
         {
@@ -51754,7 +51727,7 @@ pub mod builder {
     pub struct LinearVestingPolicy {
         begin_balance: ::std::result::Result<i64, ::std::string::String>,
         begin_timestamp: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         vesting_cliff_seconds: ::std::result::Result<u32, ::std::string::String>,
@@ -51791,7 +51764,7 @@ pub mod builder {
         }
         pub fn begin_timestamp<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.begin_timestamp = value
@@ -51858,7 +51831,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct LinearVestingPolicyInitializer {
         begin_timestamp: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         vesting_cliff_seconds: ::std::result::Result<u32, ::std::string::String>,
@@ -51882,7 +51855,7 @@ pub mod builder {
     impl LinearVestingPolicyInitializer {
         pub fn begin_timestamp<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.begin_timestamp = value
@@ -52953,7 +52926,7 @@ pub mod builder {
             ::std::string::String,
         >,
         open: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         quote: ::std::result::Result<
@@ -52985,7 +52958,7 @@ pub mod builder {
         }
         pub fn open<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.open = value
@@ -53559,7 +53532,7 @@ pub mod builder {
     pub struct OperationHistoryObject {
         block_num: ::std::result::Result<u32, ::std::string::String>,
         block_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         is_virtual: ::std::result::Result<bool, ::std::string::String>,
@@ -53598,7 +53571,7 @@ pub mod builder {
         }
         pub fn block_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.block_time = value
@@ -53715,7 +53688,7 @@ pub mod builder {
     pub struct Order {
         base: ::std::result::Result<::std::string::String, ::std::string::String>,
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         id: ::std::result::Result<super::OrderId, ::std::string::String>,
@@ -53750,7 +53723,7 @@ pub mod builder {
         }
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -54436,7 +54409,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct ProposalCreateOperation {
         expiration_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
@@ -54475,7 +54448,7 @@ pub mod builder {
     impl ProposalCreateOperation {
         pub fn expiration_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration_time = value
@@ -54810,7 +54783,7 @@ pub mod builder {
             ::std::string::String,
         >,
         expiration_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         fail_reason: ::std::result::Result<::std::string::String, ::std::string::String>,
@@ -54831,7 +54804,7 @@ pub mod builder {
             ::std::string::String,
         >,
         review_period_time: ::std::result::Result<
-            ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+            ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             ::std::string::String,
         >,
     }
@@ -54919,7 +54892,7 @@ pub mod builder {
         }
         pub fn expiration_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration_time = value
@@ -55004,7 +54977,7 @@ pub mod builder {
         pub fn review_period_time<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+                ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
             >,
             T::Error: ::std::fmt::Display,
         {
@@ -56490,7 +56463,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct SignedTransaction {
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
@@ -56522,7 +56495,7 @@ pub mod builder {
     impl SignedTransaction {
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -57204,7 +57177,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct Transaction {
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
@@ -57231,7 +57204,7 @@ pub mod builder {
     impl Transaction {
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -58075,7 +58048,7 @@ pub mod builder {
     pub struct VestingBalanceObjectWithInfo {
         allowed_withdraw: ::std::result::Result<super::Asset, ::std::string::String>,
         allowed_withdraw_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         balance: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -58122,7 +58095,7 @@ pub mod builder {
         }
         pub fn allowed_withdraw_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.allowed_withdraw_time = value
@@ -58657,7 +58630,7 @@ pub mod builder {
         >,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
         period_start_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         periods_until_expiration: ::std::result::Result<u32, ::std::string::String>,
@@ -58722,7 +58695,7 @@ pub mod builder {
         }
         pub fn period_start_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.period_start_time = value
@@ -59030,11 +59003,11 @@ pub mod builder {
         >,
         claimed_this_period: ::std::result::Result<i64, ::std::string::String>,
         expiration: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         period_start_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         withdraw_from_account: ::std::result::Result<
@@ -59100,7 +59073,7 @@ pub mod builder {
         }
         pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.expiration = value
@@ -59112,7 +59085,7 @@ pub mod builder {
         }
         pub fn period_start_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.period_start_time = value
@@ -59210,7 +59183,7 @@ pub mod builder {
         >,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
         period_start_time: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         periods_until_expiration: ::std::result::Result<u32, ::std::string::String>,
@@ -59282,7 +59255,7 @@ pub mod builder {
         }
         pub fn period_start_time<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.period_start_time = value
@@ -59929,11 +59902,11 @@ pub mod builder {
         >,
         url: ::std::result::Result<::std::string::String, ::std::string::String>,
         work_begin_date: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         work_end_date: ::std::result::Result<
-            ::chrono::DateTime<::chrono::offset::Utc>,
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
     }
@@ -60022,7 +59995,7 @@ pub mod builder {
         }
         pub fn work_begin_date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.work_begin_date = value
@@ -60034,7 +60007,7 @@ pub mod builder {
         }
         pub fn work_end_date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
             self.work_end_date = value

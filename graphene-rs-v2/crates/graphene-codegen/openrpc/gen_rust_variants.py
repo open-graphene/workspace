@@ -104,6 +104,8 @@ def payload_rust_type(payload: dict) -> str:
     """Translate one payload schema fragment into a Rust type expression."""
     if "$ref" in payload:
         target = payload["$ref"].split("/")[-1]
+        if target == "GrapheneTimePointSec":
+            return "::graphene_rpc::GrapheneTimePointSec"
         return snake_to_pascal(target)
 
     ty = payload.get("type")
@@ -118,7 +120,7 @@ def payload_rust_type(payload: dict) -> str:
         return "bool"
     if ty == "string":
         if payload.get("format") == "date-time":
-            return "::chrono::DateTime<::chrono::Utc>"
+            return "::graphene_rpc::GrapheneTimePointSec"
         return "::std::string::String"
     if ty == "integer":
         return _INT_FORMAT_MAP.get(payload.get("format", ""), "i64")

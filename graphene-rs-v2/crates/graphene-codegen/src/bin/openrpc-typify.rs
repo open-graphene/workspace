@@ -68,7 +68,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .map_err(|error| format!("failed to parse schema {}: {error}", args.schema.display()))?;
 
     let mut settings = typify::TypeSpaceSettings::default();
-    settings.with_struct_builder(true);
+    settings
+        .with_struct_builder(true)
+        .with_crate("graphene-rpc", typify::CrateVers::Any, None);
     let mut typespace = typify::TypeSpace::new(&settings);
     typespace.add_root_schema(parsed).map_err(|error| {
         format!(
