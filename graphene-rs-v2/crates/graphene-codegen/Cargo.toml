@@ -1,8 +1,15 @@
 [package]
-name = "openrpc-typify"
+name = "graphene-codegen"
 edition.workspace = true
 version.workspace = true
 publish.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "openrpc-typify"
+path = "src/bin/openrpc-typify.rs"
 
 [dependencies]
 prettyplease.workspace = true

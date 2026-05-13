@@ -69,6 +69,14 @@ def run(command: list[str], dry_run: bool) -> None:
     subprocess.run(command, check=True)
 
 
+def find_workspace_root(start: Path) -> Path:
+    for directory in [start, *start.parents]:
+        manifest = directory / "Cargo.toml"
+        if manifest.exists() and "[workspace]" in manifest.read_text():
+            return directory
+    raise ConfigError(f"could not find Cargo workspace root above {start}")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True, type=Path, help="pipeline TOML config")
@@ -195,7 +203,7 @@ def main() -> int:
     if args.skip_typify:
         return 0
 
-    workspace_root = SCRIPT_DIR.parents[1]
+    workspace_root = find_workspace_root(SCRIPT_DIR)
     typify_command = [
         "cargo",
         "run",
@@ -203,6 +211,8 @@ def main() -> int:
         "--manifest-path",
         str(workspace_root / "Cargo.toml"),
         "-p",
+        "graphene-codegen",
+        "--bin",
         "openrpc-typify",
         "--",
         "--schema",

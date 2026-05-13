@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "crates/graphene-chain-swaplock",
-    "crates/openrpc-typify",
+    "crates/graphene-codegen",
 ]
 resolver = "2"
 
