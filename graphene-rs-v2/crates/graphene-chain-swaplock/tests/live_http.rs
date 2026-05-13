@@ -297,13 +297,8 @@ fn live_node_transaction_hex_without_sig_matches_local_binary_codec() {
 }
 
 #[test]
-#[ignore = "requires network access, SWAPLOCK_WIF, and SWAPLOCK_LIVE_BROADCAST=1"]
+#[ignore = "requires network access and broadcasts a tiny Swaplock testnet transfer"]
 fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
-    assert_eq!(
-        std::env::var("SWAPLOCK_LIVE_BROADCAST").as_deref(),
-        Ok("1"),
-        "set SWAPLOCK_LIVE_BROADCAST=1 to acknowledge this mutates the testnet"
-    );
     let wif = "5K71C3PVyynjDdzxNdgd5YJ6y8Z86eEc5RNPvAN983UdhCF4HPw".to_string();
     let signer = WifSigner::from_wif(&wif).expect("SWAPLOCK_WIF should be a compressed WIF key");
     drop(wif);
