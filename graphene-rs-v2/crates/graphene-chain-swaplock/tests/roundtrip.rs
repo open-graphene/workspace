@@ -26,5 +26,7 @@ fn transfer_operation_round_trips_through_operation_envelope() {
 fn unknown_operation_index_is_a_clean_error() {
     let raw = json!([999, {}]);
     let error = serde_json::from_value::<Operation>(raw).unwrap_err();
-    assert!(error.to_string().contains("unknown Operation variant index"));
+    assert!(error
+        .to_string()
+        .contains("unknown Operation variant index"));
 }

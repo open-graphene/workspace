@@ -17538,19 +17538,9 @@ impl ::std::ops::Deref for ExtensionsType {
         &self.0
     }
 }
-impl ::std::convert::From<ExtensionsType> for Vec<FutureExtensions> {
-    fn from(value: ExtensionsType) -> Self {
-        value.0
-    }
-}
 impl ::std::convert::From<&ExtensionsType> for ExtensionsType {
     fn from(value: &ExtensionsType) -> Self {
         value.clone()
-    }
-}
-impl ::std::convert::From<Vec<FutureExtensions>> for ExtensionsType {
-    fn from(value: Vec<FutureExtensions>) -> Self {
-        Self(value)
     }
 }
 ///`FbaDistributeOperation`
@@ -18521,57 +18511,6 @@ impl<'de> ::serde::Deserialize<'de> for FullAccountAssetsItem {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
-    }
-}
-///Discriminated union — JSON form is [index, value]. 1 alternatives.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Discriminated union — JSON form is [index, value]. 1 alternatives.",
-///  "oneOf": [
-///    {
-///      "type": "array",
-///      "maxItems": 2,
-///      "minItems": 2,
-///      "prefixItems": [
-///        {
-///          "const": 0,
-///          "description": "void_t"
-///        },
-///        {
-///          "$ref": "#/$defs/void_t"
-///        }
-///      ]
-///    }
-///  ],
-///  "x-cpp-type": "graphene::protocol::future_extensions"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct FutureExtensions(pub [::serde_json::Value; 2usize]);
-impl ::std::ops::Deref for FutureExtensions {
-    type Target = [::serde_json::Value; 2usize];
-    fn deref(&self) -> &[::serde_json::Value; 2usize] {
-        &self.0
-    }
-}
-impl ::std::convert::From<FutureExtensions> for [::serde_json::Value; 2usize] {
-    fn from(value: FutureExtensions) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&FutureExtensions> for FutureExtensions {
-    fn from(value: &FutureExtensions) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<[::serde_json::Value; 2usize]> for FutureExtensions {
-    fn from(value: [::serde_json::Value; 2usize]) -> Self {
-        Self(value)
     }
 }
 ///`GenericExchangeOperationResult`
@@ -21857,57 +21796,6 @@ for InstantVestingPolicyInitializer {
     fn from(
         value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Self {
-        Self(value)
-    }
-}
-///Discriminated union — JSON form is [index, value]. 1 alternatives.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Discriminated union — JSON form is [index, value]. 1 alternatives.",
-///  "oneOf": [
-///    {
-///      "type": "array",
-///      "maxItems": 2,
-///      "minItems": 2,
-///      "prefixItems": [
-///        {
-///          "const": 0,
-///          "description": "create_take_profit_order_action"
-///        },
-///        {
-///          "$ref": "#/$defs/create_take_profit_order_action"
-///        }
-///      ]
-///    }
-///  ],
-///  "x-cpp-type": "graphene::protocol::limit_order_auto_action"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct LimitOrderAutoAction(pub [::serde_json::Value; 2usize]);
-impl ::std::ops::Deref for LimitOrderAutoAction {
-    type Target = [::serde_json::Value; 2usize];
-    fn deref(&self) -> &[::serde_json::Value; 2usize] {
-        &self.0
-    }
-}
-impl ::std::convert::From<LimitOrderAutoAction> for [::serde_json::Value; 2usize] {
-    fn from(value: LimitOrderAutoAction) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&LimitOrderAutoAction> for LimitOrderAutoAction {
-    fn from(value: &LimitOrderAutoAction) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<[::serde_json::Value; 2usize]> for LimitOrderAutoAction {
-    fn from(value: [::serde_json::Value; 2usize]) -> Self {
         Self(value)
     }
 }

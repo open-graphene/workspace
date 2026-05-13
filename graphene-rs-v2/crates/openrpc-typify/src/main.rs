@@ -70,9 +70,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut settings = typify::TypeSpaceSettings::default();
     settings.with_struct_builder(true);
     let mut typespace = typify::TypeSpace::new(&settings);
-    typespace
-        .add_root_schema(parsed)
-        .map_err(|error| format!("typify failed to ingest schema {}: {error}", args.schema.display()))?;
+    typespace.add_root_schema(parsed).map_err(|error| {
+        format!(
+            "typify failed to ingest schema {}: {error}",
+            args.schema.display()
+        )
+    })?;
 
     let tokens = typespace.to_stream();
     let formatted = match syn::parse2::<syn::File>(tokens.clone()) {
@@ -149,20 +152,47 @@ fn keep_item(item: &syn::Item, names: &HashSet<String>) -> bool {
         syn::Item::Enum(item) => !names.contains(&item.ident.to_string()),
         syn::Item::Struct(item) => !names.contains(&item.ident.to_string()),
         syn::Item::Impl(item) => {
-            if let syn::Type::Path(path) = &*item.self_ty {
-                if let Some(segment) = path.path.segments.last() {
-                    return !names.contains(&segment.ident.to_string());
-                }
-            }
-            true
+            !(type_mentions_name(&item.self_ty, names)
+                || item
+                    .trait_
+                    .as_ref()
+                    .is_some_and(|(_bang, path, _for)| path_mentions_name(path, names)))
         }
         _ => true,
     }
 }
 
+fn type_mentions_name(ty: &syn::Type, names: &HashSet<String>) -> bool {
+    match ty {
+        syn::Type::Path(path) => path_mentions_name(&path.path, names),
+        syn::Type::Reference(reference) => type_mentions_name(&reference.elem, names),
+        syn::Type::Array(array) => type_mentions_name(&array.elem, names),
+        syn::Type::Tuple(tuple) => tuple.elems.iter().any(|ty| type_mentions_name(ty, names)),
+        syn::Type::Paren(paren) => type_mentions_name(&paren.elem, names),
+        syn::Type::Group(group) => type_mentions_name(&group.elem, names),
+        _ => false,
+    }
+}
+
+fn path_mentions_name(path: &syn::Path, names: &HashSet<String>) -> bool {
+    path.segments.iter().any(|segment| {
+        names.contains(&segment.ident.to_string())
+            || match &segment.arguments {
+                syn::PathArguments::AngleBracketed(arguments) => arguments.args.iter().any(|arg| {
+                    matches!(arg, syn::GenericArgument::Type(ty) if type_mentions_name(ty, names))
+                }),
+                syn::PathArguments::Parenthesized(arguments) => {
+                    arguments.inputs.iter().any(|ty| type_mentions_name(ty, names))
+                        || matches!(&arguments.output, syn::ReturnType::Type(_, ty) if type_mentions_name(ty, names))
+                }
+                syn::PathArguments::None => false,
+            }
+    })
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{Args, strip_named_items};
+    use super::{strip_named_items, Args};
     use std::collections::HashSet;
     use std::path::PathBuf;
 
@@ -201,6 +231,7 @@ mod tests {
             pub enum Operation { Variant }
             impl Operation { pub fn method(&self) {} }
             impl serde::Serialize for Operation { fn serialize<S>(&self, _: S) -> Result<S::Ok, S::Error> where S: serde::Serializer { todo!() } }
+            impl std::convert::From<Operation> for [serde_json::Value; 2] { fn from(value: Operation) -> Self { todo!() } }
             pub struct KeepMe;
         "#;
         let names = HashSet::from(["Operation".to_owned()]);

@@ -75,7 +75,7 @@ def variant_ident(alt_desc: str, used: set[str]) -> str:
 
 def is_variant_schema(schema: dict) -> bool:
     one_of = schema.get("oneOf")
-    if not isinstance(one_of, list) or len(one_of) < 2:
+    if not isinstance(one_of, list) or len(one_of) < 1:
         return False
     for alt in one_of:
         if not isinstance(alt, dict) or alt.get("type") != "array":

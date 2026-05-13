@@ -344,6 +344,35 @@ impl<'de> Deserialize<'de> for Operation {
     }
 }
 
+/// `graphene::protocol::future_extensions` — 1 alternatives.
+///
+/// Schema: `components.schemas.future_extensions`.
+#[derive(Clone, Debug)]
+pub enum FutureExtensions {
+    /// Wire index `0` — C++ `void_t`
+    VoidT(VoidT),
+}
+
+impl Serialize for FutureExtensions {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            FutureExtensions::VoidT(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for FutureExtensions {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(FutureExtensions::VoidT).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown FutureExtensions variant index: {}", other))),
+        }
+    }
+}
+
 /// `graphene::chain::vesting_policy` — 3 alternatives.
 ///
 /// Schema: `components.schemas.vesting_policy`.
@@ -755,6 +784,35 @@ impl<'de> Deserialize<'de> for HtlcHash {
             2 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoSha256).map_err(__D::Error::custom),
             3 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoHash160).map_err(__D::Error::custom),
             other => Err(__D::Error::custom(format!("unknown HtlcHash variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::limit_order_auto_action` — 1 alternatives.
+///
+/// Schema: `components.schemas.limit_order_auto_action`.
+#[derive(Clone, Debug)]
+pub enum LimitOrderAutoAction {
+    /// Wire index `0` — C++ `create_take_profit_order_action`
+    CreateTakeProfitOrderAction(CreateTakeProfitOrderAction),
+}
+
+impl Serialize for LimitOrderAutoAction {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            LimitOrderAutoAction::CreateTakeProfitOrderAction(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for LimitOrderAutoAction {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(LimitOrderAutoAction::CreateTakeProfitOrderAction).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown LimitOrderAutoAction variant index: {}", other))),
         }
     }
 }

@@ -1,7 +1,9 @@
 Operation
+FutureExtensions
 VestingPolicy
 FeeParameters
 HtlcHash
+LimitOrderAutoAction
 OperationResult
 SpecialAuthority
 RestrictionArgumentType
