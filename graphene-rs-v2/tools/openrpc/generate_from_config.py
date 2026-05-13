@@ -16,6 +16,7 @@ This script orchestrates the current POC stages:
 2. OpenRPC components.schemas -> typify-compatible JSON Schema
 3. OpenRPC static_variant schemas -> Rust variants.rs + variants.names
 4. typify-compatible JSON Schema + variants.names -> Rust types.rs
+5. OpenRPC methods -> Rust raw RPC params
 """
 
 from __future__ import annotations
@@ -121,6 +122,7 @@ def main() -> int:
     variants_rs = resolve_from(config_dir, require_str(rust, "variants_rs", "rust"))
     variants_names = resolve_from(config_dir, require_str(rust, "variants_names", "rust"))
     types_rs = resolve_from(config_dir, require_str(rust, "types_rs", "rust"))
+    rpc_rs = resolve_from(config_dir, require_str(rust, "rpc_rs", "rust"))
     types_preview = rust.get("types_preview")
     if types_preview is not None:
         if not isinstance(types_preview, str) or not types_preview:
@@ -172,6 +174,18 @@ def main() -> int:
             str(variants_rs),
             "--out-names",
             str(variants_names),
+            "--source-label",
+            str(spec_output),
+        ],
+        args.dry_run,
+    )
+    run(
+        [
+            str(SCRIPT_DIR / "gen_rust_rpc.py"),
+            "--spec",
+            str(spec_output),
+            "--out-rs",
+            str(rpc_rs),
             "--source-label",
             str(spec_output),
         ],
