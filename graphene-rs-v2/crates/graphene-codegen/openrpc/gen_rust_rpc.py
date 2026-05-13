@@ -129,10 +129,29 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
 
 
 def method_result_type(method: dict[str, Any]) -> str:
+    if method.get("name") == "get_required_fees":
+        return "Vec<RequiredFee>"
     if method.get("name") == "lookup_vote_ids":
         return "Vec<LookupVoteIdObject>"
     result = method.get("result") or {}
     return schema_rust_type(result.get("schema"))
+
+
+def emit_required_fee() -> list[str]:
+    return [
+        "/// Typed fee result returned by `get_required_fees`.",
+        "///",
+        "/// Normal operations return a single `asset` fee. Proposal-create operations",
+        "/// return an FC pair of the proposal fee and recursively nested proposed",
+        "/// operation fees: `[fee, [nested_fee, ...]]`.",
+        "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]",
+        "#[serde(untagged)]",
+        "pub enum RequiredFee {",
+        "    Asset(Asset),",
+        "    ProposalCreate((Asset, Vec<RequiredFee>)),",
+        "}",
+        "",
+    ]
 
 
 def emit_lookup_vote_id_object() -> list[str]:
@@ -178,6 +197,8 @@ def emit(spec: dict[str, Any], source_label: str) -> str:
     out.append("];")
     out.append("")
 
+    if "get_required_fees" in method_names:
+        out.extend(emit_required_fee())
     if "lookup_vote_ids" in method_names:
         out.extend(emit_lookup_vote_id_object())
 

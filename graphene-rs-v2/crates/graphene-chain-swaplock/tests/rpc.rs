@@ -1,6 +1,6 @@
 use graphene_chain_swaplock::{
-    GetBlockHeaderBatchParams, GetBlockParams, LookupVoteIdObject, LookupVoteIdsParams,
-    MaybeSignedBlockHeader, SignedBlock,
+    GetBlockHeaderBatchParams, GetBlockParams, GetRequiredFeesParams, LookupVoteIdObject,
+    LookupVoteIdsParams, MaybeSignedBlockHeader, Operation, RequiredFee, SignedBlock,
 };
 use graphene_rpc::{GrapheneTimePointSec, OpenRpcParams};
 use serde_json::json;
@@ -65,6 +65,64 @@ fn get_block_header_batch_decodes_fc_map_as_array_pairs() {
             .unwrap()
     );
     assert!(header.witness.starts_with("1.6."));
+}
+
+#[test]
+fn get_required_fees_decodes_assets_and_nested_proposal_fee_pairs() {
+    fn assert_response_type<T: OpenRpcParams<Response = Vec<RequiredFee>>>() {}
+    assert_response_type::<GetRequiredFeesParams>();
+
+    let transfer = serde_json::from_value::<Operation>(json!([
+        0,
+        {
+            "fee": { "amount": 0, "asset_id": "1.3.0" },
+            "from": "1.2.0",
+            "to": "1.2.0",
+            "amount": { "amount": 1, "asset_id": "1.3.0" },
+            "memo": null,
+            "extensions": []
+        }
+    ]))
+    .expect("transfer operation fixture should decode");
+    let params = GetRequiredFeesParams {
+        ops: vec![transfer],
+        asset_symbol_or_id: "1.3.0".to_owned(),
+    };
+
+    assert_eq!(GetRequiredFeesParams::METHOD, "get_required_fees");
+    assert_eq!(params.into_positional_params()[1], json!("1.3.0"));
+
+    let decoded: <GetRequiredFeesParams as OpenRpcParams>::Response =
+        serde_json::from_value(json!([
+            { "amount": 2000000, "asset_id": "1.3.0" },
+            [
+                { "amount": 4000000, "asset_id": "1.3.0" },
+                [
+                    { "amount": 2000000, "asset_id": "1.3.0" }
+                ]
+            ]
+        ]))
+        .expect("required fees should decode normal assets and nested proposal fee pairs");
+
+    assert_eq!(decoded.len(), 2);
+    match &decoded[0] {
+        RequiredFee::Asset(fee) => {
+            assert_eq!(fee.amount.as_i64(), 2_000_000);
+            assert_eq!(fee.asset_id.as_str(), "1.3.0");
+        }
+        other => panic!("expected asset fee, got {other:#?}"),
+    }
+    match &decoded[1] {
+        RequiredFee::ProposalCreate((proposal_fee, nested_fees)) => {
+            assert_eq!(proposal_fee.amount.as_i64(), 4_000_000);
+            assert_eq!(nested_fees.len(), 1);
+            match &nested_fees[0] {
+                RequiredFee::Asset(fee) => assert_eq!(fee.amount.as_i64(), 2_000_000),
+                other => panic!("expected nested asset fee, got {other:#?}"),
+            }
+        }
+        other => panic!("expected proposal fee pair, got {other:#?}"),
+    }
 }
 
 #[test]

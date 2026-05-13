@@ -101,6 +101,18 @@ pub const OPENRPC_METHODS: &[&str] = &[
     "verify_authority",
 ];
 
+/// Typed fee result returned by `get_required_fees`.
+///
+/// Normal operations return a single `asset` fee. Proposal-create operations
+/// return an FC pair of the proposal fee and recursively nested proposed
+/// operation fees: `[fee, [nested_fee, ...]]`.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[serde(untagged)]
+pub enum RequiredFee {
+    Asset(Asset),
+    ProposalCreate((Asset, Vec<RequiredFee>)),
+}
+
 /// Typed object union returned by `lookup_vote_ids`.
 ///
 /// Graphene returns concrete vote target objects in one heterogeneous array.
@@ -1070,7 +1082,7 @@ pub struct GetRequiredFeesParams {
 
 impl OpenRpcParams for GetRequiredFeesParams {
     const METHOD: &'static str = "get_required_fees";
-    type Response = Vec<serde_json::Value>;
+    type Response = Vec<RequiredFee>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![

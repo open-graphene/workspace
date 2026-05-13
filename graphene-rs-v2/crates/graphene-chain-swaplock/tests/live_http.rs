@@ -5,9 +5,10 @@ use graphene_chain_swaplock::{
     GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
     GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
     GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectsParams,
-    GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams, LookupAccountsParams,
-    LookupAssetSymbolsParams, LookupCommitteeMemberAccountsParams, LookupVoteIdObject,
-    LookupVoteIdsParams, LookupWitnessAccountsParams, OPENRPC_METHODS,
+    GetRequiredFeesParams, GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams,
+    LookupAccountsParams, LookupAssetSymbolsParams, LookupCommitteeMemberAccountsParams,
+    LookupVoteIdObject, LookupVoteIdsParams, LookupWitnessAccountsParams, Operation, RequiredFee,
+    OPENRPC_METHODS,
 };
 use graphene_rpc::{GrapheneUInt64, HttpTransport, RpcClient};
 
@@ -34,6 +35,7 @@ const TYPED_LIVE_METHODS: &[&str] = &[
     "get_dynamic_global_properties",
     "get_global_properties",
     "get_objects",
+    "get_required_fees",
     "get_witness_count",
     "get_witnesses",
     "get_worker_count",
@@ -96,7 +98,6 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "get_potential_signatures",
     "get_proposed_transactions",
     "get_recent_transaction_by_id",
-    "get_required_fees",
     "get_required_signatures",
     "get_samet_funds_by_asset",
     "get_samet_funds_by_owner",
@@ -349,6 +350,34 @@ fn live_decodes_read_only_rpc_methods_over_http() {
         objects[0].get("id").and_then(|value| value.as_str()),
         Some("2.1.0")
     );
+
+    let transfer = serde_json::from_value::<Operation>(serde_json::json!([
+        0,
+        {
+            "fee": { "amount": 0, "asset_id": "1.3.0" },
+            "from": "1.2.0",
+            "to": "1.2.0",
+            "amount": { "amount": 1, "asset_id": "1.3.0" },
+            "memo": null,
+            "extensions": []
+        }
+    ]))
+    .expect("transfer operation fixture should decode");
+    let required_fees = client
+        .call(GetRequiredFeesParams {
+            ops: vec![transfer],
+            asset_symbol_or_id: "1.3.0".to_owned(),
+        })
+        .unwrap();
+    println!("get_required_fees([transfer], 1.3.0) => {required_fees:#?}");
+    assert_eq!(required_fees.len(), 1);
+    match &required_fees[0] {
+        RequiredFee::Asset(fee) => {
+            assert!(fee.amount.as_i64() > 0);
+            assert_eq!(fee.asset_id.as_str(), "1.3.0");
+        }
+        other => panic!("expected transfer fee asset, got {other:#?}"),
+    }
 
     let global = client.call(GetGlobalPropertiesParams).unwrap();
     println!("get_global_properties => {global:#?}");
