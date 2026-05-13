@@ -544,11 +544,14 @@ impl Error for RpcError {
 mod tests {
     use super::{
         build_json_rpc_request, parse_json_rpc_response, GrapheneInt64, GrapheneTimePointSec,
-        GrapheneUInt64, OpenRpcParams, RpcClient, RpcError, RpcTransport,
+        GrapheneUInt64, HttpTransport, OpenRpcParams, RpcClient, RpcError, RpcTransport,
     };
     use chrono::NaiveDate;
     use serde::Deserialize;
     use serde_json::{json, Value};
+    use std::io::{BufRead, BufReader, Read, Write};
+    use std::net::TcpListener;
+    use std::thread::{self, JoinHandle};
 
     #[derive(Debug, Deserialize, PartialEq)]
     struct Pong {
@@ -567,6 +570,71 @@ mod tests {
     }
 
     struct MockTransport;
+
+    fn spawn_one_request_server(
+        status_line: &str,
+        response_body: &str,
+    ) -> (String, JoinHandle<Value>) {
+        let listener = TcpListener::bind("127.0.0.1:0").expect("test server should bind");
+        let endpoint = format!("http://{}", listener.local_addr().unwrap());
+        let status_line = status_line.to_owned();
+        let response_body = response_body.to_owned();
+
+        let handle = thread::spawn(move || {
+            let (mut stream, _) = listener
+                .accept()
+                .expect("test server should accept one request");
+            let mut reader = BufReader::new(stream.try_clone().expect("stream clone should work"));
+
+            let mut request_line = String::new();
+            reader
+                .read_line(&mut request_line)
+                .expect("request line should be readable");
+            assert!(
+                request_line.starts_with("POST / HTTP/1.1"),
+                "unexpected request line: {request_line:?}"
+            );
+
+            let mut content_length = None;
+            loop {
+                let mut line = String::new();
+                reader
+                    .read_line(&mut line)
+                    .expect("headers should be readable");
+                if line == "\r\n" {
+                    break;
+                }
+                let lower = line.to_ascii_lowercase();
+                if let Some(value) = lower.strip_prefix("content-length:") {
+                    content_length = Some(
+                        value
+                            .trim()
+                            .parse::<usize>()
+                            .expect("content-length should be numeric"),
+                    );
+                }
+            }
+
+            let content_length = content_length.expect("request should include content-length");
+            let mut body = vec![0; content_length];
+            reader
+                .read_exact(&mut body)
+                .expect("request body should be readable");
+            let request_body = serde_json::from_slice::<Value>(&body)
+                .expect("request body should be JSON-RPC JSON");
+
+            let response = format!(
+                "{status_line}\r\ncontent-type: application/json\r\ncontent-length: {}\r\nconnection: close\r\n\r\n{response_body}",
+                response_body.len()
+            );
+            stream
+                .write_all(response.as_bytes())
+                .expect("response should be writable");
+            request_body
+        });
+
+        (endpoint, handle)
+    }
 
     impl RpcTransport for MockTransport {
         fn call_raw(&self, method: &str, params: Vec<Value>) -> Result<Value, RpcError> {
@@ -594,6 +662,101 @@ mod tests {
                 "params": ["x"],
             })
         );
+    }
+
+    #[test]
+    fn http_transport_posts_json_rpc_request_and_decodes_success() {
+        let (endpoint, handle) = spawn_one_request_server(
+            "HTTP/1.1 200 OK",
+            r#"{"jsonrpc":"2.0","id":1,"result":{"ok":true}}"#,
+        );
+        let transport = HttpTransport::new(endpoint);
+
+        let result = transport
+            .call_raw("ping", vec![json!("payload")])
+            .expect("HTTP transport should decode success response");
+
+        assert_eq!(result, json!({ "ok": true }));
+        assert_eq!(
+            handle.join().expect("server thread should finish"),
+            json!({
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "ping",
+                "params": ["payload"],
+            })
+        );
+    }
+
+    #[test]
+    fn http_transport_surfaces_json_rpc_error_response() {
+        let (endpoint, handle) = spawn_one_request_server(
+            "HTTP/1.1 200 OK",
+            r#"{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"boom","data":{"detail":"x"}}}"#,
+        );
+        let transport = HttpTransport::new(endpoint);
+
+        let error = transport.call_raw("explode", Vec::new()).unwrap_err();
+
+        handle.join().expect("server thread should finish");
+        match error {
+            RpcError::JsonRpc {
+                method,
+                code,
+                message,
+                data,
+            } => {
+                assert_eq!(method, "explode");
+                assert_eq!(code, -32000);
+                assert_eq!(message, "boom");
+                assert_eq!(data, Some(json!({ "detail": "x" })));
+            }
+            other => panic!("unexpected error: {other:?}"),
+        }
+    }
+
+    #[test]
+    fn http_transport_reports_malformed_json_body() {
+        let (endpoint, handle) =
+            spawn_one_request_server("HTTP/1.1 200 OK", r#"{"jsonrpc":"2.0","result":"#);
+        let transport = HttpTransport::new(endpoint);
+
+        let error = transport.call_raw("broken", Vec::new()).unwrap_err();
+
+        handle.join().expect("server thread should finish");
+        match error {
+            RpcError::Http { method, message } => {
+                assert_eq!(method, "broken");
+                assert!(
+                    message.contains("EOF") || message.contains("expected"),
+                    "unexpected malformed JSON error: {message}"
+                );
+            }
+            other => panic!("unexpected error: {other:?}"),
+        }
+    }
+
+    #[test]
+    fn http_transport_reports_non_success_http_status() {
+        let (endpoint, handle) = spawn_one_request_server(
+            "HTTP/1.1 500 Internal Server Error",
+            r#"{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"server exploded"}}"#,
+        );
+        let transport = HttpTransport::new(endpoint);
+
+        let error = transport.call_raw("server_error", Vec::new()).unwrap_err();
+
+        handle.join().expect("server thread should finish");
+        match error {
+            RpcError::Http { method, message } => {
+                assert_eq!(method, "server_error");
+                assert!(
+                    message.contains("500") || message.contains("Internal Server Error"),
+                    "unexpected HTTP status error: {message}"
+                );
+            }
+            other => panic!("unexpected error: {other:?}"),
+        }
     }
 
     #[test]
