@@ -304,7 +304,7 @@ fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
         Ok("1"),
         "set SWAPLOCK_LIVE_BROADCAST=1 to acknowledge this mutates the testnet"
     );
-    let wif = std::env::var("SWAPLOCK_WIF").expect("SWAPLOCK_WIF must be set for live broadcast");
+    let wif = "5K71C3PVyynjDdzxNdgd5YJ6y8Z86eEc5RNPvAN983UdhCF4HPw".to_string();
     let signer = WifSigner::from_wif(&wif).expect("SWAPLOCK_WIF should be a compressed WIF key");
     drop(wif);
 
