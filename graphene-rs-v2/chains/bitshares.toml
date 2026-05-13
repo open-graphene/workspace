@@ -15,8 +15,8 @@ header_roots = [
 
 [rust]
 schema_output = "../target/generated/bitshares/schema.json"
-variants_rs = "../target/generated/bitshares/variants.rs"
-variants_names = "../target/generated/bitshares/variants.names"
-types_rs = "../target/generated/bitshares/types.rs"
-rpc_rs = "../target/generated/bitshares/rpc.rs"
+variants_rs = "../crates/graphene-chain-bitshares/src/generated/variants.rs"
+variants_names = "../crates/graphene-chain-bitshares/src/generated/variants.names"
+types_rs = "../crates/graphene-chain-bitshares/src/generated/types.rs"
+rpc_rs = "../crates/graphene-chain-bitshares/src/generated/rpc.rs"
 schema_title = "bitshares_types_root"

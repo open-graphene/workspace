@@ -8,7 +8,7 @@ Graphene-like blockchain before building higher-level SDK ergonomics.
 ## Current contents
 
 ```text
-bin/gen.sh                      # one-command Swaplock regeneration entrypoint
+bin/gen.sh                      # one-command regeneration for all configured chains
 chains/                         # per-chain generation configs
   acta.toml
   bitshares.toml
@@ -24,15 +24,18 @@ crates/graphene-codegen/
     extract_typify_schema.py    # OpenRPC schemas -> JSON Schema $defs for typify
     gen_rust_variants.py        # static_variant schemas -> Rust [tag, payload] enums
     gen_rust_rpc.py             # OpenRPC methods -> Rust params/response bindings
+crates/graphene-chain-acta/
+crates/graphene-chain-bitshares/
+crates/graphene-chain-rsquared/
 crates/graphene-chain-swaplock/
-  src/generated/                # checked generated Swaplock chain-local types
+  src/generated/                # checked generated chain-local types
 ```
 
 `graphene-codegen` is the pipeline owner. The OpenRPC directory still contains
 Python/shell backend stages, but the orchestration entrypoint is Rust. `gen.sh`
 is intentionally only a small project-local convenience wrapper.
 
-## Generate Swaplock
+## Generate all configured chains
 
 From this directory:
 
@@ -40,36 +43,32 @@ From this directory:
 bin/gen.sh
 ```
 
-This runs the full path:
+This regenerates BitShares, Acta, RSquared, and Swaplock, then runs:
 
 ```text
-Swaplock C++ wallet/core headers
+cargo fmt
+cargo test
+```
+
+Each chain runs the same pipeline:
+
+```text
+C++ wallet/core headers
   -> OpenRPC spec
   -> typify schema
   -> Rust static variants
   -> Rust RPC params
   -> Rust schema types
-  -> cargo fmt
-  -> cargo test
 ```
 
-The underlying Rust coordinator can also be run directly:
-
-```sh
-cargo run -p graphene-codegen --bin graphene-codegen -- \
-  generate chains/swaplock.toml
-```
-
-Other chain configs are available under `chains/`:
+The underlying Rust coordinator can also be run directly for one chain:
 
 ```sh
 cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/bitshares.toml
 cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/acta.toml
 cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/rsquared.toml
+cargo run -p graphene-codegen --bin graphene-codegen -- generate chains/swaplock.toml
 ```
-
-Those currently write generated Rust files to `target/generated/<chain>/` until
-matching chain crates are added.
 
 ## Individual backend stages
 
@@ -90,5 +89,5 @@ cargo run -p graphene-codegen --bin openrpc-typify -- \
 
 1. Add a repeatable generated-output audit command under `graphene-codegen`.
 2. Port the Python Rust-facing backend stages into Rust modules incrementally.
-3. Add generated chain crates for BitShares, Acta, and RSquared.
+3. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
 4. Build the typed RPC SDK only after the codegen ownership boundary is stable.

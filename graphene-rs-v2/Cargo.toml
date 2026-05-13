@@ -1,5 +1,8 @@
 [workspace]
 members = [
+    "crates/graphene-chain-acta",
+    "crates/graphene-chain-bitshares",
+    "crates/graphene-chain-rsquared",
     "crates/graphene-chain-swaplock",
     "crates/graphene-codegen",
 ]

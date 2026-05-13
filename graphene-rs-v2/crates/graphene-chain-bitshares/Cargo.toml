@@ -1,0 +1,11 @@
+[package]
+name = "graphene-chain-bitshares"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[dependencies]
+chrono.workspace = true
+regress.workspace = true
+serde.workspace = true
+serde_json.workspace = true

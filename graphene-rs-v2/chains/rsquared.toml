@@ -15,8 +15,8 @@ header_roots = [
 
 [rust]
 schema_output = "../target/generated/rsquared/schema.json"
-variants_rs = "../target/generated/rsquared/variants.rs"
-variants_names = "../target/generated/rsquared/variants.names"
-types_rs = "../target/generated/rsquared/types.rs"
-rpc_rs = "../target/generated/rsquared/rpc.rs"
+variants_rs = "../crates/graphene-chain-rsquared/src/generated/variants.rs"
+variants_names = "../crates/graphene-chain-rsquared/src/generated/variants.names"
+types_rs = "../crates/graphene-chain-rsquared/src/generated/types.rs"
+rpc_rs = "../crates/graphene-chain-rsquared/src/generated/rpc.rs"
 schema_title = "rsquared_types_root"

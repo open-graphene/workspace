@@ -1,0 +1,11 @@
+Operation
+FutureExtensions
+VestingPolicy
+FeeParameters
+OperationResult
+SpecialAuthority
+RestrictionArgumentType
+HtlcHash
+WorkerInitializer
+Predicate
+VestingPolicyInitializer

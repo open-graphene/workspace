@@ -3,10 +3,12 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-rm -rf target/generated/swaplock
+rm -rf target/generated
 
-cargo run -p graphene-codegen --bin graphene-codegen -- \
-  generate chains/swaplock.toml
+for chain in bitshares acta rsquared swaplock; do
+  cargo run -p graphene-codegen --bin graphene-codegen -- \
+    generate "chains/${chain}.toml"
+done
 
 cargo fmt
 cargo test
