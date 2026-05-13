@@ -56,6 +56,67 @@ let properties = client.call(GetDynamicGlobalPropertiesParams)?;
 method names, positional params, and response types come from generated
 `OpenRpcParams` implementations.
 
+## Swaplock testnet sign + broadcast
+
+The Swaplock testnet path now has a complete low-level transaction flow:
+
+```text
+transfer operation
+  -> fee lookup through database_api
+  -> transaction preparation from dynamic global properties
+  -> WIF signing with Graphene-canonical compact signatures
+  -> network_broadcast_api synchronous broadcast over WebSocket
+```
+
+Database/read RPC uses the public HTTP endpoint:
+
+```text
+https://node01.swaplock.chainpool.online:8090
+```
+
+Broadcast is not exposed as a direct HTTP method on that endpoint. It uses the
+Graphene WebSocket `call(api_id, method, params)` protocol and discovers the
+`network_broadcast` API id through the login API on the same connection:
+
+```text
+wss://node01.swaplock.chainpool.online:8090
+```
+
+Run the checked live broadcast fixture:
+
+```sh
+cargo test -p graphene-chain-swaplock \
+  live_signs_and_broadcasts_tiny_transfer_with_wif \
+  -- --ignored --nocapture
+```
+
+Run the executable example:
+
+```sh
+cargo run -p graphene-chain-swaplock --example swaplock_broadcast_transfer
+```
+
+Both send a tiny Swaplock testnet transfer from the shared test account to
+`committee-account` by default and print only the transaction id, block number,
+and transaction index. Override endpoints or accounts with:
+
+```sh
+SWAPLOCK_RPC_URL=https://node01.swaplock.chainpool.online:8090
+SWAPLOCK_WS_URL=wss://node01.swaplock.chainpool.online:8090
+SWAPLOCK_FROM_ACCOUNT=swaplock
+SWAPLOCK_TO_ACCOUNT=committee-account
+```
+
+The reusable pieces live in `graphene-chain-swaplock::transaction` and are
+re-exported by the crate root:
+
+```rust
+use graphene_chain_swaplock::{
+    build_transfer_operation, fetch_required_fee_for_transfer, prepare_transaction,
+    sign_transaction, broadcast_signed_transaction_synchronous, TransferDraft,
+};
+```
+
 ## Generate all configured chains
 
 From this directory:

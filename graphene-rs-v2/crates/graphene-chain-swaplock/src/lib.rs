@@ -29,6 +29,8 @@ mod transaction;
 
 pub use generated::*;
 pub use transaction::{
-    broadcast_signed_transaction, broadcast_signed_transaction_synchronous, sign_transaction,
-    validate_signed_transaction, SignTransactionError, SignedTransactionEnvelope,
+    apply_required_fee, broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
+    build_transfer_operation, fetch_required_fee_for_transfer, prepare_transaction,
+    sign_transaction, validate_signed_transaction, BuildTransactionError, SignTransactionError,
+    SignedTransactionEnvelope, TransferDraft,
 };

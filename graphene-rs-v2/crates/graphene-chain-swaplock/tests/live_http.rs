@@ -1,21 +1,21 @@
 use std::collections::BTreeSet;
 
 use graphene_chain_swaplock::{
-    broadcast_signed_transaction_synchronous, sign_transaction, Asset, AssetAssetId,
-    ExtensionsType, GetAccountCountParams, GetAssetCountParams, GetAssetsParams,
-    GetBlockHeaderBatchParams, GetBlockHeaderParams, GetBlockParams, GetChainIdParams,
-    GetChainPropertiesParams, GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
-    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams,
-    GetRequiredFeesParams, GetTransactionHexWithoutSigParams, GetWitnessCountParams,
-    GetWitnessesParams, GetWorkerCountParams, LookupAccountsParams, LookupAssetSymbolsParams,
+    broadcast_signed_transaction_synchronous, build_transfer_operation,
+    fetch_required_fee_for_transfer, prepare_transaction, sign_transaction, GetAccountCountParams,
+    GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams, GetBlockHeaderParams,
+    GetBlockParams, GetChainIdParams, GetChainPropertiesParams, GetCommitteeCountParams,
+    GetCommitteeMembersParams, GetConfigParams, GetDynamicGlobalPropertiesParams,
+    GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams, GetRequiredFeesParams,
+    GetTransactionHexWithoutSigParams, GetWitnessCountParams, GetWitnessesParams,
+    GetWorkerCountParams, LookupAccountsParams, LookupAssetSymbolsParams,
     LookupCommitteeMemberAccountsParams, LookupVoteIdObject, LookupVoteIdsParams,
-    LookupWitnessAccountsParams, Operation, RequiredFee, Transaction, TransferOperation,
-    TransferOperationFrom, TransferOperationTo, OPENRPC_METHODS,
+    LookupWitnessAccountsParams, Operation, RequiredFee, Transaction, TransferDraft,
+    OPENRPC_METHODS,
 };
 use graphene_codec::to_graphene_bytes;
 use graphene_rpc::{
-    GrapheneInt64, GrapheneTimePointSec, GrapheneUInt64, GrapheneWebSocketTransport, HttpTransport,
-    RpcClient,
+    GrapheneTimePointSec, GrapheneUInt64, GrapheneWebSocketTransport, HttpTransport, RpcClient,
 };
 use graphene_signing::{ChainId, WifSigner};
 
@@ -203,37 +203,6 @@ fn bytes_to_hex(bytes: &[u8]) -> String {
     out
 }
 
-fn hex_to_bytes(value: &str) -> Vec<u8> {
-    assert!(
-        value.len() % 2 == 0,
-        "hex string should contain an even number of chars"
-    );
-    value
-        .as_bytes()
-        .chunks_exact(2)
-        .map(|chunk| (hex_nibble(chunk[0]) << 4) | hex_nibble(chunk[1]))
-        .collect()
-}
-
-fn hex_nibble(byte: u8) -> u8 {
-    match byte {
-        b'0'..=b'9' => byte - b'0',
-        b'a'..=b'f' => byte - b'a' + 10,
-        b'A'..=b'F' => byte - b'A' + 10,
-        _ => panic!("invalid hex byte in node-provided id"),
-    }
-}
-
-fn ref_block_prefix(block_id: &str) -> u32 {
-    let bytes = hex_to_bytes(block_id);
-    assert!(
-        bytes.len() >= 8,
-        "block id should contain at least 8 bytes, got {}",
-        bytes.len()
-    );
-    u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]])
-}
-
 fn exact_account_id(client: &RpcClient<HttpTransport>, account_name: &str) -> String {
     let accounts = client
         .call(LookupAccountsParams {
@@ -321,42 +290,19 @@ fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
     let expiration =
         GrapheneTimePointSec::new(dynamic.time.naive_utc() + chrono::Duration::minutes(5));
 
-    let mut transfer = TransferOperation {
-        fee: Asset {
-            amount: GrapheneInt64::new(0),
-            asset_id: AssetAssetId::try_from("1.3.0").expect("core asset id should parse"),
-        },
-        from: TransferOperationFrom::try_from(from.as_str()).expect("from account id should parse"),
-        to: TransferOperationTo::try_from(to.as_str()).expect("to account id should parse"),
-        amount: Asset {
-            amount: GrapheneInt64::new(1),
-            asset_id: AssetAssetId::try_from("1.3.0").expect("core asset id should parse"),
-        },
-        memo: None,
-        extensions: ExtensionsType(vec![]),
-    };
-
-    let required_fees = client
-        .call(GetRequiredFeesParams {
-            ops: vec![Operation::Transfer(transfer.clone())],
-            asset_symbol_or_id: "1.3.0".to_owned(),
-        })
+    let mut transfer = build_transfer_operation(TransferDraft {
+        from,
+        to,
+        amount: 1,
+        asset_id: "1.3.0".to_owned(),
+    })
+    .expect("transfer draft should build");
+    transfer.fee = fetch_required_fee_for_transfer(&client, &transfer, "1.3.0")
         .expect("required fee lookup should succeed");
-    let RequiredFee::Asset(required_fee) = &required_fees[0] else {
-        panic!(
-            "transfer fee should be an asset, got {:#?}",
-            required_fees[0]
-        );
-    };
-    transfer.fee = required_fee.clone();
 
-    let transaction = Transaction {
-        ref_block_num: (dynamic.head_block_number & 0xffff) as u16,
-        ref_block_prefix: ref_block_prefix(&dynamic.head_block_id),
-        expiration,
-        operations: vec![Operation::Transfer(transfer)],
-        extensions: ExtensionsType(vec![]),
-    };
+    let transaction =
+        prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
+            .expect("transaction should prepare from dynamic global properties");
     let signed =
         sign_transaction(&chain_id, transaction, &signer).expect("transaction should sign");
     let broadcast_client = live_broadcast_client();
