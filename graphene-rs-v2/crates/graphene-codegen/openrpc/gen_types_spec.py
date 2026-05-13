@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""bin/gen_types_spec.py — fill the placeholder schemas left by gen_wallet_spec.py.
+"""bin/gen_types_spec.py — fill the placeholder schemas left by gen_api_spec.py.
 
 Reads an existing OpenRPC document (`--spec`) and a set of C++ headers
 (`--header-root` — passed once per root, walked recursively), then:
@@ -567,7 +567,7 @@ def _clean_type(raw: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# C++ type → JSON Schema (shares logic with gen_wallet_spec.py)
+# C++ type → JSON Schema (shares logic with gen_api_spec.py)
 # ---------------------------------------------------------------------------
 
 PRIMITIVE_MAP: dict[str, dict] = {
@@ -842,8 +842,6 @@ def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
         if outer_stripped in ("map", "flat_map", "unordered_map") and len(inner) >= 2:
             key_schema = map_type(inner[0], reg, pending, owner=owner)
             value_schema = map_type(inner[1], reg, pending, owner=owner)
-            if key_schema.get("type") == "string":
-                return {"type": "object", "additionalProperties": value_schema}
             return {
                 "type": "array",
                 "items": {

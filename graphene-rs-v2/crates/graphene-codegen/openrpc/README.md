@@ -40,7 +40,7 @@ The Rust coordinator runs these stages:
 
 ```text
 API header + Doxygen
-  -> gen_wallet_spec.py
+  -> gen_api_spec.py
   -> OpenRPC methods with placeholder schemas
 
 C++ header roots
@@ -64,7 +64,7 @@ OpenRPC methods
 
 ## What is still POC-level
 
-- `gen_wallet_spec.py` is now API-class-aware, but still a Doxygen/XML importer
+- `gen_api_spec.py` is API-class-aware, but still a Doxygen/XML importer
   rather than a full C++ semantic model.
 - `gen_types_spec.py` is a pragmatic C++ text parser, not a full C++ parser.
 - `gen_rust_variants.py`, `gen_rust_rpc.py`, and `extract_typify_schema.py` are
@@ -73,5 +73,5 @@ OpenRPC methods
 ## Tool dependencies
 
 - `python3`
-- `doxygen` for `gen_wallet_openrpc.sh`
+- `doxygen` for `gen_openrpc.sh`
 - Rust/Cargo for the `openrpc-typify` binary in `graphene-codegen`

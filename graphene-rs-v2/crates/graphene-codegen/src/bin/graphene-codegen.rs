@@ -57,7 +57,7 @@ fn generate(config_path: &Path) -> Result<(), Box<dyn Error>> {
     let config = load_config(&workspace_root, config_path)?;
     let openrpc_dir = workspace_root.join("crates/graphene-codegen/openrpc");
 
-    run(Command::new(openrpc_dir.join("gen_wallet_openrpc.sh"))
+    run(Command::new(openrpc_dir.join("gen_openrpc.sh"))
         .arg("--chain-name")
         .arg(&config.chain_name)
         .arg("--core-root")
@@ -217,6 +217,7 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
     let todo_placeholders = count_todo_descriptions(&spec);
     let rpc_value_fields = collect_rpc_value_fields(&rpc_rs);
     let rpc_value_responses = collect_rpc_value_responses(&rpc_rs);
+    let rpc_dynamic_map_responses = collect_rpc_dynamic_map_responses(&rpc_rs);
 
     let mut failures = Vec::new();
     if !rpc_rs.contains("use graphene_rpc::OpenRpcParams;") {
@@ -266,6 +267,13 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
     }
     println!("  rpc Value responses: {}", rpc_value_responses.len());
     for response in &rpc_value_responses {
+        println!("    - {response}");
+    }
+    println!(
+        "  rpc dynamic map responses: {}",
+        rpc_dynamic_map_responses.len()
+    );
+    for response in &rpc_dynamic_map_responses {
         println!("    - {response}");
     }
 
@@ -326,7 +334,37 @@ fn collect_rpc_value_responses(rpc_rs: &str) -> Vec<String> {
             );
             continue;
         }
-        if trimmed.starts_with("type Response =") && trimmed.contains("serde_json::Value") {
+        if trimmed.starts_with("type Response =")
+            && trimmed.contains("serde_json::Value")
+            && !trimmed.contains("BTreeMap")
+        {
+            let method = current_method.as_deref().unwrap_or("<unknown method>");
+            responses.push(format!("{method}: {trimmed}"));
+        }
+    }
+
+    responses
+}
+
+fn collect_rpc_dynamic_map_responses(rpc_rs: &str) -> Vec<String> {
+    let mut responses = Vec::new();
+    let mut current_method: Option<String> = None;
+
+    for line in rpc_rs.lines() {
+        let trimmed = line.trim();
+        if let Some(method_literal) = trimmed.strip_prefix("const METHOD: &'static str = ") {
+            current_method = Some(
+                method_literal
+                    .trim_end_matches(';')
+                    .trim_matches('"')
+                    .to_owned(),
+            );
+            continue;
+        }
+        if trimmed.starts_with("type Response =")
+            && trimmed.contains("BTreeMap")
+            && trimmed.contains("serde_json::Value")
+        {
             let method = current_method.as_deref().unwrap_or("<unknown method>");
             responses.push(format!("{method}: {trimmed}"));
         }

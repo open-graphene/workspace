@@ -5,8 +5,9 @@ use graphene_chain_swaplock::{
     GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
     GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
     GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectsParams,
-    GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams, LookupAssetSymbolsParams,
-    LookupVoteIdsParams, OPENRPC_METHODS,
+    GetWitnessCountParams, GetWitnessesParams, GetWorkerCountParams, LookupAccountsParams,
+    LookupAssetSymbolsParams, LookupCommitteeMemberAccountsParams, LookupVoteIdObject,
+    LookupVoteIdsParams, LookupWitnessAccountsParams, OPENRPC_METHODS,
 };
 use graphene_rpc::{GrapheneUInt64, HttpTransport, RpcClient};
 
@@ -36,8 +37,11 @@ const TYPED_LIVE_METHODS: &[&str] = &[
     "get_witness_count",
     "get_witnesses",
     "get_worker_count",
+    "lookup_accounts",
     "lookup_asset_symbols",
+    "lookup_committee_member_accounts",
     "lookup_vote_ids",
+    "lookup_witness_accounts",
 ];
 
 /// Generated database RPC methods not yet executed against the public node.
@@ -122,9 +126,6 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
     "list_samet_funds",
     "list_tickets",
     "lookup_account_names",
-    "lookup_accounts",
-    "lookup_committee_member_accounts",
-    "lookup_witness_accounts",
     "set_auto_subscription",
     "unsubscribe_from_market",
     "validate_transaction",
@@ -142,6 +143,13 @@ fn assert_positive(value: GrapheneUInt64, method: &str) {
     assert!(
         value.as_u64() > 0,
         "{method} should return a positive count"
+    );
+}
+
+fn assert_id_like(value: &str, prefix: &str, method: &str) {
+    assert!(
+        value.starts_with(prefix),
+        "{method} should return an id starting with {prefix}, got {value}"
     );
 }
 
@@ -181,6 +189,20 @@ fn live_decodes_read_only_rpc_methods_over_http() {
     let account_count = client.call(GetAccountCountParams).unwrap();
     println!("get_account_count => {account_count}");
     assert_positive(account_count, "get_account_count");
+
+    let account_lookup = client
+        .call(LookupAccountsParams {
+            lower_bound_name: String::new(),
+            limit: 1,
+            subscribe: Some(false),
+        })
+        .unwrap();
+    println!("lookup_accounts('', 1, false) => {account_lookup:#?}");
+    let (_account_name, account_id) = account_lookup
+        .iter()
+        .next()
+        .expect("lookup_accounts should return at least one account");
+    assert_id_like(account_id, "1.2.", "lookup_accounts");
 
     let asset_count = client.call(GetAssetCountParams).unwrap();
     println!("get_asset_count => {asset_count}");
@@ -227,6 +249,23 @@ fn live_decodes_read_only_rpc_methods_over_http() {
         .committee_member_account
         .starts_with("1.2."));
 
+    let committee_member_lookup = client
+        .call(LookupCommitteeMemberAccountsParams {
+            lower_bound_name: String::new(),
+            limit: 1,
+        })
+        .unwrap();
+    println!("lookup_committee_member_accounts('', 1) => {committee_member_lookup:#?}");
+    let (_committee_account_name, committee_member_id) = committee_member_lookup
+        .iter()
+        .next()
+        .expect("lookup_committee_member_accounts should return at least one committee member");
+    assert_id_like(
+        committee_member_id,
+        "1.5.",
+        "lookup_committee_member_accounts",
+    );
+
     let witness_count = client.call(GetWitnessCountParams).unwrap();
     println!("get_witness_count => {witness_count}");
     assert_positive(witness_count, "get_witness_count");
@@ -241,6 +280,19 @@ fn live_decodes_read_only_rpc_methods_over_http() {
     let witness = witnesses[0].as_ref().expect("witness should exist");
     assert!(witness.witness_account.starts_with("1.2."));
 
+    let witness_lookup = client
+        .call(LookupWitnessAccountsParams {
+            lower_bound_name: String::new(),
+            limit: 1,
+        })
+        .unwrap();
+    println!("lookup_witness_accounts('', 1) => {witness_lookup:#?}");
+    let (_witness_account_name, witness_id) = witness_lookup
+        .iter()
+        .next()
+        .expect("lookup_witness_accounts should return at least one witness");
+    assert_id_like(witness_id, "1.6.", "lookup_witness_accounts");
+
     let vote_objects = client
         .call(LookupVoteIdsParams {
             votes: vec!["0:5".to_owned(), "1:0".to_owned()],
@@ -248,18 +300,20 @@ fn live_decodes_read_only_rpc_methods_over_http() {
         .unwrap();
     println!("lookup_vote_ids([0:5, 1:0]) => {vote_objects:#?}");
     assert_eq!(vote_objects.len(), 2);
-    assert_eq!(
-        vote_objects[0]
-            .get("committee_member_account")
-            .and_then(|value| value.as_str()),
-        Some("1.2.102")
-    );
-    assert_eq!(
-        vote_objects[1]
-            .get("witness_account")
-            .and_then(|value| value.as_str()),
-        Some("1.2.102")
-    );
+    match &vote_objects[0] {
+        LookupVoteIdObject::CommitteeMember(member) => {
+            assert_eq!(member.committee_member_account.as_str(), "1.2.102");
+            assert_eq!(member.vote_id.as_str(), "0:5");
+        }
+        other => panic!("expected committee member vote object, got {other:#?}"),
+    }
+    match &vote_objects[1] {
+        LookupVoteIdObject::Witness(witness) => {
+            assert_eq!(witness.witness_account.as_str(), "1.2.102");
+            assert_eq!(witness.vote_id.as_str(), "1:0");
+        }
+        other => panic!("expected witness vote object, got {other:#?}"),
+    }
 
     let worker_count = client.call(GetWorkerCountParams).unwrap();
     println!("get_worker_count => {worker_count}");
@@ -271,7 +325,7 @@ fn live_decodes_read_only_rpc_methods_over_http() {
     println!("get_chain_properties => {chain_properties:#?}");
 
     let config = client.call(GetConfigParams).unwrap();
-    println!("get_config => {config:#}");
+    println!("get_config => {config:#?}");
     assert_eq!(
         config
             .get("GRAPHENE_SYMBOL")

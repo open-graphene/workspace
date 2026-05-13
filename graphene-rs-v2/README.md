@@ -18,8 +18,8 @@ crates/graphene-codegen/
   src/bin/graphene-codegen.rs   # Rust coordinator for generate/audit
   src/bin/openrpc-typify.rs     # typify backend: schema.json -> types.rs
   openrpc/                      # script backends spawned by graphene-codegen
-    gen_wallet_openrpc.sh       # API header + C++ headers -> OpenRPC spec
-    gen_wallet_spec.py          # Doxygen FC_API XML -> OpenRPC methods
+    gen_openrpc.sh              # API header + C++ headers -> OpenRPC spec
+    gen_api_spec.py             # Doxygen FC_API XML -> OpenRPC methods
     gen_types_spec.py           # FC_REFLECT/static_variant scan -> OpenRPC schemas
     extract_typify_schema.py    # OpenRPC schemas -> JSON Schema $defs for typify
     gen_rust_variants.py        # static_variant schemas -> Rust [tag, payload] enums

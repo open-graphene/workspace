@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Convert Doxygen XML for a Graphene FC_API class into an OpenRPC document.
 
-Invoked by gen_wallet_openrpc.sh — not meant to be run standalone in normal use.
+Invoked by gen_openrpc.sh — not meant to be run standalone in normal use.
 
 Strategy
 --------
@@ -232,8 +232,6 @@ def clean_type(raw: str) -> str:
 def _array(inner: dict) -> dict:           return {"type": "array", "items": inner}
 def _set_array(inner: dict) -> dict:       return {"type": "array", "items": inner, "uniqueItems": True}
 def _map_object(k: dict, v: dict) -> dict:
-    if k.get("type") == "string":
-        return {"type": "object", "additionalProperties": v}
     return {
         "type": "array",
         "items": {

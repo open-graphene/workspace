@@ -101,6 +101,19 @@ pub const OPENRPC_METHODS: &[&str] = &[
     "verify_authority",
 ];
 
+/// Typed object union returned by `lookup_vote_ids`.
+///
+/// Graphene returns concrete vote target objects in one heterogeneous array.
+/// The object `id` space identifies the concrete shape: committee members
+/// use `1.5.x`, witnesses use `1.6.x`, and workers use the worker object space.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[serde(untagged)]
+pub enum LookupVoteIdObject {
+    CommitteeMember(CommitteeMemberObject),
+    Witness(WitnessObject),
+    Worker(WorkerObject),
+}
+
 /// This unsubscribes from all subscribed markets and objects.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct CancelAllSubscriptionsParams;
@@ -547,7 +560,7 @@ pub struct GetConfigParams;
 
 impl OpenRpcParams for GetConfigParams {
     const METHOD: &'static str = "get_config";
-    type Response = serde_json::Value;
+    type Response = std::collections::BTreeMap<String, serde_json::Value>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
@@ -640,7 +653,7 @@ pub struct GetFullAccountsParams {
 
 impl OpenRpcParams for GetFullAccountsParams {
     const METHOD: &'static str = "get_full_accounts";
-    type Response = std::collections::BTreeMap<String, FullAccount>;
+    type Response = Vec<(String, FullAccount)>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1688,7 +1701,7 @@ pub struct LookupAccountsParams {
 
 impl OpenRpcParams for LookupAccountsParams {
     const METHOD: &'static str = "lookup_accounts";
-    type Response = std::collections::BTreeMap<String, String>;
+    type Response = Vec<(String, String)>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1727,7 +1740,7 @@ pub struct LookupCommitteeMemberAccountsParams {
 
 impl OpenRpcParams for LookupCommitteeMemberAccountsParams {
     const METHOD: &'static str = "lookup_committee_member_accounts";
-    type Response = std::collections::BTreeMap<String, String>;
+    type Response = Vec<(String, String)>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1748,7 +1761,7 @@ pub struct LookupVoteIdsParams {
 
 impl OpenRpcParams for LookupVoteIdsParams {
     const METHOD: &'static str = "lookup_vote_ids";
-    type Response = Vec<serde_json::Value>;
+    type Response = Vec<LookupVoteIdObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1767,7 +1780,7 @@ pub struct LookupWitnessAccountsParams {
 
 impl OpenRpcParams for LookupWitnessAccountsParams {
     const METHOD: &'static str = "lookup_witness_accounts";
-    type Response = std::collections::BTreeMap<String, String>;
+    type Response = Vec<(String, String)>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![

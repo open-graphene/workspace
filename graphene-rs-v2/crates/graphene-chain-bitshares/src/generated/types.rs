@@ -8382,13 +8382,25 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateOperationNewIssuer {
 ///  ],
 ///  "properties": {
 ///    "account_auths": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "type": "integer",
-///        "format": "uint16",
-///        "minimum": 0.0
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "format": "uint16",
+///            "minimum": 0,
+///            "type": "integer"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<account_id_type,weight_type>"
+///      "x-cpp-type": "flat_map<account_id_type,weight_type>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "address_auths": {
 ///      "type": "array",
@@ -8411,13 +8423,24 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateOperationNewIssuer {
 ///      "x-fc-container": "flat_map"
 ///    },
 ///    "key_auths": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "type": "integer",
-///        "format": "uint16",
-///        "minimum": 0.0
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "type": "string"
+///          },
+///          {
+///            "format": "uint16",
+///            "minimum": 0,
+///            "type": "integer"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<public_key_type,weight_type>"
+///      "x-cpp-type": "flat_map<public_key_type,weight_type>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "weight_threshold": {
 ///      "type": "integer",
@@ -8432,9 +8455,9 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateOperationNewIssuer {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct Authority {
-    pub account_auths: ::std::collections::HashMap<::std::string::String, u16>,
+    pub account_auths: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     pub address_auths: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
-    pub key_auths: ::std::collections::HashMap<::std::string::String, u16>,
+    pub key_auths: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     pub weight_threshold: u32,
 }
 impl ::std::convert::From<&Authority> for Authority {
@@ -13889,18 +13912,42 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferAcceptOperationOfferId {
 ///  ],
 ///  "properties": {
 ///    "acceptable_borrowers": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "$ref": "#/$defs/GrapheneInt64"
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "$ref": "#/$defs/GrapheneInt64"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<account_id_type, share_type>"
+///      "x-cpp-type": "flat_map<account_id_type, share_type>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "acceptable_collateral": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "$ref": "#/$defs/price"
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "$ref": "#/$defs/price"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<asset_id_type, price>"
+///      "x-cpp-type": "flat_map<asset_id_type, price>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "asset_type": {
 ///      "type": "string",
@@ -13955,11 +14002,8 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferAcceptOperationOfferId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferCreateOperation {
-    pub acceptable_borrowers: ::std::collections::HashMap<
-        ::std::string::String,
-        ::graphene_rpc::GrapheneInt64,
-    >,
-    pub acceptable_collateral: ::std::collections::HashMap<::std::string::String, Price>,
+    pub acceptable_borrowers: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
+    pub acceptable_collateral: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     pub asset_type: CreditOfferCreateOperationAssetType,
     pub auto_disable_time: ::graphene_rpc::GrapheneTimePointSec,
     pub balance: ::graphene_rpc::GrapheneInt64,
@@ -14470,18 +14514,42 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferDeleteOperationOwnerAccount {
 ///  ],
 ///  "properties": {
 ///    "acceptable_borrowers": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "$ref": "#/$defs/GrapheneInt64"
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "$ref": "#/$defs/GrapheneInt64"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<account_id_type, share_type>"
+///      "x-cpp-type": "flat_map<account_id_type, share_type>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "acceptable_collateral": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "$ref": "#/$defs/price"
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "$ref": "#/$defs/price"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<asset_id_type, price>"
+///      "x-cpp-type": "flat_map<asset_id_type, price>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "asset_type": {
 ///      "type": "string",
@@ -14532,11 +14600,8 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferDeleteOperationOwnerAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferObject {
-    pub acceptable_borrowers: ::std::collections::HashMap<
-        ::std::string::String,
-        ::graphene_rpc::GrapheneInt64,
-    >,
-    pub acceptable_collateral: ::std::collections::HashMap<::std::string::String, Price>,
+    pub acceptable_borrowers: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
+    pub acceptable_collateral: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     pub asset_type: CreditOfferObjectAssetType,
     pub auto_disable_time: ::graphene_rpc::GrapheneTimePointSec,
     pub current_balance: ::graphene_rpc::GrapheneInt64,
@@ -14742,23 +14807,47 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferObjectOwnerAccount {
 ///  "properties": {
 ///    "acceptable_borrowers": {
 ///      "type": [
-///        "object",
+///        "array",
 ///        "null"
 ///      ],
-///      "additionalProperties": {
-///        "$ref": "#/$defs/GrapheneInt64"
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "$ref": "#/$defs/GrapheneInt64"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "optional<flat_map<account_id_type, share_type>>"
+///      "x-cpp-type": "optional<flat_map<account_id_type, share_type>>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "acceptable_collateral": {
 ///      "type": [
-///        "object",
+///        "array",
 ///        "null"
 ///      ],
-///      "additionalProperties": {
-///        "$ref": "#/$defs/price"
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "$ref": "#/$defs/price"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "optional<flat_map<asset_id_type, price>>"
+///      "x-cpp-type": "optional<flat_map<asset_id_type, price>>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "auto_disable_time": {
 ///      "oneOf": [
@@ -14844,10 +14933,10 @@ impl<'de> ::serde::Deserialize<'de> for CreditOfferObjectOwnerAccount {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct CreditOfferUpdateOperation {
     pub acceptable_borrowers: ::std::option::Option<
-        ::std::collections::HashMap<::std::string::String, ::graphene_rpc::GrapheneInt64>,
+        ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     >,
     pub acceptable_collateral: ::std::option::Option<
-        ::std::collections::HashMap<::std::string::String, Price>,
+        ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     >,
     pub auto_disable_time: ::std::option::Option<::graphene_rpc::GrapheneTimePointSec>,
     pub delta_amount: ::std::option::Option<Asset>,
@@ -45391,7 +45480,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct Authority {
         account_auths: ::std::result::Result<
-            ::std::collections::HashMap<::std::string::String, u16>,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         address_auths: ::std::result::Result<
@@ -45399,7 +45488,7 @@ pub mod builder {
             ::std::string::String,
         >,
         key_auths: ::std::result::Result<
-            ::std::collections::HashMap<::std::string::String, u16>,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         weight_threshold: ::std::result::Result<u32, ::std::string::String>,
@@ -45419,9 +45508,7 @@ pub mod builder {
     impl Authority {
         pub fn account_auths<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<::std::string::String, u16>,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.account_auths = value
@@ -45445,9 +45532,7 @@ pub mod builder {
         }
         pub fn key_auths<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<::std::string::String, u16>,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.key_auths = value
@@ -49711,14 +49796,11 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct CreditOfferCreateOperation {
         acceptable_borrowers: ::std::result::Result<
-            ::std::collections::HashMap<
-                ::std::string::String,
-                ::graphene_rpc::GrapheneInt64,
-            >,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         acceptable_collateral: ::std::result::Result<
-            ::std::collections::HashMap<::std::string::String, super::Price>,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         asset_type: ::std::result::Result<
@@ -49778,12 +49860,7 @@ pub mod builder {
     impl CreditOfferCreateOperation {
         pub fn acceptable_borrowers<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<
-                    ::std::string::String,
-                    ::graphene_rpc::GrapheneInt64,
-                >,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.acceptable_borrowers = value
@@ -49797,9 +49874,7 @@ pub mod builder {
         }
         pub fn acceptable_collateral<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<::std::string::String, super::Price>,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.acceptable_collateral = value
@@ -50177,14 +50252,11 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct CreditOfferObject {
         acceptable_borrowers: ::std::result::Result<
-            ::std::collections::HashMap<
-                ::std::string::String,
-                ::graphene_rpc::GrapheneInt64,
-            >,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         acceptable_collateral: ::std::result::Result<
-            ::std::collections::HashMap<::std::string::String, super::Price>,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         asset_type: ::std::result::Result<
@@ -50247,12 +50319,7 @@ pub mod builder {
     impl CreditOfferObject {
         pub fn acceptable_borrowers<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<
-                    ::std::string::String,
-                    ::graphene_rpc::GrapheneInt64,
-                >,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.acceptable_borrowers = value
@@ -50266,9 +50333,7 @@ pub mod builder {
         }
         pub fn acceptable_collateral<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<::std::string::String, super::Price>,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.acceptable_collateral = value
@@ -50434,18 +50499,11 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct CreditOfferUpdateOperation {
         acceptable_borrowers: ::std::result::Result<
-            ::std::option::Option<
-                ::std::collections::HashMap<
-                    ::std::string::String,
-                    ::graphene_rpc::GrapheneInt64,
-                >,
-            >,
+            ::std::option::Option<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             ::std::string::String,
         >,
         acceptable_collateral: ::std::result::Result<
-            ::std::option::Option<
-                ::std::collections::HashMap<::std::string::String, super::Price>,
-            >,
+            ::std::option::Option<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             ::std::string::String,
         >,
         auto_disable_time: ::std::result::Result<
@@ -50515,12 +50573,7 @@ pub mod builder {
         pub fn acceptable_borrowers<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<
-                    ::std::collections::HashMap<
-                        ::std::string::String,
-                        ::graphene_rpc::GrapheneInt64,
-                    >,
-                >,
+                ::std::option::Option<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             >,
             T::Error: ::std::fmt::Display,
         {
@@ -50536,9 +50589,7 @@ pub mod builder {
         pub fn acceptable_collateral<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<
-                ::std::option::Option<
-                    ::std::collections::HashMap<::std::string::String, super::Price>,
-                >,
+                ::std::option::Option<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             >,
             T::Error: ::std::fmt::Display,
         {

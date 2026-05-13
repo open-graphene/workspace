@@ -8285,13 +8285,25 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateOperationNewIssuer {
 ///  ],
 ///  "properties": {
 ///    "account_auths": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "type": "integer",
-///        "format": "uint16",
-///        "minimum": 0.0
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///            "type": "string"
+///          },
+///          {
+///            "format": "uint16",
+///            "minimum": 0,
+///            "type": "integer"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<account_id_type,weight_type>"
+///      "x-cpp-type": "flat_map<account_id_type,weight_type>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "address_auths": {
 ///      "type": "array",
@@ -8314,13 +8326,24 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateOperationNewIssuer {
 ///      "x-fc-container": "flat_map"
 ///    },
 ///    "key_auths": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "type": "integer",
-///        "format": "uint16",
-///        "minimum": 0.0
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "maxItems": 2,
+///        "minItems": 2,
+///        "prefixItems": [
+///          {
+///            "type": "string"
+///          },
+///          {
+///            "format": "uint16",
+///            "minimum": 0,
+///            "type": "integer"
+///          }
+///        ]
 ///      },
-///      "x-cpp-type": "flat_map<public_key_type,weight_type>"
+///      "x-cpp-type": "flat_map<public_key_type,weight_type>",
+///      "x-fc-container": "flat_map"
 ///    },
 ///    "weight_threshold": {
 ///      "type": "integer",
@@ -8335,9 +8358,9 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateOperationNewIssuer {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct Authority {
-    pub account_auths: ::std::collections::HashMap<::std::string::String, u16>,
+    pub account_auths: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     pub address_auths: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
-    pub key_auths: ::std::collections::HashMap<::std::string::String, u16>,
+    pub key_auths: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
     pub weight_threshold: u32,
 }
 impl ::std::convert::From<&Authority> for Authority {
@@ -34422,7 +34445,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct Authority {
         account_auths: ::std::result::Result<
-            ::std::collections::HashMap<::std::string::String, u16>,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         address_auths: ::std::result::Result<
@@ -34430,7 +34453,7 @@ pub mod builder {
             ::std::string::String,
         >,
         key_auths: ::std::result::Result<
-            ::std::collections::HashMap<::std::string::String, u16>,
+            ::std::vec::Vec<[::serde_json::Value; 2usize]>,
             ::std::string::String,
         >,
         weight_threshold: ::std::result::Result<u32, ::std::string::String>,
@@ -34450,9 +34473,7 @@ pub mod builder {
     impl Authority {
         pub fn account_auths<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<::std::string::String, u16>,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.account_auths = value
@@ -34476,9 +34497,7 @@ pub mod builder {
         }
         pub fn key_auths<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<::std::string::String, u16>,
-            >,
+            T: ::std::convert::TryInto<::std::vec::Vec<[::serde_json::Value; 2usize]>>,
             T::Error: ::std::fmt::Display,
         {
             self.key_auths = value

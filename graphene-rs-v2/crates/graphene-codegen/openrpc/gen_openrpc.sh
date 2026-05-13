@@ -7,15 +7,15 @@
 #   3. Fill components.schemas by walking FC_REFLECT/static_variant macros.
 #
 # Usage:
-#   gen_wallet_openrpc.sh \
+#   gen_openrpc.sh \
 #     --chain-name swaplock \
 #     --core-root /path/to/swaplock-core \
 #     --output /path/to/spec.json
 #
 # Optional:
-#   --wallet-header relative/or/absolute/path/to/wallet.hpp
+#   --api-header relative/or/absolute/path/to/api.hpp
 #   --header-root relative/or/absolute/path (repeatable)
-#   --build-dir /tmp/graphene-wallet-spec
+#   --build-dir /tmp/graphene-openrpc-spec
 
 set -euo pipefail
 
@@ -29,13 +29,13 @@ BUILD_DIR=""
 HEADER_ROOTS=()
 EXCLUDE_METHODS=()
 
-die() { echo "gen_wallet_openrpc: $*" >&2; exit 1; }
+die() { echo "gen_openrpc: $*" >&2; exit 1; }
 usage() {
   cat >&2 <<'EOF'
 Generate a Graphene OpenRPC specification from an FC_API class.
 
 Usage:
-  gen_wallet_openrpc.sh \
+  gen_openrpc.sh \
     --chain-name <name> \
     --core-root <path-to-chain-core> \
     --output <path-to-spec.json>
@@ -178,7 +178,7 @@ SPEC_ARGS=(
 for method in "${EXCLUDE_METHODS[@]}"; do
   SPEC_ARGS+=(--exclude-method "$method")
 done
-python3 "${SCRIPT_DIR}/gen_wallet_spec.py" "${SPEC_ARGS[@]}" > "$OUTPUT_FILE"
+python3 "${SCRIPT_DIR}/gen_api_spec.py" "${SPEC_ARGS[@]}" > "$OUTPUT_FILE"
 
 TYPE_ARGS=(--spec "$OUTPUT_FILE")
 for root in "${HEADER_ROOTS[@]}"; do

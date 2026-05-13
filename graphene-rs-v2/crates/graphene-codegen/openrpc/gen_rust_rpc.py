@@ -124,13 +124,33 @@ def schema_rust_type(schema: dict[str, Any] | None) -> str:
         additional = schema.get("additionalProperties")
         if isinstance(additional, dict):
             return f"std::collections::BTreeMap<String, {schema_rust_type(additional)}>"
-        return "serde_json::Value"
+        return "std::collections::BTreeMap<String, serde_json::Value>"
     return "serde_json::Value"
 
 
 def method_result_type(method: dict[str, Any]) -> str:
+    if method.get("name") == "lookup_vote_ids":
+        return "Vec<LookupVoteIdObject>"
     result = method.get("result") or {}
     return schema_rust_type(result.get("schema"))
+
+
+def emit_lookup_vote_id_object() -> list[str]:
+    return [
+        "/// Typed object union returned by `lookup_vote_ids`.",
+        "///",
+        "/// Graphene returns concrete vote target objects in one heterogeneous array.",
+        "/// The object `id` space identifies the concrete shape: committee members",
+        "/// use `1.5.x`, witnesses use `1.6.x`, and workers use the worker object space.",
+        "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]",
+        "#[serde(untagged)]",
+        "pub enum LookupVoteIdObject {",
+        "    CommitteeMember(CommitteeMemberObject),",
+        "    Witness(WitnessObject),",
+        "    Worker(WorkerObject),",
+        "}",
+        "",
+    ]
 
 
 def emit(spec: dict[str, Any], source_label: str) -> str:
@@ -157,6 +177,9 @@ def emit(spec: dict[str, Any], source_label: str) -> str:
         out.append(f"    {json.dumps(name)},")
     out.append("];")
     out.append("")
+
+    if "lookup_vote_ids" in method_names:
+        out.extend(emit_lookup_vote_id_object())
 
     used_structs: set[str] = set()
     for method in methods:
