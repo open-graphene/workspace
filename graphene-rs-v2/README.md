@@ -18,8 +18,8 @@ crates/graphene-codegen/
   src/bin/graphene-codegen.rs   # Rust coordinator for generate/audit
   src/bin/openrpc-typify.rs     # typify backend: schema.json -> types.rs
   openrpc/                      # script backends spawned by graphene-codegen
-    gen_wallet_openrpc.sh       # wallet.hpp + C++ headers -> OpenRPC spec
-    gen_wallet_spec.py          # Doxygen wallet_api XML -> OpenRPC methods
+    gen_wallet_openrpc.sh       # API header + C++ headers -> OpenRPC spec
+    gen_wallet_spec.py          # Doxygen FC_API XML -> OpenRPC methods
     gen_types_spec.py           # FC_REFLECT/static_variant scan -> OpenRPC schemas
     extract_typify_schema.py    # OpenRPC schemas -> JSON Schema $defs for typify
     gen_rust_variants.py        # static_variant schemas -> Rust [tag, payload] enums
@@ -44,12 +44,12 @@ defining their own copy.
 ## Typed RPC usage shape
 
 ```rust
-use graphene_chain_swaplock::AboutParams;
+use graphene_chain_swaplock::GetDynamicGlobalPropertiesParams;
 use graphene_rpc::{HttpTransport, RpcClient};
 
 let transport = HttpTransport::new("http://127.0.0.1:8090");
 let client = RpcClient::new(transport);
-let about = client.call(AboutParams)?;
+let properties = client.call(GetDynamicGlobalPropertiesParams)?;
 ```
 
 `HttpTransport` handles the JSON-RPC request/response envelope. Chain-specific
@@ -75,7 +75,7 @@ cargo test
 Each chain runs the same pipeline:
 
 ```text
-C++ wallet/core headers
+C++ app database_api/core headers
   -> OpenRPC spec
   -> typify schema
   -> Rust static variants
@@ -83,6 +83,11 @@ C++ wallet/core headers
   -> Rust schema types
   -> generated-output audit
 ```
+
+The generated chain crates model the public node/database RPC surface. Wallet
+RPC is intentionally not part of the core v2 SDK contract because wallet methods
+can require local wallet state, keys, builder handles, or return shapes that do
+not match public database nodes.
 
 The underlying Rust coordinator can also be run directly for one chain:
 
@@ -127,5 +132,5 @@ cargo run -p graphene-codegen --bin openrpc-typify -- \
 ## Next steps
 
 1. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
-2. Add a live/ignored HTTP smoke test or example against a local wallet/node.
+2. Expand ignored live HTTP smoke coverage with safe database API fixtures.
 3. Port the Python Rust-facing backend stages into Rust modules incrementally.

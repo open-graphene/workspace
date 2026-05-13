@@ -1,180 +1,133 @@
 use std::collections::BTreeSet;
 
 use graphene_chain_swaplock::{
-    GetAccountCountParams, GetAssetCountParams, GetDynamicGlobalPropertiesParams,
-    GetGlobalPropertiesParams, OPENRPC_METHODS,
+    GetAccountCountParams, GetAssetCountParams, GetBlockParams, GetChainIdParams,
+    GetChainPropertiesParams, GetCommitteeCountParams, GetConfigParams,
+    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetWitnessCountParams,
+    GetWorkerCountParams, OPENRPC_METHODS,
 };
-use graphene_rpc::{HttpTransport, RpcClient, RpcTransport};
-use serde_json::json;
+use graphene_rpc::{GrapheneUInt64, HttpTransport, RpcClient};
 
 const DEFAULT_SWAPLOCK_RPC_URL: &str = "https://node01.swaplock.chainpool.online:8090";
 
-/// Methods currently exercised end-to-end against the public Swaplock RPC node.
+/// Methods currently exercised end-to-end against the public Swaplock database RPC node.
 ///
 /// This list is deliberately conservative: it contains read-only methods with
 /// stable parameters and typed responses. The coverage test below ensures every
-/// generated method is either here, in `RAW_LIVE_METHODS`, or in
-/// `SKIPPED_LIVE_METHODS`, so adding new RPC methods forces an explicit
-/// live-test decision.
+/// generated method is either here or in `SKIPPED_LIVE_METHODS`, so adding new
+/// RPC methods forces an explicit live-test decision.
 const TYPED_LIVE_METHODS: &[&str] = &[
     "get_account_count",
     "get_asset_count",
+    "get_block",
+    "get_chain_id",
+    "get_chain_properties",
+    "get_committee_count",
+    "get_config",
     "get_dynamic_global_properties",
     "get_global_properties",
+    "get_witness_count",
+    "get_worker_count",
 ];
 
-/// Methods probed against the public node at the raw JSON layer.
+/// Generated database RPC methods not yet executed against the public node.
 ///
-/// `get_block` is intentionally raw here: the public node exposes the database
-/// API shape (`signed_block`), while the wallet OpenRPC contract names
-/// `signed_block_with_info` for the same method.
-const RAW_LIVE_METHODS: &[&str] = &["get_block"];
-
-/// Generated RPC methods not yet executed against the public node.
-///
-/// Most require account/key/object fixtures, wallet state, builder handles, or
-/// are transaction/broadcast/admin surfaces. They stay classified here until we
-/// add safe live fixtures for them.
+/// Most require object/account/asset fixtures, market fixtures, history ranges,
+/// or subscription state. They stay classified here until we add safe live
+/// fixtures for them.
 const SKIPPED_LIVE_METHODS: &[&str] = &[
-    "about",
-    "account_store_map",
-    "add_operation_to_builder_transaction",
-    "add_transaction_signature",
-    "approve_proposal",
-    "begin_builder_transaction",
-    "bid_collateral",
-    "blind_history",
-    "blind_transfer",
-    "borrow_asset",
-    "borrow_asset_ext",
-    "broadcast_transaction",
-    "cancel_order",
-    "claim_asset_fee_pool",
-    "create_account_with_brain_key",
-    "create_asset",
-    "create_blind_account",
-    "create_committee_member",
-    "create_witness",
-    "create_worker",
-    "dbg_generate_blocks",
-    "dbg_make_mia",
-    "dbg_make_uia",
-    "dbg_push_blocks",
-    "dbg_stream_json_objects",
-    "dbg_update_object",
-    "derive_owner_keys_from_brain_key",
-    "dump_private_keys",
-    "flood_network",
-    "fund_asset_fee_pool",
-    "get_account",
-    "get_account_history",
-    "get_account_history_by_operations",
-    "get_account_id",
+    "cancel_all_subscriptions",
+    "get_24_volume",
+    "get_account_balances",
+    "get_account_by_name",
+    "get_account_id_from_string",
     "get_account_limit_orders",
-    "get_account_name",
-    "get_account_storage",
-    "get_asset",
-    "get_asset_id",
-    "get_asset_name",
-    "get_asset_symbol",
-    "get_bitasset_data",
-    "get_blind_accounts",
-    "get_blind_balances",
+    "get_account_references",
+    "get_accounts",
+    "get_all_workers",
+    "get_asset_id_from_string",
+    "get_assets",
+    "get_assets_by_issuer",
+    "get_balance_objects",
+    "get_blinded_balances",
+    "get_block_header",
+    "get_block_header_batch",
     "get_call_orders",
+    "get_call_orders_by_account",
     "get_collateral_bids",
-    "get_committee_member",
-    "get_full_account",
+    "get_committee_member_by_account",
+    "get_committee_members",
+    "get_credit_deals_by_borrower",
+    "get_credit_deals_by_collateral_asset",
+    "get_credit_deals_by_debt_asset",
+    "get_credit_deals_by_offer_id",
+    "get_credit_deals_by_offer_owner",
+    "get_credit_offers_by_asset",
+    "get_credit_offers_by_owner",
+    "get_full_accounts",
     "get_htlc",
-    "get_key_label",
+    "get_htlc_by_from",
+    "get_htlc_by_to",
     "get_key_references",
     "get_limit_orders",
-    "get_market_history",
-    "get_my_blind_accounts",
-    "get_object",
+    "get_limit_orders_by_account",
+    "get_liquidity_pools",
+    "get_liquidity_pools_by_asset_a",
+    "get_liquidity_pools_by_asset_b",
+    "get_liquidity_pools_by_both_assets",
+    "get_liquidity_pools_by_one_asset",
+    "get_liquidity_pools_by_owner",
+    "get_liquidity_pools_by_share_asset",
+    "get_margin_positions",
+    "get_named_account_balances",
+    "get_next_object_id",
+    "get_objects",
     "get_order_book",
-    "get_private_key",
-    "get_prototype_operation",
-    "get_public_key",
-    "get_relative_account_history",
+    "get_potential_address_signatures",
+    "get_potential_signatures",
+    "get_proposed_transactions",
+    "get_recent_transaction_by_id",
+    "get_required_fees",
+    "get_required_signatures",
+    "get_samet_funds_by_asset",
+    "get_samet_funds_by_owner",
     "get_settle_orders",
-    "get_transaction_id",
-    "get_transaction_signers",
+    "get_settle_orders_by_account",
+    "get_ticker",
+    "get_tickets_by_account",
+    "get_top_markets",
+    "get_top_voters",
+    "get_trade_history",
+    "get_trade_history_by_sequence",
+    "get_transaction",
+    "get_transaction_hex",
+    "get_transaction_hex_without_sig",
+    "get_vested_balances",
     "get_vesting_balances",
-    "get_witness",
-    "gethelp",
-    "global_settle_asset",
-    "help",
-    "htlc_create",
-    "htlc_extend",
-    "htlc_redeem",
-    "import_account_keys",
-    "import_accounts",
-    "import_balance",
-    "import_key",
-    "info",
-    "is_locked",
-    "is_new",
+    "get_withdraw_permissions_by_giver",
+    "get_withdraw_permissions_by_recipient",
+    "get_witness_by_account",
+    "get_witnesses",
+    "get_workers_by_account",
     "is_public_key_registered",
-    "issue_asset",
-    "list_account_balances",
-    "list_accounts",
     "list_assets",
-    "list_committee_members",
-    "list_my_accounts",
-    "list_witnesses",
-    "load_wallet_file",
-    "lock",
-    "network_add_nodes",
-    "network_get_connected_peers",
-    "normalize_brain_key",
-    "preview_builder_transaction",
-    "propose_builder_transaction",
-    "propose_builder_transaction2",
-    "propose_fee_change",
-    "propose_parameter_change",
-    "publish_asset_feed",
-    "quit",
-    "read_memo",
-    "receive_blind_transfer",
-    "register_account",
-    "remove_builder_transaction",
-    "replace_operation_in_builder_transaction",
-    "reserve_asset",
-    "save_wallet_file",
-    "sell_asset",
-    "serialize_transaction",
-    "set_desired_witness_and_committee_member_count",
-    "set_fees_on_builder_transaction",
-    "set_key_label",
-    "set_password",
-    "set_voting_proxy",
-    "settle_asset",
-    "sign_builder_transaction",
-    "sign_builder_transaction2",
-    "sign_memo",
-    "sign_message",
-    "sign_transaction",
-    "sign_transaction2",
-    "suggest_brain_key",
-    "transfer",
-    "transfer2",
-    "transfer_from_blind",
-    "transfer_to_blind",
-    "unlock",
-    "update_asset",
-    "update_asset_feed_producers",
-    "update_asset_issuer",
-    "update_bitasset",
-    "update_witness",
-    "update_worker_votes",
-    "upgrade_account",
-    "verify_encapsulated_message",
-    "verify_message",
-    "verify_signed_message",
-    "vote_for_committee_member",
-    "vote_for_witness",
-    "whitelist_account",
-    "withdraw_vesting",
+    "list_credit_deals",
+    "list_credit_offers",
+    "list_htlcs",
+    "list_liquidity_pools",
+    "list_samet_funds",
+    "list_tickets",
+    "lookup_account_names",
+    "lookup_accounts",
+    "lookup_asset_symbols",
+    "lookup_committee_member_accounts",
+    "lookup_vote_ids",
+    "lookup_witness_accounts",
+    "set_auto_subscription",
+    "unsubscribe_from_market",
+    "validate_transaction",
+    "verify_account_authority",
+    "verify_authority",
 ];
 
 fn live_client() -> RpcClient<HttpTransport> {
@@ -183,12 +136,18 @@ fn live_client() -> RpcClient<HttpTransport> {
     RpcClient::new(HttpTransport::new(endpoint))
 }
 
+fn assert_positive(value: GrapheneUInt64, method: &str) {
+    assert!(
+        value.as_u64() > 0,
+        "{method} should return a positive count"
+    );
+}
+
 #[test]
 fn every_generated_method_has_a_live_test_decision() {
     let generated = OPENRPC_METHODS.iter().copied().collect::<BTreeSet<_>>();
     let classified = TYPED_LIVE_METHODS
         .iter()
-        .chain(RAW_LIVE_METHODS.iter())
         .chain(SKIPPED_LIVE_METHODS.iter())
         .copied()
         .collect::<BTreeSet<_>>();
@@ -219,11 +178,37 @@ fn live_decodes_read_only_rpc_methods_over_http() {
 
     let account_count = client.call(GetAccountCountParams).unwrap();
     println!("get_account_count => {account_count}");
-    assert!(account_count > 0);
+    assert_positive(account_count, "get_account_count");
 
     let asset_count = client.call(GetAssetCountParams).unwrap();
     println!("get_asset_count => {asset_count}");
-    assert!(asset_count > 0);
+    assert_positive(asset_count, "get_asset_count");
+
+    let committee_count = client.call(GetCommitteeCountParams).unwrap();
+    println!("get_committee_count => {committee_count}");
+    assert_positive(committee_count, "get_committee_count");
+
+    let witness_count = client.call(GetWitnessCountParams).unwrap();
+    println!("get_witness_count => {witness_count}");
+    assert_positive(witness_count, "get_witness_count");
+
+    let worker_count = client.call(GetWorkerCountParams).unwrap();
+    println!("get_worker_count => {worker_count}");
+
+    let chain_id = client.call(GetChainIdParams).unwrap();
+    println!("get_chain_id => {chain_id:?}");
+
+    let chain_properties = client.call(GetChainPropertiesParams).unwrap();
+    println!("get_chain_properties => {chain_properties:#?}");
+
+    let config = client.call(GetConfigParams).unwrap();
+    println!("get_config => {config:#}");
+    assert_eq!(
+        config
+            .get("GRAPHENE_SYMBOL")
+            .and_then(|value| value.as_str()),
+        Some("BTS")
+    );
 
     let dynamic = client.call(GetDynamicGlobalPropertiesParams).unwrap();
     println!("get_dynamic_global_properties => {dynamic:#?}");
@@ -233,11 +218,11 @@ fn live_decodes_read_only_rpc_methods_over_http() {
     println!("get_global_properties => {global:#?}");
     assert!(!global.active_witnesses.is_empty());
 
+    let block_num = dynamic.head_block_number.saturating_sub(1);
     let block = client
-        .transport()
-        .call_raw("get_block", vec![json!(dynamic.head_block_number)])
-        .unwrap();
-    println!("get_block({}) => {block:#}", dynamic.head_block_number);
-    assert!(block.get("timestamp").is_some());
-    assert!(block.get("witness_signature").is_some());
+        .call(GetBlockParams { block_num })
+        .unwrap()
+        .expect("recent block should be available");
+    println!("get_block({block_num}) => {block:#?}");
+    assert!(!block.witness_signature.is_empty());
 }

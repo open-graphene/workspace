@@ -39,7 +39,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 struct GenerationConfig {
     chain_name: String,
     core_root: PathBuf,
-    wallet_header: String,
+    api_header: String,
+    api_qualified_name: String,
+    excluded_methods: Vec<String>,
     header_roots: Vec<String>,
     spec_output: PathBuf,
     schema_output: PathBuf,
@@ -60,8 +62,16 @@ fn generate(config_path: &Path) -> Result<(), Box<dyn Error>> {
         .arg(&config.chain_name)
         .arg("--core-root")
         .arg(&config.core_root)
-        .arg("--wallet-header")
-        .arg(&config.wallet_header)
+        .arg("--api-header")
+        .arg(&config.api_header)
+        .arg("--api-qualified-name")
+        .arg(&config.api_qualified_name)
+        .args(
+            config
+                .excluded_methods
+                .iter()
+                .flat_map(|method| [OsString::from("--exclude-method"), OsString::from(method)]),
+        )
         .arg("--output")
         .arg(&config.spec_output)
         .args(
@@ -292,11 +302,33 @@ fn load_config(
 
     let chain_name = string(chain, "name")?.to_owned();
     let core_root = resolve(config_dir, string(chain, "core_root")?);
-    let wallet_header = openrpc
-        .get("wallet_header")
+    let api_header = openrpc
+        .get("api_header")
         .and_then(TomlValue::as_str)
+        .or_else(|| openrpc.get("wallet_header").and_then(TomlValue::as_str))
         .unwrap_or("libraries/wallet/include/graphene/wallet/wallet.hpp")
         .to_owned();
+    let api_qualified_name = openrpc
+        .get("api_qualified_name")
+        .and_then(TomlValue::as_str)
+        .unwrap_or("graphene::wallet::wallet_api")
+        .to_owned();
+    let excluded_methods = openrpc
+        .get("excluded_methods")
+        .and_then(TomlValue::as_array)
+        .map(|values| {
+            values
+                .iter()
+                .map(|value| {
+                    value
+                        .as_str()
+                        .map(ToOwned::to_owned)
+                        .ok_or("[openrpc].excluded_methods must contain only strings")
+                })
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .transpose()?
+        .unwrap_or_default();
     let header_roots = openrpc
         .get("header_roots")
         .and_then(TomlValue::as_array)
@@ -322,7 +354,9 @@ fn load_config(
     Ok(GenerationConfig {
         chain_name,
         core_root,
-        wallet_header,
+        api_header,
+        api_qualified_name,
+        excluded_methods,
         header_roots,
         spec_output: resolve(config_dir, string(openrpc, "output")?),
         schema_output: resolve(config_dir, string(rust, "schema_output")?),

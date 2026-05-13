@@ -20,7 +20,7 @@ bin/gen.sh
 
 This directory contains process backends for two related phases:
 
-1. **Upstream import:** C++ wallet/core metadata -> OpenRPC spec.
+1. **Upstream import:** C++ FC_API/core metadata -> OpenRPC spec.
 2. **Rust generation helpers:** OpenRPC spec -> schema JSON, static variants,
    and RPC params.
 
@@ -39,7 +39,7 @@ it adapts to upstream source layout and external tools.
 The Rust coordinator runs these stages:
 
 ```text
-wallet.hpp + Doxygen
+API header + Doxygen
   -> gen_wallet_spec.py
   -> OpenRPC methods with placeholder schemas
 
@@ -64,8 +64,8 @@ OpenRPC methods
 
 ## What is still POC-level
 
-- `gen_wallet_spec.py` is still wallet-api oriented and looks for
-  `graphene::wallet::wallet_api`.
+- `gen_wallet_spec.py` is now API-class-aware, but still a Doxygen/XML importer
+  rather than a full C++ semantic model.
 - `gen_types_spec.py` is a pragmatic C++ text parser, not a full C++ parser.
 - `gen_rust_variants.py`, `gen_rust_rpc.py`, and `extract_typify_schema.py` are
   still Python backends spawned by the Rust coordinator.

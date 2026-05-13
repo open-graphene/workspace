@@ -3,7 +3,14 @@ name = "bitshares"
 core_root = "../../chains/bitshares/bitshares-core"
 
 [openrpc]
-wallet_header = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+api_header = "libraries/app/include/graphene/app/database_api.hpp"
+api_qualified_name = "graphene::app::database_api"
+excluded_methods = [
+  "set_subscribe_callback",
+  "set_pending_transaction_callback",
+  "set_block_applied_callback",
+  "subscribe_to_market",
+]
 output = "../target/generated/bitshares/spec.json"
 header_roots = [
   "libraries/protocol",

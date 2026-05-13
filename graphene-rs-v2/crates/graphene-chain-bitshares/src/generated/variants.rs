@@ -344,35 +344,6 @@ impl<'de> Deserialize<'de> for Operation {
     }
 }
 
-/// `graphene::protocol::future_extensions` — 1 alternatives.
-///
-/// Schema: `components.schemas.future_extensions`.
-#[derive(Clone, Debug)]
-pub enum FutureExtensions {
-    /// Wire index `0` — C++ `void_t`
-    VoidT(VoidT),
-}
-
-impl Serialize for FutureExtensions {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            FutureExtensions::VoidT(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for FutureExtensions {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(FutureExtensions::VoidT).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown FutureExtensions variant index: {}", other))),
-        }
-    }
-}
-
 /// `graphene::chain::vesting_policy` — 3 alternatives.
 ///
 /// Schema: `components.schemas.vesting_policy`.
@@ -406,6 +377,458 @@ impl<'de> Deserialize<'de> for VestingPolicy {
             1 => ::serde_json::from_value(payload).map(VestingPolicy::CddVesting).map_err(__D::Error::custom),
             2 => ::serde_json::from_value(payload).map(VestingPolicy::InstantVesting).map_err(__D::Error::custom),
             other => Err(__D::Error::custom(format!("unknown VestingPolicy variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::future_extensions` — 1 alternatives.
+///
+/// Schema: `components.schemas.future_extensions`.
+#[derive(Clone, Debug)]
+pub enum FutureExtensions {
+    /// Wire index `0` — C++ `void_t`
+    VoidT(VoidT),
+}
+
+impl Serialize for FutureExtensions {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            FutureExtensions::VoidT(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for FutureExtensions {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(FutureExtensions::VoidT).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown FutureExtensions variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::operation_result` — 6 alternatives.
+///
+/// Schema: `components.schemas.operation_result`.
+#[derive(Clone, Debug)]
+pub enum OperationResult {
+    /// Wire index `0` — C++ `void_result`
+    VoidResult(VoidResult),
+    /// Wire index `1` — C++ `object_id_type`
+    ObjectIdType(::std::string::String),
+    /// Wire index `2` — C++ `asset`
+    Asset(Asset),
+    /// Wire index `3` — C++ `generic_operation_result`
+    GenericOperationResult(GenericOperationResult),
+    /// Wire index `4` — C++ `generic_exchange_operation_result`
+    GenericExchangeOperationResult(GenericExchangeOperationResult),
+    /// Wire index `5` — C++ `extendable_operation_result`
+    ExtendableOperationResult(ExtendableOperationResult),
+}
+
+impl Serialize for OperationResult {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            OperationResult::VoidResult(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            OperationResult::ObjectIdType(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            OperationResult::Asset(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+            OperationResult::GenericOperationResult(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
+            OperationResult::GenericExchangeOperationResult(value) => { tuple.serialize_element(&4u32)?; tuple.serialize_element(value)?; }
+            OperationResult::ExtendableOperationResult(value) => { tuple.serialize_element(&5u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationResult {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(OperationResult::VoidResult).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(OperationResult::ObjectIdType).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(OperationResult::Asset).map_err(__D::Error::custom),
+            3 => ::serde_json::from_value(payload).map(OperationResult::GenericOperationResult).map_err(__D::Error::custom),
+            4 => ::serde_json::from_value(payload).map(OperationResult::GenericExchangeOperationResult).map_err(__D::Error::custom),
+            5 => ::serde_json::from_value(payload).map(OperationResult::ExtendableOperationResult).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown OperationResult variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::limit_order_auto_action` — 1 alternatives.
+///
+/// Schema: `components.schemas.limit_order_auto_action`.
+#[derive(Clone, Debug)]
+pub enum LimitOrderAutoAction {
+    /// Wire index `0` — C++ `create_take_profit_order_action`
+    CreateTakeProfitOrderAction(CreateTakeProfitOrderAction),
+}
+
+impl Serialize for LimitOrderAutoAction {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            LimitOrderAutoAction::CreateTakeProfitOrderAction(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for LimitOrderAutoAction {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(LimitOrderAutoAction::CreateTakeProfitOrderAction).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown LimitOrderAutoAction variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::restriction::argument_type` — 42 alternatives.
+///
+/// Schema: `components.schemas.restriction__argument_type`.
+#[derive(Clone, Debug)]
+pub enum RestrictionArgumentType {
+    /// Wire index `0` — C++ `void_t`
+    VoidT(VoidT),
+    /// Wire index `1` — C++ `bool`
+    Bool(bool),
+    /// Wire index `2` — C++ `int64_t`
+    Int64T(i64),
+    /// Wire index `3` — C++ `string`
+    String(::std::string::String),
+    /// Wire index `4` — C++ `time_point_sec`
+    TimePointSec(::graphene_rpc::GrapheneTimePointSec),
+    /// Wire index `5` — C++ `public_key_type`
+    PublicKeyType(::std::string::String),
+    /// Wire index `6` — C++ `fc::sha256`
+    Sha256(::std::string::String),
+    /// Wire index `7` — C++ `account_id_type`
+    AccountIdType(::std::string::String),
+    /// Wire index `8` — C++ `asset_id_type`
+    AssetIdType(::std::string::String),
+    /// Wire index `9` — C++ `force_settlement_id_type`
+    ForceSettlementIdType(::std::string::String),
+    /// Wire index `10` — C++ `committee_member_id_type`
+    CommitteeMemberIdType(::std::string::String),
+    /// Wire index `11` — C++ `witness_id_type`
+    WitnessIdType(::std::string::String),
+    /// Wire index `12` — C++ `limit_order_id_type`
+    LimitOrderIdType(::std::string::String),
+    /// Wire index `13` — C++ `call_order_id_type`
+    CallOrderIdType(::std::string::String),
+    /// Wire index `14` — C++ `custom_id_type`
+    CustomIdType(::std::string::String),
+    /// Wire index `15` — C++ `proposal_id_type`
+    ProposalIdType(::std::string::String),
+    /// Wire index `16` — C++ `withdraw_permission_id_type`
+    WithdrawPermissionIdType(::std::string::String),
+    /// Wire index `17` — C++ `vesting_balance_id_type`
+    VestingBalanceIdType(::std::string::String),
+    /// Wire index `18` — C++ `worker_id_type`
+    WorkerIdType(::std::string::String),
+    /// Wire index `19` — C++ `balance_id_type`
+    BalanceIdType(::std::string::String),
+    /// Wire index `20` — C++ `flat_set<bool>`
+    FlatSetBool(::std::vec::Vec<bool>),
+    /// Wire index `21` — C++ `flat_set<int64_t>`
+    FlatSetInt64T(::std::vec::Vec<i64>),
+    /// Wire index `22` — C++ `flat_set<string>`
+    FlatSetString(::std::vec::Vec<::std::string::String>),
+    /// Wire index `23` — C++ `flat_set<time_point_sec>`
+    FlatSetTimePointSec(::std::vec::Vec<::graphene_rpc::GrapheneTimePointSec>),
+    /// Wire index `24` — C++ `flat_set<public_key_type>`
+    FlatSetPublicKeyType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `25` — C++ `flat_set<fc::sha256>`
+    Sha2562(::std::vec::Vec<::std::string::String>),
+    /// Wire index `26` — C++ `flat_set<account_id_type>`
+    FlatSetAccountIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `27` — C++ `flat_set<asset_id_type>`
+    FlatSetAssetIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `28` — C++ `flat_set<force_settlement_id_type>`
+    FlatSetForceSettlementIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `29` — C++ `flat_set<committee_member_id_type>`
+    FlatSetCommitteeMemberIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `30` — C++ `flat_set<witness_id_type>`
+    FlatSetWitnessIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `31` — C++ `flat_set<limit_order_id_type>`
+    FlatSetLimitOrderIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `32` — C++ `flat_set<call_order_id_type>`
+    FlatSetCallOrderIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `33` — C++ `flat_set<custom_id_type>`
+    FlatSetCustomIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `34` — C++ `flat_set<proposal_id_type>`
+    FlatSetProposalIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `35` — C++ `flat_set<withdraw_permission_id_type>`
+    FlatSetWithdrawPermissionIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `36` — C++ `flat_set<vesting_balance_id_type>`
+    FlatSetVestingBalanceIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `37` — C++ `flat_set<worker_id_type>`
+    FlatSetWorkerIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `38` — C++ `flat_set<balance_id_type>`
+    FlatSetBalanceIdType(::std::vec::Vec<::std::string::String>),
+    /// Wire index `39` — C++ `vector<restriction>`
+    VectorRestriction(::std::vec::Vec<Restriction>),
+    /// Wire index `40` — C++ `vector<vector<restriction>>`
+    VectorVectorRestriction(::std::vec::Vec<::std::vec::Vec<Restriction>>),
+    /// Wire index `41` — C++ `variant_assert_argument_type`
+    VariantAssert(RestrictionVariantAssertArgumentType),
+}
+
+impl Serialize for RestrictionArgumentType {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            RestrictionArgumentType::VoidT(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::Bool(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::Int64T(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::String(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::TimePointSec(value) => { tuple.serialize_element(&4u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::PublicKeyType(value) => { tuple.serialize_element(&5u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::Sha256(value) => { tuple.serialize_element(&6u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::AccountIdType(value) => { tuple.serialize_element(&7u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::AssetIdType(value) => { tuple.serialize_element(&8u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::ForceSettlementIdType(value) => { tuple.serialize_element(&9u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::CommitteeMemberIdType(value) => { tuple.serialize_element(&10u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::WitnessIdType(value) => { tuple.serialize_element(&11u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::LimitOrderIdType(value) => { tuple.serialize_element(&12u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::CallOrderIdType(value) => { tuple.serialize_element(&13u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::CustomIdType(value) => { tuple.serialize_element(&14u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::ProposalIdType(value) => { tuple.serialize_element(&15u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::WithdrawPermissionIdType(value) => { tuple.serialize_element(&16u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::VestingBalanceIdType(value) => { tuple.serialize_element(&17u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::WorkerIdType(value) => { tuple.serialize_element(&18u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::BalanceIdType(value) => { tuple.serialize_element(&19u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetBool(value) => { tuple.serialize_element(&20u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetInt64T(value) => { tuple.serialize_element(&21u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetString(value) => { tuple.serialize_element(&22u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetTimePointSec(value) => { tuple.serialize_element(&23u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetPublicKeyType(value) => { tuple.serialize_element(&24u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::Sha2562(value) => { tuple.serialize_element(&25u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetAccountIdType(value) => { tuple.serialize_element(&26u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetAssetIdType(value) => { tuple.serialize_element(&27u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetForceSettlementIdType(value) => { tuple.serialize_element(&28u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetCommitteeMemberIdType(value) => { tuple.serialize_element(&29u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetWitnessIdType(value) => { tuple.serialize_element(&30u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetLimitOrderIdType(value) => { tuple.serialize_element(&31u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetCallOrderIdType(value) => { tuple.serialize_element(&32u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetCustomIdType(value) => { tuple.serialize_element(&33u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetProposalIdType(value) => { tuple.serialize_element(&34u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetWithdrawPermissionIdType(value) => { tuple.serialize_element(&35u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetVestingBalanceIdType(value) => { tuple.serialize_element(&36u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetWorkerIdType(value) => { tuple.serialize_element(&37u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::FlatSetBalanceIdType(value) => { tuple.serialize_element(&38u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::VectorRestriction(value) => { tuple.serialize_element(&39u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::VectorVectorRestriction(value) => { tuple.serialize_element(&40u32)?; tuple.serialize_element(value)?; }
+            RestrictionArgumentType::VariantAssert(value) => { tuple.serialize_element(&41u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for RestrictionArgumentType {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VoidT).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Bool).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Int64T).map_err(__D::Error::custom),
+            3 => ::serde_json::from_value(payload).map(RestrictionArgumentType::String).map_err(__D::Error::custom),
+            4 => ::serde_json::from_value(payload).map(RestrictionArgumentType::TimePointSec).map_err(__D::Error::custom),
+            5 => ::serde_json::from_value(payload).map(RestrictionArgumentType::PublicKeyType).map_err(__D::Error::custom),
+            6 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Sha256).map_err(__D::Error::custom),
+            7 => ::serde_json::from_value(payload).map(RestrictionArgumentType::AccountIdType).map_err(__D::Error::custom),
+            8 => ::serde_json::from_value(payload).map(RestrictionArgumentType::AssetIdType).map_err(__D::Error::custom),
+            9 => ::serde_json::from_value(payload).map(RestrictionArgumentType::ForceSettlementIdType).map_err(__D::Error::custom),
+            10 => ::serde_json::from_value(payload).map(RestrictionArgumentType::CommitteeMemberIdType).map_err(__D::Error::custom),
+            11 => ::serde_json::from_value(payload).map(RestrictionArgumentType::WitnessIdType).map_err(__D::Error::custom),
+            12 => ::serde_json::from_value(payload).map(RestrictionArgumentType::LimitOrderIdType).map_err(__D::Error::custom),
+            13 => ::serde_json::from_value(payload).map(RestrictionArgumentType::CallOrderIdType).map_err(__D::Error::custom),
+            14 => ::serde_json::from_value(payload).map(RestrictionArgumentType::CustomIdType).map_err(__D::Error::custom),
+            15 => ::serde_json::from_value(payload).map(RestrictionArgumentType::ProposalIdType).map_err(__D::Error::custom),
+            16 => ::serde_json::from_value(payload).map(RestrictionArgumentType::WithdrawPermissionIdType).map_err(__D::Error::custom),
+            17 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VestingBalanceIdType).map_err(__D::Error::custom),
+            18 => ::serde_json::from_value(payload).map(RestrictionArgumentType::WorkerIdType).map_err(__D::Error::custom),
+            19 => ::serde_json::from_value(payload).map(RestrictionArgumentType::BalanceIdType).map_err(__D::Error::custom),
+            20 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetBool).map_err(__D::Error::custom),
+            21 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetInt64T).map_err(__D::Error::custom),
+            22 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetString).map_err(__D::Error::custom),
+            23 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetTimePointSec).map_err(__D::Error::custom),
+            24 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetPublicKeyType).map_err(__D::Error::custom),
+            25 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Sha2562).map_err(__D::Error::custom),
+            26 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetAccountIdType).map_err(__D::Error::custom),
+            27 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetAssetIdType).map_err(__D::Error::custom),
+            28 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetForceSettlementIdType).map_err(__D::Error::custom),
+            29 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetCommitteeMemberIdType).map_err(__D::Error::custom),
+            30 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetWitnessIdType).map_err(__D::Error::custom),
+            31 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetLimitOrderIdType).map_err(__D::Error::custom),
+            32 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetCallOrderIdType).map_err(__D::Error::custom),
+            33 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetCustomIdType).map_err(__D::Error::custom),
+            34 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetProposalIdType).map_err(__D::Error::custom),
+            35 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetWithdrawPermissionIdType).map_err(__D::Error::custom),
+            36 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetVestingBalanceIdType).map_err(__D::Error::custom),
+            37 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetWorkerIdType).map_err(__D::Error::custom),
+            38 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetBalanceIdType).map_err(__D::Error::custom),
+            39 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VectorRestriction).map_err(__D::Error::custom),
+            40 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VectorVectorRestriction).map_err(__D::Error::custom),
+            41 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VariantAssert).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown RestrictionArgumentType variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::htlc_hash` — 4 alternatives.
+///
+/// Schema: `components.schemas.htlc_hash`.
+#[derive(Clone, Debug)]
+pub enum HtlcHash {
+    /// Wire index `0` — C++ `htlc_algo_ripemd160`
+    HtlcAlgoRipemd160(HtlcAlgoRipemd160),
+    /// Wire index `1` — C++ `htlc_algo_sha1`
+    HtlcAlgoSha1(HtlcAlgoSha1),
+    /// Wire index `2` — C++ `htlc_algo_sha256`
+    HtlcAlgoSha256(HtlcAlgoSha256),
+    /// Wire index `3` — C++ `htlc_algo_hash160`
+    HtlcAlgoHash160(HtlcAlgoHash160),
+}
+
+impl Serialize for HtlcHash {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            HtlcHash::HtlcAlgoRipemd160(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            HtlcHash::HtlcAlgoSha1(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            HtlcHash::HtlcAlgoSha256(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+            HtlcHash::HtlcAlgoHash160(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for HtlcHash {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoRipemd160).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoSha1).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoSha256).map_err(__D::Error::custom),
+            3 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoHash160).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown HtlcHash variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::predicate` — 3 alternatives.
+///
+/// Schema: `components.schemas.predicate`.
+#[derive(Clone, Debug)]
+pub enum Predicate {
+    /// Wire index `0` — C++ `account_name_eq_lit_predicate`
+    AccountNameEqLitPredicate(AccountNameEqLitPredicate),
+    /// Wire index `1` — C++ `asset_symbol_eq_lit_predicate`
+    AssetSymbolEqLitPredicate(AssetSymbolEqLitPredicate),
+    /// Wire index `2` — C++ `block_id_predicate`
+    BlockIdPredicate(BlockIdPredicate),
+}
+
+impl Serialize for Predicate {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            Predicate::AccountNameEqLitPredicate(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            Predicate::AssetSymbolEqLitPredicate(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            Predicate::BlockIdPredicate(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for Predicate {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(Predicate::AccountNameEqLitPredicate).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(Predicate::AssetSymbolEqLitPredicate).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(Predicate::BlockIdPredicate).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown Predicate variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::worker_initializer` — 3 alternatives.
+///
+/// Schema: `components.schemas.worker_initializer`.
+#[derive(Clone, Debug)]
+pub enum WorkerInitializer {
+    /// Wire index `0` — C++ `refund_worker_initializer`
+    RefundWorker(RefundWorkerInitializer),
+    /// Wire index `1` — C++ `vesting_balance_worker_initializer`
+    VestingBalanceWorker(VestingBalanceWorkerInitializer),
+    /// Wire index `2` — C++ `burn_worker_initializer`
+    BurnWorker(BurnWorkerInitializer),
+}
+
+impl Serialize for WorkerInitializer {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            WorkerInitializer::RefundWorker(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            WorkerInitializer::VestingBalanceWorker(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            WorkerInitializer::BurnWorker(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkerInitializer {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(WorkerInitializer::RefundWorker).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(WorkerInitializer::VestingBalanceWorker).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(WorkerInitializer::BurnWorker).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown WorkerInitializer variant index: {}", other))),
+        }
+    }
+}
+
+/// `graphene::protocol::vesting_policy_initializer` — 3 alternatives.
+///
+/// Schema: `components.schemas.vesting_policy_initializer`.
+#[derive(Clone, Debug)]
+pub enum VestingPolicyInitializer {
+    /// Wire index `0` — C++ `linear_vesting_policy_initializer`
+    LinearVestingPolicy(LinearVestingPolicyInitializer),
+    /// Wire index `1` — C++ `cdd_vesting_policy_initializer`
+    CddVestingPolicy(CddVestingPolicyInitializer),
+    /// Wire index `2` — C++ `instant_vesting_policy_initializer`
+    InstantVestingPolicy(InstantVestingPolicyInitializer),
+}
+
+impl Serialize for VestingPolicyInitializer {
+    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
+        let mut tuple = ser.serialize_tuple(2)?;
+        match self {
+            VestingPolicyInitializer::LinearVestingPolicy(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            VestingPolicyInitializer::CddVestingPolicy(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            VestingPolicyInitializer::InstantVestingPolicy(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+        }
+        tuple.end()
+    }
+}
+
+impl<'de> Deserialize<'de> for VestingPolicyInitializer {
+    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
+        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
+        match index {
+            0 => ::serde_json::from_value(payload).map(VestingPolicyInitializer::LinearVestingPolicy).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(VestingPolicyInitializer::CddVestingPolicy).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(VestingPolicyInitializer::InstantVestingPolicy).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown VestingPolicyInitializer variant index: {}", other))),
         }
     }
 }
@@ -747,125 +1170,6 @@ impl<'de> Deserialize<'de> for FeeParameters {
     }
 }
 
-/// `graphene::protocol::htlc_hash` — 4 alternatives.
-///
-/// Schema: `components.schemas.htlc_hash`.
-#[derive(Clone, Debug)]
-pub enum HtlcHash {
-    /// Wire index `0` — C++ `htlc_algo_ripemd160`
-    HtlcAlgoRipemd160(HtlcAlgoRipemd160),
-    /// Wire index `1` — C++ `htlc_algo_sha1`
-    HtlcAlgoSha1(HtlcAlgoSha1),
-    /// Wire index `2` — C++ `htlc_algo_sha256`
-    HtlcAlgoSha256(HtlcAlgoSha256),
-    /// Wire index `3` — C++ `htlc_algo_hash160`
-    HtlcAlgoHash160(HtlcAlgoHash160),
-}
-
-impl Serialize for HtlcHash {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            HtlcHash::HtlcAlgoRipemd160(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            HtlcHash::HtlcAlgoSha1(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            HtlcHash::HtlcAlgoSha256(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-            HtlcHash::HtlcAlgoHash160(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for HtlcHash {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoRipemd160).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoSha1).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoSha256).map_err(__D::Error::custom),
-            3 => ::serde_json::from_value(payload).map(HtlcHash::HtlcAlgoHash160).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown HtlcHash variant index: {}", other))),
-        }
-    }
-}
-
-/// `graphene::protocol::limit_order_auto_action` — 1 alternatives.
-///
-/// Schema: `components.schemas.limit_order_auto_action`.
-#[derive(Clone, Debug)]
-pub enum LimitOrderAutoAction {
-    /// Wire index `0` — C++ `create_take_profit_order_action`
-    CreateTakeProfitOrderAction(CreateTakeProfitOrderAction),
-}
-
-impl Serialize for LimitOrderAutoAction {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            LimitOrderAutoAction::CreateTakeProfitOrderAction(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for LimitOrderAutoAction {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(LimitOrderAutoAction::CreateTakeProfitOrderAction).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown LimitOrderAutoAction variant index: {}", other))),
-        }
-    }
-}
-
-/// `graphene::protocol::operation_result` — 6 alternatives.
-///
-/// Schema: `components.schemas.operation_result`.
-#[derive(Clone, Debug)]
-pub enum OperationResult {
-    /// Wire index `0` — C++ `void_result`
-    VoidResult(VoidResult),
-    /// Wire index `1` — C++ `object_id_type`
-    ObjectIdType(::std::string::String),
-    /// Wire index `2` — C++ `asset`
-    Asset(Asset),
-    /// Wire index `3` — C++ `generic_operation_result`
-    GenericOperationResult(GenericOperationResult),
-    /// Wire index `4` — C++ `generic_exchange_operation_result`
-    GenericExchangeOperationResult(GenericExchangeOperationResult),
-    /// Wire index `5` — C++ `extendable_operation_result`
-    ExtendableOperationResult(ExtendableOperationResult),
-}
-
-impl Serialize for OperationResult {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            OperationResult::VoidResult(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            OperationResult::ObjectIdType(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            OperationResult::Asset(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-            OperationResult::GenericOperationResult(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
-            OperationResult::GenericExchangeOperationResult(value) => { tuple.serialize_element(&4u32)?; tuple.serialize_element(value)?; }
-            OperationResult::ExtendableOperationResult(value) => { tuple.serialize_element(&5u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for OperationResult {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(OperationResult::VoidResult).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(OperationResult::ObjectIdType).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(OperationResult::Asset).map_err(__D::Error::custom),
-            3 => ::serde_json::from_value(payload).map(OperationResult::GenericOperationResult).map_err(__D::Error::custom),
-            4 => ::serde_json::from_value(payload).map(OperationResult::GenericExchangeOperationResult).map_err(__D::Error::custom),
-            5 => ::serde_json::from_value(payload).map(OperationResult::ExtendableOperationResult).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown OperationResult variant index: {}", other))),
-        }
-    }
-}
-
 /// `graphene::protocol::special_authority` — 2 alternatives.
 ///
 /// Schema: `components.schemas.special_authority`.
@@ -899,306 +1203,39 @@ impl<'de> Deserialize<'de> for SpecialAuthority {
     }
 }
 
-/// `graphene::protocol::restriction::argument_type` — 42 alternatives.
+/// `graphene::chain::worker_type` — 3 alternatives.
 ///
-/// Schema: `components.schemas.restriction__argument_type`.
+/// Schema: `components.schemas.worker_type`.
 #[derive(Clone, Debug)]
-pub enum RestrictionArgumentType {
-    /// Wire index `0` — C++ `void_t`
-    VoidT(VoidT),
-    /// Wire index `1` — C++ `bool`
-    Bool(bool),
-    /// Wire index `2` — C++ `int64_t`
-    Int64T(i64),
-    /// Wire index `3` — C++ `string`
-    String(::std::string::String),
-    /// Wire index `4` — C++ `time_point_sec`
-    TimePointSec(::graphene_rpc::GrapheneTimePointSec),
-    /// Wire index `5` — C++ `public_key_type`
-    PublicKeyType(::std::string::String),
-    /// Wire index `6` — C++ `fc::sha256`
-    Sha256(::std::string::String),
-    /// Wire index `7` — C++ `account_id_type`
-    AccountIdType(::std::string::String),
-    /// Wire index `8` — C++ `asset_id_type`
-    AssetIdType(::std::string::String),
-    /// Wire index `9` — C++ `force_settlement_id_type`
-    ForceSettlementIdType(::std::string::String),
-    /// Wire index `10` — C++ `committee_member_id_type`
-    CommitteeMemberIdType(::std::string::String),
-    /// Wire index `11` — C++ `witness_id_type`
-    WitnessIdType(::std::string::String),
-    /// Wire index `12` — C++ `limit_order_id_type`
-    LimitOrderIdType(::std::string::String),
-    /// Wire index `13` — C++ `call_order_id_type`
-    CallOrderIdType(::std::string::String),
-    /// Wire index `14` — C++ `custom_id_type`
-    CustomIdType(::std::string::String),
-    /// Wire index `15` — C++ `proposal_id_type`
-    ProposalIdType(::std::string::String),
-    /// Wire index `16` — C++ `withdraw_permission_id_type`
-    WithdrawPermissionIdType(::std::string::String),
-    /// Wire index `17` — C++ `vesting_balance_id_type`
-    VestingBalanceIdType(::std::string::String),
-    /// Wire index `18` — C++ `worker_id_type`
-    WorkerIdType(::std::string::String),
-    /// Wire index `19` — C++ `balance_id_type`
-    BalanceIdType(::std::string::String),
-    /// Wire index `20` — C++ `flat_set<bool>`
-    FlatSetBool(::std::vec::Vec<bool>),
-    /// Wire index `21` — C++ `flat_set<int64_t>`
-    FlatSetInt64T(::std::vec::Vec<i64>),
-    /// Wire index `22` — C++ `flat_set<string>`
-    FlatSetString(::std::vec::Vec<::std::string::String>),
-    /// Wire index `23` — C++ `flat_set<time_point_sec>`
-    FlatSetTimePointSec(::std::vec::Vec<::graphene_rpc::GrapheneTimePointSec>),
-    /// Wire index `24` — C++ `flat_set<public_key_type>`
-    FlatSetPublicKeyType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `25` — C++ `flat_set<fc::sha256>`
-    Sha2562(::std::vec::Vec<::std::string::String>),
-    /// Wire index `26` — C++ `flat_set<account_id_type>`
-    FlatSetAccountIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `27` — C++ `flat_set<asset_id_type>`
-    FlatSetAssetIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `28` — C++ `flat_set<force_settlement_id_type>`
-    FlatSetForceSettlementIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `29` — C++ `flat_set<committee_member_id_type>`
-    FlatSetCommitteeMemberIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `30` — C++ `flat_set<witness_id_type>`
-    FlatSetWitnessIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `31` — C++ `flat_set<limit_order_id_type>`
-    FlatSetLimitOrderIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `32` — C++ `flat_set<call_order_id_type>`
-    FlatSetCallOrderIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `33` — C++ `flat_set<custom_id_type>`
-    FlatSetCustomIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `34` — C++ `flat_set<proposal_id_type>`
-    FlatSetProposalIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `35` — C++ `flat_set<withdraw_permission_id_type>`
-    FlatSetWithdrawPermissionIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `36` — C++ `flat_set<vesting_balance_id_type>`
-    FlatSetVestingBalanceIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `37` — C++ `flat_set<worker_id_type>`
-    FlatSetWorkerIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `38` — C++ `flat_set<balance_id_type>`
-    FlatSetBalanceIdType(::std::vec::Vec<::std::string::String>),
-    /// Wire index `39` — C++ `vector<restriction>`
-    VectorRestriction(::std::vec::Vec<Restriction>),
-    /// Wire index `40` — C++ `vector<vector<restriction>>`
-    VectorVectorRestriction(::std::vec::Vec<::std::vec::Vec<Restriction>>),
-    /// Wire index `41` — C++ `variant_assert_argument_type`
-    VariantAssert(RestrictionVariantAssertArgumentType),
+pub enum WorkerType {
+    /// Wire index `0` — C++ `refund_worker_type`
+    RefundWorkerType(RefundWorkerType),
+    /// Wire index `1` — C++ `vesting_balance_worker_type`
+    VestingBalanceWorkerType(VestingBalanceWorkerType),
+    /// Wire index `2` — C++ `burn_worker_type`
+    BurnWorkerType(BurnWorkerType),
 }
 
-impl Serialize for RestrictionArgumentType {
+impl Serialize for WorkerType {
     fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
         let mut tuple = ser.serialize_tuple(2)?;
         match self {
-            RestrictionArgumentType::VoidT(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::Bool(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::Int64T(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::String(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::TimePointSec(value) => { tuple.serialize_element(&4u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::PublicKeyType(value) => { tuple.serialize_element(&5u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::Sha256(value) => { tuple.serialize_element(&6u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::AccountIdType(value) => { tuple.serialize_element(&7u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::AssetIdType(value) => { tuple.serialize_element(&8u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::ForceSettlementIdType(value) => { tuple.serialize_element(&9u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::CommitteeMemberIdType(value) => { tuple.serialize_element(&10u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::WitnessIdType(value) => { tuple.serialize_element(&11u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::LimitOrderIdType(value) => { tuple.serialize_element(&12u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::CallOrderIdType(value) => { tuple.serialize_element(&13u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::CustomIdType(value) => { tuple.serialize_element(&14u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::ProposalIdType(value) => { tuple.serialize_element(&15u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::WithdrawPermissionIdType(value) => { tuple.serialize_element(&16u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::VestingBalanceIdType(value) => { tuple.serialize_element(&17u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::WorkerIdType(value) => { tuple.serialize_element(&18u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::BalanceIdType(value) => { tuple.serialize_element(&19u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetBool(value) => { tuple.serialize_element(&20u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetInt64T(value) => { tuple.serialize_element(&21u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetString(value) => { tuple.serialize_element(&22u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetTimePointSec(value) => { tuple.serialize_element(&23u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetPublicKeyType(value) => { tuple.serialize_element(&24u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::Sha2562(value) => { tuple.serialize_element(&25u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetAccountIdType(value) => { tuple.serialize_element(&26u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetAssetIdType(value) => { tuple.serialize_element(&27u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetForceSettlementIdType(value) => { tuple.serialize_element(&28u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetCommitteeMemberIdType(value) => { tuple.serialize_element(&29u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetWitnessIdType(value) => { tuple.serialize_element(&30u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetLimitOrderIdType(value) => { tuple.serialize_element(&31u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetCallOrderIdType(value) => { tuple.serialize_element(&32u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetCustomIdType(value) => { tuple.serialize_element(&33u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetProposalIdType(value) => { tuple.serialize_element(&34u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetWithdrawPermissionIdType(value) => { tuple.serialize_element(&35u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetVestingBalanceIdType(value) => { tuple.serialize_element(&36u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetWorkerIdType(value) => { tuple.serialize_element(&37u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::FlatSetBalanceIdType(value) => { tuple.serialize_element(&38u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::VectorRestriction(value) => { tuple.serialize_element(&39u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::VectorVectorRestriction(value) => { tuple.serialize_element(&40u32)?; tuple.serialize_element(value)?; }
-            RestrictionArgumentType::VariantAssert(value) => { tuple.serialize_element(&41u32)?; tuple.serialize_element(value)?; }
+            WorkerType::RefundWorkerType(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            WorkerType::VestingBalanceWorkerType(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            WorkerType::BurnWorkerType(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
         }
         tuple.end()
     }
 }
 
-impl<'de> Deserialize<'de> for RestrictionArgumentType {
+impl<'de> Deserialize<'de> for WorkerType {
     fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
         let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
         match index {
-            0 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VoidT).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Bool).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Int64T).map_err(__D::Error::custom),
-            3 => ::serde_json::from_value(payload).map(RestrictionArgumentType::String).map_err(__D::Error::custom),
-            4 => ::serde_json::from_value(payload).map(RestrictionArgumentType::TimePointSec).map_err(__D::Error::custom),
-            5 => ::serde_json::from_value(payload).map(RestrictionArgumentType::PublicKeyType).map_err(__D::Error::custom),
-            6 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Sha256).map_err(__D::Error::custom),
-            7 => ::serde_json::from_value(payload).map(RestrictionArgumentType::AccountIdType).map_err(__D::Error::custom),
-            8 => ::serde_json::from_value(payload).map(RestrictionArgumentType::AssetIdType).map_err(__D::Error::custom),
-            9 => ::serde_json::from_value(payload).map(RestrictionArgumentType::ForceSettlementIdType).map_err(__D::Error::custom),
-            10 => ::serde_json::from_value(payload).map(RestrictionArgumentType::CommitteeMemberIdType).map_err(__D::Error::custom),
-            11 => ::serde_json::from_value(payload).map(RestrictionArgumentType::WitnessIdType).map_err(__D::Error::custom),
-            12 => ::serde_json::from_value(payload).map(RestrictionArgumentType::LimitOrderIdType).map_err(__D::Error::custom),
-            13 => ::serde_json::from_value(payload).map(RestrictionArgumentType::CallOrderIdType).map_err(__D::Error::custom),
-            14 => ::serde_json::from_value(payload).map(RestrictionArgumentType::CustomIdType).map_err(__D::Error::custom),
-            15 => ::serde_json::from_value(payload).map(RestrictionArgumentType::ProposalIdType).map_err(__D::Error::custom),
-            16 => ::serde_json::from_value(payload).map(RestrictionArgumentType::WithdrawPermissionIdType).map_err(__D::Error::custom),
-            17 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VestingBalanceIdType).map_err(__D::Error::custom),
-            18 => ::serde_json::from_value(payload).map(RestrictionArgumentType::WorkerIdType).map_err(__D::Error::custom),
-            19 => ::serde_json::from_value(payload).map(RestrictionArgumentType::BalanceIdType).map_err(__D::Error::custom),
-            20 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetBool).map_err(__D::Error::custom),
-            21 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetInt64T).map_err(__D::Error::custom),
-            22 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetString).map_err(__D::Error::custom),
-            23 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetTimePointSec).map_err(__D::Error::custom),
-            24 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetPublicKeyType).map_err(__D::Error::custom),
-            25 => ::serde_json::from_value(payload).map(RestrictionArgumentType::Sha2562).map_err(__D::Error::custom),
-            26 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetAccountIdType).map_err(__D::Error::custom),
-            27 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetAssetIdType).map_err(__D::Error::custom),
-            28 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetForceSettlementIdType).map_err(__D::Error::custom),
-            29 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetCommitteeMemberIdType).map_err(__D::Error::custom),
-            30 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetWitnessIdType).map_err(__D::Error::custom),
-            31 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetLimitOrderIdType).map_err(__D::Error::custom),
-            32 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetCallOrderIdType).map_err(__D::Error::custom),
-            33 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetCustomIdType).map_err(__D::Error::custom),
-            34 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetProposalIdType).map_err(__D::Error::custom),
-            35 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetWithdrawPermissionIdType).map_err(__D::Error::custom),
-            36 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetVestingBalanceIdType).map_err(__D::Error::custom),
-            37 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetWorkerIdType).map_err(__D::Error::custom),
-            38 => ::serde_json::from_value(payload).map(RestrictionArgumentType::FlatSetBalanceIdType).map_err(__D::Error::custom),
-            39 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VectorRestriction).map_err(__D::Error::custom),
-            40 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VectorVectorRestriction).map_err(__D::Error::custom),
-            41 => ::serde_json::from_value(payload).map(RestrictionArgumentType::VariantAssert).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown RestrictionArgumentType variant index: {}", other))),
-        }
-    }
-}
-
-/// `graphene::protocol::predicate` — 3 alternatives.
-///
-/// Schema: `components.schemas.predicate`.
-#[derive(Clone, Debug)]
-pub enum Predicate {
-    /// Wire index `0` — C++ `account_name_eq_lit_predicate`
-    AccountNameEqLitPredicate(AccountNameEqLitPredicate),
-    /// Wire index `1` — C++ `asset_symbol_eq_lit_predicate`
-    AssetSymbolEqLitPredicate(AssetSymbolEqLitPredicate),
-    /// Wire index `2` — C++ `block_id_predicate`
-    BlockIdPredicate(BlockIdPredicate),
-}
-
-impl Serialize for Predicate {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            Predicate::AccountNameEqLitPredicate(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            Predicate::AssetSymbolEqLitPredicate(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            Predicate::BlockIdPredicate(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for Predicate {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(Predicate::AccountNameEqLitPredicate).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(Predicate::AssetSymbolEqLitPredicate).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(Predicate::BlockIdPredicate).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown Predicate variant index: {}", other))),
-        }
-    }
-}
-
-/// `graphene::protocol::worker_initializer` — 3 alternatives.
-///
-/// Schema: `components.schemas.worker_initializer`.
-#[derive(Clone, Debug)]
-pub enum WorkerInitializer {
-    /// Wire index `0` — C++ `refund_worker_initializer`
-    RefundWorker(RefundWorkerInitializer),
-    /// Wire index `1` — C++ `vesting_balance_worker_initializer`
-    VestingBalanceWorker(VestingBalanceWorkerInitializer),
-    /// Wire index `2` — C++ `burn_worker_initializer`
-    BurnWorker(BurnWorkerInitializer),
-}
-
-impl Serialize for WorkerInitializer {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            WorkerInitializer::RefundWorker(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            WorkerInitializer::VestingBalanceWorker(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            WorkerInitializer::BurnWorker(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for WorkerInitializer {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(WorkerInitializer::RefundWorker).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(WorkerInitializer::VestingBalanceWorker).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(WorkerInitializer::BurnWorker).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown WorkerInitializer variant index: {}", other))),
-        }
-    }
-}
-
-/// `graphene::protocol::vesting_policy_initializer` — 3 alternatives.
-///
-/// Schema: `components.schemas.vesting_policy_initializer`.
-#[derive(Clone, Debug)]
-pub enum VestingPolicyInitializer {
-    /// Wire index `0` — C++ `linear_vesting_policy_initializer`
-    LinearVestingPolicy(LinearVestingPolicyInitializer),
-    /// Wire index `1` — C++ `cdd_vesting_policy_initializer`
-    CddVestingPolicy(CddVestingPolicyInitializer),
-    /// Wire index `2` — C++ `instant_vesting_policy_initializer`
-    InstantVestingPolicy(InstantVestingPolicyInitializer),
-}
-
-impl Serialize for VestingPolicyInitializer {
-    fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
-        let mut tuple = ser.serialize_tuple(2)?;
-        match self {
-            VestingPolicyInitializer::LinearVestingPolicy(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            VestingPolicyInitializer::CddVestingPolicy(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            VestingPolicyInitializer::InstantVestingPolicy(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-        }
-        tuple.end()
-    }
-}
-
-impl<'de> Deserialize<'de> for VestingPolicyInitializer {
-    fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
-        let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
-        match index {
-            0 => ::serde_json::from_value(payload).map(VestingPolicyInitializer::LinearVestingPolicy).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(VestingPolicyInitializer::CddVestingPolicy).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(VestingPolicyInitializer::InstantVestingPolicy).map_err(__D::Error::custom),
-            other => Err(__D::Error::custom(format!("unknown VestingPolicyInitializer variant index: {}", other))),
+            0 => ::serde_json::from_value(payload).map(WorkerType::RefundWorkerType).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(WorkerType::VestingBalanceWorkerType).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(WorkerType::BurnWorkerType).map_err(__D::Error::custom),
+            other => Err(__D::Error::custom(format!("unknown WorkerType variant index: {}", other))),
         }
     }
 }

@@ -1,11 +1,12 @@
 Operation
-FutureExtensions
 VestingPolicy
-FeeParameters
+FutureExtensions
 OperationResult
-SpecialAuthority
 RestrictionArgumentType
 HtlcHash
 WorkerInitializer
 Predicate
 VestingPolicyInitializer
+FeeParameters
+SpecialAuthority
+WorkerType

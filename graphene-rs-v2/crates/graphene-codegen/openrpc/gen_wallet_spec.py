@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Convert Doxygen XML for graphene::wallet::wallet_api into an OpenRPC document.
+"""Convert Doxygen XML for a Graphene FC_API class into an OpenRPC document.
 
-Invoked by bin/gen_wallet_spec.sh — not meant to be run standalone in normal use.
+Invoked by gen_wallet_openrpc.sh — not meant to be run standalone in normal use.
 
 Strategy
 --------
-1. Read the FC_API(graphene::wallet::wallet_api, (m1)(m2)...) list directly from
-   wallet.hpp. Only methods registered there are exposed over JSON-RPC, so this
-   is our authoritative method whitelist.
-2. Find the Doxygen XML file for class graphene::wallet::wallet_api (file name
-   is hash-mangled by Doxygen, so we look it up via the index).
+1. Read the FC_API(qualified::api_class, (m1)(m2)...) list directly from the API
+   header. Only methods registered there are exposed over JSON-RPC, so this is
+   our authoritative method whitelist.
+2. Find the Doxygen XML file for the requested API class (file name is
+   hash-mangled by Doxygen, so we look it up via the index).
 3. For each <memberdef kind="function" prot="public"> whose name appears in the
    FC_API list, extract: return type, parameter list, brief & detailed docs.
 4. Map each C++ type string to a JSON Schema fragment. Complex types become
@@ -34,19 +34,20 @@ from pathlib import Path
 # FC_API list extraction
 # ---------------------------------------------------------------------------
 
-FC_API_START_RE = re.compile(r"FC_API\s*\(\s*graphene::wallet::wallet_api\s*,")
 METHOD_TOKEN_RE = re.compile(r"\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)")
 
 
-def parse_fc_api_methods(wallet_header: Path) -> set[str]:
-    """Locate FC_API(graphene::wallet::wallet_api, (m1)(m2)...) and pull out the
-    method tokens. We can't use a single regex because the body contains nested
-    `(...)` groups — instead we find the macro start, then walk forward counting
-    parens until the outer call closes."""
-    text = wallet_header.read_text(encoding="utf-8")
-    m = FC_API_START_RE.search(text)
+def parse_fc_api_methods(api_header: Path, api_qualified_name: str) -> set[str]:
+    """Locate FC_API(api_qualified_name, (m1)(m2)...) and pull out the method
+    tokens. We can't use a single regex because the body contains nested `(...)`
+    groups — instead we find the macro start, then walk forward counting parens
+    until the outer call closes."""
+    text = api_header.read_text(encoding="utf-8")
+    escaped_name = re.escape(api_qualified_name).replace(r"\::", r"\s*::\s*")
+    start_re = re.compile(rf"FC_API\s*\(\s*{escaped_name}\s*,")
+    m = start_re.search(text)
     if not m:
-        sys.exit(f"FC_API(graphene::wallet::wallet_api, ...) not found in {wallet_header}")
+        sys.exit(f"FC_API({api_qualified_name}, ...) not found in {api_header}")
     # Depth is 1 right after the '(' that opens the macro call.
     depth = 1
     i = m.end()
@@ -70,13 +71,13 @@ def parse_fc_api_methods(wallet_header: Path) -> set[str]:
 # Doxygen XML helpers
 # ---------------------------------------------------------------------------
 
-def find_wallet_api_xml(xml_dir: Path) -> Path:
+def find_api_xml(xml_dir: Path, api_qualified_name: str) -> Path:
     index = ET.parse(xml_dir / "index.xml").getroot()
     for compound in index.findall("./compound[@kind='class']"):
         name_el = compound.find("name")
-        if name_el is not None and name_el.text == "graphene::wallet::wallet_api":
+        if name_el is not None and name_el.text == api_qualified_name:
             return xml_dir / f"{compound.get('refid')}.xml"
-    sys.exit("graphene::wallet::wallet_api not found in Doxygen index.xml")
+    sys.exit(f"{api_qualified_name} not found in Doxygen index.xml")
 
 
 def text_of(el: ET.Element | None) -> str:
@@ -168,14 +169,14 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "uint8_t":  {"type": "integer", "format": "uint8",  "minimum": 0},
     "uint16_t": {"type": "integer", "format": "uint16", "minimum": 0},
     "uint32_t": {"type": "integer", "format": "uint32", "minimum": 0},
-    "uint64_t": {"type": "integer", "format": "uint64", "minimum": 0},
+    "uint64_t": {"$ref": "#/components/schemas/GrapheneUInt64"},
     "float":    {"type": "number", "format": "float"},
     "double":   {"type": "number", "format": "double"},
     "share_type": {"type": "integer", "format": "int64"},
-    "time_point_sec": {"type": "string", "format": "date-time"},
-    "fc::time_point_sec": {"type": "string", "format": "date-time"},
-    "time_point": {"type": "string", "format": "date-time"},
-    "fc::time_point": {"type": "string", "format": "date-time"},
+    "time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
+    "fc::time_point_sec": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
+    "time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
+    "fc::time_point": {"$ref": "#/components/schemas/GrapheneTimePointSec"},
     "object_id_type": {"type": "string", "pattern": r"^\d+\.\d+\.\d+$"},
     "public_key_type": {"type": "string"},
     "private_key_type": {"type": "string"},
@@ -187,10 +188,14 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "fc::sha256": {"type": "string"},
     "variant": {},  # accept anything
     "fc::variant": {},
+    "variants": {"type": "array", "items": {}},
+    "fc::variants": {"type": "array", "items": {}},
     "variant_object": {"type": "object"},
     "fc::variant_object": {"type": "object"},
     "mutable_variant_object": {"type": "object"},
     "fc::mutable_variant_object": {"type": "object"},
+    "blind_factor_type": {"type": "string"},
+    "commitment_type": {"type": "string"},
 }
 
 # graphene::protocol object id helpers — they all serialize as "1.X.Y" strings
@@ -401,7 +406,7 @@ def parse_methods(class_xml: Path, allowed: set[str]) -> list[Method]:
 # OpenRPC document assembly
 # ---------------------------------------------------------------------------
 
-def build_openrpc(methods: list[Method]) -> dict:
+def build_openrpc(methods: list[Method], *, api_qualified_name: str, title: str) -> dict:
     schemas: dict[str, dict] = {}
     openrpc_methods: list[dict] = []
 
@@ -438,12 +443,12 @@ def build_openrpc(methods: list[Method]) -> dict:
     return {
         "openrpc": "1.3.2",
         "info": {
-            "title": "swaplock wallet_api",
+            "title": title,
             "version": "0.1.0",
             "description": (
-                "Generated from graphene::wallet::wallet_api via Doxygen XML.\n"
+                f"Generated from {api_qualified_name} via Doxygen XML.\n"
                 "Schemas marked with x-cpp-type are placeholders awaiting fill-in "
-                "from an FC_REFLECT walker (see programs/js_operation_serializer)."
+                "from an FC_REFLECT walker."
             ),
         },
         "methods": openrpc_methods,
@@ -458,11 +463,21 @@ def build_openrpc(methods: list[Method]) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--xml-dir", required=True, type=Path)
-    ap.add_argument("--wallet-header", required=True, type=Path)
+    ap.add_argument("--api-header", type=Path)
+    ap.add_argument("--api-qualified-name", default="graphene::wallet::wallet_api")
+    ap.add_argument("--title", default=None)
+    ap.add_argument("--exclude-method", action="append", default=[])
+    # Backward-compatible alias while the pipeline moves from wallet-only to API-class-aware.
+    ap.add_argument("--wallet-header", type=Path)
     args = ap.parse_args()
 
-    allowed = parse_fc_api_methods(args.wallet_header)
-    class_xml = find_wallet_api_xml(args.xml_dir)
+    api_header = args.api_header or args.wallet_header
+    if api_header is None:
+        sys.exit("missing --api-header")
+
+    excluded = set(args.exclude_method)
+    allowed = parse_fc_api_methods(api_header, args.api_qualified_name) - excluded
+    class_xml = find_api_xml(args.xml_dir, args.api_qualified_name)
     methods = parse_methods(class_xml, allowed)
 
     missing = allowed - {m.name for m in methods}
@@ -473,7 +488,11 @@ def main() -> int:
             file=sys.stderr,
         )
 
-    doc = build_openrpc(methods)
+    doc = build_openrpc(
+        methods,
+        api_qualified_name=args.api_qualified_name,
+        title=args.title or args.api_qualified_name,
+    )
     json.dump(doc, sys.stdout, indent=2, ensure_ascii=False)
     sys.stdout.write("\n")
     return 0

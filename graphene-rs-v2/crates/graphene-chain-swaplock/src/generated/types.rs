@@ -624,60 +624,6 @@ impl<'de> ::serde::Deserialize<'de> for AccountCreateOperationRegistrar {
             })
     }
 }
-///`AccountHistoryOperationDetail`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "details",
-///    "result_count",
-///    "total_count"
-///  ],
-///  "properties": {
-///    "details": {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/operation_detail_ex"
-///      },
-///      "x-cpp-type": "vector<operation_detail_ex>"
-///    },
-///    "result_count": {
-///      "type": "integer",
-///      "format": "uint32",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint32_t"
-///    },
-///    "total_count": {
-///      "type": "integer",
-///      "format": "uint32",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint32_t"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::account_history_operation_detail"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct AccountHistoryOperationDetail {
-    pub details: ::std::vec::Vec<OperationDetailEx>,
-    pub result_count: u32,
-    pub total_count: u32,
-}
-impl ::std::convert::From<&AccountHistoryOperationDetail>
-for AccountHistoryOperationDetail {
-    fn from(value: &AccountHistoryOperationDetail) -> Self {
-        value.clone()
-    }
-}
-impl AccountHistoryOperationDetail {
-    pub fn builder() -> builder::AccountHistoryOperationDetail {
-        Default::default()
-    }
-}
 ///`AccountNameEqLitPredicate`
 ///
 /// <details><summary>JSON schema</summary>
@@ -2337,144 +2283,6 @@ impl<'de> ::serde::Deserialize<'de> for AccountStatisticsObjectOwner {
             })
     }
 }
-///`AccountStorageObject`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "account",
-///    "catalog",
-///    "key",
-///    "value"
-///  ],
-///  "properties": {
-///    "account": {
-///      "type": "string",
-///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///      "x-cpp-type": "account_id_type"
-///    },
-///    "catalog": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "key": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "value": {
-///      "oneOf": [
-///        {},
-///        {
-///          "type": "null"
-///        }
-///      ],
-///      "x-cpp-type": "optional<variant>"
-///    }
-///  },
-///  "x-cpp-type": "graphene::custom_operations::account_storage_object"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct AccountStorageObject {
-    pub account: AccountStorageObjectAccount,
-    pub catalog: ::std::string::String,
-    pub key: ::std::string::String,
-    pub value: ::std::option::Option<::serde_json::Value>,
-}
-impl ::std::convert::From<&AccountStorageObject> for AccountStorageObject {
-    fn from(value: &AccountStorageObject) -> Self {
-        value.clone()
-    }
-}
-impl AccountStorageObject {
-    pub fn builder() -> builder::AccountStorageObject {
-        Default::default()
-    }
-}
-///`AccountStorageObjectAccount`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///  "x-cpp-type": "account_id_type"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct AccountStorageObjectAccount(::std::string::String);
-impl ::std::ops::Deref for AccountStorageObjectAccount {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<AccountStorageObjectAccount> for ::std::string::String {
-    fn from(value: AccountStorageObjectAccount) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AccountStorageObjectAccount> for AccountStorageObjectAccount {
-    fn from(value: &AccountStorageObjectAccount) -> Self {
-        value.clone()
-    }
-}
-impl ::std::str::FromStr for AccountStorageObjectAccount {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
-        if PATTERN.find(value).is_none() {
-            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for AccountStorageObjectAccount {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for AccountStorageObjectAccount {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for AccountStorageObjectAccount {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for AccountStorageObjectAccount {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
 ///`AccountTransferOperation`
 ///
 /// <details><summary>JSON schema</summary>
@@ -3248,100 +3056,6 @@ impl AccountWhitelistOperation {
         Default::default()
     }
 }
-///`AccountWhitelistOperationAccountListing`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "enum": [
-///    "no_listing",
-///    "white_listed",
-///    "black_listed",
-///    "white_and_black_listed"
-///  ],
-///  "x-cpp-type": "graphene::protocol::account_whitelist_operation::account_listing"
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum AccountWhitelistOperationAccountListing {
-    #[serde(rename = "no_listing")]
-    NoListing,
-    #[serde(rename = "white_listed")]
-    WhiteListed,
-    #[serde(rename = "black_listed")]
-    BlackListed,
-    #[serde(rename = "white_and_black_listed")]
-    WhiteAndBlackListed,
-}
-impl ::std::convert::From<&Self> for AccountWhitelistOperationAccountListing {
-    fn from(value: &AccountWhitelistOperationAccountListing) -> Self {
-        value.clone()
-    }
-}
-impl ::std::fmt::Display for AccountWhitelistOperationAccountListing {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::NoListing => f.write_str("no_listing"),
-            Self::WhiteListed => f.write_str("white_listed"),
-            Self::BlackListed => f.write_str("black_listed"),
-            Self::WhiteAndBlackListed => f.write_str("white_and_black_listed"),
-        }
-    }
-}
-impl ::std::str::FromStr for AccountWhitelistOperationAccountListing {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "no_listing" => Ok(Self::NoListing),
-            "white_listed" => Ok(Self::WhiteListed),
-            "black_listed" => Ok(Self::BlackListed),
-            "white_and_black_listed" => Ok(Self::WhiteAndBlackListed),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for AccountWhitelistOperationAccountListing {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for AccountWhitelistOperationAccountListing {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for AccountWhitelistOperationAccountListing {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
 ///`AccountWhitelistOperationAccountToList`
 ///
 /// <details><summary>JSON schema</summary>
@@ -3733,7 +3447,7 @@ for AdditionalAssetOptionsWhitelistMarketFeeSharingItem {
             })
     }
 }
-///`ApprovalDelta`
+///`Address`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -3741,77 +3455,29 @@ for AdditionalAssetOptionsWhitelistMarketFeeSharingItem {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "active_approvals_to_add",
-///    "active_approvals_to_remove",
-///    "key_approvals_to_add",
-///    "key_approvals_to_remove",
-///    "owner_approvals_to_add",
-///    "owner_approvals_to_remove"
+///    "addr"
 ///  ],
 ///  "properties": {
-///    "active_approvals_to_add": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      },
-///      "x-cpp-type": "vector<string>"
-///    },
-///    "active_approvals_to_remove": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      },
-///      "x-cpp-type": "vector<string>"
-///    },
-///    "key_approvals_to_add": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      },
-///      "x-cpp-type": "vector<string>"
-///    },
-///    "key_approvals_to_remove": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      },
-///      "x-cpp-type": "vector<string>"
-///    },
-///    "owner_approvals_to_add": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      },
-///      "x-cpp-type": "vector<string>"
-///    },
-///    "owner_approvals_to_remove": {
-///      "type": "array",
-///      "items": {
-///        "type": "string"
-///      },
-///      "x-cpp-type": "vector<string>"
+///    "addr": {
+///      "type": "string",
+///      "x-cpp-type": "fc::ripemd160"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::wallet::approval_delta"
+///  "x-cpp-type": "graphene::protocol::address"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct ApprovalDelta {
-    pub active_approvals_to_add: ::std::vec::Vec<::std::string::String>,
-    pub active_approvals_to_remove: ::std::vec::Vec<::std::string::String>,
-    pub key_approvals_to_add: ::std::vec::Vec<::std::string::String>,
-    pub key_approvals_to_remove: ::std::vec::Vec<::std::string::String>,
-    pub owner_approvals_to_add: ::std::vec::Vec<::std::string::String>,
-    pub owner_approvals_to_remove: ::std::vec::Vec<::std::string::String>,
+pub struct Address {
+    pub addr: ::std::string::String,
 }
-impl ::std::convert::From<&ApprovalDelta> for ApprovalDelta {
-    fn from(value: &ApprovalDelta) -> Self {
+impl ::std::convert::From<&Address> for Address {
+    fn from(value: &Address) -> Self {
         value.clone()
     }
 }
-impl ApprovalDelta {
-    pub fn builder() -> builder::ApprovalDelta {
+impl Address {
+    pub fn builder() -> builder::Address {
         Default::default()
     }
 }
@@ -4191,232 +3857,6 @@ impl ::std::convert::TryFrom<::std::string::String> for AssetAssetId {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for AssetAssetId {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`AssetBitassetDataObject`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "asset_cer_updated",
-///    "asset_id",
-///    "current_feed",
-///    "current_feed_publication_time",
-///    "current_initial_collateralization",
-///    "current_maintenance_collateralization",
-///    "feed_cer_updated",
-///    "feeds",
-///    "force_settled_volume",
-///    "individual_settlement_debt",
-///    "individual_settlement_fund",
-///    "is_prediction_market",
-///    "median_feed",
-///    "options",
-///    "settlement_fund",
-///    "settlement_price"
-///  ],
-///  "properties": {
-///    "asset_cer_updated": {
-///      "type": "boolean",
-///      "x-cpp-type": "bool"
-///    },
-///    "asset_id": {
-///      "type": "string",
-///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///      "x-cpp-type": "asset_id_type"
-///    },
-///    "current_feed": {
-///      "$ref": "#/$defs/price_feed_with_icr",
-///      "x-cpp-type": "price_feed_with_icr"
-///    },
-///    "current_feed_publication_time": {
-///      "$ref": "#/$defs/GrapheneTimePointSec",
-///      "x-cpp-type": "time_point_sec"
-///    },
-///    "current_initial_collateralization": {
-///      "$ref": "#/$defs/price",
-///      "x-cpp-type": "price"
-///    },
-///    "current_maintenance_collateralization": {
-///      "$ref": "#/$defs/price",
-///      "x-cpp-type": "price"
-///    },
-///    "feed_cer_updated": {
-///      "type": "boolean",
-///      "x-cpp-type": "bool"
-///    },
-///    "feeds": {
-///      "type": "object",
-///      "additionalProperties": {
-///        "type": "array",
-///        "maxItems": 2,
-///        "minItems": 2,
-///        "prefixItems": [
-///          {
-///            "$ref": "#/$defs/GrapheneTimePointSec"
-///          },
-///          {
-///            "$ref": "#/$defs/price_feed_with_icr"
-///          }
-///        ]
-///      },
-///      "x-cpp-type": "flat_map<account_id_type, pair<time_point_sec,price_feed_with_icr>>"
-///    },
-///    "force_settled_volume": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "individual_settlement_debt": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "individual_settlement_fund": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "is_prediction_market": {
-///      "type": "boolean",
-///      "x-cpp-type": "bool"
-///    },
-///    "median_feed": {
-///      "$ref": "#/$defs/price_feed_with_icr",
-///      "x-cpp-type": "price_feed_with_icr"
-///    },
-///    "options": {
-///      "$ref": "#/$defs/bitasset_options",
-///      "x-cpp-type": "bitasset_options"
-///    },
-///    "settlement_fund": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "settlement_price": {
-///      "$ref": "#/$defs/price",
-///      "x-cpp-type": "price"
-///    }
-///  },
-///  "x-cpp-type": "graphene::chain::asset_bitasset_data_object"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct AssetBitassetDataObject {
-    pub asset_cer_updated: bool,
-    pub asset_id: AssetBitassetDataObjectAssetId,
-    pub current_feed: PriceFeedWithIcr,
-    pub current_feed_publication_time: ::graphene_rpc::GrapheneTimePointSec,
-    pub current_initial_collateralization: Price,
-    pub current_maintenance_collateralization: Price,
-    pub feed_cer_updated: bool,
-    pub feeds: ::std::collections::HashMap<
-        ::std::string::String,
-        [::serde_json::Value; 2usize],
-    >,
-    pub force_settled_volume: i64,
-    pub individual_settlement_debt: i64,
-    pub individual_settlement_fund: i64,
-    pub is_prediction_market: bool,
-    pub median_feed: PriceFeedWithIcr,
-    pub options: BitassetOptions,
-    pub settlement_fund: i64,
-    pub settlement_price: Price,
-}
-impl ::std::convert::From<&AssetBitassetDataObject> for AssetBitassetDataObject {
-    fn from(value: &AssetBitassetDataObject) -> Self {
-        value.clone()
-    }
-}
-impl AssetBitassetDataObject {
-    pub fn builder() -> builder::AssetBitassetDataObject {
-        Default::default()
-    }
-}
-///`AssetBitassetDataObjectAssetId`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///  "x-cpp-type": "asset_id_type"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct AssetBitassetDataObjectAssetId(::std::string::String);
-impl ::std::ops::Deref for AssetBitassetDataObjectAssetId {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<AssetBitassetDataObjectAssetId> for ::std::string::String {
-    fn from(value: AssetBitassetDataObjectAssetId) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetBitassetDataObjectAssetId>
-for AssetBitassetDataObjectAssetId {
-    fn from(value: &AssetBitassetDataObjectAssetId) -> Self {
-        value.clone()
-    }
-}
-impl ::std::str::FromStr for AssetBitassetDataObjectAssetId {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
-        if PATTERN.find(value).is_none() {
-            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for AssetBitassetDataObjectAssetId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for AssetBitassetDataObjectAssetId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for AssetBitassetDataObjectAssetId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for AssetBitassetDataObjectAssetId {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -9203,6 +8643,65 @@ for BalanceClaimOperationFeeParamsT {
         Self(value)
     }
 }
+///`BalanceObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "balance",
+///    "last_claim_date",
+///    "owner",
+///    "vesting_policy"
+///  ],
+///  "properties": {
+///    "balance": {
+///      "$ref": "#/$defs/asset",
+///      "x-cpp-type": "asset"
+///    },
+///    "last_claim_date": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "owner": {
+///      "$ref": "#/$defs/address",
+///      "x-cpp-type": "address"
+///    },
+///    "vesting_policy": {
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/linear_vesting_policy"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ],
+///      "x-cpp-type": "optional<linear_vesting_policy>"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::balance_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BalanceObject {
+    pub balance: Asset,
+    pub last_claim_date: ::graphene_rpc::GrapheneTimePointSec,
+    pub owner: Address,
+    pub vesting_policy: ::std::option::Option<LinearVestingPolicy>,
+}
+impl ::std::convert::From<&BalanceObject> for BalanceObject {
+    fn from(value: &BalanceObject) -> Self {
+        value.clone()
+    }
+}
+impl BalanceObject {
+    pub fn builder() -> builder::BalanceObject {
+        Default::default()
+    }
+}
 ///`BidCollateralOperation`
 ///
 /// <details><summary>JSON schema</summary>
@@ -9636,113 +9135,6 @@ impl<'de> ::serde::Deserialize<'de> for BitassetOptionsShortBackingAsset {
             })
     }
 }
-///`BlindConfirmation`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "outputs",
-///    "trx"
-///  ],
-///  "properties": {
-///    "outputs": {
-///      "type": "array",
-///      "items": {
-///        "$ref": "#/$defs/blind_confirmation__output"
-///      },
-///      "x-cpp-type": "vector<output>"
-///    },
-///    "trx": {
-///      "$ref": "#/$defs/signed_transaction",
-///      "x-cpp-type": "signed_transaction"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::blind_confirmation"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct BlindConfirmation {
-    pub outputs: ::std::vec::Vec<BlindConfirmationOutput>,
-    pub trx: SignedTransaction,
-}
-impl ::std::convert::From<&BlindConfirmation> for BlindConfirmation {
-    fn from(value: &BlindConfirmation) -> Self {
-        value.clone()
-    }
-}
-impl BlindConfirmation {
-    pub fn builder() -> builder::BlindConfirmation {
-        Default::default()
-    }
-}
-///`BlindConfirmationOutput`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "auth",
-///    "confirmation",
-///    "confirmation_receipt",
-///    "decrypted_memo",
-///    "label",
-///    "pub_key"
-///  ],
-///  "properties": {
-///    "auth": {
-///      "$ref": "#/$defs/authority",
-///      "x-cpp-type": "authority"
-///    },
-///    "confirmation": {
-///      "$ref": "#/$defs/stealth_confirmation",
-///      "x-cpp-type": "stealth_confirmation"
-///    },
-///    "confirmation_receipt": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "decrypted_memo": {
-///      "$ref": "#/$defs/stealth_confirmation__memo_data",
-///      "x-cpp-type": "stealth_confirmation::memo_data"
-///    },
-///    "label": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "pub_key": {
-///      "type": "string",
-///      "x-cpp-type": "public_key_type"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::blind_confirmation::output"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct BlindConfirmationOutput {
-    pub auth: Authority,
-    pub confirmation: StealthConfirmation,
-    pub confirmation_receipt: ::std::string::String,
-    pub decrypted_memo: StealthConfirmationMemoData,
-    pub label: ::std::string::String,
-    pub pub_key: ::std::string::String,
-}
-impl ::std::convert::From<&BlindConfirmationOutput> for BlindConfirmationOutput {
-    fn from(value: &BlindConfirmationOutput) -> Self {
-        value.clone()
-    }
-}
-impl BlindConfirmationOutput {
-    pub fn builder() -> builder::BlindConfirmationOutput {
-        Default::default()
-    }
-}
 ///`BlindInput`
 ///
 /// <details><summary>JSON schema</summary>
@@ -9848,100 +9240,6 @@ impl BlindOutput {
         Default::default()
     }
 }
-///`BlindReceipt`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "amount",
-///    "conf",
-///    "control_authority",
-///    "data",
-///    "date",
-///    "from_key",
-///    "from_label",
-///    "memo",
-///    "to_key",
-///    "to_label",
-///    "used"
-///  ],
-///  "properties": {
-///    "amount": {
-///      "$ref": "#/$defs/asset",
-///      "x-cpp-type": "asset"
-///    },
-///    "conf": {
-///      "$ref": "#/$defs/stealth_confirmation",
-///      "x-cpp-type": "stealth_confirmation"
-///    },
-///    "control_authority": {
-///      "$ref": "#/$defs/authority",
-///      "x-cpp-type": "authority"
-///    },
-///    "data": {
-///      "$ref": "#/$defs/stealth_confirmation__memo_data",
-///      "x-cpp-type": "stealth_confirmation::memo_data"
-///    },
-///    "date": {
-///      "$ref": "#/$defs/GrapheneTimePointSec",
-///      "x-cpp-type": "fc::time_point"
-///    },
-///    "from_key": {
-///      "type": "string",
-///      "x-cpp-type": "public_key_type"
-///    },
-///    "from_label": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "memo": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "to_key": {
-///      "type": "string",
-///      "x-cpp-type": "public_key_type"
-///    },
-///    "to_label": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "used": {
-///      "type": "boolean",
-///      "x-cpp-type": "bool"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::blind_receipt"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct BlindReceipt {
-    pub amount: Asset,
-    pub conf: StealthConfirmation,
-    pub control_authority: Authority,
-    pub data: StealthConfirmationMemoData,
-    pub date: ::graphene_rpc::GrapheneTimePointSec,
-    pub from_key: ::std::string::String,
-    pub from_label: ::std::string::String,
-    pub memo: ::std::string::String,
-    pub to_key: ::std::string::String,
-    pub to_label: ::std::string::String,
-    pub used: bool,
-}
-impl ::std::convert::From<&BlindReceipt> for BlindReceipt {
-    fn from(value: &BlindReceipt) -> Self {
-        value.clone()
-    }
-}
-impl BlindReceipt {
-    pub fn builder() -> builder::BlindReceipt {
-        Default::default()
-    }
-}
 ///`BlindTransferOperation`
 ///
 /// <details><summary>JSON schema</summary>
@@ -10037,6 +9335,135 @@ impl BlindTransferOperationFeeParamsT {
         Default::default()
     }
 }
+///`BlindedBalanceObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "asset_id",
+///    "commitment",
+///    "owner"
+///  ],
+///  "properties": {
+///    "asset_id": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "commitment": {
+///      "description": "Pedersen commitment, hex-encoded.",
+///      "type": "string",
+///      "x-cpp-type": "fc::ecc::commitment_type"
+///    },
+///    "owner": {
+///      "$ref": "#/$defs/authority",
+///      "x-cpp-type": "authority"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::blinded_balance_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BlindedBalanceObject {
+    pub asset_id: BlindedBalanceObjectAssetId,
+    ///Pedersen commitment, hex-encoded.
+    pub commitment: ::std::string::String,
+    pub owner: Authority,
+}
+impl ::std::convert::From<&BlindedBalanceObject> for BlindedBalanceObject {
+    fn from(value: &BlindedBalanceObject) -> Self {
+        value.clone()
+    }
+}
+impl BlindedBalanceObject {
+    pub fn builder() -> builder::BlindedBalanceObject {
+        Default::default()
+    }
+}
+///`BlindedBalanceObjectAssetId`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BlindedBalanceObjectAssetId(::std::string::String);
+impl ::std::ops::Deref for BlindedBalanceObjectAssetId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BlindedBalanceObjectAssetId> for ::std::string::String {
+    fn from(value: BlindedBalanceObjectAssetId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&BlindedBalanceObjectAssetId> for BlindedBalanceObjectAssetId {
+    fn from(value: &BlindedBalanceObjectAssetId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for BlindedBalanceObjectAssetId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BlindedBalanceObjectAssetId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BlindedBalanceObjectAssetId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BlindedBalanceObjectAssetId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BlindedBalanceObjectAssetId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`BlockIdPredicate`
 ///
 /// <details><summary>JSON schema</summary>
@@ -10128,156 +9555,6 @@ impl ::std::fmt::Display for BlockIdType {
         self.0.fmt(f)
     }
 }
-///`BrainKeyInfo`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "brain_priv_key",
-///    "pub_key",
-///    "wif_priv_key"
-///  ],
-///  "properties": {
-///    "brain_priv_key": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "pub_key": {
-///      "type": "string",
-///      "x-cpp-type": "public_key_type"
-///    },
-///    "wif_priv_key": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::brain_key_info"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct BrainKeyInfo {
-    pub brain_priv_key: ::std::string::String,
-    pub pub_key: ::std::string::String,
-    pub wif_priv_key: ::std::string::String,
-}
-impl ::std::convert::From<&BrainKeyInfo> for BrainKeyInfo {
-    fn from(value: &BrainKeyInfo) -> Self {
-        value.clone()
-    }
-}
-impl BrainKeyInfo {
-    pub fn builder() -> builder::BrainKeyInfo {
-        Default::default()
-    }
-}
-///`BucketObject`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "base_volume",
-///    "close_base",
-///    "close_quote",
-///    "high_base",
-///    "high_quote",
-///    "key",
-///    "low_base",
-///    "low_quote",
-///    "open_base",
-///    "open_quote",
-///    "quote_volume"
-///  ],
-///  "properties": {
-///    "base_volume": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "close_base": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "close_quote": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "high_base": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "high_quote": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "key": {
-///      "$ref": "#/$defs/market_history__bucket_key",
-///      "x-cpp-type": "bucket_key"
-///    },
-///    "low_base": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "low_quote": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "open_base": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "open_quote": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    },
-///    "quote_volume": {
-///      "type": "integer",
-///      "format": "int64",
-///      "x-cpp-type": "share_type"
-///    }
-///  },
-///  "x-cpp-type": "graphene::market_history::bucket_object"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct BucketObject {
-    pub base_volume: i64,
-    pub close_base: i64,
-    pub close_quote: i64,
-    pub high_base: i64,
-    pub high_quote: i64,
-    pub key: MarketHistoryBucketKey,
-    pub low_base: i64,
-    pub low_quote: i64,
-    pub open_base: i64,
-    pub open_quote: i64,
-    pub quote_volume: i64,
-}
-impl ::std::convert::From<&BucketObject> for BucketObject {
-    fn from(value: &BucketObject) -> Self {
-        value.clone()
-    }
-}
-impl BucketObject {
-    pub fn builder() -> builder::BucketObject {
-        Default::default()
-    }
-}
 ///`BurnWorkerInitializer`
 ///
 /// <details><summary>JSON schema</summary>
@@ -10317,6 +9594,41 @@ for BurnWorkerInitializer {
         value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     ) -> Self {
         Self(value)
+    }
+}
+///`BurnWorkerType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "total_burned"
+///  ],
+///  "properties": {
+///    "total_burned": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::burn_worker_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BurnWorkerType {
+    pub total_burned: i64,
+}
+impl ::std::convert::From<&BurnWorkerType> for BurnWorkerType {
+    fn from(value: &BurnWorkerType) -> Self {
+        value.clone()
+    }
+}
+impl BurnWorkerType {
+    pub fn builder() -> builder::BurnWorkerType {
+        Default::default()
     }
 }
 ///`BuybackAccountOptions`
@@ -11168,6 +10480,63 @@ impl CddVestingPolicyInitializer {
         Default::default()
     }
 }
+///Alias for fc::sha256
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Alias for fc::sha256",
+///  "type": "string",
+///  "x-cpp-type": "graphene::protocol::chain_id_type"
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+#[serde(transparent)]
+pub struct ChainIdType(pub ::std::string::String);
+impl ::std::ops::Deref for ChainIdType {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ChainIdType> for ::std::string::String {
+    fn from(value: ChainIdType) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ChainIdType> for ChainIdType {
+    fn from(value: &ChainIdType) -> Self {
+        value.clone()
+    }
+}
+impl ::std::convert::From<::std::string::String> for ChainIdType {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::str::FromStr for ChainIdType {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::fmt::Display for ChainIdType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
 ///`ChainParameters`
 ///
 /// <details><summary>JSON schema</summary>
@@ -11490,6 +10859,103 @@ impl ::std::convert::From<&ChainParametersExt> for ChainParametersExt {
 impl ChainParametersExt {
     pub fn builder() -> builder::ChainParametersExt {
         Default::default()
+    }
+}
+///`ChainPropertyObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "chain_id",
+///    "immutable_parameters"
+///  ],
+///  "properties": {
+///    "chain_id": {
+///      "$ref": "#/$defs/chain_id_type",
+///      "x-cpp-type": "chain_id_type"
+///    },
+///    "immutable_parameters": {
+///      "$ref": "#/$defs/immutable_chain_parameters",
+///      "x-cpp-type": "immutable_chain_parameters"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::chain_property_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct ChainPropertyObject {
+    pub chain_id: ChainIdType,
+    pub immutable_parameters: ImmutableChainParameters,
+}
+impl ::std::convert::From<&ChainPropertyObject> for ChainPropertyObject {
+    fn from(value: &ChainPropertyObject) -> Self {
+        value.clone()
+    }
+}
+impl ChainPropertyObject {
+    pub fn builder() -> builder::ChainPropertyObject {
+        Default::default()
+    }
+}
+///Alias for fc::ripemd160
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Alias for fc::ripemd160",
+///  "type": "string",
+///  "x-cpp-type": "graphene::protocol::checksum_type"
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+#[serde(transparent)]
+pub struct ChecksumType(pub ::std::string::String);
+impl ::std::ops::Deref for ChecksumType {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ChecksumType> for ::std::string::String {
+    fn from(value: ChecksumType) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ChecksumType> for ChecksumType {
+    fn from(value: &ChecksumType) -> Self {
+        value.clone()
+    }
+}
+impl ::std::convert::From<::std::string::String> for ChecksumType {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::str::FromStr for ChecksumType {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::fmt::Display for ChecksumType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
     }
 }
 ///`CollateralBidObject`
@@ -12859,6 +12325,507 @@ for CreditDealExpiredOperationOfferOwner {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for CreditDealExpiredOperationOfferOwner {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditDealObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "auto_repay",
+///    "borrower",
+///    "collateral_amount",
+///    "collateral_asset",
+///    "debt_amount",
+///    "debt_asset",
+///    "fee_rate",
+///    "latest_repay_time",
+///    "offer_id",
+///    "offer_owner"
+///  ],
+///  "properties": {
+///    "auto_repay": {
+///      "type": "integer",
+///      "format": "uint8",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint8_t"
+///    },
+///    "borrower": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "collateral_amount": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "collateral_asset": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "debt_amount": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "debt_asset": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "fee_rate": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "latest_repay_time": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "offer_id": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "credit_offer_id_type"
+///    },
+///    "offer_owner": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::credit_deal_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct CreditDealObject {
+    pub auto_repay: u8,
+    pub borrower: CreditDealObjectBorrower,
+    pub collateral_amount: i64,
+    pub collateral_asset: CreditDealObjectCollateralAsset,
+    pub debt_amount: i64,
+    pub debt_asset: CreditDealObjectDebtAsset,
+    pub fee_rate: u32,
+    pub latest_repay_time: ::graphene_rpc::GrapheneTimePointSec,
+    pub offer_id: CreditDealObjectOfferId,
+    pub offer_owner: CreditDealObjectOfferOwner,
+}
+impl ::std::convert::From<&CreditDealObject> for CreditDealObject {
+    fn from(value: &CreditDealObject) -> Self {
+        value.clone()
+    }
+}
+impl CreditDealObject {
+    pub fn builder() -> builder::CreditDealObject {
+        Default::default()
+    }
+}
+///`CreditDealObjectBorrower`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditDealObjectBorrower(::std::string::String);
+impl ::std::ops::Deref for CreditDealObjectBorrower {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditDealObjectBorrower> for ::std::string::String {
+    fn from(value: CreditDealObjectBorrower) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditDealObjectBorrower> for CreditDealObjectBorrower {
+    fn from(value: &CreditDealObjectBorrower) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditDealObjectBorrower {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditDealObjectBorrower {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreditDealObjectBorrower {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditDealObjectBorrower {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditDealObjectBorrower {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditDealObjectCollateralAsset`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditDealObjectCollateralAsset(::std::string::String);
+impl ::std::ops::Deref for CreditDealObjectCollateralAsset {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditDealObjectCollateralAsset> for ::std::string::String {
+    fn from(value: CreditDealObjectCollateralAsset) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditDealObjectCollateralAsset>
+for CreditDealObjectCollateralAsset {
+    fn from(value: &CreditDealObjectCollateralAsset) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditDealObjectCollateralAsset {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditDealObjectCollateralAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for CreditDealObjectCollateralAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditDealObjectCollateralAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditDealObjectCollateralAsset {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditDealObjectDebtAsset`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditDealObjectDebtAsset(::std::string::String);
+impl ::std::ops::Deref for CreditDealObjectDebtAsset {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditDealObjectDebtAsset> for ::std::string::String {
+    fn from(value: CreditDealObjectDebtAsset) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditDealObjectDebtAsset> for CreditDealObjectDebtAsset {
+    fn from(value: &CreditDealObjectDebtAsset) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditDealObjectDebtAsset {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditDealObjectDebtAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreditDealObjectDebtAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditDealObjectDebtAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditDealObjectDebtAsset {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditDealObjectOfferId`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "credit_offer_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditDealObjectOfferId(::std::string::String);
+impl ::std::ops::Deref for CreditDealObjectOfferId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditDealObjectOfferId> for ::std::string::String {
+    fn from(value: CreditDealObjectOfferId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditDealObjectOfferId> for CreditDealObjectOfferId {
+    fn from(value: &CreditDealObjectOfferId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditDealObjectOfferId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditDealObjectOfferId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreditDealObjectOfferId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditDealObjectOfferId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditDealObjectOfferId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditDealObjectOfferOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditDealObjectOfferOwner(::std::string::String);
+impl ::std::ops::Deref for CreditDealObjectOfferOwner {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditDealObjectOfferOwner> for ::std::string::String {
+    fn from(value: CreditDealObjectOfferOwner) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditDealObjectOfferOwner> for CreditDealObjectOfferOwner {
+    fn from(value: &CreditDealObjectOfferOwner) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditDealObjectOfferOwner {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditDealObjectOfferOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreditDealObjectOfferOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditDealObjectOfferOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditDealObjectOfferOwner {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -14290,6 +14257,277 @@ for CreditOfferDeleteOperationOwnerAccount {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for CreditOfferDeleteOperationOwnerAccount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditOfferObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "acceptable_borrowers",
+///    "acceptable_collateral",
+///    "asset_type",
+///    "auto_disable_time",
+///    "current_balance",
+///    "enabled",
+///    "fee_rate",
+///    "max_duration_seconds",
+///    "min_deal_amount",
+///    "owner_account",
+///    "total_balance"
+///  ],
+///  "properties": {
+///    "acceptable_borrowers": {
+///      "type": "object",
+///      "additionalProperties": {
+///        "type": "integer",
+///        "format": "int64"
+///      },
+///      "x-cpp-type": "flat_map<account_id_type, share_type>"
+///    },
+///    "acceptable_collateral": {
+///      "type": "object",
+///      "additionalProperties": {
+///        "$ref": "#/$defs/price"
+///      },
+///      "x-cpp-type": "flat_map<asset_id_type, price>"
+///    },
+///    "asset_type": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "auto_disable_time": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "current_balance": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "enabled": {
+///      "type": "boolean",
+///      "x-cpp-type": "bool"
+///    },
+///    "fee_rate": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "max_duration_seconds": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "min_deal_amount": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "owner_account": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "total_balance": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::credit_offer_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct CreditOfferObject {
+    pub acceptable_borrowers: ::std::collections::HashMap<::std::string::String, i64>,
+    pub acceptable_collateral: ::std::collections::HashMap<::std::string::String, Price>,
+    pub asset_type: CreditOfferObjectAssetType,
+    pub auto_disable_time: ::graphene_rpc::GrapheneTimePointSec,
+    pub current_balance: i64,
+    pub enabled: bool,
+    pub fee_rate: u32,
+    pub max_duration_seconds: u32,
+    pub min_deal_amount: i64,
+    pub owner_account: CreditOfferObjectOwnerAccount,
+    pub total_balance: i64,
+}
+impl ::std::convert::From<&CreditOfferObject> for CreditOfferObject {
+    fn from(value: &CreditOfferObject) -> Self {
+        value.clone()
+    }
+}
+impl CreditOfferObject {
+    pub fn builder() -> builder::CreditOfferObject {
+        Default::default()
+    }
+}
+///`CreditOfferObjectAssetType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditOfferObjectAssetType(::std::string::String);
+impl ::std::ops::Deref for CreditOfferObjectAssetType {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditOfferObjectAssetType> for ::std::string::String {
+    fn from(value: CreditOfferObjectAssetType) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditOfferObjectAssetType> for CreditOfferObjectAssetType {
+    fn from(value: &CreditOfferObjectAssetType) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditOfferObjectAssetType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditOfferObjectAssetType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreditOfferObjectAssetType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditOfferObjectAssetType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditOfferObjectAssetType {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CreditOfferObjectOwnerAccount`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CreditOfferObjectOwnerAccount(::std::string::String);
+impl ::std::ops::Deref for CreditOfferObjectOwnerAccount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CreditOfferObjectOwnerAccount> for ::std::string::String {
+    fn from(value: CreditOfferObjectOwnerAccount) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&CreditOfferObjectOwnerAccount>
+for CreditOfferObjectOwnerAccount {
+    fn from(value: &CreditOfferObjectOwnerAccount) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for CreditOfferObjectOwnerAccount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreditOfferObjectOwnerAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreditOfferObjectOwnerAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreditOfferObjectOwnerAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CreditOfferObjectOwnerAccount {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -17399,6 +17637,442 @@ impl ::std::convert::TryFrom<::std::string::String> for ExtendedAssetObjectIssue
     }
 }
 impl<'de> ::serde::Deserialize<'de> for ExtendedAssetObjectIssuer {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ExtendedLiquidityPoolObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "asset_a",
+///    "asset_b",
+///    "balance_a",
+///    "balance_b",
+///    "share_asset",
+///    "statistics",
+///    "taker_fee_percent",
+///    "virtual_value",
+///    "withdrawal_fee_percent"
+///  ],
+///  "properties": {
+///    "asset_a": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "asset_b": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "balance_a": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "balance_b": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "share_asset": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "statistics": {
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/market_history__liquidity_pool_ticker_object"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ],
+///      "x-cpp-type": "optional<liquidity_pool_ticker_object>"
+///    },
+///    "taker_fee_percent": {
+///      "type": "integer",
+///      "format": "uint16",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint16_t"
+///    },
+///    "virtual_value": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "withdrawal_fee_percent": {
+///      "type": "integer",
+///      "format": "uint16",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint16_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::app::extended_liquidity_pool_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct ExtendedLiquidityPoolObject {
+    pub asset_a: ExtendedLiquidityPoolObjectAssetA,
+    pub asset_b: ExtendedLiquidityPoolObjectAssetB,
+    pub balance_a: i64,
+    pub balance_b: i64,
+    pub share_asset: ExtendedLiquidityPoolObjectShareAsset,
+    pub statistics: ::std::option::Option<MarketHistoryLiquidityPoolTickerObject>,
+    pub taker_fee_percent: u16,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub virtual_value: ExtendedLiquidityPoolObjectVirtualValue,
+    pub withdrawal_fee_percent: u16,
+}
+impl ::std::convert::From<&ExtendedLiquidityPoolObject> for ExtendedLiquidityPoolObject {
+    fn from(value: &ExtendedLiquidityPoolObject) -> Self {
+        value.clone()
+    }
+}
+impl ExtendedLiquidityPoolObject {
+    pub fn builder() -> builder::ExtendedLiquidityPoolObject {
+        Default::default()
+    }
+}
+///`ExtendedLiquidityPoolObjectAssetA`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ExtendedLiquidityPoolObjectAssetA(::std::string::String);
+impl ::std::ops::Deref for ExtendedLiquidityPoolObjectAssetA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ExtendedLiquidityPoolObjectAssetA> for ::std::string::String {
+    fn from(value: ExtendedLiquidityPoolObjectAssetA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ExtendedLiquidityPoolObjectAssetA>
+for ExtendedLiquidityPoolObjectAssetA {
+    fn from(value: &ExtendedLiquidityPoolObjectAssetA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for ExtendedLiquidityPoolObjectAssetA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ExtendedLiquidityPoolObjectAssetA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ExtendedLiquidityPoolObjectAssetA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ExtendedLiquidityPoolObjectAssetA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ExtendedLiquidityPoolObjectAssetA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ExtendedLiquidityPoolObjectAssetB`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ExtendedLiquidityPoolObjectAssetB(::std::string::String);
+impl ::std::ops::Deref for ExtendedLiquidityPoolObjectAssetB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ExtendedLiquidityPoolObjectAssetB> for ::std::string::String {
+    fn from(value: ExtendedLiquidityPoolObjectAssetB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ExtendedLiquidityPoolObjectAssetB>
+for ExtendedLiquidityPoolObjectAssetB {
+    fn from(value: &ExtendedLiquidityPoolObjectAssetB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for ExtendedLiquidityPoolObjectAssetB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ExtendedLiquidityPoolObjectAssetB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ExtendedLiquidityPoolObjectAssetB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ExtendedLiquidityPoolObjectAssetB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ExtendedLiquidityPoolObjectAssetB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ExtendedLiquidityPoolObjectShareAsset`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ExtendedLiquidityPoolObjectShareAsset(::std::string::String);
+impl ::std::ops::Deref for ExtendedLiquidityPoolObjectShareAsset {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ExtendedLiquidityPoolObjectShareAsset>
+for ::std::string::String {
+    fn from(value: ExtendedLiquidityPoolObjectShareAsset) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ExtendedLiquidityPoolObjectShareAsset>
+for ExtendedLiquidityPoolObjectShareAsset {
+    fn from(value: &ExtendedLiquidityPoolObjectShareAsset) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for ExtendedLiquidityPoolObjectShareAsset {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ExtendedLiquidityPoolObjectShareAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ExtendedLiquidityPoolObjectShareAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ExtendedLiquidityPoolObjectShareAsset {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ExtendedLiquidityPoolObjectShareAsset {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ExtendedLiquidityPoolObjectVirtualValue(::std::string::String);
+impl ::std::ops::Deref for ExtendedLiquidityPoolObjectVirtualValue {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ExtendedLiquidityPoolObjectVirtualValue>
+for ::std::string::String {
+    fn from(value: ExtendedLiquidityPoolObjectVirtualValue) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ExtendedLiquidityPoolObjectVirtualValue>
+for ExtendedLiquidityPoolObjectVirtualValue {
+    fn from(value: &ExtendedLiquidityPoolObjectVirtualValue) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for ExtendedLiquidityPoolObjectVirtualValue {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ExtendedLiquidityPoolObjectVirtualValue {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ExtendedLiquidityPoolObjectVirtualValue {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ExtendedLiquidityPoolObjectVirtualValue {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ExtendedLiquidityPoolObjectVirtualValue {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -21599,6 +22273,66 @@ impl<'de> ::serde::Deserialize<'de> for HtlcRefundOperationTo {
             })
     }
 }
+///`ImmutableChainParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "min_committee_member_count",
+///    "min_witness_count",
+///    "num_special_accounts",
+///    "num_special_assets"
+///  ],
+///  "properties": {
+///    "min_committee_member_count": {
+///      "type": "integer",
+///      "format": "uint16",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint16_t"
+///    },
+///    "min_witness_count": {
+///      "type": "integer",
+///      "format": "uint16",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint16_t"
+///    },
+///    "num_special_accounts": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "num_special_assets": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::immutable_chain_parameters"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct ImmutableChainParameters {
+    pub min_committee_member_count: u16,
+    pub min_witness_count: u16,
+    pub num_special_accounts: u32,
+    pub num_special_assets: u32,
+}
+impl ::std::convert::From<&ImmutableChainParameters> for ImmutableChainParameters {
+    fn from(value: &ImmutableChainParameters) -> Self {
+        value.clone()
+    }
+}
+impl ImmutableChainParameters {
+    pub fn builder() -> builder::ImmutableChainParameters {
+        Default::default()
+    }
+}
 ///`InstantVestingPolicy`
 ///
 /// <details><summary>JSON schema</summary>
@@ -24754,7 +25488,7 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolWithdrawOperationPool {
             })
     }
 }
-///`MarketHistoryBucketKey`
+///`MarketHistoryLiquidityPoolTickerObject`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -24762,99 +25496,420 @@ impl<'de> ::serde::Deserialize<'de> for LiquidityPoolWithdrawOperationPool {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "base",
-///    "open",
-///    "quote",
-///    "seconds"
+///    "_24h_balance_delta_a",
+///    "_24h_balance_delta_b",
+///    "_24h_deposit_amount_a",
+///    "_24h_deposit_amount_b",
+///    "_24h_deposit_count",
+///    "_24h_deposit_share_amount",
+///    "_24h_exchange_a2b_amount_a",
+///    "_24h_exchange_a2b_amount_b",
+///    "_24h_exchange_a2b_count",
+///    "_24h_exchange_b2a_amount_a",
+///    "_24h_exchange_b2a_amount_b",
+///    "_24h_exchange_b2a_count",
+///    "_24h_exchange_fee_a",
+///    "_24h_exchange_fee_b",
+///    "_24h_withdrawal_amount_a",
+///    "_24h_withdrawal_amount_b",
+///    "_24h_withdrawal_count",
+///    "_24h_withdrawal_fee_a",
+///    "_24h_withdrawal_fee_b",
+///    "_24h_withdrawal_share_amount",
+///    "total_deposit_amount_a",
+///    "total_deposit_amount_b",
+///    "total_deposit_count",
+///    "total_deposit_share_amount",
+///    "total_exchange_a2b_amount_a",
+///    "total_exchange_a2b_amount_b",
+///    "total_exchange_a2b_count",
+///    "total_exchange_b2a_amount_a",
+///    "total_exchange_b2a_amount_b",
+///    "total_exchange_b2a_count",
+///    "total_exchange_fee_a",
+///    "total_exchange_fee_b",
+///    "total_withdrawal_amount_a",
+///    "total_withdrawal_amount_b",
+///    "total_withdrawal_count",
+///    "total_withdrawal_fee_a",
+///    "total_withdrawal_fee_b",
+///    "total_withdrawal_share_amount"
 ///  ],
 ///  "properties": {
-///    "base": {
+///    "_24h_balance_delta_a": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "_24h_balance_delta_b": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "_24h_deposit_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
 ///      "type": "string",
-///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///      "x-cpp-type": "asset_id_type"
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
 ///    },
-///    "open": {
-///      "$ref": "#/$defs/GrapheneTimePointSec",
-///      "x-cpp-type": "fc::time_point_sec"
-///    },
-///    "quote": {
+///    "_24h_deposit_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
 ///      "type": "string",
-///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///      "x-cpp-type": "asset_id_type"
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
 ///    },
-///    "seconds": {
+///    "_24h_deposit_count": {
 ///      "type": "integer",
 ///      "format": "uint32",
 ///      "minimum": 0.0,
 ///      "x-cpp-type": "uint32_t"
+///    },
+///    "_24h_deposit_share_amount": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_exchange_a2b_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_exchange_a2b_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_exchange_a2b_count": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "_24h_exchange_b2a_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_exchange_b2a_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_exchange_b2a_count": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "_24h_exchange_fee_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_exchange_fee_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_withdrawal_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_withdrawal_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_withdrawal_count": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "_24h_withdrawal_fee_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_withdrawal_fee_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "_24h_withdrawal_share_amount": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_deposit_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_deposit_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_deposit_count": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "total_deposit_share_amount": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_exchange_a2b_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_exchange_a2b_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_exchange_a2b_count": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "total_exchange_b2a_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_exchange_b2a_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_exchange_b2a_count": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "total_exchange_fee_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_exchange_fee_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_withdrawal_amount_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_withdrawal_amount_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_withdrawal_count": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "total_withdrawal_fee_a": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_withdrawal_fee_b": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
+///    },
+///    "total_withdrawal_share_amount": {
+///      "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///      "type": "string",
+///      "pattern": "^\\d+$",
+///      "x-cpp-type": "fc::uint128_t"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::market_history::bucket_key"
+///  "x-cpp-type": "graphene::market_history::liquidity_pool_ticker_object"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct MarketHistoryBucketKey {
-    pub base: MarketHistoryBucketKeyBase,
-    pub open: ::graphene_rpc::GrapheneTimePointSec,
-    pub quote: MarketHistoryBucketKeyQuote,
-    pub seconds: u32,
+pub struct MarketHistoryLiquidityPoolTickerObject {
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_deposit_amount_a: MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_deposit_amount_b: MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB,
+    pub total_deposit_count: ::graphene_rpc::GrapheneUInt64,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_deposit_share_amount: MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_exchange_a2b_amount_a: MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_exchange_a2b_amount_b: MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB,
+    pub total_exchange_a2b_count: ::graphene_rpc::GrapheneUInt64,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_exchange_b2a_amount_a: MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_exchange_b2a_amount_b: MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB,
+    pub total_exchange_b2a_count: ::graphene_rpc::GrapheneUInt64,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_exchange_fee_a: MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_exchange_fee_b: MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_withdrawal_amount_a: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_withdrawal_amount_b: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB,
+    pub total_withdrawal_count: ::graphene_rpc::GrapheneUInt64,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_withdrawal_fee_a: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_withdrawal_fee_b: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    pub total_withdrawal_share_amount: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+    #[serde(rename = "_24h_balance_delta_a")]
+    pub x24h_balance_delta_a: i64,
+    #[serde(rename = "_24h_balance_delta_b")]
+    pub x24h_balance_delta_b: i64,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_deposit_amount_a")]
+    pub x24h_deposit_amount_a: MarketHistoryLiquidityPoolTickerObject24hDepositAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_deposit_amount_b")]
+    pub x24h_deposit_amount_b: MarketHistoryLiquidityPoolTickerObject24hDepositAmountB,
+    #[serde(rename = "_24h_deposit_count")]
+    pub x24h_deposit_count: u32,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_deposit_share_amount")]
+    pub x24h_deposit_share_amount: MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_exchange_a2b_amount_a")]
+    pub x24h_exchange_a2b_amount_a: MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_exchange_a2b_amount_b")]
+    pub x24h_exchange_a2b_amount_b: MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB,
+    #[serde(rename = "_24h_exchange_a2b_count")]
+    pub x24h_exchange_a2b_count: u32,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_exchange_b2a_amount_a")]
+    pub x24h_exchange_b2a_amount_a: MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_exchange_b2a_amount_b")]
+    pub x24h_exchange_b2a_amount_b: MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB,
+    #[serde(rename = "_24h_exchange_b2a_count")]
+    pub x24h_exchange_b2a_count: u32,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_exchange_fee_a")]
+    pub x24h_exchange_fee_a: MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_exchange_fee_b")]
+    pub x24h_exchange_fee_b: MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_withdrawal_amount_a")]
+    pub x24h_withdrawal_amount_a: MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_withdrawal_amount_b")]
+    pub x24h_withdrawal_amount_b: MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB,
+    #[serde(rename = "_24h_withdrawal_count")]
+    pub x24h_withdrawal_count: u32,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_withdrawal_fee_a")]
+    pub x24h_withdrawal_fee_a: MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_withdrawal_fee_b")]
+    pub x24h_withdrawal_fee_b: MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB,
+    ///Unsigned 128-bit integer serialized as a decimal string.
+    #[serde(rename = "_24h_withdrawal_share_amount")]
+    pub x24h_withdrawal_share_amount: MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount,
 }
-impl ::std::convert::From<&MarketHistoryBucketKey> for MarketHistoryBucketKey {
-    fn from(value: &MarketHistoryBucketKey) -> Self {
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject>
+for MarketHistoryLiquidityPoolTickerObject {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject) -> Self {
         value.clone()
     }
 }
-impl MarketHistoryBucketKey {
-    pub fn builder() -> builder::MarketHistoryBucketKey {
+impl MarketHistoryLiquidityPoolTickerObject {
+    pub fn builder() -> builder::MarketHistoryLiquidityPoolTickerObject {
         Default::default()
     }
 }
-///`MarketHistoryBucketKeyBase`
+///Unsigned 128-bit integer serialized as a decimal string.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
 ///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///  "x-cpp-type": "asset_id_type"
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct MarketHistoryBucketKeyBase(::std::string::String);
-impl ::std::ops::Deref for MarketHistoryBucketKeyBase {
+pub struct MarketHistoryLiquidityPoolTickerObject24hDepositAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
     type Target = ::std::string::String;
     fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<MarketHistoryBucketKeyBase> for ::std::string::String {
-    fn from(value: MarketHistoryBucketKeyBase) -> Self {
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hDepositAmountA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hDepositAmountA) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&MarketHistoryBucketKeyBase> for MarketHistoryBucketKeyBase {
-    fn from(value: &MarketHistoryBucketKeyBase) -> Self {
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hDepositAmountA>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hDepositAmountA) -> Self {
         value.clone()
     }
 }
-impl ::std::str::FromStr for MarketHistoryBucketKeyBase {
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        { ::regress::Regex::new("^\\d+$").unwrap() });
         if PATTERN.find(value).is_none() {
-            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+            return Err("doesn't match pattern \"^\\d+$\"".into());
         }
         Ok(Self(value.to_string()))
     }
 }
-impl ::std::convert::TryFrom<&str> for MarketHistoryBucketKeyBase {
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -24862,7 +25917,8 @@ impl ::std::convert::TryFrom<&str> for MarketHistoryBucketKeyBase {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<&::std::string::String> for MarketHistoryBucketKeyBase {
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -24870,7 +25926,8 @@ impl ::std::convert::TryFrom<&::std::string::String> for MarketHistoryBucketKeyB
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for MarketHistoryBucketKeyBase {
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -24878,7 +25935,8 @@ impl ::std::convert::TryFrom<::std::string::String> for MarketHistoryBucketKeyBa
         value.parse()
     }
 }
-impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyBase {
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountA {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -24890,7 +25948,2592 @@ impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyBase {
             })
     }
 }
-///`MarketHistoryBucketKeyQuote`
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hDepositAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hDepositAmountB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hDepositAmountB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hDepositAmountB>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hDepositAmountB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hDepositAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount>
+for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA(::std::string::String);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB(::std::string::String);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<
+    &MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount,
+> for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB>
+for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB>
+for ::std::string::String {
+    fn from(value: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    fn from(value: &MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Unsigned 128-bit integer serialized as a decimal string.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Unsigned 128-bit integer serialized as a decimal string.",
+///  "type": "string",
+///  "pattern": "^\\d+$",
+///  "x-cpp-type": "fc::uint128_t"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount(
+    ::std::string::String,
+);
+impl ::std::ops::Deref
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<
+    MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+> for ::std::string::String {
+    fn from(
+        value: MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+    ) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<
+    &MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+> for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    fn from(
+        value: &MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+    ) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`MarketTicker`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "base",
+///    "base_volume",
+///    "highest_bid",
+///    "highest_bid_base_size",
+///    "highest_bid_quote_size",
+///    "latest",
+///    "lowest_ask",
+///    "lowest_ask_base_size",
+///    "lowest_ask_quote_size",
+///    "mto_id",
+///    "percent_change",
+///    "quote",
+///    "quote_volume",
+///    "time"
+///  ],
+///  "properties": {
+///    "base": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "base_volume": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "highest_bid": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "highest_bid_base_size": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "highest_bid_quote_size": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "latest": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "lowest_ask": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "lowest_ask_base_size": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "lowest_ask_quote_size": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "mto_id": {
+///      "type": [
+///        "string",
+///        "null"
+///      ],
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "optional<object_id_type>"
+///    },
+///    "percent_change": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "quote": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "quote_volume": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "time": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    }
+///  },
+///  "x-cpp-type": "graphene::app::market_ticker"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct MarketTicker {
+    pub base: ::std::string::String,
+    pub base_volume: ::std::string::String,
+    pub highest_bid: ::std::string::String,
+    pub highest_bid_base_size: ::std::string::String,
+    pub highest_bid_quote_size: ::std::string::String,
+    pub latest: ::std::string::String,
+    pub lowest_ask: ::std::string::String,
+    pub lowest_ask_base_size: ::std::string::String,
+    pub lowest_ask_quote_size: ::std::string::String,
+    pub mto_id: ::std::option::Option<MarketTickerMtoId>,
+    pub percent_change: ::std::string::String,
+    pub quote: ::std::string::String,
+    pub quote_volume: ::std::string::String,
+    pub time: ::graphene_rpc::GrapheneTimePointSec,
+}
+impl ::std::convert::From<&MarketTicker> for MarketTicker {
+    fn from(value: &MarketTicker) -> Self {
+        value.clone()
+    }
+}
+impl MarketTicker {
+    pub fn builder() -> builder::MarketTicker {
+        Default::default()
+    }
+}
+///`MarketTickerMtoId`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -24898,30 +28541,30 @@ impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyBase {
 ///{
 ///  "type": "string",
 ///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///  "x-cpp-type": "asset_id_type"
+///  "x-cpp-type": "optional<object_id_type>"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct MarketHistoryBucketKeyQuote(::std::string::String);
-impl ::std::ops::Deref for MarketHistoryBucketKeyQuote {
+pub struct MarketTickerMtoId(::std::string::String);
+impl ::std::ops::Deref for MarketTickerMtoId {
     type Target = ::std::string::String;
     fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<MarketHistoryBucketKeyQuote> for ::std::string::String {
-    fn from(value: MarketHistoryBucketKeyQuote) -> Self {
+impl ::std::convert::From<MarketTickerMtoId> for ::std::string::String {
+    fn from(value: MarketTickerMtoId) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&MarketHistoryBucketKeyQuote> for MarketHistoryBucketKeyQuote {
-    fn from(value: &MarketHistoryBucketKeyQuote) -> Self {
+impl ::std::convert::From<&MarketTickerMtoId> for MarketTickerMtoId {
+    fn from(value: &MarketTickerMtoId) -> Self {
         value.clone()
     }
 }
-impl ::std::str::FromStr for MarketHistoryBucketKeyQuote {
+impl ::std::str::FromStr for MarketTickerMtoId {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -24934,7 +28577,7 @@ impl ::std::str::FromStr for MarketHistoryBucketKeyQuote {
         Ok(Self(value.to_string()))
     }
 }
-impl ::std::convert::TryFrom<&str> for MarketHistoryBucketKeyQuote {
+impl ::std::convert::TryFrom<&str> for MarketTickerMtoId {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -24942,7 +28585,7 @@ impl ::std::convert::TryFrom<&str> for MarketHistoryBucketKeyQuote {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<&::std::string::String> for MarketHistoryBucketKeyQuote {
+impl ::std::convert::TryFrom<&::std::string::String> for MarketTickerMtoId {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -24950,7 +28593,7 @@ impl ::std::convert::TryFrom<&::std::string::String> for MarketHistoryBucketKeyQ
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for MarketHistoryBucketKeyQuote {
+impl ::std::convert::TryFrom<::std::string::String> for MarketTickerMtoId {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -24958,7 +28601,454 @@ impl ::std::convert::TryFrom<::std::string::String> for MarketHistoryBucketKeyQu
         value.parse()
     }
 }
-impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyQuote {
+impl<'de> ::serde::Deserialize<'de> for MarketTickerMtoId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`MarketTrade`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "date",
+///    "price",
+///    "sequence",
+///    "side1_account_id",
+///    "side2_account_id",
+///    "type",
+///    "value"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "date": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "fc::time_point_sec"
+///    },
+///    "price": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "sequence": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "int64_t"
+///    },
+///    "side1_account_id": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "side2_account_id": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "type": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "value": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    }
+///  },
+///  "x-cpp-type": "graphene::app::market_trade"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct MarketTrade {
+    pub amount: ::std::string::String,
+    pub date: ::graphene_rpc::GrapheneTimePointSec,
+    pub price: ::std::string::String,
+    pub sequence: i64,
+    pub side1_account_id: MarketTradeSide1AccountId,
+    pub side2_account_id: MarketTradeSide2AccountId,
+    #[serde(rename = "type")]
+    pub type_: ::std::string::String,
+    pub value: ::std::string::String,
+}
+impl ::std::convert::From<&MarketTrade> for MarketTrade {
+    fn from(value: &MarketTrade) -> Self {
+        value.clone()
+    }
+}
+impl MarketTrade {
+    pub fn builder() -> builder::MarketTrade {
+        Default::default()
+    }
+}
+///`MarketTradeSide1AccountId`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketTradeSide1AccountId(::std::string::String);
+impl ::std::ops::Deref for MarketTradeSide1AccountId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketTradeSide1AccountId> for ::std::string::String {
+    fn from(value: MarketTradeSide1AccountId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketTradeSide1AccountId> for MarketTradeSide1AccountId {
+    fn from(value: &MarketTradeSide1AccountId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketTradeSide1AccountId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for MarketTradeSide1AccountId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MarketTradeSide1AccountId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MarketTradeSide1AccountId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MarketTradeSide1AccountId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`MarketTradeSide2AccountId`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MarketTradeSide2AccountId(::std::string::String);
+impl ::std::ops::Deref for MarketTradeSide2AccountId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MarketTradeSide2AccountId> for ::std::string::String {
+    fn from(value: MarketTradeSide2AccountId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MarketTradeSide2AccountId> for MarketTradeSide2AccountId {
+    fn from(value: &MarketTradeSide2AccountId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MarketTradeSide2AccountId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for MarketTradeSide2AccountId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MarketTradeSide2AccountId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MarketTradeSide2AccountId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MarketTradeSide2AccountId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`MarketVolume`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "base",
+///    "base_volume",
+///    "quote",
+///    "quote_volume",
+///    "time"
+///  ],
+///  "properties": {
+///    "base": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "base_volume": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "quote": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "quote_volume": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "time": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    }
+///  },
+///  "x-cpp-type": "graphene::app::market_volume"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct MarketVolume {
+    pub base: ::std::string::String,
+    pub base_volume: ::std::string::String,
+    pub quote: ::std::string::String,
+    pub quote_volume: ::std::string::String,
+    pub time: ::graphene_rpc::GrapheneTimePointSec,
+}
+impl ::std::convert::From<&MarketVolume> for MarketVolume {
+    fn from(value: &MarketVolume) -> Self {
+        value.clone()
+    }
+}
+impl MarketVolume {
+    pub fn builder() -> builder::MarketVolume {
+        Default::default()
+    }
+}
+///`MaybeSignedBlockHeader`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "extensions",
+///    "previous",
+///    "timestamp",
+///    "transaction_merkle_root",
+///    "witness",
+///    "witness_signature"
+///  ],
+///  "properties": {
+///    "extensions": {
+///      "$ref": "#/$defs/extensions_type",
+///      "x-cpp-type": "extensions_type"
+///    },
+///    "previous": {
+///      "$ref": "#/$defs/block_id_type",
+///      "x-cpp-type": "block_id_type"
+///    },
+///    "timestamp": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "fc::time_point_sec"
+///    },
+///    "transaction_merkle_root": {
+///      "$ref": "#/$defs/checksum_type",
+///      "x-cpp-type": "checksum_type"
+///    },
+///    "witness": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "witness_id_type"
+///    },
+///    "witness_signature": {
+///      "type": [
+///        "string",
+///        "null"
+///      ],
+///      "x-cpp-type": "optional<signature_type>"
+///    }
+///  },
+///  "x-cpp-type": "graphene::app::maybe_signed_block_header"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct MaybeSignedBlockHeader {
+    pub extensions: ExtensionsType,
+    pub previous: BlockIdType,
+    pub timestamp: ::graphene_rpc::GrapheneTimePointSec,
+    pub transaction_merkle_root: ChecksumType,
+    pub witness: MaybeSignedBlockHeaderWitness,
+    pub witness_signature: ::std::option::Option<::std::string::String>,
+}
+impl ::std::convert::From<&MaybeSignedBlockHeader> for MaybeSignedBlockHeader {
+    fn from(value: &MaybeSignedBlockHeader) -> Self {
+        value.clone()
+    }
+}
+impl MaybeSignedBlockHeader {
+    pub fn builder() -> builder::MaybeSignedBlockHeader {
+        Default::default()
+    }
+}
+///`MaybeSignedBlockHeaderWitness`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "witness_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MaybeSignedBlockHeaderWitness(::std::string::String);
+impl ::std::ops::Deref for MaybeSignedBlockHeaderWitness {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MaybeSignedBlockHeaderWitness> for ::std::string::String {
+    fn from(value: MaybeSignedBlockHeaderWitness) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MaybeSignedBlockHeaderWitness>
+for MaybeSignedBlockHeaderWitness {
+    fn from(value: &MaybeSignedBlockHeaderWitness) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MaybeSignedBlockHeaderWitness {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for MaybeSignedBlockHeaderWitness {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MaybeSignedBlockHeaderWitness {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MaybeSignedBlockHeaderWitness {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MaybeSignedBlockHeaderWitness {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -24978,52 +29068,44 @@ impl<'de> ::serde::Deserialize<'de> for MarketHistoryBucketKeyQuote {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "amount",
-///    "blinding_factor",
-///    "check",
-///    "commitment",
-///    "from"
+///    "from",
+///    "message",
+///    "nonce",
+///    "to"
 ///  ],
 ///  "properties": {
-///    "amount": {
-///      "$ref": "#/$defs/asset",
-///      "x-cpp-type": "asset"
-///    },
-///    "blinding_factor": {
-///      "type": "string",
-///      "x-cpp-type": "fc::sha256"
-///    },
-///    "check": {
-///      "type": "integer",
-///      "format": "uint32",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint32_t"
-///    },
-///    "commitment": {
-///      "description": "Pedersen commitment, hex-encoded.",
-///      "type": "string",
-///      "x-cpp-type": "fc::ecc::commitment_type"
-///    },
 ///    "from": {
-///      "type": [
-///        "string",
-///        "null"
-///      ],
-///      "x-cpp-type": "optional<public_key_type>"
+///      "type": "string",
+///      "x-cpp-type": "public_key_type"
+///    },
+///    "message": {
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "maxLength": 1,
+///        "minLength": 1
+///      },
+///      "x-cpp-type": "vector<char>"
+///    },
+///    "nonce": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "to": {
+///      "type": "string",
+///      "x-cpp-type": "public_key_type"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::protocol::stealth_confirmation::memo_data"
+///  "x-cpp-type": "graphene::protocol::memo_data"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct MemoData {
-    pub amount: Asset,
-    pub blinding_factor: ::std::string::String,
-    pub check: u32,
-    ///Pedersen commitment, hex-encoded.
-    pub commitment: ::std::string::String,
-    pub from: ::std::option::Option<::std::string::String>,
+    pub from: ::std::string::String,
+    pub message: ::std::vec::Vec<MemoDataMessageItem>,
+    pub nonce: ::graphene_rpc::GrapheneUInt64,
+    pub to: ::std::string::String,
 }
 impl ::std::convert::From<&MemoData> for MemoData {
     fn from(value: &MemoData) -> Self {
@@ -25033,6 +29115,87 @@ impl ::std::convert::From<&MemoData> for MemoData {
 impl MemoData {
     pub fn builder() -> builder::MemoData {
         Default::default()
+    }
+}
+///`MemoDataMessageItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 1,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MemoDataMessageItem(::std::string::String);
+impl ::std::ops::Deref for MemoDataMessageItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MemoDataMessageItem> for ::std::string::String {
+    fn from(value: MemoDataMessageItem) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&MemoDataMessageItem> for MemoDataMessageItem {
+    fn from(value: &MemoDataMessageItem) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for MemoDataMessageItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 1usize {
+            return Err("longer than 1 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for MemoDataMessageItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MemoDataMessageItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MemoDataMessageItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MemoDataMessageItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`MoreData`
@@ -25201,188 +29364,6 @@ impl ::std::convert::From<&OpWrapper> for OpWrapper {
 }
 impl OpWrapper {
     pub fn builder() -> builder::OpWrapper {
-        Default::default()
-    }
-}
-///`OperationDetail`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "description",
-///    "memo",
-///    "op"
-///  ],
-///  "properties": {
-///    "description": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "memo": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "op": {
-///      "$ref": "#/$defs/operation_history_object",
-///      "x-cpp-type": "operation_history_object"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::operation_detail"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct OperationDetail {
-    pub description: ::std::string::String,
-    pub memo: ::std::string::String,
-    pub op: OperationHistoryObject,
-}
-impl ::std::convert::From<&OperationDetail> for OperationDetail {
-    fn from(value: &OperationDetail) -> Self {
-        value.clone()
-    }
-}
-impl OperationDetail {
-    pub fn builder() -> builder::OperationDetail {
-        Default::default()
-    }
-}
-///`OperationDetailEx`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "description",
-///    "memo",
-///    "op",
-///    "transaction_id"
-///  ],
-///  "properties": {
-///    "description": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "memo": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "op": {
-///      "$ref": "#/$defs/operation_history_object",
-///      "x-cpp-type": "operation_history_object"
-///    },
-///    "transaction_id": {
-///      "type": "string",
-///      "x-cpp-type": "transaction_id_type"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::operation_detail_ex"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct OperationDetailEx {
-    pub description: ::std::string::String,
-    pub memo: ::std::string::String,
-    pub op: OperationHistoryObject,
-    pub transaction_id: ::std::string::String,
-}
-impl ::std::convert::From<&OperationDetailEx> for OperationDetailEx {
-    fn from(value: &OperationDetailEx) -> Self {
-        value.clone()
-    }
-}
-impl OperationDetailEx {
-    pub fn builder() -> builder::OperationDetailEx {
-        Default::default()
-    }
-}
-///`OperationHistoryObject`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "block_num",
-///    "block_time",
-///    "is_virtual",
-///    "op",
-///    "op_in_trx",
-///    "result",
-///    "trx_in_block",
-///    "virtual_op"
-///  ],
-///  "properties": {
-///    "block_num": {
-///      "type": "integer",
-///      "format": "uint32",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint32_t"
-///    },
-///    "block_time": {
-///      "$ref": "#/$defs/GrapheneTimePointSec",
-///      "x-cpp-type": "time_point_sec"
-///    },
-///    "is_virtual": {
-///      "type": "boolean",
-///      "x-cpp-type": "bool"
-///    },
-///    "op": {
-///      "$ref": "#/$defs/operation",
-///      "x-cpp-type": "operation"
-///    },
-///    "op_in_trx": {
-///      "type": "integer",
-///      "format": "uint16",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint16_t"
-///    },
-///    "result": {
-///      "$ref": "#/$defs/operation_result",
-///      "x-cpp-type": "operation_result"
-///    },
-///    "trx_in_block": {
-///      "type": "integer",
-///      "format": "uint16",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint16_t"
-///    },
-///    "virtual_op": {
-///      "type": "integer",
-///      "format": "uint32",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint32_t"
-///    }
-///  },
-///  "x-cpp-type": "graphene::chain::operation_history_object"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct OperationHistoryObject {
-    pub block_num: u32,
-    pub block_time: ::graphene_rpc::GrapheneTimePointSec,
-    pub is_virtual: bool,
-    pub op: Operation,
-    pub op_in_trx: u16,
-    pub result: OperationResult,
-    pub trx_in_block: u16,
-    pub virtual_op: u32,
-}
-impl ::std::convert::From<&OperationHistoryObject> for OperationHistoryObject {
-    fn from(value: &OperationHistoryObject) -> Self {
-        value.clone()
-    }
-}
-impl OperationHistoryObject {
-    pub fn builder() -> builder::OperationHistoryObject {
         Default::default()
     }
 }
@@ -26138,7 +30119,7 @@ impl PriceFeed {
         Default::default()
     }
 }
-///`PriceFeedWithIcr`
+///`ProcessedTransaction`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -26146,59 +30127,78 @@ impl PriceFeed {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "core_exchange_rate",
-///    "initial_collateral_ratio",
-///    "maintenance_collateral_ratio",
-///    "maximum_short_squeeze_ratio",
-///    "settlement_price"
+///    "expiration",
+///    "extensions",
+///    "operation_results",
+///    "operations",
+///    "ref_block_num",
+///    "ref_block_prefix",
+///    "signatures"
 ///  ],
 ///  "properties": {
-///    "core_exchange_rate": {
-///      "$ref": "#/$defs/price",
-///      "x-cpp-type": "price"
+///    "expiration": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "fc::time_point_sec"
 ///    },
-///    "initial_collateral_ratio": {
+///    "extensions": {
+///      "$ref": "#/$defs/extensions_type",
+///      "x-cpp-type": "extensions_type"
+///    },
+///    "operation_results": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/operation_result"
+///      },
+///      "x-cpp-type": "vector<operation_result>"
+///    },
+///    "operations": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/operation"
+///      },
+///      "x-cpp-type": "vector<operation>"
+///    },
+///    "ref_block_num": {
 ///      "type": "integer",
 ///      "format": "uint16",
 ///      "minimum": 0.0,
 ///      "x-cpp-type": "uint16_t"
 ///    },
-///    "maintenance_collateral_ratio": {
+///    "ref_block_prefix": {
 ///      "type": "integer",
-///      "format": "uint16",
+///      "format": "uint32",
 ///      "minimum": 0.0,
-///      "x-cpp-type": "uint16_t"
+///      "x-cpp-type": "uint32_t"
 ///    },
-///    "maximum_short_squeeze_ratio": {
-///      "type": "integer",
-///      "format": "uint16",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint16_t"
-///    },
-///    "settlement_price": {
-///      "$ref": "#/$defs/price",
-///      "x-cpp-type": "price"
+///    "signatures": {
+///      "type": "array",
+///      "items": {
+///        "type": "string"
+///      },
+///      "x-cpp-type": "vector<signature_type>"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::chain::price_feed_with_icr"
+///  "x-cpp-type": "graphene::protocol::processed_transaction"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct PriceFeedWithIcr {
-    pub core_exchange_rate: Price,
-    pub initial_collateral_ratio: u16,
-    pub maintenance_collateral_ratio: u16,
-    pub maximum_short_squeeze_ratio: u16,
-    pub settlement_price: Price,
+pub struct ProcessedTransaction {
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
+    pub extensions: ExtensionsType,
+    pub operation_results: ::std::vec::Vec<OperationResult>,
+    pub operations: ::std::vec::Vec<Operation>,
+    pub ref_block_num: u16,
+    pub ref_block_prefix: u32,
+    pub signatures: ::std::vec::Vec<::std::string::String>,
 }
-impl ::std::convert::From<&PriceFeedWithIcr> for PriceFeedWithIcr {
-    fn from(value: &PriceFeedWithIcr) -> Self {
+impl ::std::convert::From<&ProcessedTransaction> for ProcessedTransaction {
+    fn from(value: &ProcessedTransaction) -> Self {
         value.clone()
     }
 }
-impl PriceFeedWithIcr {
-    pub fn builder() -> builder::PriceFeedWithIcr {
+impl ProcessedTransaction {
+    pub fn builder() -> builder::ProcessedTransaction {
         Default::default()
     }
 }
@@ -27903,6 +31903,41 @@ for RefundWorkerInitializer {
         Self(value)
     }
 }
+///`RefundWorkerType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "total_burned"
+///  ],
+///  "properties": {
+///    "total_burned": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::refund_worker_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct RefundWorkerType {
+    pub total_burned: i64,
+}
+impl ::std::convert::From<&RefundWorkerType> for RefundWorkerType {
+    fn from(value: &RefundWorkerType) -> Self {
+        value.clone()
+    }
+}
+impl RefundWorkerType {
+    pub fn builder() -> builder::RefundWorkerType {
+        Default::default()
+    }
+}
 ///`Restriction`
 ///
 /// <details><summary>JSON schema</summary>
@@ -28798,6 +32833,230 @@ impl<'de> ::serde::Deserialize<'de> for SametFundDeleteOperationOwnerAccount {
             })
     }
 }
+///`SametFundObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "asset_type",
+///    "balance",
+///    "fee_rate",
+///    "owner_account",
+///    "unpaid_amount"
+///  ],
+///  "properties": {
+///    "asset_type": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "balance": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "fee_rate": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "owner_account": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "unpaid_amount": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::samet_fund_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct SametFundObject {
+    pub asset_type: SametFundObjectAssetType,
+    pub balance: i64,
+    pub fee_rate: u32,
+    pub owner_account: SametFundObjectOwnerAccount,
+    pub unpaid_amount: i64,
+}
+impl ::std::convert::From<&SametFundObject> for SametFundObject {
+    fn from(value: &SametFundObject) -> Self {
+        value.clone()
+    }
+}
+impl SametFundObject {
+    pub fn builder() -> builder::SametFundObject {
+        Default::default()
+    }
+}
+///`SametFundObjectAssetType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct SametFundObjectAssetType(::std::string::String);
+impl ::std::ops::Deref for SametFundObjectAssetType {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SametFundObjectAssetType> for ::std::string::String {
+    fn from(value: SametFundObjectAssetType) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&SametFundObjectAssetType> for SametFundObjectAssetType {
+    fn from(value: &SametFundObjectAssetType) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for SametFundObjectAssetType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SametFundObjectAssetType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SametFundObjectAssetType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SametFundObjectAssetType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SametFundObjectAssetType {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`SametFundObjectOwnerAccount`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct SametFundObjectOwnerAccount(::std::string::String);
+impl ::std::ops::Deref for SametFundObjectOwnerAccount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SametFundObjectOwnerAccount> for ::std::string::String {
+    fn from(value: SametFundObjectOwnerAccount) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&SametFundObjectOwnerAccount> for SametFundObjectOwnerAccount {
+    fn from(value: &SametFundObjectOwnerAccount) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for SametFundObjectOwnerAccount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SametFundObjectOwnerAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SametFundObjectOwnerAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SametFundObjectOwnerAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SametFundObjectOwnerAccount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`SametFundRepayOperation`
 ///
 /// <details><summary>JSON schema</summary>
@@ -29339,7 +33598,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundUpdateOperationOwnerAccount {
             })
     }
 }
-///`SignedBlockWithInfo`
+///`SignedBlock`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -29347,148 +33606,150 @@ impl<'de> ::serde::Deserialize<'de> for SametFundUpdateOperationOwnerAccount {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "block_id",
-///    "signing_key",
-///    "transaction_ids"
+///    "extensions",
+///    "previous",
+///    "timestamp",
+///    "transaction_merkle_root",
+///    "transactions",
+///    "witness",
+///    "witness_signature"
 ///  ],
 ///  "properties": {
-///    "block_id": {
+///    "extensions": {
+///      "$ref": "#/$defs/extensions_type",
+///      "x-cpp-type": "extensions_type"
+///    },
+///    "previous": {
 ///      "$ref": "#/$defs/block_id_type",
 ///      "x-cpp-type": "block_id_type"
 ///    },
-///    "signing_key": {
-///      "type": "string",
-///      "x-cpp-type": "public_key_type"
+///    "timestamp": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "fc::time_point_sec"
 ///    },
-///    "transaction_ids": {
+///    "transaction_merkle_root": {
+///      "$ref": "#/$defs/checksum_type",
+///      "x-cpp-type": "checksum_type"
+///    },
+///    "transactions": {
 ///      "type": "array",
 ///      "items": {
-///        "type": "string"
+///        "$ref": "#/$defs/processed_transaction"
 ///      },
-///      "x-cpp-type": "vector<transaction_id_type>"
+///      "x-cpp-type": "vector<processed_transaction>"
+///    },
+///    "witness": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "witness_id_type"
+///    },
+///    "witness_signature": {
+///      "type": "string",
+///      "x-cpp-type": "signature_type"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::wallet::signed_block_with_info"
+///  "x-cpp-type": "graphene::protocol::signed_block"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SignedBlockWithInfo {
-    pub block_id: BlockIdType,
-    pub signing_key: ::std::string::String,
-    pub transaction_ids: ::std::vec::Vec<::std::string::String>,
+pub struct SignedBlock {
+    pub extensions: ExtensionsType,
+    pub previous: BlockIdType,
+    pub timestamp: ::graphene_rpc::GrapheneTimePointSec,
+    pub transaction_merkle_root: ChecksumType,
+    pub transactions: ::std::vec::Vec<ProcessedTransaction>,
+    pub witness: SignedBlockWitness,
+    pub witness_signature: ::std::string::String,
 }
-impl ::std::convert::From<&SignedBlockWithInfo> for SignedBlockWithInfo {
-    fn from(value: &SignedBlockWithInfo) -> Self {
+impl ::std::convert::From<&SignedBlock> for SignedBlock {
+    fn from(value: &SignedBlock) -> Self {
         value.clone()
     }
 }
-impl SignedBlockWithInfo {
-    pub fn builder() -> builder::SignedBlockWithInfo {
+impl SignedBlock {
+    pub fn builder() -> builder::SignedBlock {
         Default::default()
     }
 }
-///`SignedMessage`
+///`SignedBlockWitness`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "type": "object",
-///  "required": [
-///    "message",
-///    "meta",
-///    "signature"
-///  ],
-///  "properties": {
-///    "message": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "meta": {
-///      "$ref": "#/$defs/signed_message_meta",
-///      "x-cpp-type": "signed_message_meta"
-///    },
-///    "signature": {
-///      "type": [
-///        "string",
-///        "null"
-///      ],
-///      "x-cpp-type": "fc::optional<fc::ecc::compact_signature>"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::signed_message"
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "witness_id_type"
 ///}
 /// ```
 /// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SignedMessage {
-    pub message: ::std::string::String,
-    pub meta: SignedMessageMeta,
-    pub signature: ::std::option::Option<::std::string::String>,
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct SignedBlockWitness(::std::string::String);
+impl ::std::ops::Deref for SignedBlockWitness {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
 }
-impl ::std::convert::From<&SignedMessage> for SignedMessage {
-    fn from(value: &SignedMessage) -> Self {
+impl ::std::convert::From<SignedBlockWitness> for ::std::string::String {
+    fn from(value: SignedBlockWitness) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&SignedBlockWitness> for SignedBlockWitness {
+    fn from(value: &SignedBlockWitness) -> Self {
         value.clone()
     }
 }
-impl SignedMessage {
-    pub fn builder() -> builder::SignedMessage {
-        Default::default()
+impl ::std::str::FromStr for SignedBlockWitness {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
     }
 }
-///`SignedMessageMeta`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "account",
-///    "block",
-///    "memo_key",
-///    "time"
-///  ],
-///  "properties": {
-///    "account": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    },
-///    "block": {
-///      "type": "integer",
-///      "format": "uint32",
-///      "minimum": 0.0,
-///      "x-cpp-type": "uint32_t"
-///    },
-///    "memo_key": {
-///      "type": "string",
-///      "x-cpp-type": "public_key_type"
-///    },
-///    "time": {
-///      "type": "string",
-///      "x-cpp-type": "string"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::signed_message_meta"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct SignedMessageMeta {
-    pub account: ::std::string::String,
-    pub block: u32,
-    pub memo_key: ::std::string::String,
-    pub time: ::std::string::String,
-}
-impl ::std::convert::From<&SignedMessageMeta> for SignedMessageMeta {
-    fn from(value: &SignedMessageMeta) -> Self {
-        value.clone()
+impl ::std::convert::TryFrom<&str> for SignedBlockWitness {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
-impl SignedMessageMeta {
-    pub fn builder() -> builder::SignedMessageMeta {
-        Default::default()
+impl ::std::convert::TryFrom<&::std::string::String> for SignedBlockWitness {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SignedBlockWitness {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SignedBlockWitness {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`SignedTransaction`
@@ -29981,6 +34242,358 @@ impl TicketCreateOperationFeeParamsT {
         Default::default()
     }
 }
+///`TicketObject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "account",
+///    "amount",
+///    "current_type",
+///    "next_auto_update_time",
+///    "next_type_downgrade_time",
+///    "status",
+///    "target_type",
+///    "value"
+///  ],
+///  "properties": {
+///    "account": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "amount": {
+///      "$ref": "#/$defs/asset",
+///      "x-cpp-type": "asset"
+///    },
+///    "current_type": {
+///      "$ref": "#/$defs/ticket_type",
+///      "x-cpp-type": "ticket_type"
+///    },
+///    "next_auto_update_time": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "next_type_downgrade_time": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "status": {
+///      "$ref": "#/$defs/ticket_status",
+///      "x-cpp-type": "ticket_status"
+///    },
+///    "target_type": {
+///      "$ref": "#/$defs/ticket_type",
+///      "x-cpp-type": "ticket_type"
+///    },
+///    "value": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::ticket_object"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct TicketObject {
+    pub account: TicketObjectAccount,
+    pub amount: Asset,
+    pub current_type: TicketType,
+    pub next_auto_update_time: ::graphene_rpc::GrapheneTimePointSec,
+    pub next_type_downgrade_time: ::graphene_rpc::GrapheneTimePointSec,
+    pub status: TicketStatus,
+    pub target_type: TicketType,
+    pub value: i64,
+}
+impl ::std::convert::From<&TicketObject> for TicketObject {
+    fn from(value: &TicketObject) -> Self {
+        value.clone()
+    }
+}
+impl TicketObject {
+    pub fn builder() -> builder::TicketObject {
+        Default::default()
+    }
+}
+///`TicketObjectAccount`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct TicketObjectAccount(::std::string::String);
+impl ::std::ops::Deref for TicketObjectAccount {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TicketObjectAccount> for ::std::string::String {
+    fn from(value: TicketObjectAccount) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&TicketObjectAccount> for TicketObjectAccount {
+    fn from(value: &TicketObjectAccount) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for TicketObjectAccount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TicketObjectAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TicketObjectAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TicketObjectAccount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TicketObjectAccount {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`TicketStatus`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "charging",
+///    "stable",
+///    "withdrawing",
+///    "TICKET_STATUS_COUNT"
+///  ],
+///  "x-cpp-type": "graphene::chain::ticket_status"
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum TicketStatus {
+    #[serde(rename = "charging")]
+    Charging,
+    #[serde(rename = "stable")]
+    Stable,
+    #[serde(rename = "withdrawing")]
+    Withdrawing,
+    #[serde(rename = "TICKET_STATUS_COUNT")]
+    TicketStatusCount,
+}
+impl ::std::convert::From<&Self> for TicketStatus {
+    fn from(value: &TicketStatus) -> Self {
+        value.clone()
+    }
+}
+impl ::std::fmt::Display for TicketStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Charging => f.write_str("charging"),
+            Self::Stable => f.write_str("stable"),
+            Self::Withdrawing => f.write_str("withdrawing"),
+            Self::TicketStatusCount => f.write_str("TICKET_STATUS_COUNT"),
+        }
+    }
+}
+impl ::std::str::FromStr for TicketStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "charging" => Ok(Self::Charging),
+            "stable" => Ok(Self::Stable),
+            "withdrawing" => Ok(Self::Withdrawing),
+            "TICKET_STATUS_COUNT" => Ok(Self::TicketStatusCount),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TicketStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TicketStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TicketStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`TicketType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "liquid",
+///    "lock_180_days",
+///    "lock_360_days",
+///    "lock_720_days",
+///    "lock_forever",
+///    "TICKET_TYPE_COUNT"
+///  ],
+///  "x-cpp-type": "graphene::protocol::ticket_type"
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum TicketType {
+    #[serde(rename = "liquid")]
+    Liquid,
+    #[serde(rename = "lock_180_days")]
+    Lock180Days,
+    #[serde(rename = "lock_360_days")]
+    Lock360Days,
+    #[serde(rename = "lock_720_days")]
+    Lock720Days,
+    #[serde(rename = "lock_forever")]
+    LockForever,
+    #[serde(rename = "TICKET_TYPE_COUNT")]
+    TicketTypeCount,
+}
+impl ::std::convert::From<&Self> for TicketType {
+    fn from(value: &TicketType) -> Self {
+        value.clone()
+    }
+}
+impl ::std::fmt::Display for TicketType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Liquid => f.write_str("liquid"),
+            Self::Lock180Days => f.write_str("lock_180_days"),
+            Self::Lock360Days => f.write_str("lock_360_days"),
+            Self::Lock720Days => f.write_str("lock_720_days"),
+            Self::LockForever => f.write_str("lock_forever"),
+            Self::TicketTypeCount => f.write_str("TICKET_TYPE_COUNT"),
+        }
+    }
+}
+impl ::std::str::FromStr for TicketType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "liquid" => Ok(Self::Liquid),
+            "lock_180_days" => Ok(Self::Lock180Days),
+            "lock_360_days" => Ok(Self::Lock360Days),
+            "lock_720_days" => Ok(Self::Lock720Days),
+            "lock_forever" => Ok(Self::LockForever),
+            "TICKET_TYPE_COUNT" => Ok(Self::TicketTypeCount),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TicketType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TicketType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TicketType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`TicketUpdateOperation`
 ///
 /// <details><summary>JSON schema</summary>
@@ -30441,73 +35054,6 @@ impl ::std::convert::From<&Transaction> for Transaction {
 impl Transaction {
     pub fn builder() -> builder::Transaction {
         Default::default()
-    }
-}
-///Alias for uint32_t
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Alias for uint32_t",
-///  "type": "integer",
-///  "format": "uint32",
-///  "minimum": 0.0,
-///  "x-cpp-type": "graphene::wallet::transaction_handle_type"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct TransactionHandleType(pub u32);
-impl ::std::ops::Deref for TransactionHandleType {
-    type Target = u32;
-    fn deref(&self) -> &u32 {
-        &self.0
-    }
-}
-impl ::std::convert::From<TransactionHandleType> for u32 {
-    fn from(value: TransactionHandleType) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&TransactionHandleType> for TransactionHandleType {
-    fn from(value: &TransactionHandleType) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<u32> for TransactionHandleType {
-    fn from(value: u32) -> Self {
-        Self(value)
-    }
-}
-impl ::std::str::FromStr for TransactionHandleType {
-    type Err = <u32 as ::std::str::FromStr>::Err;
-    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
-        Ok(Self(value.parse()?))
-    }
-}
-impl ::std::convert::TryFrom<&str> for TransactionHandleType {
-    type Error = <u32 as ::std::str::FromStr>::Err;
-    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&String> for TransactionHandleType {
-    type Error = <u32 as ::std::str::FromStr>::Err;
-    fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<String> for TransactionHandleType {
-    type Error = <u32 as ::std::str::FromStr>::Err;
-    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
-        value.parse()
-    }
-}
-impl ::std::fmt::Display for TransactionHandleType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        self.0.fmt(f)
     }
 }
 ///Alias for fc::ripemd160
@@ -31602,155 +36148,6 @@ impl<'de> ::serde::Deserialize<'de> for VestingBalanceObjectOwner {
             })
     }
 }
-///`VestingBalanceObjectWithInfo`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "allowed_withdraw",
-///    "allowed_withdraw_time",
-///    "balance",
-///    "balance_type",
-///    "owner",
-///    "policy"
-///  ],
-///  "properties": {
-///    "allowed_withdraw": {
-///      "$ref": "#/$defs/asset",
-///      "x-cpp-type": "asset"
-///    },
-///    "allowed_withdraw_time": {
-///      "$ref": "#/$defs/GrapheneTimePointSec",
-///      "x-cpp-type": "fc::time_point_sec"
-///    },
-///    "balance": {
-///      "$ref": "#/$defs/asset",
-///      "x-cpp-type": "asset"
-///    },
-///    "balance_type": {
-///      "$ref": "#/$defs/vesting_balance_type",
-///      "x-cpp-type": "vesting_balance_type"
-///    },
-///    "owner": {
-///      "type": "string",
-///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///      "x-cpp-type": "account_id_type"
-///    },
-///    "policy": {
-///      "$ref": "#/$defs/vesting_policy",
-///      "x-cpp-type": "vesting_policy"
-///    }
-///  },
-///  "x-cpp-type": "graphene::wallet::vesting_balance_object_with_info"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct VestingBalanceObjectWithInfo {
-    pub allowed_withdraw: Asset,
-    pub allowed_withdraw_time: ::graphene_rpc::GrapheneTimePointSec,
-    pub balance: Asset,
-    pub balance_type: VestingBalanceType,
-    pub owner: VestingBalanceObjectWithInfoOwner,
-    pub policy: VestingPolicy,
-}
-impl ::std::convert::From<&VestingBalanceObjectWithInfo>
-for VestingBalanceObjectWithInfo {
-    fn from(value: &VestingBalanceObjectWithInfo) -> Self {
-        value.clone()
-    }
-}
-impl VestingBalanceObjectWithInfo {
-    pub fn builder() -> builder::VestingBalanceObjectWithInfo {
-        Default::default()
-    }
-}
-///`VestingBalanceObjectWithInfoOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
-///  "x-cpp-type": "account_id_type"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct VestingBalanceObjectWithInfoOwner(::std::string::String);
-impl ::std::ops::Deref for VestingBalanceObjectWithInfoOwner {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<VestingBalanceObjectWithInfoOwner> for ::std::string::String {
-    fn from(value: VestingBalanceObjectWithInfoOwner) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&VestingBalanceObjectWithInfoOwner>
-for VestingBalanceObjectWithInfoOwner {
-    fn from(value: &VestingBalanceObjectWithInfoOwner) -> Self {
-        value.clone()
-    }
-}
-impl ::std::str::FromStr for VestingBalanceObjectWithInfoOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
-        if PATTERN.find(value).is_none() {
-            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for VestingBalanceObjectWithInfoOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for VestingBalanceObjectWithInfoOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for VestingBalanceObjectWithInfoOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for VestingBalanceObjectWithInfoOwner {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
 ///`VestingBalanceType`
 ///
 /// <details><summary>JSON schema</summary>
@@ -32141,6 +36538,123 @@ for VestingBalanceWorkerInitializer {
 impl VestingBalanceWorkerInitializer {
     pub fn builder() -> builder::VestingBalanceWorkerInitializer {
         Default::default()
+    }
+}
+///`VestingBalanceWorkerType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "balance"
+///  ],
+///  "properties": {
+///    "balance": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "vesting_balance_id_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::vesting_balance_worker_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct VestingBalanceWorkerType {
+    pub balance: VestingBalanceWorkerTypeBalance,
+}
+impl ::std::convert::From<&VestingBalanceWorkerType> for VestingBalanceWorkerType {
+    fn from(value: &VestingBalanceWorkerType) -> Self {
+        value.clone()
+    }
+}
+impl VestingBalanceWorkerType {
+    pub fn builder() -> builder::VestingBalanceWorkerType {
+        Default::default()
+    }
+}
+///`VestingBalanceWorkerTypeBalance`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "vesting_balance_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VestingBalanceWorkerTypeBalance(::std::string::String);
+impl ::std::ops::Deref for VestingBalanceWorkerTypeBalance {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VestingBalanceWorkerTypeBalance> for ::std::string::String {
+    fn from(value: VestingBalanceWorkerTypeBalance) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&VestingBalanceWorkerTypeBalance>
+for VestingBalanceWorkerTypeBalance {
+    fn from(value: &VestingBalanceWorkerTypeBalance) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for VestingBalanceWorkerTypeBalance {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VestingBalanceWorkerTypeBalance {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for VestingBalanceWorkerTypeBalance {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for VestingBalanceWorkerTypeBalance {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VestingBalanceWorkerTypeBalance {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`VoidResult`
@@ -34768,7 +39282,7 @@ impl<'de> ::serde::Deserialize<'de> for WorkerCreateOperationOwner {
             })
     }
 }
-///`WorkerVoteDelta`
+///`WorkerObject`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -34776,91 +39290,126 @@ impl<'de> ::serde::Deserialize<'de> for WorkerCreateOperationOwner {
 ///{
 ///  "type": "object",
 ///  "required": [
-///    "vote_abstain",
+///    "daily_pay",
+///    "name",
+///    "total_votes_against",
+///    "total_votes_for",
+///    "url",
 ///    "vote_against",
-///    "vote_for"
+///    "vote_for",
+///    "work_begin_date",
+///    "work_end_date",
+///    "worker",
+///    "worker_account"
 ///  ],
 ///  "properties": {
-///    "vote_abstain": {
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "pattern": "^\\d+\\.\\d+\\.\\d+$"
-///      },
-///      "uniqueItems": true,
-///      "x-cpp-type": "flat_set<worker_id_type>"
+///    "daily_pay": {
+///      "type": "integer",
+///      "format": "int64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "name": {
+///      "type": "string",
+///      "x-cpp-type": "string"
+///    },
+///    "total_votes_against": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "total_votes_for": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "url": {
+///      "type": "string",
+///      "x-cpp-type": "string"
 ///    },
 ///    "vote_against": {
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "pattern": "^\\d+\\.\\d+\\.\\d+$"
-///      },
-///      "uniqueItems": true,
-///      "x-cpp-type": "flat_set<worker_id_type>"
+///      "$ref": "#/$defs/vote_id_type",
+///      "x-cpp-type": "vote_id_type"
 ///    },
 ///    "vote_for": {
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "pattern": "^\\d+\\.\\d+\\.\\d+$"
-///      },
-///      "uniqueItems": true,
-///      "x-cpp-type": "flat_set<worker_id_type>"
+///      "$ref": "#/$defs/vote_id_type",
+///      "x-cpp-type": "vote_id_type"
+///    },
+///    "work_begin_date": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "work_end_date": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "time_point_sec"
+///    },
+///    "worker": {
+///      "$ref": "#/$defs/worker_type",
+///      "x-cpp-type": "worker_type"
+///    },
+///    "worker_account": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::wallet::worker_vote_delta"
+///  "x-cpp-type": "graphene::chain::worker_object"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-pub struct WorkerVoteDelta {
-    pub vote_abstain: Vec<WorkerVoteDeltaVoteAbstainItem>,
-    pub vote_against: Vec<WorkerVoteDeltaVoteAgainstItem>,
-    pub vote_for: Vec<WorkerVoteDeltaVoteForItem>,
+pub struct WorkerObject {
+    pub daily_pay: i64,
+    pub name: ::std::string::String,
+    pub total_votes_against: ::graphene_rpc::GrapheneUInt64,
+    pub total_votes_for: ::graphene_rpc::GrapheneUInt64,
+    pub url: ::std::string::String,
+    pub vote_against: VoteIdType,
+    pub vote_for: VoteIdType,
+    pub work_begin_date: ::graphene_rpc::GrapheneTimePointSec,
+    pub work_end_date: ::graphene_rpc::GrapheneTimePointSec,
+    pub worker: WorkerType,
+    pub worker_account: WorkerObjectWorkerAccount,
 }
-impl ::std::convert::From<&WorkerVoteDelta> for WorkerVoteDelta {
-    fn from(value: &WorkerVoteDelta) -> Self {
+impl ::std::convert::From<&WorkerObject> for WorkerObject {
+    fn from(value: &WorkerObject) -> Self {
         value.clone()
     }
 }
-impl WorkerVoteDelta {
-    pub fn builder() -> builder::WorkerVoteDelta {
+impl WorkerObject {
+    pub fn builder() -> builder::WorkerObject {
         Default::default()
     }
 }
-///`WorkerVoteDeltaVoteAbstainItem`
+///`WorkerObjectWorkerAccount`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
 ///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$"
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct WorkerVoteDeltaVoteAbstainItem(::std::string::String);
-impl ::std::ops::Deref for WorkerVoteDeltaVoteAbstainItem {
+pub struct WorkerObjectWorkerAccount(::std::string::String);
+impl ::std::ops::Deref for WorkerObjectWorkerAccount {
     type Target = ::std::string::String;
     fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<WorkerVoteDeltaVoteAbstainItem> for ::std::string::String {
-    fn from(value: WorkerVoteDeltaVoteAbstainItem) -> Self {
+impl ::std::convert::From<WorkerObjectWorkerAccount> for ::std::string::String {
+    fn from(value: WorkerObjectWorkerAccount) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&WorkerVoteDeltaVoteAbstainItem>
-for WorkerVoteDeltaVoteAbstainItem {
-    fn from(value: &WorkerVoteDeltaVoteAbstainItem) -> Self {
+impl ::std::convert::From<&WorkerObjectWorkerAccount> for WorkerObjectWorkerAccount {
+    fn from(value: &WorkerObjectWorkerAccount) -> Self {
         value.clone()
     }
 }
-impl ::std::str::FromStr for WorkerVoteDeltaVoteAbstainItem {
+impl ::std::str::FromStr for WorkerObjectWorkerAccount {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -34873,7 +39422,7 @@ impl ::std::str::FromStr for WorkerVoteDeltaVoteAbstainItem {
         Ok(Self(value.to_string()))
     }
 }
-impl ::std::convert::TryFrom<&str> for WorkerVoteDeltaVoteAbstainItem {
+impl ::std::convert::TryFrom<&str> for WorkerObjectWorkerAccount {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -34881,7 +39430,7 @@ impl ::std::convert::TryFrom<&str> for WorkerVoteDeltaVoteAbstainItem {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<&::std::string::String> for WorkerVoteDeltaVoteAbstainItem {
+impl ::std::convert::TryFrom<&::std::string::String> for WorkerObjectWorkerAccount {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -34889,7 +39438,7 @@ impl ::std::convert::TryFrom<&::std::string::String> for WorkerVoteDeltaVoteAbst
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for WorkerVoteDeltaVoteAbstainItem {
+impl ::std::convert::TryFrom<::std::string::String> for WorkerObjectWorkerAccount {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -34897,166 +39446,7 @@ impl ::std::convert::TryFrom<::std::string::String> for WorkerVoteDeltaVoteAbsta
         value.parse()
     }
 }
-impl<'de> ::serde::Deserialize<'de> for WorkerVoteDeltaVoteAbstainItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`WorkerVoteDeltaVoteAgainstItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct WorkerVoteDeltaVoteAgainstItem(::std::string::String);
-impl ::std::ops::Deref for WorkerVoteDeltaVoteAgainstItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<WorkerVoteDeltaVoteAgainstItem> for ::std::string::String {
-    fn from(value: WorkerVoteDeltaVoteAgainstItem) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WorkerVoteDeltaVoteAgainstItem>
-for WorkerVoteDeltaVoteAgainstItem {
-    fn from(value: &WorkerVoteDeltaVoteAgainstItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::str::FromStr for WorkerVoteDeltaVoteAgainstItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
-        if PATTERN.find(value).is_none() {
-            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for WorkerVoteDeltaVoteAgainstItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for WorkerVoteDeltaVoteAgainstItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for WorkerVoteDeltaVoteAgainstItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for WorkerVoteDeltaVoteAgainstItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`WorkerVoteDeltaVoteForItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "pattern": "^\\d+\\.\\d+\\.\\d+$"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct WorkerVoteDeltaVoteForItem(::std::string::String);
-impl ::std::ops::Deref for WorkerVoteDeltaVoteForItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<WorkerVoteDeltaVoteForItem> for ::std::string::String {
-    fn from(value: WorkerVoteDeltaVoteForItem) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WorkerVoteDeltaVoteForItem> for WorkerVoteDeltaVoteForItem {
-    fn from(value: &WorkerVoteDeltaVoteForItem) -> Self {
-        value.clone()
-    }
-}
-impl ::std::str::FromStr for WorkerVoteDeltaVoteForItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
-        if PATTERN.find(value).is_none() {
-            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for WorkerVoteDeltaVoteForItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for WorkerVoteDeltaVoteForItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for WorkerVoteDeltaVoteForItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for WorkerVoteDeltaVoteForItem {
+impl<'de> ::serde::Deserialize<'de> for WorkerObjectWorkerAccount {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -35547,85 +39937,6 @@ pub mod builder {
                 basic_fee: Ok(value.basic_fee),
                 premium_fee: Ok(value.premium_fee),
                 price_per_kbyte: Ok(value.price_per_kbyte),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct AccountHistoryOperationDetail {
-        details: ::std::result::Result<
-            ::std::vec::Vec<super::OperationDetailEx>,
-            ::std::string::String,
-        >,
-        result_count: ::std::result::Result<u32, ::std::string::String>,
-        total_count: ::std::result::Result<u32, ::std::string::String>,
-    }
-    impl ::std::default::Default for AccountHistoryOperationDetail {
-        fn default() -> Self {
-            Self {
-                details: Err("no value supplied for details".to_string()),
-                result_count: Err("no value supplied for result_count".to_string()),
-                total_count: Err("no value supplied for total_count".to_string()),
-            }
-        }
-    }
-    impl AccountHistoryOperationDetail {
-        pub fn details<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<super::OperationDetailEx>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.details = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for details: {}", e)
-                });
-            self
-        }
-        pub fn result_count<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u32>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.result_count = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for result_count: {}", e)
-                });
-            self
-        }
-        pub fn total_count<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u32>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.total_count = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for total_count: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<AccountHistoryOperationDetail>
-    for super::AccountHistoryOperationDetail {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: AccountHistoryOperationDetail,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                details: value.details?,
-                result_count: value.result_count?,
-                total_count: value.total_count?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::AccountHistoryOperationDetail>
-    for AccountHistoryOperationDetail {
-        fn from(value: super::AccountHistoryOperationDetail) -> Self {
-            Self {
-                details: Ok(value.details),
-                result_count: Ok(value.result_count),
-                total_count: Ok(value.total_count),
             }
         }
     }
@@ -36813,100 +41124,6 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct AccountStorageObject {
-        account: ::std::result::Result<
-            super::AccountStorageObjectAccount,
-            ::std::string::String,
-        >,
-        catalog: ::std::result::Result<::std::string::String, ::std::string::String>,
-        key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        value: ::std::result::Result<
-            ::std::option::Option<::serde_json::Value>,
-            ::std::string::String,
-        >,
-    }
-    impl ::std::default::Default for AccountStorageObject {
-        fn default() -> Self {
-            Self {
-                account: Err("no value supplied for account".to_string()),
-                catalog: Err("no value supplied for catalog".to_string()),
-                key: Err("no value supplied for key".to_string()),
-                value: Err("no value supplied for value".to_string()),
-            }
-        }
-    }
-    impl AccountStorageObject {
-        pub fn account<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::AccountStorageObjectAccount>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.account = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for account: {}", e)
-                });
-            self
-        }
-        pub fn catalog<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.catalog = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for catalog: {}", e)
-                });
-            self
-        }
-        pub fn key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.key = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for key: {}", e));
-            self
-        }
-        pub fn value<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<::serde_json::Value>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.value = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for value: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<AccountStorageObject> for super::AccountStorageObject {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: AccountStorageObject,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                account: value.account?,
-                catalog: value.catalog?,
-                key: value.key?,
-                value: value.value?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::AccountStorageObject> for AccountStorageObject {
-        fn from(value: super::AccountStorageObject) -> Self {
-            Self {
-                account: Ok(value.account),
-                catalog: Ok(value.catalog),
-                key: Ok(value.key),
-                value: Ok(value.value),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
     pub struct AccountTransferOperation {
         account_id: ::std::result::Result<
             super::AccountTransferOperationAccountId,
@@ -37768,172 +41985,39 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct ApprovalDelta {
-        active_approvals_to_add: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
-            ::std::string::String,
-        >,
-        active_approvals_to_remove: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
-            ::std::string::String,
-        >,
-        key_approvals_to_add: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
-            ::std::string::String,
-        >,
-        key_approvals_to_remove: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
-            ::std::string::String,
-        >,
-        owner_approvals_to_add: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
-            ::std::string::String,
-        >,
-        owner_approvals_to_remove: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
-            ::std::string::String,
-        >,
+    pub struct Address {
+        addr: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
-    impl ::std::default::Default for ApprovalDelta {
+    impl ::std::default::Default for Address {
         fn default() -> Self {
             Self {
-                active_approvals_to_add: Err(
-                    "no value supplied for active_approvals_to_add".to_string(),
-                ),
-                active_approvals_to_remove: Err(
-                    "no value supplied for active_approvals_to_remove".to_string(),
-                ),
-                key_approvals_to_add: Err(
-                    "no value supplied for key_approvals_to_add".to_string(),
-                ),
-                key_approvals_to_remove: Err(
-                    "no value supplied for key_approvals_to_remove".to_string(),
-                ),
-                owner_approvals_to_add: Err(
-                    "no value supplied for owner_approvals_to_add".to_string(),
-                ),
-                owner_approvals_to_remove: Err(
-                    "no value supplied for owner_approvals_to_remove".to_string(),
-                ),
+                addr: Err("no value supplied for addr".to_string()),
             }
         }
     }
-    impl ApprovalDelta {
-        pub fn active_approvals_to_add<T>(mut self, value: T) -> Self
+    impl Address {
+        pub fn addr<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
-            self.active_approvals_to_add = value
+            self.addr = value
                 .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for active_approvals_to_add: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn active_approvals_to_remove<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.active_approvals_to_remove = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for active_approvals_to_remove: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn key_approvals_to_add<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.key_approvals_to_add = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for key_approvals_to_add: {}", e
-                    )
-                });
-            self
-        }
-        pub fn key_approvals_to_remove<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.key_approvals_to_remove = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for key_approvals_to_remove: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn owner_approvals_to_add<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.owner_approvals_to_add = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for owner_approvals_to_add: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn owner_approvals_to_remove<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.owner_approvals_to_remove = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for owner_approvals_to_remove: {}",
-                        e
-                    )
-                });
+                .map_err(|e| format!("error converting supplied value for addr: {}", e));
             self
         }
     }
-    impl ::std::convert::TryFrom<ApprovalDelta> for super::ApprovalDelta {
+    impl ::std::convert::TryFrom<Address> for super::Address {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: ApprovalDelta,
+            value: Address,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                active_approvals_to_add: value.active_approvals_to_add?,
-                active_approvals_to_remove: value.active_approvals_to_remove?,
-                key_approvals_to_add: value.key_approvals_to_add?,
-                key_approvals_to_remove: value.key_approvals_to_remove?,
-                owner_approvals_to_add: value.owner_approvals_to_add?,
-                owner_approvals_to_remove: value.owner_approvals_to_remove?,
-            })
+            Ok(Self { addr: value.addr? })
         }
     }
-    impl ::std::convert::From<super::ApprovalDelta> for ApprovalDelta {
-        fn from(value: super::ApprovalDelta) -> Self {
-            Self {
-                active_approvals_to_add: Ok(value.active_approvals_to_add),
-                active_approvals_to_remove: Ok(value.active_approvals_to_remove),
-                key_approvals_to_add: Ok(value.key_approvals_to_add),
-                key_approvals_to_remove: Ok(value.key_approvals_to_remove),
-                owner_approvals_to_add: Ok(value.owner_approvals_to_add),
-                owner_approvals_to_remove: Ok(value.owner_approvals_to_remove),
-            }
+    impl ::std::convert::From<super::Address> for Address {
+        fn from(value: super::Address) -> Self {
+            Self { addr: Ok(value.addr) }
         }
     }
     #[derive(Clone, Debug)]
@@ -38149,373 +42233,6 @@ pub mod builder {
             Self {
                 amount: Ok(value.amount),
                 asset_id: Ok(value.asset_id),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct AssetBitassetDataObject {
-        asset_cer_updated: ::std::result::Result<bool, ::std::string::String>,
-        asset_id: ::std::result::Result<
-            super::AssetBitassetDataObjectAssetId,
-            ::std::string::String,
-        >,
-        current_feed: ::std::result::Result<
-            super::PriceFeedWithIcr,
-            ::std::string::String,
-        >,
-        current_feed_publication_time: ::std::result::Result<
-            ::graphene_rpc::GrapheneTimePointSec,
-            ::std::string::String,
-        >,
-        current_initial_collateralization: ::std::result::Result<
-            super::Price,
-            ::std::string::String,
-        >,
-        current_maintenance_collateralization: ::std::result::Result<
-            super::Price,
-            ::std::string::String,
-        >,
-        feed_cer_updated: ::std::result::Result<bool, ::std::string::String>,
-        feeds: ::std::result::Result<
-            ::std::collections::HashMap<
-                ::std::string::String,
-                [::serde_json::Value; 2usize],
-            >,
-            ::std::string::String,
-        >,
-        force_settled_volume: ::std::result::Result<i64, ::std::string::String>,
-        individual_settlement_debt: ::std::result::Result<i64, ::std::string::String>,
-        individual_settlement_fund: ::std::result::Result<i64, ::std::string::String>,
-        is_prediction_market: ::std::result::Result<bool, ::std::string::String>,
-        median_feed: ::std::result::Result<
-            super::PriceFeedWithIcr,
-            ::std::string::String,
-        >,
-        options: ::std::result::Result<super::BitassetOptions, ::std::string::String>,
-        settlement_fund: ::std::result::Result<i64, ::std::string::String>,
-        settlement_price: ::std::result::Result<super::Price, ::std::string::String>,
-    }
-    impl ::std::default::Default for AssetBitassetDataObject {
-        fn default() -> Self {
-            Self {
-                asset_cer_updated: Err(
-                    "no value supplied for asset_cer_updated".to_string(),
-                ),
-                asset_id: Err("no value supplied for asset_id".to_string()),
-                current_feed: Err("no value supplied for current_feed".to_string()),
-                current_feed_publication_time: Err(
-                    "no value supplied for current_feed_publication_time".to_string(),
-                ),
-                current_initial_collateralization: Err(
-                    "no value supplied for current_initial_collateralization".to_string(),
-                ),
-                current_maintenance_collateralization: Err(
-                    "no value supplied for current_maintenance_collateralization"
-                        .to_string(),
-                ),
-                feed_cer_updated: Err(
-                    "no value supplied for feed_cer_updated".to_string(),
-                ),
-                feeds: Err("no value supplied for feeds".to_string()),
-                force_settled_volume: Err(
-                    "no value supplied for force_settled_volume".to_string(),
-                ),
-                individual_settlement_debt: Err(
-                    "no value supplied for individual_settlement_debt".to_string(),
-                ),
-                individual_settlement_fund: Err(
-                    "no value supplied for individual_settlement_fund".to_string(),
-                ),
-                is_prediction_market: Err(
-                    "no value supplied for is_prediction_market".to_string(),
-                ),
-                median_feed: Err("no value supplied for median_feed".to_string()),
-                options: Err("no value supplied for options".to_string()),
-                settlement_fund: Err(
-                    "no value supplied for settlement_fund".to_string(),
-                ),
-                settlement_price: Err(
-                    "no value supplied for settlement_price".to_string(),
-                ),
-            }
-        }
-    }
-    impl AssetBitassetDataObject {
-        pub fn asset_cer_updated<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<bool>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.asset_cer_updated = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for asset_cer_updated: {}", e
-                    )
-                });
-            self
-        }
-        pub fn asset_id<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::AssetBitassetDataObjectAssetId>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.asset_id = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for asset_id: {}", e)
-                });
-            self
-        }
-        pub fn current_feed<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::PriceFeedWithIcr>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.current_feed = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for current_feed: {}", e)
-                });
-            self
-        }
-        pub fn current_feed_publication_time<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.current_feed_publication_time = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for current_feed_publication_time: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn current_initial_collateralization<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Price>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.current_initial_collateralization = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for current_initial_collateralization: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn current_maintenance_collateralization<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Price>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.current_maintenance_collateralization = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for current_maintenance_collateralization: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn feed_cer_updated<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<bool>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.feed_cer_updated = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for feed_cer_updated: {}", e
-                    )
-                });
-            self
-        }
-        pub fn feeds<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<
-                ::std::collections::HashMap<
-                    ::std::string::String,
-                    [::serde_json::Value; 2usize],
-                >,
-            >,
-            T::Error: ::std::fmt::Display,
-        {
-            self.feeds = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for feeds: {}", e)
-                });
-            self
-        }
-        pub fn force_settled_volume<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.force_settled_volume = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for force_settled_volume: {}", e
-                    )
-                });
-            self
-        }
-        pub fn individual_settlement_debt<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.individual_settlement_debt = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for individual_settlement_debt: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn individual_settlement_fund<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.individual_settlement_fund = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for individual_settlement_fund: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn is_prediction_market<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<bool>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.is_prediction_market = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for is_prediction_market: {}", e
-                    )
-                });
-            self
-        }
-        pub fn median_feed<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::PriceFeedWithIcr>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.median_feed = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for median_feed: {}", e)
-                });
-            self
-        }
-        pub fn options<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::BitassetOptions>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.options = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for options: {}", e)
-                });
-            self
-        }
-        pub fn settlement_fund<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.settlement_fund = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for settlement_fund: {}", e)
-                });
-            self
-        }
-        pub fn settlement_price<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Price>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.settlement_price = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for settlement_price: {}", e
-                    )
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<AssetBitassetDataObject>
-    for super::AssetBitassetDataObject {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: AssetBitassetDataObject,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                asset_cer_updated: value.asset_cer_updated?,
-                asset_id: value.asset_id?,
-                current_feed: value.current_feed?,
-                current_feed_publication_time: value.current_feed_publication_time?,
-                current_initial_collateralization: value
-                    .current_initial_collateralization?,
-                current_maintenance_collateralization: value
-                    .current_maintenance_collateralization?,
-                feed_cer_updated: value.feed_cer_updated?,
-                feeds: value.feeds?,
-                force_settled_volume: value.force_settled_volume?,
-                individual_settlement_debt: value.individual_settlement_debt?,
-                individual_settlement_fund: value.individual_settlement_fund?,
-                is_prediction_market: value.is_prediction_market?,
-                median_feed: value.median_feed?,
-                options: value.options?,
-                settlement_fund: value.settlement_fund?,
-                settlement_price: value.settlement_price?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::AssetBitassetDataObject>
-    for AssetBitassetDataObject {
-        fn from(value: super::AssetBitassetDataObject) -> Self {
-            Self {
-                asset_cer_updated: Ok(value.asset_cer_updated),
-                asset_id: Ok(value.asset_id),
-                current_feed: Ok(value.current_feed),
-                current_feed_publication_time: Ok(value.current_feed_publication_time),
-                current_initial_collateralization: Ok(
-                    value.current_initial_collateralization,
-                ),
-                current_maintenance_collateralization: Ok(
-                    value.current_maintenance_collateralization,
-                ),
-                feed_cer_updated: Ok(value.feed_cer_updated),
-                feeds: Ok(value.feeds),
-                force_settled_volume: Ok(value.force_settled_volume),
-                individual_settlement_debt: Ok(value.individual_settlement_debt),
-                individual_settlement_fund: Ok(value.individual_settlement_fund),
-                is_prediction_market: Ok(value.is_prediction_market),
-                median_feed: Ok(value.median_feed),
-                options: Ok(value.options),
-                settlement_fund: Ok(value.settlement_fund),
-                settlement_price: Ok(value.settlement_price),
             }
         }
     }
@@ -41523,6 +45240,106 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct BalanceObject {
+        balance: ::std::result::Result<super::Asset, ::std::string::String>,
+        last_claim_date: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        owner: ::std::result::Result<super::Address, ::std::string::String>,
+        vesting_policy: ::std::result::Result<
+            ::std::option::Option<super::LinearVestingPolicy>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for BalanceObject {
+        fn default() -> Self {
+            Self {
+                balance: Err("no value supplied for balance".to_string()),
+                last_claim_date: Err(
+                    "no value supplied for last_claim_date".to_string(),
+                ),
+                owner: Err("no value supplied for owner".to_string()),
+                vesting_policy: Err("no value supplied for vesting_policy".to_string()),
+            }
+        }
+    }
+    impl BalanceObject {
+        pub fn balance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::Asset>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.balance = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for balance: {}", e)
+                });
+            self
+        }
+        pub fn last_claim_date<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.last_claim_date = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for last_claim_date: {}", e)
+                });
+            self
+        }
+        pub fn owner<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::Address>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.owner = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for owner: {}", e)
+                });
+            self
+        }
+        pub fn vesting_policy<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                ::std::option::Option<super::LinearVestingPolicy>,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.vesting_policy = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for vesting_policy: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<BalanceObject> for super::BalanceObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: BalanceObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                balance: value.balance?,
+                last_claim_date: value.last_claim_date?,
+                owner: value.owner?,
+                vesting_policy: value.vesting_policy?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::BalanceObject> for BalanceObject {
+        fn from(value: super::BalanceObject) -> Self {
+            Self {
+                balance: Ok(value.balance),
+                last_claim_date: Ok(value.last_claim_date),
+                owner: Ok(value.owner),
+                vesting_policy: Ok(value.vesting_policy),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct BidCollateralOperation {
         additional_collateral: ::std::result::Result<
             super::Asset,
@@ -42027,200 +45844,6 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct BlindConfirmation {
-        outputs: ::std::result::Result<
-            ::std::vec::Vec<super::BlindConfirmationOutput>,
-            ::std::string::String,
-        >,
-        trx: ::std::result::Result<super::SignedTransaction, ::std::string::String>,
-    }
-    impl ::std::default::Default for BlindConfirmation {
-        fn default() -> Self {
-            Self {
-                outputs: Err("no value supplied for outputs".to_string()),
-                trx: Err("no value supplied for trx".to_string()),
-            }
-        }
-    }
-    impl BlindConfirmation {
-        pub fn outputs<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<super::BlindConfirmationOutput>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.outputs = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for outputs: {}", e)
-                });
-            self
-        }
-        pub fn trx<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::SignedTransaction>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.trx = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for trx: {}", e));
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<BlindConfirmation> for super::BlindConfirmation {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: BlindConfirmation,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                outputs: value.outputs?,
-                trx: value.trx?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::BlindConfirmation> for BlindConfirmation {
-        fn from(value: super::BlindConfirmation) -> Self {
-            Self {
-                outputs: Ok(value.outputs),
-                trx: Ok(value.trx),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct BlindConfirmationOutput {
-        auth: ::std::result::Result<super::Authority, ::std::string::String>,
-        confirmation: ::std::result::Result<
-            super::StealthConfirmation,
-            ::std::string::String,
-        >,
-        confirmation_receipt: ::std::result::Result<
-            ::std::string::String,
-            ::std::string::String,
-        >,
-        decrypted_memo: ::std::result::Result<
-            super::StealthConfirmationMemoData,
-            ::std::string::String,
-        >,
-        label: ::std::result::Result<::std::string::String, ::std::string::String>,
-        pub_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-    }
-    impl ::std::default::Default for BlindConfirmationOutput {
-        fn default() -> Self {
-            Self {
-                auth: Err("no value supplied for auth".to_string()),
-                confirmation: Err("no value supplied for confirmation".to_string()),
-                confirmation_receipt: Err(
-                    "no value supplied for confirmation_receipt".to_string(),
-                ),
-                decrypted_memo: Err("no value supplied for decrypted_memo".to_string()),
-                label: Err("no value supplied for label".to_string()),
-                pub_key: Err("no value supplied for pub_key".to_string()),
-            }
-        }
-    }
-    impl BlindConfirmationOutput {
-        pub fn auth<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Authority>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.auth = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for auth: {}", e));
-            self
-        }
-        pub fn confirmation<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::StealthConfirmation>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.confirmation = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for confirmation: {}", e)
-                });
-            self
-        }
-        pub fn confirmation_receipt<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.confirmation_receipt = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for confirmation_receipt: {}", e
-                    )
-                });
-            self
-        }
-        pub fn decrypted_memo<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::StealthConfirmationMemoData>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.decrypted_memo = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for decrypted_memo: {}", e)
-                });
-            self
-        }
-        pub fn label<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.label = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for label: {}", e)
-                });
-            self
-        }
-        pub fn pub_key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.pub_key = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for pub_key: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<BlindConfirmationOutput>
-    for super::BlindConfirmationOutput {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: BlindConfirmationOutput,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                auth: value.auth?,
-                confirmation: value.confirmation?,
-                confirmation_receipt: value.confirmation_receipt?,
-                decrypted_memo: value.decrypted_memo?,
-                label: value.label?,
-                pub_key: value.pub_key?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::BlindConfirmationOutput>
-    for BlindConfirmationOutput {
-        fn from(value: super::BlindConfirmationOutput) -> Self {
-            Self {
-                auth: Ok(value.auth),
-                confirmation: Ok(value.confirmation),
-                confirmation_receipt: Ok(value.confirmation_receipt),
-                decrypted_memo: Ok(value.decrypted_memo),
-                label: Ok(value.label),
-                pub_key: Ok(value.pub_key),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
     pub struct BlindInput {
         commitment: ::std::result::Result<::std::string::String, ::std::string::String>,
         owner: ::std::result::Result<super::Authority, ::std::string::String>,
@@ -42374,211 +45997,6 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct BlindReceipt {
-        amount: ::std::result::Result<super::Asset, ::std::string::String>,
-        conf: ::std::result::Result<super::StealthConfirmation, ::std::string::String>,
-        control_authority: ::std::result::Result<
-            super::Authority,
-            ::std::string::String,
-        >,
-        data: ::std::result::Result<
-            super::StealthConfirmationMemoData,
-            ::std::string::String,
-        >,
-        date: ::std::result::Result<
-            ::graphene_rpc::GrapheneTimePointSec,
-            ::std::string::String,
-        >,
-        from_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        from_label: ::std::result::Result<::std::string::String, ::std::string::String>,
-        memo: ::std::result::Result<::std::string::String, ::std::string::String>,
-        to_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        to_label: ::std::result::Result<::std::string::String, ::std::string::String>,
-        used: ::std::result::Result<bool, ::std::string::String>,
-    }
-    impl ::std::default::Default for BlindReceipt {
-        fn default() -> Self {
-            Self {
-                amount: Err("no value supplied for amount".to_string()),
-                conf: Err("no value supplied for conf".to_string()),
-                control_authority: Err(
-                    "no value supplied for control_authority".to_string(),
-                ),
-                data: Err("no value supplied for data".to_string()),
-                date: Err("no value supplied for date".to_string()),
-                from_key: Err("no value supplied for from_key".to_string()),
-                from_label: Err("no value supplied for from_label".to_string()),
-                memo: Err("no value supplied for memo".to_string()),
-                to_key: Err("no value supplied for to_key".to_string()),
-                to_label: Err("no value supplied for to_label".to_string()),
-                used: Err("no value supplied for used".to_string()),
-            }
-        }
-    }
-    impl BlindReceipt {
-        pub fn amount<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Asset>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.amount = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for amount: {}", e)
-                });
-            self
-        }
-        pub fn conf<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::StealthConfirmation>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.conf = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for conf: {}", e));
-            self
-        }
-        pub fn control_authority<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Authority>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.control_authority = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for control_authority: {}", e
-                    )
-                });
-            self
-        }
-        pub fn data<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::StealthConfirmationMemoData>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.data = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for data: {}", e));
-            self
-        }
-        pub fn date<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.date = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for date: {}", e));
-            self
-        }
-        pub fn from_key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.from_key = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for from_key: {}", e)
-                });
-            self
-        }
-        pub fn from_label<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.from_label = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for from_label: {}", e)
-                });
-            self
-        }
-        pub fn memo<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.memo = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for memo: {}", e));
-            self
-        }
-        pub fn to_key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.to_key = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for to_key: {}", e)
-                });
-            self
-        }
-        pub fn to_label<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.to_label = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for to_label: {}", e)
-                });
-            self
-        }
-        pub fn used<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<bool>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.used = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for used: {}", e));
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<BlindReceipt> for super::BlindReceipt {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: BlindReceipt,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                amount: value.amount?,
-                conf: value.conf?,
-                control_authority: value.control_authority?,
-                data: value.data?,
-                date: value.date?,
-                from_key: value.from_key?,
-                from_label: value.from_label?,
-                memo: value.memo?,
-                to_key: value.to_key?,
-                to_label: value.to_label?,
-                used: value.used?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::BlindReceipt> for BlindReceipt {
-        fn from(value: super::BlindReceipt) -> Self {
-            Self {
-                amount: Ok(value.amount),
-                conf: Ok(value.conf),
-                control_authority: Ok(value.control_authority),
-                data: Ok(value.data),
-                date: Ok(value.date),
-                from_key: Ok(value.from_key),
-                from_label: Ok(value.from_label),
-                memo: Ok(value.memo),
-                to_key: Ok(value.to_key),
-                to_label: Ok(value.to_label),
-                used: Ok(value.used),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
     pub struct BlindTransferOperation {
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
         inputs: ::std::result::Result<
@@ -42723,6 +46141,83 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct BlindedBalanceObject {
+        asset_id: ::std::result::Result<
+            super::BlindedBalanceObjectAssetId,
+            ::std::string::String,
+        >,
+        commitment: ::std::result::Result<::std::string::String, ::std::string::String>,
+        owner: ::std::result::Result<super::Authority, ::std::string::String>,
+    }
+    impl ::std::default::Default for BlindedBalanceObject {
+        fn default() -> Self {
+            Self {
+                asset_id: Err("no value supplied for asset_id".to_string()),
+                commitment: Err("no value supplied for commitment".to_string()),
+                owner: Err("no value supplied for owner".to_string()),
+            }
+        }
+    }
+    impl BlindedBalanceObject {
+        pub fn asset_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::BlindedBalanceObjectAssetId>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.asset_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for asset_id: {}", e)
+                });
+            self
+        }
+        pub fn commitment<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.commitment = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for commitment: {}", e)
+                });
+            self
+        }
+        pub fn owner<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::Authority>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.owner = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for owner: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<BlindedBalanceObject> for super::BlindedBalanceObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: BlindedBalanceObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                asset_id: value.asset_id?,
+                commitment: value.commitment?,
+                owner: value.owner?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::BlindedBalanceObject> for BlindedBalanceObject {
+        fn from(value: super::BlindedBalanceObject) -> Self {
+            Self {
+                asset_id: Ok(value.asset_id),
+                commitment: Ok(value.commitment),
+                owner: Ok(value.owner),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct BlockIdPredicate {
         id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
     }
@@ -42759,282 +46254,44 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct BrainKeyInfo {
-        brain_priv_key: ::std::result::Result<
-            ::std::string::String,
-            ::std::string::String,
-        >,
-        pub_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        wif_priv_key: ::std::result::Result<
-            ::std::string::String,
-            ::std::string::String,
-        >,
+    pub struct BurnWorkerType {
+        total_burned: ::std::result::Result<i64, ::std::string::String>,
     }
-    impl ::std::default::Default for BrainKeyInfo {
+    impl ::std::default::Default for BurnWorkerType {
         fn default() -> Self {
             Self {
-                brain_priv_key: Err("no value supplied for brain_priv_key".to_string()),
-                pub_key: Err("no value supplied for pub_key".to_string()),
-                wif_priv_key: Err("no value supplied for wif_priv_key".to_string()),
+                total_burned: Err("no value supplied for total_burned".to_string()),
             }
         }
     }
-    impl BrainKeyInfo {
-        pub fn brain_priv_key<T>(mut self, value: T) -> Self
+    impl BurnWorkerType {
+        pub fn total_burned<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::string::String>,
+            T: ::std::convert::TryInto<i64>,
             T::Error: ::std::fmt::Display,
         {
-            self.brain_priv_key = value
+            self.total_burned = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for brain_priv_key: {}", e)
-                });
-            self
-        }
-        pub fn pub_key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.pub_key = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for pub_key: {}", e)
-                });
-            self
-        }
-        pub fn wif_priv_key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.wif_priv_key = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for wif_priv_key: {}", e)
+                    format!("error converting supplied value for total_burned: {}", e)
                 });
             self
         }
     }
-    impl ::std::convert::TryFrom<BrainKeyInfo> for super::BrainKeyInfo {
+    impl ::std::convert::TryFrom<BurnWorkerType> for super::BurnWorkerType {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: BrainKeyInfo,
+            value: BurnWorkerType,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
-                brain_priv_key: value.brain_priv_key?,
-                pub_key: value.pub_key?,
-                wif_priv_key: value.wif_priv_key?,
+                total_burned: value.total_burned?,
             })
         }
     }
-    impl ::std::convert::From<super::BrainKeyInfo> for BrainKeyInfo {
-        fn from(value: super::BrainKeyInfo) -> Self {
+    impl ::std::convert::From<super::BurnWorkerType> for BurnWorkerType {
+        fn from(value: super::BurnWorkerType) -> Self {
             Self {
-                brain_priv_key: Ok(value.brain_priv_key),
-                pub_key: Ok(value.pub_key),
-                wif_priv_key: Ok(value.wif_priv_key),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct BucketObject {
-        base_volume: ::std::result::Result<i64, ::std::string::String>,
-        close_base: ::std::result::Result<i64, ::std::string::String>,
-        close_quote: ::std::result::Result<i64, ::std::string::String>,
-        high_base: ::std::result::Result<i64, ::std::string::String>,
-        high_quote: ::std::result::Result<i64, ::std::string::String>,
-        key: ::std::result::Result<super::MarketHistoryBucketKey, ::std::string::String>,
-        low_base: ::std::result::Result<i64, ::std::string::String>,
-        low_quote: ::std::result::Result<i64, ::std::string::String>,
-        open_base: ::std::result::Result<i64, ::std::string::String>,
-        open_quote: ::std::result::Result<i64, ::std::string::String>,
-        quote_volume: ::std::result::Result<i64, ::std::string::String>,
-    }
-    impl ::std::default::Default for BucketObject {
-        fn default() -> Self {
-            Self {
-                base_volume: Err("no value supplied for base_volume".to_string()),
-                close_base: Err("no value supplied for close_base".to_string()),
-                close_quote: Err("no value supplied for close_quote".to_string()),
-                high_base: Err("no value supplied for high_base".to_string()),
-                high_quote: Err("no value supplied for high_quote".to_string()),
-                key: Err("no value supplied for key".to_string()),
-                low_base: Err("no value supplied for low_base".to_string()),
-                low_quote: Err("no value supplied for low_quote".to_string()),
-                open_base: Err("no value supplied for open_base".to_string()),
-                open_quote: Err("no value supplied for open_quote".to_string()),
-                quote_volume: Err("no value supplied for quote_volume".to_string()),
-            }
-        }
-    }
-    impl BucketObject {
-        pub fn base_volume<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.base_volume = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for base_volume: {}", e)
-                });
-            self
-        }
-        pub fn close_base<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.close_base = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for close_base: {}", e)
-                });
-            self
-        }
-        pub fn close_quote<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.close_quote = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for close_quote: {}", e)
-                });
-            self
-        }
-        pub fn high_base<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.high_base = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for high_base: {}", e)
-                });
-            self
-        }
-        pub fn high_quote<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.high_quote = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for high_quote: {}", e)
-                });
-            self
-        }
-        pub fn key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::MarketHistoryBucketKey>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.key = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for key: {}", e));
-            self
-        }
-        pub fn low_base<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.low_base = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for low_base: {}", e)
-                });
-            self
-        }
-        pub fn low_quote<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.low_quote = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for low_quote: {}", e)
-                });
-            self
-        }
-        pub fn open_base<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.open_base = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for open_base: {}", e)
-                });
-            self
-        }
-        pub fn open_quote<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.open_quote = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for open_quote: {}", e)
-                });
-            self
-        }
-        pub fn quote_volume<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<i64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.quote_volume = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for quote_volume: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<BucketObject> for super::BucketObject {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: BucketObject,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                base_volume: value.base_volume?,
-                close_base: value.close_base?,
-                close_quote: value.close_quote?,
-                high_base: value.high_base?,
-                high_quote: value.high_quote?,
-                key: value.key?,
-                low_base: value.low_base?,
-                low_quote: value.low_quote?,
-                open_base: value.open_base?,
-                open_quote: value.open_quote?,
-                quote_volume: value.quote_volume?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::BucketObject> for BucketObject {
-        fn from(value: super::BucketObject) -> Self {
-            Self {
-                base_volume: Ok(value.base_volume),
-                close_base: Ok(value.close_base),
-                close_quote: Ok(value.close_quote),
-                high_base: Ok(value.high_base),
-                high_quote: Ok(value.high_quote),
-                key: Ok(value.key),
-                low_base: Ok(value.low_base),
-                low_quote: Ok(value.low_quote),
-                open_base: Ok(value.open_base),
-                open_quote: Ok(value.open_quote),
-                quote_volume: Ok(value.quote_volume),
+                total_burned: Ok(value.total_burned),
             }
         }
     }
@@ -44339,6 +47596,71 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct ChainPropertyObject {
+        chain_id: ::std::result::Result<super::ChainIdType, ::std::string::String>,
+        immutable_parameters: ::std::result::Result<
+            super::ImmutableChainParameters,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for ChainPropertyObject {
+        fn default() -> Self {
+            Self {
+                chain_id: Err("no value supplied for chain_id".to_string()),
+                immutable_parameters: Err(
+                    "no value supplied for immutable_parameters".to_string(),
+                ),
+            }
+        }
+    }
+    impl ChainPropertyObject {
+        pub fn chain_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ChainIdType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.chain_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for chain_id: {}", e)
+                });
+            self
+        }
+        pub fn immutable_parameters<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ImmutableChainParameters>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.immutable_parameters = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for immutable_parameters: {}", e
+                    )
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ChainPropertyObject> for super::ChainPropertyObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ChainPropertyObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                chain_id: value.chain_id?,
+                immutable_parameters: value.immutable_parameters?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ChainPropertyObject> for ChainPropertyObject {
+        fn from(value: super::ChainPropertyObject) -> Self {
+            Self {
+                chain_id: Ok(value.chain_id),
+                immutable_parameters: Ok(value.immutable_parameters),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CollateralBidObject {
         bidder: ::std::result::Result<
             super::CollateralBidObjectBidder,
@@ -45178,6 +48500,222 @@ pub mod builder {
                 offer_id: Ok(value.offer_id),
                 offer_owner: Ok(value.offer_owner),
                 unpaid_amount: Ok(value.unpaid_amount),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CreditDealObject {
+        auto_repay: ::std::result::Result<u8, ::std::string::String>,
+        borrower: ::std::result::Result<
+            super::CreditDealObjectBorrower,
+            ::std::string::String,
+        >,
+        collateral_amount: ::std::result::Result<i64, ::std::string::String>,
+        collateral_asset: ::std::result::Result<
+            super::CreditDealObjectCollateralAsset,
+            ::std::string::String,
+        >,
+        debt_amount: ::std::result::Result<i64, ::std::string::String>,
+        debt_asset: ::std::result::Result<
+            super::CreditDealObjectDebtAsset,
+            ::std::string::String,
+        >,
+        fee_rate: ::std::result::Result<u32, ::std::string::String>,
+        latest_repay_time: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        offer_id: ::std::result::Result<
+            super::CreditDealObjectOfferId,
+            ::std::string::String,
+        >,
+        offer_owner: ::std::result::Result<
+            super::CreditDealObjectOfferOwner,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CreditDealObject {
+        fn default() -> Self {
+            Self {
+                auto_repay: Err("no value supplied for auto_repay".to_string()),
+                borrower: Err("no value supplied for borrower".to_string()),
+                collateral_amount: Err(
+                    "no value supplied for collateral_amount".to_string(),
+                ),
+                collateral_asset: Err(
+                    "no value supplied for collateral_asset".to_string(),
+                ),
+                debt_amount: Err("no value supplied for debt_amount".to_string()),
+                debt_asset: Err("no value supplied for debt_asset".to_string()),
+                fee_rate: Err("no value supplied for fee_rate".to_string()),
+                latest_repay_time: Err(
+                    "no value supplied for latest_repay_time".to_string(),
+                ),
+                offer_id: Err("no value supplied for offer_id".to_string()),
+                offer_owner: Err("no value supplied for offer_owner".to_string()),
+            }
+        }
+    }
+    impl CreditDealObject {
+        pub fn auto_repay<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u8>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.auto_repay = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for auto_repay: {}", e)
+                });
+            self
+        }
+        pub fn borrower<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditDealObjectBorrower>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.borrower = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for borrower: {}", e)
+                });
+            self
+        }
+        pub fn collateral_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.collateral_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for collateral_amount: {}", e
+                    )
+                });
+            self
+        }
+        pub fn collateral_asset<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditDealObjectCollateralAsset>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.collateral_asset = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for collateral_asset: {}", e
+                    )
+                });
+            self
+        }
+        pub fn debt_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.debt_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for debt_amount: {}", e)
+                });
+            self
+        }
+        pub fn debt_asset<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditDealObjectDebtAsset>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.debt_asset = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for debt_asset: {}", e)
+                });
+            self
+        }
+        pub fn fee_rate<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee_rate = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for fee_rate: {}", e)
+                });
+            self
+        }
+        pub fn latest_repay_time<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.latest_repay_time = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for latest_repay_time: {}", e
+                    )
+                });
+            self
+        }
+        pub fn offer_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditDealObjectOfferId>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.offer_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for offer_id: {}", e)
+                });
+            self
+        }
+        pub fn offer_owner<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditDealObjectOfferOwner>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.offer_owner = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for offer_owner: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreditDealObject> for super::CreditDealObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreditDealObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                auto_repay: value.auto_repay?,
+                borrower: value.borrower?,
+                collateral_amount: value.collateral_amount?,
+                collateral_asset: value.collateral_asset?,
+                debt_amount: value.debt_amount?,
+                debt_asset: value.debt_asset?,
+                fee_rate: value.fee_rate?,
+                latest_repay_time: value.latest_repay_time?,
+                offer_id: value.offer_id?,
+                offer_owner: value.offer_owner?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreditDealObject> for CreditDealObject {
+        fn from(value: super::CreditDealObject) -> Self {
+            Self {
+                auto_repay: Ok(value.auto_repay),
+                borrower: Ok(value.borrower),
+                collateral_amount: Ok(value.collateral_amount),
+                collateral_asset: Ok(value.collateral_asset),
+                debt_amount: Ok(value.debt_amount),
+                debt_asset: Ok(value.debt_asset),
+                fee_rate: Ok(value.fee_rate),
+                latest_repay_time: Ok(value.latest_repay_time),
+                offer_id: Ok(value.offer_id),
+                offer_owner: Ok(value.offer_owner),
             }
         }
     }
@@ -46210,6 +49748,248 @@ pub mod builder {
     for CreditOfferDeleteOperationFeeParamsT {
         fn from(value: super::CreditOfferDeleteOperationFeeParamsT) -> Self {
             Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CreditOfferObject {
+        acceptable_borrowers: ::std::result::Result<
+            ::std::collections::HashMap<::std::string::String, i64>,
+            ::std::string::String,
+        >,
+        acceptable_collateral: ::std::result::Result<
+            ::std::collections::HashMap<::std::string::String, super::Price>,
+            ::std::string::String,
+        >,
+        asset_type: ::std::result::Result<
+            super::CreditOfferObjectAssetType,
+            ::std::string::String,
+        >,
+        auto_disable_time: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        current_balance: ::std::result::Result<i64, ::std::string::String>,
+        enabled: ::std::result::Result<bool, ::std::string::String>,
+        fee_rate: ::std::result::Result<u32, ::std::string::String>,
+        max_duration_seconds: ::std::result::Result<u32, ::std::string::String>,
+        min_deal_amount: ::std::result::Result<i64, ::std::string::String>,
+        owner_account: ::std::result::Result<
+            super::CreditOfferObjectOwnerAccount,
+            ::std::string::String,
+        >,
+        total_balance: ::std::result::Result<i64, ::std::string::String>,
+    }
+    impl ::std::default::Default for CreditOfferObject {
+        fn default() -> Self {
+            Self {
+                acceptable_borrowers: Err(
+                    "no value supplied for acceptable_borrowers".to_string(),
+                ),
+                acceptable_collateral: Err(
+                    "no value supplied for acceptable_collateral".to_string(),
+                ),
+                asset_type: Err("no value supplied for asset_type".to_string()),
+                auto_disable_time: Err(
+                    "no value supplied for auto_disable_time".to_string(),
+                ),
+                current_balance: Err(
+                    "no value supplied for current_balance".to_string(),
+                ),
+                enabled: Err("no value supplied for enabled".to_string()),
+                fee_rate: Err("no value supplied for fee_rate".to_string()),
+                max_duration_seconds: Err(
+                    "no value supplied for max_duration_seconds".to_string(),
+                ),
+                min_deal_amount: Err(
+                    "no value supplied for min_deal_amount".to_string(),
+                ),
+                owner_account: Err("no value supplied for owner_account".to_string()),
+                total_balance: Err("no value supplied for total_balance".to_string()),
+            }
+        }
+    }
+    impl CreditOfferObject {
+        pub fn acceptable_borrowers<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                ::std::collections::HashMap<::std::string::String, i64>,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.acceptable_borrowers = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for acceptable_borrowers: {}", e
+                    )
+                });
+            self
+        }
+        pub fn acceptable_collateral<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                ::std::collections::HashMap<::std::string::String, super::Price>,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.acceptable_collateral = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for acceptable_collateral: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn asset_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditOfferObjectAssetType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.asset_type = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for asset_type: {}", e)
+                });
+            self
+        }
+        pub fn auto_disable_time<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.auto_disable_time = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for auto_disable_time: {}", e
+                    )
+                });
+            self
+        }
+        pub fn current_balance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.current_balance = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for current_balance: {}", e)
+                });
+            self
+        }
+        pub fn enabled<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<bool>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.enabled = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for enabled: {}", e)
+                });
+            self
+        }
+        pub fn fee_rate<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee_rate = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for fee_rate: {}", e)
+                });
+            self
+        }
+        pub fn max_duration_seconds<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_duration_seconds = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for max_duration_seconds: {}", e
+                    )
+                });
+            self
+        }
+        pub fn min_deal_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_deal_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for min_deal_amount: {}", e)
+                });
+            self
+        }
+        pub fn owner_account<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreditOfferObjectOwnerAccount>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.owner_account = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for owner_account: {}", e)
+                });
+            self
+        }
+        pub fn total_balance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_balance = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for total_balance: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreditOfferObject> for super::CreditOfferObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreditOfferObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                acceptable_borrowers: value.acceptable_borrowers?,
+                acceptable_collateral: value.acceptable_collateral?,
+                asset_type: value.asset_type?,
+                auto_disable_time: value.auto_disable_time?,
+                current_balance: value.current_balance?,
+                enabled: value.enabled?,
+                fee_rate: value.fee_rate?,
+                max_duration_seconds: value.max_duration_seconds?,
+                min_deal_amount: value.min_deal_amount?,
+                owner_account: value.owner_account?,
+                total_balance: value.total_balance?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreditOfferObject> for CreditOfferObject {
+        fn from(value: super::CreditOfferObject) -> Self {
+            Self {
+                acceptable_borrowers: Ok(value.acceptable_borrowers),
+                acceptable_collateral: Ok(value.acceptable_collateral),
+                asset_type: Ok(value.asset_type),
+                auto_disable_time: Ok(value.auto_disable_time),
+                current_balance: Ok(value.current_balance),
+                enabled: Ok(value.enabled),
+                fee_rate: Ok(value.fee_rate),
+                max_duration_seconds: Ok(value.max_duration_seconds),
+                min_deal_amount: Ok(value.min_deal_amount),
+                owner_account: Ok(value.owner_account),
+                total_balance: Ok(value.total_balance),
+            }
         }
     }
     #[derive(Clone, Debug)]
@@ -48439,6 +52219,204 @@ pub mod builder {
                 symbol: Ok(value.symbol),
                 total_backing_collateral: Ok(value.total_backing_collateral),
                 total_in_collateral: Ok(value.total_in_collateral),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct ExtendedLiquidityPoolObject {
+        asset_a: ::std::result::Result<
+            super::ExtendedLiquidityPoolObjectAssetA,
+            ::std::string::String,
+        >,
+        asset_b: ::std::result::Result<
+            super::ExtendedLiquidityPoolObjectAssetB,
+            ::std::string::String,
+        >,
+        balance_a: ::std::result::Result<i64, ::std::string::String>,
+        balance_b: ::std::result::Result<i64, ::std::string::String>,
+        share_asset: ::std::result::Result<
+            super::ExtendedLiquidityPoolObjectShareAsset,
+            ::std::string::String,
+        >,
+        statistics: ::std::result::Result<
+            ::std::option::Option<super::MarketHistoryLiquidityPoolTickerObject>,
+            ::std::string::String,
+        >,
+        taker_fee_percent: ::std::result::Result<u16, ::std::string::String>,
+        virtual_value: ::std::result::Result<
+            super::ExtendedLiquidityPoolObjectVirtualValue,
+            ::std::string::String,
+        >,
+        withdrawal_fee_percent: ::std::result::Result<u16, ::std::string::String>,
+    }
+    impl ::std::default::Default for ExtendedLiquidityPoolObject {
+        fn default() -> Self {
+            Self {
+                asset_a: Err("no value supplied for asset_a".to_string()),
+                asset_b: Err("no value supplied for asset_b".to_string()),
+                balance_a: Err("no value supplied for balance_a".to_string()),
+                balance_b: Err("no value supplied for balance_b".to_string()),
+                share_asset: Err("no value supplied for share_asset".to_string()),
+                statistics: Err("no value supplied for statistics".to_string()),
+                taker_fee_percent: Err(
+                    "no value supplied for taker_fee_percent".to_string(),
+                ),
+                virtual_value: Err("no value supplied for virtual_value".to_string()),
+                withdrawal_fee_percent: Err(
+                    "no value supplied for withdrawal_fee_percent".to_string(),
+                ),
+            }
+        }
+    }
+    impl ExtendedLiquidityPoolObject {
+        pub fn asset_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtendedLiquidityPoolObjectAssetA>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.asset_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for asset_a: {}", e)
+                });
+            self
+        }
+        pub fn asset_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtendedLiquidityPoolObjectAssetB>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.asset_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for asset_b: {}", e)
+                });
+            self
+        }
+        pub fn balance_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.balance_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for balance_a: {}", e)
+                });
+            self
+        }
+        pub fn balance_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.balance_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for balance_b: {}", e)
+                });
+            self
+        }
+        pub fn share_asset<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtendedLiquidityPoolObjectShareAsset>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.share_asset = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for share_asset: {}", e)
+                });
+            self
+        }
+        pub fn statistics<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                ::std::option::Option<super::MarketHistoryLiquidityPoolTickerObject>,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.statistics = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for statistics: {}", e)
+                });
+            self
+        }
+        pub fn taker_fee_percent<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u16>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.taker_fee_percent = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for taker_fee_percent: {}", e
+                    )
+                });
+            self
+        }
+        pub fn virtual_value<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtendedLiquidityPoolObjectVirtualValue>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.virtual_value = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for virtual_value: {}", e)
+                });
+            self
+        }
+        pub fn withdrawal_fee_percent<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u16>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.withdrawal_fee_percent = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for withdrawal_fee_percent: {}",
+                        e
+                    )
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ExtendedLiquidityPoolObject>
+    for super::ExtendedLiquidityPoolObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ExtendedLiquidityPoolObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                asset_a: value.asset_a?,
+                asset_b: value.asset_b?,
+                balance_a: value.balance_a?,
+                balance_b: value.balance_b?,
+                share_asset: value.share_asset?,
+                statistics: value.statistics?,
+                taker_fee_percent: value.taker_fee_percent?,
+                virtual_value: value.virtual_value?,
+                withdrawal_fee_percent: value.withdrawal_fee_percent?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ExtendedLiquidityPoolObject>
+    for ExtendedLiquidityPoolObject {
+        fn from(value: super::ExtendedLiquidityPoolObject) -> Self {
+            Self {
+                asset_a: Ok(value.asset_a),
+                asset_b: Ok(value.asset_b),
+                balance_a: Ok(value.balance_a),
+                balance_b: Ok(value.balance_b),
+                share_asset: Ok(value.share_asset),
+                statistics: Ok(value.statistics),
+                taker_fee_percent: Ok(value.taker_fee_percent),
+                virtual_value: Ok(value.virtual_value),
+                withdrawal_fee_percent: Ok(value.withdrawal_fee_percent),
             }
         }
     }
@@ -50911,6 +54889,115 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct ImmutableChainParameters {
+        min_committee_member_count: ::std::result::Result<u16, ::std::string::String>,
+        min_witness_count: ::std::result::Result<u16, ::std::string::String>,
+        num_special_accounts: ::std::result::Result<u32, ::std::string::String>,
+        num_special_assets: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for ImmutableChainParameters {
+        fn default() -> Self {
+            Self {
+                min_committee_member_count: Err(
+                    "no value supplied for min_committee_member_count".to_string(),
+                ),
+                min_witness_count: Err(
+                    "no value supplied for min_witness_count".to_string(),
+                ),
+                num_special_accounts: Err(
+                    "no value supplied for num_special_accounts".to_string(),
+                ),
+                num_special_assets: Err(
+                    "no value supplied for num_special_assets".to_string(),
+                ),
+            }
+        }
+    }
+    impl ImmutableChainParameters {
+        pub fn min_committee_member_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u16>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_committee_member_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for min_committee_member_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn min_witness_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u16>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_witness_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for min_witness_count: {}", e
+                    )
+                });
+            self
+        }
+        pub fn num_special_accounts<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.num_special_accounts = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for num_special_accounts: {}", e
+                    )
+                });
+            self
+        }
+        pub fn num_special_assets<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.num_special_assets = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for num_special_assets: {}", e
+                    )
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ImmutableChainParameters>
+    for super::ImmutableChainParameters {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ImmutableChainParameters,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                min_committee_member_count: value.min_committee_member_count?,
+                min_witness_count: value.min_witness_count?,
+                num_special_accounts: value.num_special_accounts?,
+                num_special_assets: value.num_special_assets?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ImmutableChainParameters>
+    for ImmutableChainParameters {
+        fn from(value: super::ImmutableChainParameters) -> Self {
+            Self {
+                min_committee_member_count: Ok(value.min_committee_member_count),
+                min_witness_count: Ok(value.min_witness_count),
+                num_special_accounts: Ok(value.num_special_accounts),
+                num_special_assets: Ok(value.num_special_assets),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct LimitOrderCancelOperation {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -52933,35 +57020,1048 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct MarketHistoryBucketKey {
-        base: ::std::result::Result<
-            super::MarketHistoryBucketKeyBase,
+    pub struct MarketHistoryLiquidityPoolTickerObject {
+        total_deposit_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA,
             ::std::string::String,
         >,
-        open: ::std::result::Result<
-            ::graphene_rpc::GrapheneTimePointSec,
+        total_deposit_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB,
             ::std::string::String,
         >,
-        quote: ::std::result::Result<
-            super::MarketHistoryBucketKeyQuote,
+        total_deposit_count: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
             ::std::string::String,
         >,
-        seconds: ::std::result::Result<u32, ::std::string::String>,
+        total_deposit_share_amount: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount,
+            ::std::string::String,
+        >,
+        total_exchange_a2b_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA,
+            ::std::string::String,
+        >,
+        total_exchange_a2b_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB,
+            ::std::string::String,
+        >,
+        total_exchange_a2b_count: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        total_exchange_b2a_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA,
+            ::std::string::String,
+        >,
+        total_exchange_b2a_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB,
+            ::std::string::String,
+        >,
+        total_exchange_b2a_count: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        total_exchange_fee_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA,
+            ::std::string::String,
+        >,
+        total_exchange_fee_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB,
+            ::std::string::String,
+        >,
+        total_withdrawal_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA,
+            ::std::string::String,
+        >,
+        total_withdrawal_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB,
+            ::std::string::String,
+        >,
+        total_withdrawal_count: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        total_withdrawal_fee_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA,
+            ::std::string::String,
+        >,
+        total_withdrawal_fee_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB,
+            ::std::string::String,
+        >,
+        total_withdrawal_share_amount: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+            ::std::string::String,
+        >,
+        x24h_balance_delta_a: ::std::result::Result<i64, ::std::string::String>,
+        x24h_balance_delta_b: ::std::result::Result<i64, ::std::string::String>,
+        x24h_deposit_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hDepositAmountA,
+            ::std::string::String,
+        >,
+        x24h_deposit_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hDepositAmountB,
+            ::std::string::String,
+        >,
+        x24h_deposit_count: ::std::result::Result<u32, ::std::string::String>,
+        x24h_deposit_share_amount: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount,
+            ::std::string::String,
+        >,
+        x24h_exchange_a2b_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA,
+            ::std::string::String,
+        >,
+        x24h_exchange_a2b_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB,
+            ::std::string::String,
+        >,
+        x24h_exchange_a2b_count: ::std::result::Result<u32, ::std::string::String>,
+        x24h_exchange_b2a_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA,
+            ::std::string::String,
+        >,
+        x24h_exchange_b2a_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB,
+            ::std::string::String,
+        >,
+        x24h_exchange_b2a_count: ::std::result::Result<u32, ::std::string::String>,
+        x24h_exchange_fee_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA,
+            ::std::string::String,
+        >,
+        x24h_exchange_fee_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB,
+            ::std::string::String,
+        >,
+        x24h_withdrawal_amount_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA,
+            ::std::string::String,
+        >,
+        x24h_withdrawal_amount_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB,
+            ::std::string::String,
+        >,
+        x24h_withdrawal_count: ::std::result::Result<u32, ::std::string::String>,
+        x24h_withdrawal_fee_a: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA,
+            ::std::string::String,
+        >,
+        x24h_withdrawal_fee_b: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB,
+            ::std::string::String,
+        >,
+        x24h_withdrawal_share_amount: ::std::result::Result<
+            super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount,
+            ::std::string::String,
+        >,
     }
-    impl ::std::default::Default for MarketHistoryBucketKey {
+    impl ::std::default::Default for MarketHistoryLiquidityPoolTickerObject {
         fn default() -> Self {
             Self {
-                base: Err("no value supplied for base".to_string()),
-                open: Err("no value supplied for open".to_string()),
-                quote: Err("no value supplied for quote".to_string()),
-                seconds: Err("no value supplied for seconds".to_string()),
+                total_deposit_amount_a: Err(
+                    "no value supplied for total_deposit_amount_a".to_string(),
+                ),
+                total_deposit_amount_b: Err(
+                    "no value supplied for total_deposit_amount_b".to_string(),
+                ),
+                total_deposit_count: Err(
+                    "no value supplied for total_deposit_count".to_string(),
+                ),
+                total_deposit_share_amount: Err(
+                    "no value supplied for total_deposit_share_amount".to_string(),
+                ),
+                total_exchange_a2b_amount_a: Err(
+                    "no value supplied for total_exchange_a2b_amount_a".to_string(),
+                ),
+                total_exchange_a2b_amount_b: Err(
+                    "no value supplied for total_exchange_a2b_amount_b".to_string(),
+                ),
+                total_exchange_a2b_count: Err(
+                    "no value supplied for total_exchange_a2b_count".to_string(),
+                ),
+                total_exchange_b2a_amount_a: Err(
+                    "no value supplied for total_exchange_b2a_amount_a".to_string(),
+                ),
+                total_exchange_b2a_amount_b: Err(
+                    "no value supplied for total_exchange_b2a_amount_b".to_string(),
+                ),
+                total_exchange_b2a_count: Err(
+                    "no value supplied for total_exchange_b2a_count".to_string(),
+                ),
+                total_exchange_fee_a: Err(
+                    "no value supplied for total_exchange_fee_a".to_string(),
+                ),
+                total_exchange_fee_b: Err(
+                    "no value supplied for total_exchange_fee_b".to_string(),
+                ),
+                total_withdrawal_amount_a: Err(
+                    "no value supplied for total_withdrawal_amount_a".to_string(),
+                ),
+                total_withdrawal_amount_b: Err(
+                    "no value supplied for total_withdrawal_amount_b".to_string(),
+                ),
+                total_withdrawal_count: Err(
+                    "no value supplied for total_withdrawal_count".to_string(),
+                ),
+                total_withdrawal_fee_a: Err(
+                    "no value supplied for total_withdrawal_fee_a".to_string(),
+                ),
+                total_withdrawal_fee_b: Err(
+                    "no value supplied for total_withdrawal_fee_b".to_string(),
+                ),
+                total_withdrawal_share_amount: Err(
+                    "no value supplied for total_withdrawal_share_amount".to_string(),
+                ),
+                x24h_balance_delta_a: Err(
+                    "no value supplied for x24h_balance_delta_a".to_string(),
+                ),
+                x24h_balance_delta_b: Err(
+                    "no value supplied for x24h_balance_delta_b".to_string(),
+                ),
+                x24h_deposit_amount_a: Err(
+                    "no value supplied for x24h_deposit_amount_a".to_string(),
+                ),
+                x24h_deposit_amount_b: Err(
+                    "no value supplied for x24h_deposit_amount_b".to_string(),
+                ),
+                x24h_deposit_count: Err(
+                    "no value supplied for x24h_deposit_count".to_string(),
+                ),
+                x24h_deposit_share_amount: Err(
+                    "no value supplied for x24h_deposit_share_amount".to_string(),
+                ),
+                x24h_exchange_a2b_amount_a: Err(
+                    "no value supplied for x24h_exchange_a2b_amount_a".to_string(),
+                ),
+                x24h_exchange_a2b_amount_b: Err(
+                    "no value supplied for x24h_exchange_a2b_amount_b".to_string(),
+                ),
+                x24h_exchange_a2b_count: Err(
+                    "no value supplied for x24h_exchange_a2b_count".to_string(),
+                ),
+                x24h_exchange_b2a_amount_a: Err(
+                    "no value supplied for x24h_exchange_b2a_amount_a".to_string(),
+                ),
+                x24h_exchange_b2a_amount_b: Err(
+                    "no value supplied for x24h_exchange_b2a_amount_b".to_string(),
+                ),
+                x24h_exchange_b2a_count: Err(
+                    "no value supplied for x24h_exchange_b2a_count".to_string(),
+                ),
+                x24h_exchange_fee_a: Err(
+                    "no value supplied for x24h_exchange_fee_a".to_string(),
+                ),
+                x24h_exchange_fee_b: Err(
+                    "no value supplied for x24h_exchange_fee_b".to_string(),
+                ),
+                x24h_withdrawal_amount_a: Err(
+                    "no value supplied for x24h_withdrawal_amount_a".to_string(),
+                ),
+                x24h_withdrawal_amount_b: Err(
+                    "no value supplied for x24h_withdrawal_amount_b".to_string(),
+                ),
+                x24h_withdrawal_count: Err(
+                    "no value supplied for x24h_withdrawal_count".to_string(),
+                ),
+                x24h_withdrawal_fee_a: Err(
+                    "no value supplied for x24h_withdrawal_fee_a".to_string(),
+                ),
+                x24h_withdrawal_fee_b: Err(
+                    "no value supplied for x24h_withdrawal_fee_b".to_string(),
+                ),
+                x24h_withdrawal_share_amount: Err(
+                    "no value supplied for x24h_withdrawal_share_amount".to_string(),
+                ),
             }
         }
     }
-    impl MarketHistoryBucketKey {
+    impl MarketHistoryLiquidityPoolTickerObject {
+        pub fn total_deposit_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_deposit_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_deposit_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_deposit_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalDepositAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_deposit_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_deposit_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_deposit_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_deposit_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_deposit_count: {}", e
+                    )
+                });
+            self
+        }
+        pub fn total_deposit_share_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalDepositShareAmount,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_deposit_share_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_deposit_share_amount: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_a2b_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_a2b_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_a2b_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_a2b_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeA2bAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_a2b_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_a2b_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_a2b_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_a2b_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_a2b_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_b2a_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_b2a_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_b2a_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_b2a_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeB2aAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_b2a_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_b2a_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_b2a_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_b2a_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_b2a_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_fee_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_fee_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_fee_a: {}", e
+                    )
+                });
+            self
+        }
+        pub fn total_exchange_fee_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalExchangeFeeB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_exchange_fee_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_exchange_fee_b: {}", e
+                    )
+                });
+            self
+        }
+        pub fn total_withdrawal_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_withdrawal_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_withdrawal_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_withdrawal_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_withdrawal_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_withdrawal_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_withdrawal_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_withdrawal_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_withdrawal_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_withdrawal_fee_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_withdrawal_fee_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_withdrawal_fee_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_withdrawal_fee_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalFeeB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_withdrawal_fee_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_withdrawal_fee_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn total_withdrawal_share_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObjectTotalWithdrawalShareAmount,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_withdrawal_share_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_withdrawal_share_amount: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_balance_delta_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_balance_delta_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_balance_delta_a: {}", e
+                    )
+                });
+            self
+        }
+        pub fn x24h_balance_delta_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_balance_delta_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_balance_delta_b: {}", e
+                    )
+                });
+            self
+        }
+        pub fn x24h_deposit_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hDepositAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_deposit_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_deposit_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_deposit_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hDepositAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_deposit_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_deposit_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_deposit_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_deposit_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_deposit_count: {}", e
+                    )
+                });
+            self
+        }
+        pub fn x24h_deposit_share_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hDepositShareAmount,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_deposit_share_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_deposit_share_amount: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_a2b_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_a2b_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_a2b_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_a2b_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hExchangeA2bAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_a2b_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_a2b_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_a2b_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_a2b_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_a2b_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_b2a_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_b2a_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_b2a_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_b2a_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hExchangeB2aAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_b2a_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_b2a_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_b2a_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_b2a_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_b2a_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_fee_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hExchangeFeeA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_fee_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_fee_a: {}", e
+                    )
+                });
+            self
+        }
+        pub fn x24h_exchange_fee_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hExchangeFeeB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_exchange_fee_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_exchange_fee_b: {}", e
+                    )
+                });
+            self
+        }
+        pub fn x24h_withdrawal_amount_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_withdrawal_amount_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_withdrawal_amount_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_withdrawal_amount_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalAmountB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_withdrawal_amount_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_withdrawal_amount_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_withdrawal_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_withdrawal_count = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_withdrawal_count: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_withdrawal_fee_a<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeA,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_withdrawal_fee_a = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_withdrawal_fee_a: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_withdrawal_fee_b<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalFeeB,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_withdrawal_fee_b = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_withdrawal_fee_b: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn x24h_withdrawal_share_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                super::MarketHistoryLiquidityPoolTickerObject24hWithdrawalShareAmount,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.x24h_withdrawal_share_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for x24h_withdrawal_share_amount: {}",
+                        e
+                    )
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<MarketHistoryLiquidityPoolTickerObject>
+    for super::MarketHistoryLiquidityPoolTickerObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: MarketHistoryLiquidityPoolTickerObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                total_deposit_amount_a: value.total_deposit_amount_a?,
+                total_deposit_amount_b: value.total_deposit_amount_b?,
+                total_deposit_count: value.total_deposit_count?,
+                total_deposit_share_amount: value.total_deposit_share_amount?,
+                total_exchange_a2b_amount_a: value.total_exchange_a2b_amount_a?,
+                total_exchange_a2b_amount_b: value.total_exchange_a2b_amount_b?,
+                total_exchange_a2b_count: value.total_exchange_a2b_count?,
+                total_exchange_b2a_amount_a: value.total_exchange_b2a_amount_a?,
+                total_exchange_b2a_amount_b: value.total_exchange_b2a_amount_b?,
+                total_exchange_b2a_count: value.total_exchange_b2a_count?,
+                total_exchange_fee_a: value.total_exchange_fee_a?,
+                total_exchange_fee_b: value.total_exchange_fee_b?,
+                total_withdrawal_amount_a: value.total_withdrawal_amount_a?,
+                total_withdrawal_amount_b: value.total_withdrawal_amount_b?,
+                total_withdrawal_count: value.total_withdrawal_count?,
+                total_withdrawal_fee_a: value.total_withdrawal_fee_a?,
+                total_withdrawal_fee_b: value.total_withdrawal_fee_b?,
+                total_withdrawal_share_amount: value.total_withdrawal_share_amount?,
+                x24h_balance_delta_a: value.x24h_balance_delta_a?,
+                x24h_balance_delta_b: value.x24h_balance_delta_b?,
+                x24h_deposit_amount_a: value.x24h_deposit_amount_a?,
+                x24h_deposit_amount_b: value.x24h_deposit_amount_b?,
+                x24h_deposit_count: value.x24h_deposit_count?,
+                x24h_deposit_share_amount: value.x24h_deposit_share_amount?,
+                x24h_exchange_a2b_amount_a: value.x24h_exchange_a2b_amount_a?,
+                x24h_exchange_a2b_amount_b: value.x24h_exchange_a2b_amount_b?,
+                x24h_exchange_a2b_count: value.x24h_exchange_a2b_count?,
+                x24h_exchange_b2a_amount_a: value.x24h_exchange_b2a_amount_a?,
+                x24h_exchange_b2a_amount_b: value.x24h_exchange_b2a_amount_b?,
+                x24h_exchange_b2a_count: value.x24h_exchange_b2a_count?,
+                x24h_exchange_fee_a: value.x24h_exchange_fee_a?,
+                x24h_exchange_fee_b: value.x24h_exchange_fee_b?,
+                x24h_withdrawal_amount_a: value.x24h_withdrawal_amount_a?,
+                x24h_withdrawal_amount_b: value.x24h_withdrawal_amount_b?,
+                x24h_withdrawal_count: value.x24h_withdrawal_count?,
+                x24h_withdrawal_fee_a: value.x24h_withdrawal_fee_a?,
+                x24h_withdrawal_fee_b: value.x24h_withdrawal_fee_b?,
+                x24h_withdrawal_share_amount: value.x24h_withdrawal_share_amount?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::MarketHistoryLiquidityPoolTickerObject>
+    for MarketHistoryLiquidityPoolTickerObject {
+        fn from(value: super::MarketHistoryLiquidityPoolTickerObject) -> Self {
+            Self {
+                total_deposit_amount_a: Ok(value.total_deposit_amount_a),
+                total_deposit_amount_b: Ok(value.total_deposit_amount_b),
+                total_deposit_count: Ok(value.total_deposit_count),
+                total_deposit_share_amount: Ok(value.total_deposit_share_amount),
+                total_exchange_a2b_amount_a: Ok(value.total_exchange_a2b_amount_a),
+                total_exchange_a2b_amount_b: Ok(value.total_exchange_a2b_amount_b),
+                total_exchange_a2b_count: Ok(value.total_exchange_a2b_count),
+                total_exchange_b2a_amount_a: Ok(value.total_exchange_b2a_amount_a),
+                total_exchange_b2a_amount_b: Ok(value.total_exchange_b2a_amount_b),
+                total_exchange_b2a_count: Ok(value.total_exchange_b2a_count),
+                total_exchange_fee_a: Ok(value.total_exchange_fee_a),
+                total_exchange_fee_b: Ok(value.total_exchange_fee_b),
+                total_withdrawal_amount_a: Ok(value.total_withdrawal_amount_a),
+                total_withdrawal_amount_b: Ok(value.total_withdrawal_amount_b),
+                total_withdrawal_count: Ok(value.total_withdrawal_count),
+                total_withdrawal_fee_a: Ok(value.total_withdrawal_fee_a),
+                total_withdrawal_fee_b: Ok(value.total_withdrawal_fee_b),
+                total_withdrawal_share_amount: Ok(value.total_withdrawal_share_amount),
+                x24h_balance_delta_a: Ok(value.x24h_balance_delta_a),
+                x24h_balance_delta_b: Ok(value.x24h_balance_delta_b),
+                x24h_deposit_amount_a: Ok(value.x24h_deposit_amount_a),
+                x24h_deposit_amount_b: Ok(value.x24h_deposit_amount_b),
+                x24h_deposit_count: Ok(value.x24h_deposit_count),
+                x24h_deposit_share_amount: Ok(value.x24h_deposit_share_amount),
+                x24h_exchange_a2b_amount_a: Ok(value.x24h_exchange_a2b_amount_a),
+                x24h_exchange_a2b_amount_b: Ok(value.x24h_exchange_a2b_amount_b),
+                x24h_exchange_a2b_count: Ok(value.x24h_exchange_a2b_count),
+                x24h_exchange_b2a_amount_a: Ok(value.x24h_exchange_b2a_amount_a),
+                x24h_exchange_b2a_amount_b: Ok(value.x24h_exchange_b2a_amount_b),
+                x24h_exchange_b2a_count: Ok(value.x24h_exchange_b2a_count),
+                x24h_exchange_fee_a: Ok(value.x24h_exchange_fee_a),
+                x24h_exchange_fee_b: Ok(value.x24h_exchange_fee_b),
+                x24h_withdrawal_amount_a: Ok(value.x24h_withdrawal_amount_a),
+                x24h_withdrawal_amount_b: Ok(value.x24h_withdrawal_amount_b),
+                x24h_withdrawal_count: Ok(value.x24h_withdrawal_count),
+                x24h_withdrawal_fee_a: Ok(value.x24h_withdrawal_fee_a),
+                x24h_withdrawal_fee_b: Ok(value.x24h_withdrawal_fee_b),
+                x24h_withdrawal_share_amount: Ok(value.x24h_withdrawal_share_amount),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct MarketTicker {
+        base: ::std::result::Result<::std::string::String, ::std::string::String>,
+        base_volume: ::std::result::Result<::std::string::String, ::std::string::String>,
+        highest_bid: ::std::result::Result<::std::string::String, ::std::string::String>,
+        highest_bid_base_size: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        highest_bid_quote_size: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        latest: ::std::result::Result<::std::string::String, ::std::string::String>,
+        lowest_ask: ::std::result::Result<::std::string::String, ::std::string::String>,
+        lowest_ask_base_size: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        lowest_ask_quote_size: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        mto_id: ::std::result::Result<
+            ::std::option::Option<super::MarketTickerMtoId>,
+            ::std::string::String,
+        >,
+        percent_change: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        quote: ::std::result::Result<::std::string::String, ::std::string::String>,
+        quote_volume: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        time: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for MarketTicker {
+        fn default() -> Self {
+            Self {
+                base: Err("no value supplied for base".to_string()),
+                base_volume: Err("no value supplied for base_volume".to_string()),
+                highest_bid: Err("no value supplied for highest_bid".to_string()),
+                highest_bid_base_size: Err(
+                    "no value supplied for highest_bid_base_size".to_string(),
+                ),
+                highest_bid_quote_size: Err(
+                    "no value supplied for highest_bid_quote_size".to_string(),
+                ),
+                latest: Err("no value supplied for latest".to_string()),
+                lowest_ask: Err("no value supplied for lowest_ask".to_string()),
+                lowest_ask_base_size: Err(
+                    "no value supplied for lowest_ask_base_size".to_string(),
+                ),
+                lowest_ask_quote_size: Err(
+                    "no value supplied for lowest_ask_quote_size".to_string(),
+                ),
+                mto_id: Err("no value supplied for mto_id".to_string()),
+                percent_change: Err("no value supplied for percent_change".to_string()),
+                quote: Err("no value supplied for quote".to_string()),
+                quote_volume: Err("no value supplied for quote_volume".to_string()),
+                time: Err("no value supplied for time".to_string()),
+            }
+        }
+    }
+    impl MarketTicker {
         pub fn base<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::MarketHistoryBucketKeyBase>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.base = value
@@ -52969,19 +58069,140 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for base: {}", e));
             self
         }
-        pub fn open<T>(mut self, value: T) -> Self
+        pub fn base_volume<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
-            self.open = value
+            self.base_volume = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for open: {}", e));
+                .map_err(|e| {
+                    format!("error converting supplied value for base_volume: {}", e)
+                });
+            self
+        }
+        pub fn highest_bid<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.highest_bid = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for highest_bid: {}", e)
+                });
+            self
+        }
+        pub fn highest_bid_base_size<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.highest_bid_base_size = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for highest_bid_base_size: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn highest_bid_quote_size<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.highest_bid_quote_size = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for highest_bid_quote_size: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn latest<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.latest = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for latest: {}", e)
+                });
+            self
+        }
+        pub fn lowest_ask<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.lowest_ask = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for lowest_ask: {}", e)
+                });
+            self
+        }
+        pub fn lowest_ask_base_size<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.lowest_ask_base_size = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for lowest_ask_base_size: {}", e
+                    )
+                });
+            self
+        }
+        pub fn lowest_ask_quote_size<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.lowest_ask_quote_size = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for lowest_ask_quote_size: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn mto_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<super::MarketTickerMtoId>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mto_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for mto_id: {}", e)
+                });
+            self
+        }
+        pub fn percent_change<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.percent_change = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for percent_change: {}", e)
+                });
             self
         }
         pub fn quote<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::MarketHistoryBucketKeyQuote>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.quote = value
@@ -52991,74 +58212,114 @@ pub mod builder {
                 });
             self
         }
-        pub fn seconds<T>(mut self, value: T) -> Self
+        pub fn quote_volume<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u32>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
-            self.seconds = value
+            self.quote_volume = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for seconds: {}", e)
+                    format!("error converting supplied value for quote_volume: {}", e)
                 });
             self
         }
+        pub fn time<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.time = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for time: {}", e));
+            self
+        }
     }
-    impl ::std::convert::TryFrom<MarketHistoryBucketKey>
-    for super::MarketHistoryBucketKey {
+    impl ::std::convert::TryFrom<MarketTicker> for super::MarketTicker {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: MarketHistoryBucketKey,
+            value: MarketTicker,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
                 base: value.base?,
-                open: value.open?,
+                base_volume: value.base_volume?,
+                highest_bid: value.highest_bid?,
+                highest_bid_base_size: value.highest_bid_base_size?,
+                highest_bid_quote_size: value.highest_bid_quote_size?,
+                latest: value.latest?,
+                lowest_ask: value.lowest_ask?,
+                lowest_ask_base_size: value.lowest_ask_base_size?,
+                lowest_ask_quote_size: value.lowest_ask_quote_size?,
+                mto_id: value.mto_id?,
+                percent_change: value.percent_change?,
                 quote: value.quote?,
-                seconds: value.seconds?,
+                quote_volume: value.quote_volume?,
+                time: value.time?,
             })
         }
     }
-    impl ::std::convert::From<super::MarketHistoryBucketKey> for MarketHistoryBucketKey {
-        fn from(value: super::MarketHistoryBucketKey) -> Self {
+    impl ::std::convert::From<super::MarketTicker> for MarketTicker {
+        fn from(value: super::MarketTicker) -> Self {
             Self {
                 base: Ok(value.base),
-                open: Ok(value.open),
+                base_volume: Ok(value.base_volume),
+                highest_bid: Ok(value.highest_bid),
+                highest_bid_base_size: Ok(value.highest_bid_base_size),
+                highest_bid_quote_size: Ok(value.highest_bid_quote_size),
+                latest: Ok(value.latest),
+                lowest_ask: Ok(value.lowest_ask),
+                lowest_ask_base_size: Ok(value.lowest_ask_base_size),
+                lowest_ask_quote_size: Ok(value.lowest_ask_quote_size),
+                mto_id: Ok(value.mto_id),
+                percent_change: Ok(value.percent_change),
                 quote: Ok(value.quote),
-                seconds: Ok(value.seconds),
+                quote_volume: Ok(value.quote_volume),
+                time: Ok(value.time),
             }
         }
     }
     #[derive(Clone, Debug)]
-    pub struct MemoData {
-        amount: ::std::result::Result<super::Asset, ::std::string::String>,
-        blinding_factor: ::std::result::Result<
-            ::std::string::String,
-            ::std::string::String,
-        >,
-        check: ::std::result::Result<u32, ::std::string::String>,
-        commitment: ::std::result::Result<::std::string::String, ::std::string::String>,
-        from: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
+    pub struct MarketTrade {
+        amount: ::std::result::Result<::std::string::String, ::std::string::String>,
+        date: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
+        price: ::std::result::Result<::std::string::String, ::std::string::String>,
+        sequence: ::std::result::Result<i64, ::std::string::String>,
+        side1_account_id: ::std::result::Result<
+            super::MarketTradeSide1AccountId,
+            ::std::string::String,
+        >,
+        side2_account_id: ::std::result::Result<
+            super::MarketTradeSide2AccountId,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        value: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
-    impl ::std::default::Default for MemoData {
+    impl ::std::default::Default for MarketTrade {
         fn default() -> Self {
             Self {
                 amount: Err("no value supplied for amount".to_string()),
-                blinding_factor: Err(
-                    "no value supplied for blinding_factor".to_string(),
+                date: Err("no value supplied for date".to_string()),
+                price: Err("no value supplied for price".to_string()),
+                sequence: Err("no value supplied for sequence".to_string()),
+                side1_account_id: Err(
+                    "no value supplied for side1_account_id".to_string(),
                 ),
-                check: Err("no value supplied for check".to_string()),
-                commitment: Err("no value supplied for commitment".to_string()),
-                from: Err("no value supplied for from".to_string()),
+                side2_account_id: Err(
+                    "no value supplied for side2_account_id".to_string(),
+                ),
+                type_: Err("no value supplied for type_".to_string()),
+                value: Err("no value supplied for value".to_string()),
             }
         }
     }
-    impl MemoData {
+    impl MarketTrade {
         pub fn amount<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::Asset>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.amount = value
@@ -53068,50 +58329,442 @@ pub mod builder {
                 });
             self
         }
-        pub fn blinding_factor<T>(mut self, value: T) -> Self
+        pub fn date<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.date = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for date: {}", e));
+            self
+        }
+        pub fn price<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
-            self.blinding_factor = value
+            self.price = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for blinding_factor: {}", e)
+                    format!("error converting supplied value for price: {}", e)
                 });
             self
         }
-        pub fn check<T>(mut self, value: T) -> Self
+        pub fn sequence<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u32>,
+            T: ::std::convert::TryInto<i64>,
             T::Error: ::std::fmt::Display,
         {
-            self.check = value
+            self.sequence = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for check: {}", e)
+                    format!("error converting supplied value for sequence: {}", e)
                 });
             self
         }
-        pub fn commitment<T>(mut self, value: T) -> Self
+        pub fn side1_account_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::MarketTradeSide1AccountId>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.side1_account_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for side1_account_id: {}", e
+                    )
+                });
+            self
+        }
+        pub fn side2_account_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::MarketTradeSide2AccountId>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.side2_account_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for side2_account_id: {}", e
+                    )
+                });
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
-            self.commitment = value
+            self.type_ = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for commitment: {}", e)
+                    format!("error converting supplied value for type_: {}", e)
                 });
             self
         }
-        pub fn from<T>(mut self, value: T) -> Self
+        pub fn value<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.value = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for value: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<MarketTrade> for super::MarketTrade {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: MarketTrade,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                amount: value.amount?,
+                date: value.date?,
+                price: value.price?,
+                sequence: value.sequence?,
+                side1_account_id: value.side1_account_id?,
+                side2_account_id: value.side2_account_id?,
+                type_: value.type_?,
+                value: value.value?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::MarketTrade> for MarketTrade {
+        fn from(value: super::MarketTrade) -> Self {
+            Self {
+                amount: Ok(value.amount),
+                date: Ok(value.date),
+                price: Ok(value.price),
+                sequence: Ok(value.sequence),
+                side1_account_id: Ok(value.side1_account_id),
+                side2_account_id: Ok(value.side2_account_id),
+                type_: Ok(value.type_),
+                value: Ok(value.value),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct MarketVolume {
+        base: ::std::result::Result<::std::string::String, ::std::string::String>,
+        base_volume: ::std::result::Result<::std::string::String, ::std::string::String>,
+        quote: ::std::result::Result<::std::string::String, ::std::string::String>,
+        quote_volume: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
+        time: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for MarketVolume {
+        fn default() -> Self {
+            Self {
+                base: Err("no value supplied for base".to_string()),
+                base_volume: Err("no value supplied for base_volume".to_string()),
+                quote: Err("no value supplied for quote".to_string()),
+                quote_volume: Err("no value supplied for quote_volume".to_string()),
+                time: Err("no value supplied for time".to_string()),
+            }
+        }
+    }
+    impl MarketVolume {
+        pub fn base<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.base = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for base: {}", e));
+            self
+        }
+        pub fn base_volume<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.base_volume = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for base_volume: {}", e)
+                });
+            self
+        }
+        pub fn quote<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.quote = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for quote: {}", e)
+                });
+            self
+        }
+        pub fn quote_volume<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.quote_volume = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for quote_volume: {}", e)
+                });
+            self
+        }
+        pub fn time<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.time = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for time: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<MarketVolume> for super::MarketVolume {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: MarketVolume,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                base: value.base?,
+                base_volume: value.base_volume?,
+                quote: value.quote?,
+                quote_volume: value.quote_volume?,
+                time: value.time?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::MarketVolume> for MarketVolume {
+        fn from(value: super::MarketVolume) -> Self {
+            Self {
+                base: Ok(value.base),
+                base_volume: Ok(value.base_volume),
+                quote: Ok(value.quote),
+                quote_volume: Ok(value.quote_volume),
+                time: Ok(value.time),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct MaybeSignedBlockHeader {
+        extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
+        previous: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        timestamp: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        transaction_merkle_root: ::std::result::Result<
+            super::ChecksumType,
+            ::std::string::String,
+        >,
+        witness: ::std::result::Result<
+            super::MaybeSignedBlockHeaderWitness,
+            ::std::string::String,
+        >,
+        witness_signature: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for MaybeSignedBlockHeader {
+        fn default() -> Self {
+            Self {
+                extensions: Err("no value supplied for extensions".to_string()),
+                previous: Err("no value supplied for previous".to_string()),
+                timestamp: Err("no value supplied for timestamp".to_string()),
+                transaction_merkle_root: Err(
+                    "no value supplied for transaction_merkle_root".to_string(),
+                ),
+                witness: Err("no value supplied for witness".to_string()),
+                witness_signature: Err(
+                    "no value supplied for witness_signature".to_string(),
+                ),
+            }
+        }
+    }
+    impl MaybeSignedBlockHeader {
+        pub fn extensions<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtensionsType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.extensions = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for extensions: {}", e)
+                });
+            self
+        }
+        pub fn previous<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::BlockIdType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.previous = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for previous: {}", e)
+                });
+            self
+        }
+        pub fn timestamp<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.timestamp = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for timestamp: {}", e)
+                });
+            self
+        }
+        pub fn transaction_merkle_root<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ChecksumType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.transaction_merkle_root = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for transaction_merkle_root: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn witness<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::MaybeSignedBlockHeaderWitness>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.witness = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for witness: {}", e)
+                });
+            self
+        }
+        pub fn witness_signature<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.witness_signature = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for witness_signature: {}", e
+                    )
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<MaybeSignedBlockHeader>
+    for super::MaybeSignedBlockHeader {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: MaybeSignedBlockHeader,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                extensions: value.extensions?,
+                previous: value.previous?,
+                timestamp: value.timestamp?,
+                transaction_merkle_root: value.transaction_merkle_root?,
+                witness: value.witness?,
+                witness_signature: value.witness_signature?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::MaybeSignedBlockHeader> for MaybeSignedBlockHeader {
+        fn from(value: super::MaybeSignedBlockHeader) -> Self {
+            Self {
+                extensions: Ok(value.extensions),
+                previous: Ok(value.previous),
+                timestamp: Ok(value.timestamp),
+                transaction_merkle_root: Ok(value.transaction_merkle_root),
+                witness: Ok(value.witness),
+                witness_signature: Ok(value.witness_signature),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct MemoData {
+        from: ::std::result::Result<::std::string::String, ::std::string::String>,
+        message: ::std::result::Result<
+            ::std::vec::Vec<super::MemoDataMessageItem>,
+            ::std::string::String,
+        >,
+        nonce: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        to: ::std::result::Result<::std::string::String, ::std::string::String>,
+    }
+    impl ::std::default::Default for MemoData {
+        fn default() -> Self {
+            Self {
+                from: Err("no value supplied for from".to_string()),
+                message: Err("no value supplied for message".to_string()),
+                nonce: Err("no value supplied for nonce".to_string()),
+                to: Err("no value supplied for to".to_string()),
+            }
+        }
+    }
+    impl MemoData {
+        pub fn from<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.from = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for from: {}", e));
+            self
+        }
+        pub fn message<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::vec::Vec<super::MemoDataMessageItem>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.message = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for message: {}", e)
+                });
+            self
+        }
+        pub fn nonce<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.nonce = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for nonce: {}", e)
+                });
+            self
+        }
+        pub fn to<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.to = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for to: {}", e));
             self
         }
     }
@@ -53121,22 +58774,20 @@ pub mod builder {
             value: MemoData,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
-                amount: value.amount?,
-                blinding_factor: value.blinding_factor?,
-                check: value.check?,
-                commitment: value.commitment?,
                 from: value.from?,
+                message: value.message?,
+                nonce: value.nonce?,
+                to: value.to?,
             })
         }
     }
     impl ::std::convert::From<super::MemoData> for MemoData {
         fn from(value: super::MemoData) -> Self {
             Self {
-                amount: Ok(value.amount),
-                blinding_factor: Ok(value.blinding_factor),
-                check: Ok(value.check),
-                commitment: Ok(value.commitment),
                 from: Ok(value.from),
+                message: Ok(value.message),
+                nonce: Ok(value.nonce),
+                to: Ok(value.to),
             }
         }
     }
@@ -53380,321 +59031,6 @@ pub mod builder {
     impl ::std::convert::From<super::OpWrapper> for OpWrapper {
         fn from(value: super::OpWrapper) -> Self {
             Self { op: Ok(value.op) }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct OperationDetail {
-        description: ::std::result::Result<::std::string::String, ::std::string::String>,
-        memo: ::std::result::Result<::std::string::String, ::std::string::String>,
-        op: ::std::result::Result<super::OperationHistoryObject, ::std::string::String>,
-    }
-    impl ::std::default::Default for OperationDetail {
-        fn default() -> Self {
-            Self {
-                description: Err("no value supplied for description".to_string()),
-                memo: Err("no value supplied for memo".to_string()),
-                op: Err("no value supplied for op".to_string()),
-            }
-        }
-    }
-    impl OperationDetail {
-        pub fn description<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.description = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for description: {}", e)
-                });
-            self
-        }
-        pub fn memo<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.memo = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for memo: {}", e));
-            self
-        }
-        pub fn op<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::OperationHistoryObject>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.op = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for op: {}", e));
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<OperationDetail> for super::OperationDetail {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: OperationDetail,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                description: value.description?,
-                memo: value.memo?,
-                op: value.op?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::OperationDetail> for OperationDetail {
-        fn from(value: super::OperationDetail) -> Self {
-            Self {
-                description: Ok(value.description),
-                memo: Ok(value.memo),
-                op: Ok(value.op),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct OperationDetailEx {
-        description: ::std::result::Result<::std::string::String, ::std::string::String>,
-        memo: ::std::result::Result<::std::string::String, ::std::string::String>,
-        op: ::std::result::Result<super::OperationHistoryObject, ::std::string::String>,
-        transaction_id: ::std::result::Result<
-            ::std::string::String,
-            ::std::string::String,
-        >,
-    }
-    impl ::std::default::Default for OperationDetailEx {
-        fn default() -> Self {
-            Self {
-                description: Err("no value supplied for description".to_string()),
-                memo: Err("no value supplied for memo".to_string()),
-                op: Err("no value supplied for op".to_string()),
-                transaction_id: Err("no value supplied for transaction_id".to_string()),
-            }
-        }
-    }
-    impl OperationDetailEx {
-        pub fn description<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.description = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for description: {}", e)
-                });
-            self
-        }
-        pub fn memo<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.memo = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for memo: {}", e));
-            self
-        }
-        pub fn op<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::OperationHistoryObject>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.op = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for op: {}", e));
-            self
-        }
-        pub fn transaction_id<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.transaction_id = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for transaction_id: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<OperationDetailEx> for super::OperationDetailEx {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: OperationDetailEx,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                description: value.description?,
-                memo: value.memo?,
-                op: value.op?,
-                transaction_id: value.transaction_id?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::OperationDetailEx> for OperationDetailEx {
-        fn from(value: super::OperationDetailEx) -> Self {
-            Self {
-                description: Ok(value.description),
-                memo: Ok(value.memo),
-                op: Ok(value.op),
-                transaction_id: Ok(value.transaction_id),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct OperationHistoryObject {
-        block_num: ::std::result::Result<u32, ::std::string::String>,
-        block_time: ::std::result::Result<
-            ::graphene_rpc::GrapheneTimePointSec,
-            ::std::string::String,
-        >,
-        is_virtual: ::std::result::Result<bool, ::std::string::String>,
-        op: ::std::result::Result<super::Operation, ::std::string::String>,
-        op_in_trx: ::std::result::Result<u16, ::std::string::String>,
-        result: ::std::result::Result<super::OperationResult, ::std::string::String>,
-        trx_in_block: ::std::result::Result<u16, ::std::string::String>,
-        virtual_op: ::std::result::Result<u32, ::std::string::String>,
-    }
-    impl ::std::default::Default for OperationHistoryObject {
-        fn default() -> Self {
-            Self {
-                block_num: Err("no value supplied for block_num".to_string()),
-                block_time: Err("no value supplied for block_time".to_string()),
-                is_virtual: Err("no value supplied for is_virtual".to_string()),
-                op: Err("no value supplied for op".to_string()),
-                op_in_trx: Err("no value supplied for op_in_trx".to_string()),
-                result: Err("no value supplied for result".to_string()),
-                trx_in_block: Err("no value supplied for trx_in_block".to_string()),
-                virtual_op: Err("no value supplied for virtual_op".to_string()),
-            }
-        }
-    }
-    impl OperationHistoryObject {
-        pub fn block_num<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u32>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.block_num = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for block_num: {}", e)
-                });
-            self
-        }
-        pub fn block_time<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.block_time = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for block_time: {}", e)
-                });
-            self
-        }
-        pub fn is_virtual<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<bool>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.is_virtual = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for is_virtual: {}", e)
-                });
-            self
-        }
-        pub fn op<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Operation>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.op = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for op: {}", e));
-            self
-        }
-        pub fn op_in_trx<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u16>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.op_in_trx = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for op_in_trx: {}", e)
-                });
-            self
-        }
-        pub fn result<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::OperationResult>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.result = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for result: {}", e)
-                });
-            self
-        }
-        pub fn trx_in_block<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u16>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.trx_in_block = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for trx_in_block: {}", e)
-                });
-            self
-        }
-        pub fn virtual_op<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u32>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.virtual_op = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for virtual_op: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<OperationHistoryObject>
-    for super::OperationHistoryObject {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: OperationHistoryObject,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                block_num: value.block_num?,
-                block_time: value.block_time?,
-                is_virtual: value.is_virtual?,
-                op: value.op?,
-                op_in_trx: value.op_in_trx?,
-                result: value.result?,
-                trx_in_block: value.trx_in_block?,
-                virtual_op: value.virtual_op?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::OperationHistoryObject> for OperationHistoryObject {
-        fn from(value: super::OperationHistoryObject) -> Self {
-            Self {
-                block_num: Ok(value.block_num),
-                block_time: Ok(value.block_time),
-                is_virtual: Ok(value.is_virtual),
-                op: Ok(value.op),
-                op_in_trx: Ok(value.op_in_trx),
-                result: Ok(value.result),
-                trx_in_block: Ok(value.trx_in_block),
-                virtual_op: Ok(value.virtual_op),
-            }
         }
     }
     #[derive(Clone, Debug)]
@@ -54294,131 +59630,160 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct PriceFeedWithIcr {
-        core_exchange_rate: ::std::result::Result<super::Price, ::std::string::String>,
-        initial_collateral_ratio: ::std::result::Result<u16, ::std::string::String>,
-        maintenance_collateral_ratio: ::std::result::Result<u16, ::std::string::String>,
-        maximum_short_squeeze_ratio: ::std::result::Result<u16, ::std::string::String>,
-        settlement_price: ::std::result::Result<super::Price, ::std::string::String>,
+    pub struct ProcessedTransaction {
+        expiration: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
+        operation_results: ::std::result::Result<
+            ::std::vec::Vec<super::OperationResult>,
+            ::std::string::String,
+        >,
+        operations: ::std::result::Result<
+            ::std::vec::Vec<super::Operation>,
+            ::std::string::String,
+        >,
+        ref_block_num: ::std::result::Result<u16, ::std::string::String>,
+        ref_block_prefix: ::std::result::Result<u32, ::std::string::String>,
+        signatures: ::std::result::Result<
+            ::std::vec::Vec<::std::string::String>,
+            ::std::string::String,
+        >,
     }
-    impl ::std::default::Default for PriceFeedWithIcr {
+    impl ::std::default::Default for ProcessedTransaction {
         fn default() -> Self {
             Self {
-                core_exchange_rate: Err(
-                    "no value supplied for core_exchange_rate".to_string(),
+                expiration: Err("no value supplied for expiration".to_string()),
+                extensions: Err("no value supplied for extensions".to_string()),
+                operation_results: Err(
+                    "no value supplied for operation_results".to_string(),
                 ),
-                initial_collateral_ratio: Err(
-                    "no value supplied for initial_collateral_ratio".to_string(),
+                operations: Err("no value supplied for operations".to_string()),
+                ref_block_num: Err("no value supplied for ref_block_num".to_string()),
+                ref_block_prefix: Err(
+                    "no value supplied for ref_block_prefix".to_string(),
                 ),
-                maintenance_collateral_ratio: Err(
-                    "no value supplied for maintenance_collateral_ratio".to_string(),
-                ),
-                maximum_short_squeeze_ratio: Err(
-                    "no value supplied for maximum_short_squeeze_ratio".to_string(),
-                ),
-                settlement_price: Err(
-                    "no value supplied for settlement_price".to_string(),
-                ),
+                signatures: Err("no value supplied for signatures".to_string()),
             }
         }
     }
-    impl PriceFeedWithIcr {
-        pub fn core_exchange_rate<T>(mut self, value: T) -> Self
+    impl ProcessedTransaction {
+        pub fn expiration<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::Price>,
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
             T::Error: ::std::fmt::Display,
         {
-            self.core_exchange_rate = value
+            self.expiration = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for expiration: {}", e)
+                });
+            self
+        }
+        pub fn extensions<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtensionsType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.extensions = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for extensions: {}", e)
+                });
+            self
+        }
+        pub fn operation_results<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::vec::Vec<super::OperationResult>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.operation_results = value
                 .try_into()
                 .map_err(|e| {
                     format!(
-                        "error converting supplied value for core_exchange_rate: {}", e
+                        "error converting supplied value for operation_results: {}", e
                     )
                 });
             self
         }
-        pub fn initial_collateral_ratio<T>(mut self, value: T) -> Self
+        pub fn operations<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::vec::Vec<super::Operation>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.operations = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for operations: {}", e)
+                });
+            self
+        }
+        pub fn ref_block_num<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<u16>,
             T::Error: ::std::fmt::Display,
         {
-            self.initial_collateral_ratio = value
+            self.ref_block_num = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for ref_block_num: {}", e)
+                });
+            self
+        }
+        pub fn ref_block_prefix<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.ref_block_prefix = value
                 .try_into()
                 .map_err(|e| {
                     format!(
-                        "error converting supplied value for initial_collateral_ratio: {}",
-                        e
+                        "error converting supplied value for ref_block_prefix: {}", e
                     )
                 });
             self
         }
-        pub fn maintenance_collateral_ratio<T>(mut self, value: T) -> Self
+        pub fn signatures<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<u16>,
+            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
             T::Error: ::std::fmt::Display,
         {
-            self.maintenance_collateral_ratio = value
+            self.signatures = value
                 .try_into()
                 .map_err(|e| {
-                    format!(
-                        "error converting supplied value for maintenance_collateral_ratio: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn maximum_short_squeeze_ratio<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u16>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.maximum_short_squeeze_ratio = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for maximum_short_squeeze_ratio: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn settlement_price<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Price>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.settlement_price = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for settlement_price: {}", e
-                    )
+                    format!("error converting supplied value for signatures: {}", e)
                 });
             self
         }
     }
-    impl ::std::convert::TryFrom<PriceFeedWithIcr> for super::PriceFeedWithIcr {
+    impl ::std::convert::TryFrom<ProcessedTransaction> for super::ProcessedTransaction {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: PriceFeedWithIcr,
+            value: ProcessedTransaction,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
-                core_exchange_rate: value.core_exchange_rate?,
-                initial_collateral_ratio: value.initial_collateral_ratio?,
-                maintenance_collateral_ratio: value.maintenance_collateral_ratio?,
-                maximum_short_squeeze_ratio: value.maximum_short_squeeze_ratio?,
-                settlement_price: value.settlement_price?,
+                expiration: value.expiration?,
+                extensions: value.extensions?,
+                operation_results: value.operation_results?,
+                operations: value.operations?,
+                ref_block_num: value.ref_block_num?,
+                ref_block_prefix: value.ref_block_prefix?,
+                signatures: value.signatures?,
             })
         }
     }
-    impl ::std::convert::From<super::PriceFeedWithIcr> for PriceFeedWithIcr {
-        fn from(value: super::PriceFeedWithIcr) -> Self {
+    impl ::std::convert::From<super::ProcessedTransaction> for ProcessedTransaction {
+        fn from(value: super::ProcessedTransaction) -> Self {
             Self {
-                core_exchange_rate: Ok(value.core_exchange_rate),
-                initial_collateral_ratio: Ok(value.initial_collateral_ratio),
-                maintenance_collateral_ratio: Ok(value.maintenance_collateral_ratio),
-                maximum_short_squeeze_ratio: Ok(value.maximum_short_squeeze_ratio),
-                settlement_price: Ok(value.settlement_price),
+                expiration: Ok(value.expiration),
+                extensions: Ok(value.extensions),
+                operation_results: Ok(value.operation_results),
+                operations: Ok(value.operations),
+                ref_block_num: Ok(value.ref_block_num),
+                ref_block_prefix: Ok(value.ref_block_prefix),
+                signatures: Ok(value.signatures),
             }
         }
     }
@@ -55361,6 +60726,48 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct RefundWorkerType {
+        total_burned: ::std::result::Result<i64, ::std::string::String>,
+    }
+    impl ::std::default::Default for RefundWorkerType {
+        fn default() -> Self {
+            Self {
+                total_burned: Err("no value supplied for total_burned".to_string()),
+            }
+        }
+    }
+    impl RefundWorkerType {
+        pub fn total_burned<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_burned = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for total_burned: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<RefundWorkerType> for super::RefundWorkerType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: RefundWorkerType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                total_burned: value.total_burned?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::RefundWorkerType> for RefundWorkerType {
+        fn from(value: super::RefundWorkerType) -> Self {
+            Self {
+                total_burned: Ok(value.total_burned),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct Restriction {
         argument: ::std::result::Result<
             super::RestrictionArgumentType,
@@ -55917,6 +61324,118 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct SametFundObject {
+        asset_type: ::std::result::Result<
+            super::SametFundObjectAssetType,
+            ::std::string::String,
+        >,
+        balance: ::std::result::Result<i64, ::std::string::String>,
+        fee_rate: ::std::result::Result<u32, ::std::string::String>,
+        owner_account: ::std::result::Result<
+            super::SametFundObjectOwnerAccount,
+            ::std::string::String,
+        >,
+        unpaid_amount: ::std::result::Result<i64, ::std::string::String>,
+    }
+    impl ::std::default::Default for SametFundObject {
+        fn default() -> Self {
+            Self {
+                asset_type: Err("no value supplied for asset_type".to_string()),
+                balance: Err("no value supplied for balance".to_string()),
+                fee_rate: Err("no value supplied for fee_rate".to_string()),
+                owner_account: Err("no value supplied for owner_account".to_string()),
+                unpaid_amount: Err("no value supplied for unpaid_amount".to_string()),
+            }
+        }
+    }
+    impl SametFundObject {
+        pub fn asset_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::SametFundObjectAssetType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.asset_type = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for asset_type: {}", e)
+                });
+            self
+        }
+        pub fn balance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.balance = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for balance: {}", e)
+                });
+            self
+        }
+        pub fn fee_rate<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee_rate = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for fee_rate: {}", e)
+                });
+            self
+        }
+        pub fn owner_account<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::SametFundObjectOwnerAccount>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.owner_account = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for owner_account: {}", e)
+                });
+            self
+        }
+        pub fn unpaid_amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.unpaid_amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for unpaid_amount: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<SametFundObject> for super::SametFundObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: SametFundObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                asset_type: value.asset_type?,
+                balance: value.balance?,
+                fee_rate: value.fee_rate?,
+                owner_account: value.owner_account?,
+                unpaid_amount: value.unpaid_amount?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::SametFundObject> for SametFundObject {
+        fn from(value: super::SametFundObject) -> Self {
+            Self {
+                asset_type: Ok(value.asset_type),
+                balance: Ok(value.balance),
+                fee_rate: Ok(value.fee_rate),
+                owner_account: Ok(value.owner_account),
+                unpaid_amount: Ok(value.unpaid_amount),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct SametFundRepayOperation {
         account: ::std::result::Result<
             super::SametFundRepayOperationAccount,
@@ -56261,242 +61780,161 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct SignedBlockWithInfo {
-        block_id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
-        signing_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        transaction_ids: ::std::result::Result<
-            ::std::vec::Vec<::std::string::String>,
+    pub struct SignedBlock {
+        extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
+        previous: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        timestamp: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        transaction_merkle_root: ::std::result::Result<
+            super::ChecksumType,
+            ::std::string::String,
+        >,
+        transactions: ::std::result::Result<
+            ::std::vec::Vec<super::ProcessedTransaction>,
+            ::std::string::String,
+        >,
+        witness: ::std::result::Result<super::SignedBlockWitness, ::std::string::String>,
+        witness_signature: ::std::result::Result<
+            ::std::string::String,
             ::std::string::String,
         >,
     }
-    impl ::std::default::Default for SignedBlockWithInfo {
+    impl ::std::default::Default for SignedBlock {
         fn default() -> Self {
             Self {
-                block_id: Err("no value supplied for block_id".to_string()),
-                signing_key: Err("no value supplied for signing_key".to_string()),
-                transaction_ids: Err("no value supplied for transaction_ids".to_string()),
+                extensions: Err("no value supplied for extensions".to_string()),
+                previous: Err("no value supplied for previous".to_string()),
+                timestamp: Err("no value supplied for timestamp".to_string()),
+                transaction_merkle_root: Err(
+                    "no value supplied for transaction_merkle_root".to_string(),
+                ),
+                transactions: Err("no value supplied for transactions".to_string()),
+                witness: Err("no value supplied for witness".to_string()),
+                witness_signature: Err(
+                    "no value supplied for witness_signature".to_string(),
+                ),
             }
         }
     }
-    impl SignedBlockWithInfo {
-        pub fn block_id<T>(mut self, value: T) -> Self
+    impl SignedBlock {
+        pub fn extensions<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ExtensionsType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.extensions = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for extensions: {}", e)
+                });
+            self
+        }
+        pub fn previous<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<super::BlockIdType>,
             T::Error: ::std::fmt::Display,
         {
-            self.block_id = value
+            self.previous = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for block_id: {}", e)
+                    format!("error converting supplied value for previous: {}", e)
                 });
             self
         }
-        pub fn signing_key<T>(mut self, value: T) -> Self
+        pub fn timestamp<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.timestamp = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for timestamp: {}", e)
+                });
+            self
+        }
+        pub fn transaction_merkle_root<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::ChecksumType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.transaction_merkle_root = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for transaction_merkle_root: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn transactions<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::vec::Vec<super::ProcessedTransaction>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.transactions = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for transactions: {}", e)
+                });
+            self
+        }
+        pub fn witness<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::SignedBlockWitness>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.witness = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for witness: {}", e)
+                });
+            self
+        }
+        pub fn witness_signature<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
-            self.signing_key = value
+            self.witness_signature = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for signing_key: {}", e)
-                });
-            self
-        }
-        pub fn transaction_ids<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.transaction_ids = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for transaction_ids: {}", e)
+                    format!(
+                        "error converting supplied value for witness_signature: {}", e
+                    )
                 });
             self
         }
     }
-    impl ::std::convert::TryFrom<SignedBlockWithInfo> for super::SignedBlockWithInfo {
+    impl ::std::convert::TryFrom<SignedBlock> for super::SignedBlock {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: SignedBlockWithInfo,
+            value: SignedBlock,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
-                block_id: value.block_id?,
-                signing_key: value.signing_key?,
-                transaction_ids: value.transaction_ids?,
+                extensions: value.extensions?,
+                previous: value.previous?,
+                timestamp: value.timestamp?,
+                transaction_merkle_root: value.transaction_merkle_root?,
+                transactions: value.transactions?,
+                witness: value.witness?,
+                witness_signature: value.witness_signature?,
             })
         }
     }
-    impl ::std::convert::From<super::SignedBlockWithInfo> for SignedBlockWithInfo {
-        fn from(value: super::SignedBlockWithInfo) -> Self {
+    impl ::std::convert::From<super::SignedBlock> for SignedBlock {
+        fn from(value: super::SignedBlock) -> Self {
             Self {
-                block_id: Ok(value.block_id),
-                signing_key: Ok(value.signing_key),
-                transaction_ids: Ok(value.transaction_ids),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct SignedMessage {
-        message: ::std::result::Result<::std::string::String, ::std::string::String>,
-        meta: ::std::result::Result<super::SignedMessageMeta, ::std::string::String>,
-        signature: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
-    }
-    impl ::std::default::Default for SignedMessage {
-        fn default() -> Self {
-            Self {
-                message: Err("no value supplied for message".to_string()),
-                meta: Err("no value supplied for meta".to_string()),
-                signature: Err("no value supplied for signature".to_string()),
-            }
-        }
-    }
-    impl SignedMessage {
-        pub fn message<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.message = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for message: {}", e)
-                });
-            self
-        }
-        pub fn meta<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::SignedMessageMeta>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.meta = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for meta: {}", e));
-            self
-        }
-        pub fn signature<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.signature = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for signature: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<SignedMessage> for super::SignedMessage {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: SignedMessage,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                message: value.message?,
-                meta: value.meta?,
-                signature: value.signature?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::SignedMessage> for SignedMessage {
-        fn from(value: super::SignedMessage) -> Self {
-            Self {
-                message: Ok(value.message),
-                meta: Ok(value.meta),
-                signature: Ok(value.signature),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
-    pub struct SignedMessageMeta {
-        account: ::std::result::Result<::std::string::String, ::std::string::String>,
-        block: ::std::result::Result<u32, ::std::string::String>,
-        memo_key: ::std::result::Result<::std::string::String, ::std::string::String>,
-        time: ::std::result::Result<::std::string::String, ::std::string::String>,
-    }
-    impl ::std::default::Default for SignedMessageMeta {
-        fn default() -> Self {
-            Self {
-                account: Err("no value supplied for account".to_string()),
-                block: Err("no value supplied for block".to_string()),
-                memo_key: Err("no value supplied for memo_key".to_string()),
-                time: Err("no value supplied for time".to_string()),
-            }
-        }
-    }
-    impl SignedMessageMeta {
-        pub fn account<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.account = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for account: {}", e)
-                });
-            self
-        }
-        pub fn block<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<u32>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.block = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for block: {}", e)
-                });
-            self
-        }
-        pub fn memo_key<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.memo_key = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for memo_key: {}", e)
-                });
-            self
-        }
-        pub fn time<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::string::String>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.time = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for time: {}", e));
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<SignedMessageMeta> for super::SignedMessageMeta {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: SignedMessageMeta,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                account: value.account?,
-                block: value.block?,
-                memo_key: value.memo_key?,
-                time: value.time?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::SignedMessageMeta> for SignedMessageMeta {
-        fn from(value: super::SignedMessageMeta) -> Self {
-            Self {
-                account: Ok(value.account),
-                block: Ok(value.block),
-                memo_key: Ok(value.memo_key),
-                time: Ok(value.time),
+                extensions: Ok(value.extensions),
+                previous: Ok(value.previous),
+                timestamp: Ok(value.timestamp),
+                transaction_merkle_root: Ok(value.transaction_merkle_root),
+                transactions: Ok(value.transactions),
+                witness: Ok(value.witness),
+                witness_signature: Ok(value.witness_signature),
             }
         }
     }
@@ -56979,6 +62417,179 @@ pub mod builder {
     for TicketCreateOperationFeeParamsT {
         fn from(value: super::TicketCreateOperationFeeParamsT) -> Self {
             Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct TicketObject {
+        account: ::std::result::Result<
+            super::TicketObjectAccount,
+            ::std::string::String,
+        >,
+        amount: ::std::result::Result<super::Asset, ::std::string::String>,
+        current_type: ::std::result::Result<super::TicketType, ::std::string::String>,
+        next_auto_update_time: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        next_type_downgrade_time: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        status: ::std::result::Result<super::TicketStatus, ::std::string::String>,
+        target_type: ::std::result::Result<super::TicketType, ::std::string::String>,
+        value: ::std::result::Result<i64, ::std::string::String>,
+    }
+    impl ::std::default::Default for TicketObject {
+        fn default() -> Self {
+            Self {
+                account: Err("no value supplied for account".to_string()),
+                amount: Err("no value supplied for amount".to_string()),
+                current_type: Err("no value supplied for current_type".to_string()),
+                next_auto_update_time: Err(
+                    "no value supplied for next_auto_update_time".to_string(),
+                ),
+                next_type_downgrade_time: Err(
+                    "no value supplied for next_type_downgrade_time".to_string(),
+                ),
+                status: Err("no value supplied for status".to_string()),
+                target_type: Err("no value supplied for target_type".to_string()),
+                value: Err("no value supplied for value".to_string()),
+            }
+        }
+    }
+    impl TicketObject {
+        pub fn account<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::TicketObjectAccount>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.account = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for account: {}", e)
+                });
+            self
+        }
+        pub fn amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::Asset>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for amount: {}", e)
+                });
+            self
+        }
+        pub fn current_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::TicketType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.current_type = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for current_type: {}", e)
+                });
+            self
+        }
+        pub fn next_auto_update_time<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.next_auto_update_time = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for next_auto_update_time: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn next_type_downgrade_time<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.next_type_downgrade_time = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for next_type_downgrade_time: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn status<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::TicketStatus>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.status = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for status: {}", e)
+                });
+            self
+        }
+        pub fn target_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::TicketType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.target_type = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for target_type: {}", e)
+                });
+            self
+        }
+        pub fn value<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.value = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for value: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<TicketObject> for super::TicketObject {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: TicketObject,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                account: value.account?,
+                amount: value.amount?,
+                current_type: value.current_type?,
+                next_auto_update_time: value.next_auto_update_time?,
+                next_type_downgrade_time: value.next_type_downgrade_time?,
+                status: value.status?,
+                target_type: value.target_type?,
+                value: value.value?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::TicketObject> for TicketObject {
+        fn from(value: super::TicketObject) -> Self {
+            Self {
+                account: Ok(value.account),
+                amount: Ok(value.amount),
+                current_type: Ok(value.current_type),
+                next_auto_update_time: Ok(value.next_auto_update_time),
+                next_type_downgrade_time: Ok(value.next_type_downgrade_time),
+                status: Ok(value.status),
+                target_type: Ok(value.target_type),
+                value: Ok(value.value),
+            }
         }
     }
     #[derive(Clone, Debug)]
@@ -58103,148 +63714,6 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct VestingBalanceObjectWithInfo {
-        allowed_withdraw: ::std::result::Result<super::Asset, ::std::string::String>,
-        allowed_withdraw_time: ::std::result::Result<
-            ::graphene_rpc::GrapheneTimePointSec,
-            ::std::string::String,
-        >,
-        balance: ::std::result::Result<super::Asset, ::std::string::String>,
-        balance_type: ::std::result::Result<
-            super::VestingBalanceType,
-            ::std::string::String,
-        >,
-        owner: ::std::result::Result<
-            super::VestingBalanceObjectWithInfoOwner,
-            ::std::string::String,
-        >,
-        policy: ::std::result::Result<super::VestingPolicy, ::std::string::String>,
-    }
-    impl ::std::default::Default for VestingBalanceObjectWithInfo {
-        fn default() -> Self {
-            Self {
-                allowed_withdraw: Err(
-                    "no value supplied for allowed_withdraw".to_string(),
-                ),
-                allowed_withdraw_time: Err(
-                    "no value supplied for allowed_withdraw_time".to_string(),
-                ),
-                balance: Err("no value supplied for balance".to_string()),
-                balance_type: Err("no value supplied for balance_type".to_string()),
-                owner: Err("no value supplied for owner".to_string()),
-                policy: Err("no value supplied for policy".to_string()),
-            }
-        }
-    }
-    impl VestingBalanceObjectWithInfo {
-        pub fn allowed_withdraw<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Asset>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.allowed_withdraw = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for allowed_withdraw: {}", e
-                    )
-                });
-            self
-        }
-        pub fn allowed_withdraw_time<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.allowed_withdraw_time = value
-                .try_into()
-                .map_err(|e| {
-                    format!(
-                        "error converting supplied value for allowed_withdraw_time: {}",
-                        e
-                    )
-                });
-            self
-        }
-        pub fn balance<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::Asset>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.balance = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for balance: {}", e)
-                });
-            self
-        }
-        pub fn balance_type<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::VestingBalanceType>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.balance_type = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for balance_type: {}", e)
-                });
-            self
-        }
-        pub fn owner<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::VestingBalanceObjectWithInfoOwner>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.owner = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for owner: {}", e)
-                });
-            self
-        }
-        pub fn policy<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<super::VestingPolicy>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.policy = value
-                .try_into()
-                .map_err(|e| {
-                    format!("error converting supplied value for policy: {}", e)
-                });
-            self
-        }
-    }
-    impl ::std::convert::TryFrom<VestingBalanceObjectWithInfo>
-    for super::VestingBalanceObjectWithInfo {
-        type Error = super::error::ConversionError;
-        fn try_from(
-            value: VestingBalanceObjectWithInfo,
-        ) -> ::std::result::Result<Self, super::error::ConversionError> {
-            Ok(Self {
-                allowed_withdraw: value.allowed_withdraw?,
-                allowed_withdraw_time: value.allowed_withdraw_time?,
-                balance: value.balance?,
-                balance_type: value.balance_type?,
-                owner: value.owner?,
-                policy: value.policy?,
-            })
-        }
-    }
-    impl ::std::convert::From<super::VestingBalanceObjectWithInfo>
-    for VestingBalanceObjectWithInfo {
-        fn from(value: super::VestingBalanceObjectWithInfo) -> Self {
-            Self {
-                allowed_withdraw: Ok(value.allowed_withdraw),
-                allowed_withdraw_time: Ok(value.allowed_withdraw_time),
-                balance: Ok(value.balance),
-                balance_type: Ok(value.balance_type),
-                owner: Ok(value.owner),
-                policy: Ok(value.policy),
-            }
-        }
-    }
-    #[derive(Clone, Debug)]
     pub struct VestingBalanceWithdrawOperation {
         amount: ::std::result::Result<super::Asset, ::std::string::String>,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -58430,6 +63899,49 @@ pub mod builder {
             Self {
                 pay_vesting_period_days: Ok(value.pay_vesting_period_days),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct VestingBalanceWorkerType {
+        balance: ::std::result::Result<
+            super::VestingBalanceWorkerTypeBalance,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for VestingBalanceWorkerType {
+        fn default() -> Self {
+            Self {
+                balance: Err("no value supplied for balance".to_string()),
+            }
+        }
+    }
+    impl VestingBalanceWorkerType {
+        pub fn balance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::VestingBalanceWorkerTypeBalance>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.balance = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for balance: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<VestingBalanceWorkerType>
+    for super::VestingBalanceWorkerType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: VestingBalanceWorkerType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { balance: value.balance? })
+        }
+    }
+    impl ::std::convert::From<super::VestingBalanceWorkerType>
+    for VestingBalanceWorkerType {
+        fn from(value: super::VestingBalanceWorkerType) -> Self {
+            Self { balance: Ok(value.balance) }
         }
     }
     #[derive(Clone, Debug)]
@@ -60174,45 +65686,119 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
-    pub struct WorkerVoteDelta {
-        vote_abstain: ::std::result::Result<
-            Vec<super::WorkerVoteDeltaVoteAbstainItem>,
+    pub struct WorkerObject {
+        daily_pay: ::std::result::Result<i64, ::std::string::String>,
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        total_votes_against: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
             ::std::string::String,
         >,
-        vote_against: ::std::result::Result<
-            Vec<super::WorkerVoteDeltaVoteAgainstItem>,
+        total_votes_for: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
             ::std::string::String,
         >,
-        vote_for: ::std::result::Result<
-            Vec<super::WorkerVoteDeltaVoteForItem>,
+        url: ::std::result::Result<::std::string::String, ::std::string::String>,
+        vote_against: ::std::result::Result<super::VoteIdType, ::std::string::String>,
+        vote_for: ::std::result::Result<super::VoteIdType, ::std::string::String>,
+        work_begin_date: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        work_end_date: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+        worker: ::std::result::Result<super::WorkerType, ::std::string::String>,
+        worker_account: ::std::result::Result<
+            super::WorkerObjectWorkerAccount,
             ::std::string::String,
         >,
     }
-    impl ::std::default::Default for WorkerVoteDelta {
+    impl ::std::default::Default for WorkerObject {
         fn default() -> Self {
             Self {
-                vote_abstain: Err("no value supplied for vote_abstain".to_string()),
+                daily_pay: Err("no value supplied for daily_pay".to_string()),
+                name: Err("no value supplied for name".to_string()),
+                total_votes_against: Err(
+                    "no value supplied for total_votes_against".to_string(),
+                ),
+                total_votes_for: Err(
+                    "no value supplied for total_votes_for".to_string(),
+                ),
+                url: Err("no value supplied for url".to_string()),
                 vote_against: Err("no value supplied for vote_against".to_string()),
                 vote_for: Err("no value supplied for vote_for".to_string()),
+                work_begin_date: Err(
+                    "no value supplied for work_begin_date".to_string(),
+                ),
+                work_end_date: Err("no value supplied for work_end_date".to_string()),
+                worker: Err("no value supplied for worker".to_string()),
+                worker_account: Err("no value supplied for worker_account".to_string()),
             }
         }
     }
-    impl WorkerVoteDelta {
-        pub fn vote_abstain<T>(mut self, value: T) -> Self
+    impl WorkerObject {
+        pub fn daily_pay<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<Vec<super::WorkerVoteDeltaVoteAbstainItem>>,
+            T: ::std::convert::TryInto<i64>,
             T::Error: ::std::fmt::Display,
         {
-            self.vote_abstain = value
+            self.daily_pay = value
                 .try_into()
                 .map_err(|e| {
-                    format!("error converting supplied value for vote_abstain: {}", e)
+                    format!("error converting supplied value for daily_pay: {}", e)
                 });
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {}", e));
+            self
+        }
+        pub fn total_votes_against<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_votes_against = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for total_votes_against: {}", e
+                    )
+                });
+            self
+        }
+        pub fn total_votes_for<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_votes_for = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for total_votes_for: {}", e)
+                });
+            self
+        }
+        pub fn url<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.url = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for url: {}", e));
             self
         }
         pub fn vote_against<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<Vec<super::WorkerVoteDeltaVoteAgainstItem>>,
+            T: ::std::convert::TryInto<super::VoteIdType>,
             T::Error: ::std::fmt::Display,
         {
             self.vote_against = value
@@ -60224,7 +65810,7 @@ pub mod builder {
         }
         pub fn vote_for<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<Vec<super::WorkerVoteDeltaVoteForItem>>,
+            T: ::std::convert::TryInto<super::VoteIdType>,
             T::Error: ::std::fmt::Display,
         {
             self.vote_for = value
@@ -60234,25 +65820,89 @@ pub mod builder {
                 });
             self
         }
+        pub fn work_begin_date<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.work_begin_date = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for work_begin_date: {}", e)
+                });
+            self
+        }
+        pub fn work_end_date<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.work_end_date = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for work_end_date: {}", e)
+                });
+            self
+        }
+        pub fn worker<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::WorkerType>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.worker = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for worker: {}", e)
+                });
+            self
+        }
+        pub fn worker_account<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::WorkerObjectWorkerAccount>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.worker_account = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for worker_account: {}", e)
+                });
+            self
+        }
     }
-    impl ::std::convert::TryFrom<WorkerVoteDelta> for super::WorkerVoteDelta {
+    impl ::std::convert::TryFrom<WorkerObject> for super::WorkerObject {
         type Error = super::error::ConversionError;
         fn try_from(
-            value: WorkerVoteDelta,
+            value: WorkerObject,
         ) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
-                vote_abstain: value.vote_abstain?,
+                daily_pay: value.daily_pay?,
+                name: value.name?,
+                total_votes_against: value.total_votes_against?,
+                total_votes_for: value.total_votes_for?,
+                url: value.url?,
                 vote_against: value.vote_against?,
                 vote_for: value.vote_for?,
+                work_begin_date: value.work_begin_date?,
+                work_end_date: value.work_end_date?,
+                worker: value.worker?,
+                worker_account: value.worker_account?,
             })
         }
     }
-    impl ::std::convert::From<super::WorkerVoteDelta> for WorkerVoteDelta {
-        fn from(value: super::WorkerVoteDelta) -> Self {
+    impl ::std::convert::From<super::WorkerObject> for WorkerObject {
+        fn from(value: super::WorkerObject) -> Self {
             Self {
-                vote_abstain: Ok(value.vote_abstain),
+                daily_pay: Ok(value.daily_pay),
+                name: Ok(value.name),
+                total_votes_against: Ok(value.total_votes_against),
+                total_votes_for: Ok(value.total_votes_for),
+                url: Ok(value.url),
                 vote_against: Ok(value.vote_against),
                 vote_for: Ok(value.vote_for),
+                work_begin_date: Ok(value.work_begin_date),
+                work_end_date: Ok(value.work_end_date),
+                worker: Ok(value.worker),
+                worker_account: Ok(value.worker_account),
             }
         }
     }

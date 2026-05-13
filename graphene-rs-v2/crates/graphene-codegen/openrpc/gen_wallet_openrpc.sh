@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Generate a Graphene wallet OpenRPC specification for any Graphene-like chain.
+# Generate a Graphene OpenRPC specification for any FC_API class.
 #
 # This is the generic version of the Swaplock POC pipeline:
-#   1. Run Doxygen against wallet.hpp.
-#   2. Extract wallet_api methods into OpenRPC.
+#   1. Run Doxygen against the selected API header.
+#   2. Extract FC_API methods into OpenRPC.
 #   3. Fill components.schemas by walking FC_REFLECT/static_variant macros.
 #
 # Usage:
@@ -23,14 +23,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHAIN_NAME=""
 CORE_ROOT=""
 OUTPUT_FILE=""
-WALLET_HEADER="libraries/wallet/include/graphene/wallet/wallet.hpp"
+API_HEADER="libraries/wallet/include/graphene/wallet/wallet.hpp"
+API_QUALIFIED_NAME="graphene::wallet::wallet_api"
 BUILD_DIR=""
 HEADER_ROOTS=()
+EXCLUDE_METHODS=()
 
 die() { echo "gen_wallet_openrpc: $*" >&2; exit 1; }
 usage() {
   cat >&2 <<'EOF'
-Generate a Graphene wallet OpenRPC specification.
+Generate a Graphene OpenRPC specification from an FC_API class.
 
 Usage:
   gen_wallet_openrpc.sh \
@@ -39,8 +41,11 @@ Usage:
     --output <path-to-spec.json>
 
 Optional:
-  --wallet-header <relative-or-absolute-wallet.hpp>
+  --api-header <relative-or-absolute-api-header.hpp>
+  --api-qualified-name <qualified::api_class>
+  --wallet-header <relative-or-absolute-wallet.hpp>  # backward-compatible alias
   --header-root <relative-or-absolute-header-root>  # repeatable
+  --exclude-method <method-name>                    # repeatable
   --build-dir <path>
 EOF
 }
@@ -72,14 +77,29 @@ while [[ $# -gt 0 ]]; do
       OUTPUT_FILE="$2"
       shift 2
       ;;
+    --api-header)
+      [[ $# -ge 2 ]] || die "--api-header requires a path"
+      API_HEADER="$2"
+      shift 2
+      ;;
+    --api-qualified-name)
+      [[ $# -ge 2 ]] || die "--api-qualified-name requires a value"
+      API_QUALIFIED_NAME="$2"
+      shift 2
+      ;;
     --wallet-header)
       [[ $# -ge 2 ]] || die "--wallet-header requires a path"
-      WALLET_HEADER="$2"
+      API_HEADER="$2"
       shift 2
       ;;
     --header-root)
       [[ $# -ge 2 ]] || die "--header-root requires a path"
       HEADER_ROOTS+=("$2")
+      shift 2
+      ;;
+    --exclude-method)
+      [[ $# -ge 2 ]] || die "--exclude-method requires a method name"
+      EXCLUDE_METHODS+=("$2")
       shift 2
       ;;
     --build-dir)
@@ -102,9 +122,9 @@ done
 [[ -n "$OUTPUT_FILE" ]] || die "missing --output"
 
 CORE_ROOT="$(cd "$CORE_ROOT" && pwd)"
-WALLET_HEADER="$(resolve_path "$CORE_ROOT" "$WALLET_HEADER")"
+API_HEADER="$(resolve_path "$CORE_ROOT" "$API_HEADER")"
 OUTPUT_FILE="$(python3 -c 'import os,sys; print(os.path.abspath(sys.argv[1]))' "$OUTPUT_FILE")"
-BUILD_DIR="${BUILD_DIR:-${CORE_ROOT}/build/wallet-openrpc}"
+BUILD_DIR="${BUILD_DIR:-${CORE_ROOT}/build/openrpc-${CHAIN_NAME}}"
 XML_DIR="${BUILD_DIR}/xml"
 
 if [[ ${#HEADER_ROOTS[@]} -eq 0 ]]; then
@@ -119,15 +139,15 @@ fi
 
 command -v doxygen >/dev/null 2>&1 || die "doxygen not found. Install with: brew install doxygen (macOS) or apt-get install doxygen (Linux)."
 command -v python3 >/dev/null 2>&1 || die "python3 not found."
-[[ -f "$WALLET_HEADER" ]] || die "wallet header not found: $WALLET_HEADER"
+[[ -f "$API_HEADER" ]] || die "API header not found: $API_HEADER"
 
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR" "$(dirname "$OUTPUT_FILE")"
 
 cat > "${BUILD_DIR}/Doxyfile" <<EOF
-PROJECT_NAME           = "${CHAIN_NAME} wallet_api"
+PROJECT_NAME           = "${CHAIN_NAME} ${API_QUALIFIED_NAME}"
 OUTPUT_DIRECTORY       = ${BUILD_DIR}
-INPUT                  = ${WALLET_HEADER}
+INPUT                  = ${API_HEADER}
 INPUT_ENCODING         = UTF-8
 RECURSIVE              = NO
 QUIET                  = YES
@@ -149,10 +169,16 @@ EOF
 doxygen "${BUILD_DIR}/Doxyfile" >/dev/null
 [[ -d "$XML_DIR" ]] || die "Doxygen produced no XML at $XML_DIR"
 
-python3 "${SCRIPT_DIR}/gen_wallet_spec.py" \
-  --xml-dir "$XML_DIR" \
-  --wallet-header "$WALLET_HEADER" \
-  > "$OUTPUT_FILE"
+SPEC_ARGS=(
+  --xml-dir "$XML_DIR"
+  --api-header "$API_HEADER"
+  --api-qualified-name "$API_QUALIFIED_NAME"
+  --title "${CHAIN_NAME} ${API_QUALIFIED_NAME}"
+)
+for method in "${EXCLUDE_METHODS[@]}"; do
+  SPEC_ARGS+=(--exclude-method "$method")
+done
+python3 "${SCRIPT_DIR}/gen_wallet_spec.py" "${SPEC_ARGS[@]}" > "$OUTPUT_FILE"
 
 TYPE_ARGS=(--spec "$OUTPUT_FILE")
 for root in "${HEADER_ROOTS[@]}"; do

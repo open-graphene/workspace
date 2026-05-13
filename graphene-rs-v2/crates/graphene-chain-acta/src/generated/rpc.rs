@@ -5,840 +5,109 @@ use graphene_rpc::OpenRpcParams;
 
 /// OpenRPC method names generated for this chain crate.
 pub const OPENRPC_METHODS: &[&str] = &[
-    "about",
-    "account_store_map",
-    "add_operation_to_builder_transaction",
-    "add_room_participant",
-    "add_transaction_signature",
-    "approve_proposal",
-    "begin_builder_transaction",
-    "broadcast_transaction",
-    "cancel_order",
-    "claim_asset_fee_pool",
-    "create_account_with_brain_key",
-    "create_asset",
-    "create_committee_member",
-    "create_content_card",
-    "create_permission",
-    "create_permission_many",
-    "create_personal_data",
-    "create_room",
-    "create_witness",
-    "create_worker",
-    "dbg_generate_blocks",
-    "dbg_make_mia",
-    "dbg_make_uia",
-    "dbg_push_blocks",
-    "dbg_stream_json_objects",
-    "dbg_update_object",
-    "derive_owner_keys_from_brain_key",
-    "dump_private_keys",
-    "flood_network",
-    "fund_asset_fee_pool",
-    "get_account",
+    "cancel_all_subscriptions",
+    "get_24_volume",
+    "get_account_balances",
+    "get_account_by_name",
     "get_account_count",
-    "get_account_history",
-    "get_account_history_by_operations",
-    "get_account_id",
+    "get_account_id_from_string",
     "get_account_limit_orders",
-    "get_account_name",
-    "get_account_storage",
-    "get_asset",
+    "get_account_references",
+    "get_accounts",
+    "get_all_workers",
     "get_asset_count",
-    "get_asset_id",
-    "get_asset_name",
-    "get_asset_symbol",
-    "get_bitasset_data",
+    "get_asset_id_from_string",
+    "get_assets",
+    "get_assets_by_issuer",
+    "get_balance_objects",
     "get_block",
+    "get_block_header",
+    "get_block_header_batch",
     "get_call_orders",
-    "get_committee_member",
+    "get_call_orders_by_account",
+    "get_chain_id",
+    "get_chain_properties",
+    "get_committee_count",
+    "get_committee_member_by_account",
+    "get_committee_members",
+    "get_config",
     "get_content_card_by_id",
     "get_content_cards",
     "get_content_cards_by_room",
     "get_dynamic_global_properties",
-    "get_full_account",
+    "get_full_accounts",
     "get_global_properties",
     "get_htlc",
+    "get_htlc_by_from",
+    "get_htlc_by_to",
+    "get_ico_balance_objects",
     "get_key_references",
     "get_last_personal_data",
     "get_limit_orders",
-    "get_market_history",
-    "get_object",
+    "get_limit_orders_by_account",
+    "get_margin_positions",
+    "get_named_account_balances",
+    "get_objects",
     "get_order_book",
     "get_permission_by_id",
     "get_permissions",
     "get_personal_data",
-    "get_private_key",
-    "get_prototype_operation",
-    "get_public_key",
-    "get_relative_account_history",
+    "get_potential_address_signatures",
+    "get_potential_signatures",
+    "get_proposed_global_parameters",
+    "get_proposed_transactions",
+    "get_recent_transaction_by_id",
+    "get_required_fees",
+    "get_required_signatures",
     "get_room_by_id",
+    "get_room_key_epoch",
     "get_room_key_epochs",
+    "get_room_participant",
     "get_room_participants",
     "get_rooms_by_owner",
     "get_rooms_by_participant",
     "get_settle_orders",
-    "get_transaction_id",
-    "get_transaction_signers",
+    "get_settle_orders_by_account",
+    "get_ticker",
+    "get_top_markets",
+    "get_trade_history",
+    "get_trade_history_by_sequence",
+    "get_transaction",
+    "get_transaction_hex",
+    "get_transaction_hex_without_sig",
+    "get_vested_balances",
     "get_vesting_balances",
-    "get_witness",
-    "gethelp",
-    "global_settle_asset",
-    "help",
-    "htlc_create",
-    "htlc_extend",
-    "htlc_redeem",
-    "ico_import_balance",
-    "import_balance",
-    "import_key",
-    "info",
-    "is_locked",
-    "is_new",
+    "get_withdraw_permissions_by_giver",
+    "get_withdraw_permissions_by_recipient",
+    "get_witness_by_account",
+    "get_witness_count",
+    "get_witness_schedule",
+    "get_witnesses",
+    "get_worker_count",
+    "get_workers_by_account",
     "is_public_key_registered",
-    "issue_asset",
-    "list_account_balances",
-    "list_accounts",
     "list_assets",
-    "list_committee_members",
-    "list_my_accounts",
-    "list_witnesses",
-    "load_wallet_file",
-    "lock",
-    "network_add_nodes",
-    "network_get_connected_peers",
-    "normalize_brain_key",
-    "preview_builder_transaction",
-    "propose_builder_transaction",
-    "propose_fee_change",
-    "propose_parameter_change",
-    "propose_parameter_extension_change",
-    "publish_asset_feed",
-    "quit",
-    "read_memo",
-    "register_account",
-    "remove_builder_transaction",
-    "remove_content_card",
-    "remove_permission",
-    "remove_personal_data",
-    "remove_room_participant",
-    "replace_operation_in_builder_transaction",
-    "reserve_asset",
-    "rotate_room_key",
-    "save_wallet_file",
-    "sell_asset",
-    "serialize_transaction",
-    "set_desired_witness_and_committee_member_count",
-    "set_fees_on_builder_transaction",
-    "set_password",
-    "set_voting_proxy",
-    "settle_asset",
-    "sign_builder_transaction",
-    "sign_memo",
-    "sign_message",
-    "sign_transaction",
-    "sign_transaction2",
-    "suggest_brain_key",
-    "transfer",
-    "unlock",
-    "update_asset",
-    "update_asset_feed_producers",
-    "update_asset_issuer",
-    "update_bitasset",
-    "update_content_card",
-    "update_room",
-    "update_witness",
-    "update_worker_votes",
-    "upgrade_account",
-    "verify_encapsulated_message",
-    "verify_message",
-    "verify_signed_message",
-    "vote_for_committee_member",
-    "vote_for_witness",
-    "whitelist_account",
-    "withdraw_vesting",
+    "list_htlcs",
+    "lookup_account_names",
+    "lookup_accounts",
+    "lookup_asset_symbols",
+    "lookup_committee_member_accounts",
+    "lookup_vote_ids",
+    "lookup_witness_accounts",
+    "set_auto_subscription",
+    "unsubscribe_from_market",
+    "validate_transaction",
+    "verify_account_authority",
+    "verify_authority",
 ];
 
-/// Returns info such as client version, git version of graphene/fc, version of boost, openssl.
+/// This unsubscribes from all subscribed markets and objects.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct AboutParams;
+pub struct CancelAllSubscriptionsParams;
 
-impl OpenRpcParams for AboutParams {
-    const METHOD: &'static str = "about";
-    type Response = serde_json::Value;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
-    }
-}
-
-/// Manage account storage map(key->value) by using the custom operations plugin.
-///
-/// Each account can optionally add random information in the form of a key-value map to be retrieved by any interested party.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct AccountStoreMapParams {
-    /// The account name or ID that we are adding additional information to.
-    pub account: String,
-    /// The name of the catalog the operation will insert data to.
-    pub catalog: String,
-    /// true if you want to remove stuff from a catalog.
-    pub remove: bool,
-    /// The map to be inserted/removed to/from the catalog
-    pub key_values: std::collections::BTreeMap<String, Option<String>>,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for AccountStoreMapParams {
-    const METHOD: &'static str = "account_store_map";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account),
-            serde_json::json!(self.catalog),
-            serde_json::json!(self.remove),
-            serde_json::json!(self.key_values),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Append a new operation to a transaction builder.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct AddOperationToBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub transaction_handle: TransactionHandleType,
-    /// the operation in JSON format
-    pub op: Operation,
-}
-
-impl OpenRpcParams for AddOperationToBuilderTransactionParams {
-    const METHOD: &'static str = "add_operation_to_builder_transaction";
+impl OpenRpcParams for CancelAllSubscriptionsParams {
+    const METHOD: &'static str = "cancel_all_subscriptions";
     type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.transaction_handle),
-            serde_json::json!(self.op),
-        ]
-    }
-}
-
-/// Add a participant to a room.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct AddRoomParticipantParams {
-    /// the account that owns the room.
-    pub owner: String,
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// the account to add to the room.
-    pub participant: String,
-    /// the room key encrypted for the participant.
-    pub content_key: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for AddRoomParticipantParams {
-    const METHOD: &'static str = "add_room_participant";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner),
-            serde_json::json!(self.room),
-            serde_json::json!(self.participant),
-            serde_json::json!(self.content_key),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Signs a transaction.
-///
-/// Given a fully-formed transaction with or without signatures, signs the transaction with the owned keys and optionally broadcasts the transaction.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct AddTransactionSignatureParams {
-    /// the unsigned transaction
-    pub tx: SignedTransaction,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for AddTransactionSignatureParams {
-    const METHOD: &'static str = "add_transaction_signature";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.tx),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Approve or disapprove a proposal.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ApproveProposalParams {
-    /// The account paying the fee for the op.
-    pub fee_paying_account: String,
-    /// The proposal to modify.
-    pub proposal_id: String,
-    /// Members contain approvals to create or remove. In JSON you can leave empty members undefined.
-    pub delta: ApprovalDelta,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for ApproveProposalParams {
-    const METHOD: &'static str = "approve_proposal";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.fee_paying_account),
-            serde_json::json!(self.proposal_id),
-            serde_json::json!(self.delta),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create a new transaction builder.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct BeginBuilderTransactionParams;
-
-impl OpenRpcParams for BeginBuilderTransactionParams {
-    const METHOD: &'static str = "begin_builder_transaction";
-    type Response = TransactionHandleType;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
-    }
-}
-
-/// Broadcast signed transaction
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct BroadcastTransactionParams {
-    /// signed transaction
-    pub tx: SignedTransaction,
-}
-
-impl OpenRpcParams for BroadcastTransactionParams {
-    const METHOD: &'static str = "broadcast_transaction";
-    type Response = Vec<()>;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.tx),
-        ]
-    }
-}
-
-/// Cancel an existing order
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CancelOrderParams {
-    /// the id of order to be cancelled
-    pub order_id: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CancelOrderParams {
-    const METHOD: &'static str = "cancel_order";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.order_id),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Claim funds from the fee pool for the given asset.
-///
-/// User-issued assets can optionally have a pool of the core asset which is automatically used to pay transaction fees for any transaction using that asset (using the asset's core exchange rate).
-///
-/// This command allows the issuer to withdraw those funds from the fee pool.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ClaimAssetFeePoolParams {
-    /// the symbol or id of the asset whose fee pool you wish to claim
-    pub symbol_or_id: String,
-    /// the amount of the core asset to withdraw
-    pub amount: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for ClaimAssetFeePoolParams {
-    const METHOD: &'static str = "claim_asset_fee_pool";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Creates a new account and registers it on the blockchain.
-///
-/// Todowhy no referrer_percent here?
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateAccountWithBrainKeyParams {
-    /// the brain key used for generating the account's private keys
-    pub brain_key: String,
-    /// the name of the account, must be unique on the blockchain. Names with only latin letters and at least one vowel are premium names and expensive to register. Names with only consonants, or at least with a digit, a dot or a minus sign are cheap.
-    pub account_name: String,
-    /// the account which will pay the fee to register the user
-    pub registrar_account: String,
-    /// the account who is acting as a referrer, and may receive a portion of the user's transaction fees. This can be the same as the registrar_account if there is no referrer.
-    pub referrer_account: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateAccountWithBrainKeyParams {
-    const METHOD: &'static str = "create_account_with_brain_key";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.brain_key),
-            serde_json::json!(self.account_name),
-            serde_json::json!(self.registrar_account),
-            serde_json::json!(self.referrer_account),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Creates a new user-issued or market-issued asset.
-///
-/// Many options can be changed later using update_asset()
-///
-/// Right now this function is difficult to use because you must provide raw JSON data structures for the options objects, and those include prices and asset ids.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateAssetParams {
-    /// the name or id of the account who will pay the fee and become the issuer of the new asset. This can be updated later
-    pub issuer: String,
-    /// the ticker symbol of the new asset
-    pub symbol: String,
-    /// the number of digits of precision to the right of the decimal point, must be less than or equal to 12
-    pub precision: u8,
-    /// asset options required for all new assets. Note that core_exchange_rate technically needs to store the asset ID of this new asset. Since this ID is not known at the time this operation is created, create this price as though the new asset has instance ID 1, and the chain will overwrite it with the new asset's ID.
-    pub common: AssetOptions,
-    /// options specific to BitAssets. This may be null unless the market_issued flag is set in common.flags
-    pub bitasset_opts: Option<BitassetOptions>,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateAssetParams {
-    const METHOD: &'static str = "create_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.issuer),
-            serde_json::json!(self.symbol),
-            serde_json::json!(self.precision),
-            serde_json::json!(self.common),
-            serde_json::json!(self.bitasset_opts),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Creates a committee_member object owned by the given account.
-///
-/// An account can have at most one committee_member object.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateCommitteeMemberParams {
-    /// the name or id of the account which is creating the committee_member
-    pub owner_account: String,
-    /// a URL to include in the committee_member record in the blockchain. Clients may display this when showing a list of committee_members. May be blank.
-    pub url: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateCommitteeMemberParams {
-    const METHOD: &'static str = "create_committee_member";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner_account),
-            serde_json::json!(self.url),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create a content card.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateContentCardParams {
-    /// an owner of a content.
-    pub subject_account: String,
-    /// an hash value getted from content.
-    pub hash: String,
-    /// a url to the content storage.
-    pub url: String,
-    /// a type of a content (jpg, mp3, mp4, html, est.).
-    pub r#type: String,
-    /// a text description of content to convenient full text search.
-    pub description: String,
-    /// a encrypted symmetric key to decrypt content, can be decrypted by subject account.
-    pub content_key: String,
-    /// data specific to the cloud storage (content id in the cloud storage).
-    pub storage_data: String,
-    /// optional room id for encrypted threads.
-    pub room: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateContentCardParams {
-    const METHOD: &'static str = "create_content_card";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.hash),
-            serde_json::json!(self.url),
-            serde_json::json!(self.r#type),
-            serde_json::json!(self.description),
-            serde_json::json!(self.content_key),
-            serde_json::json!(self.storage_data),
-            serde_json::json!(self.room),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create a permission object.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreatePermissionParams {
-    /// an owner of a content.
-    pub subject_account: String,
-    /// an account who has permission to use a content.
-    pub operator_account: String,
-    /// a type of permission (content, like, content group, etc).
-    pub permission_type: String,
-    /// an id of permitted object.
-    pub object_id: String,
-    /// a encrypted symmetric key to decrypt content, can be decrypted by an operator account.
-    pub content_key: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreatePermissionParams {
-    const METHOD: &'static str = "create_permission";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.operator_account),
-            serde_json::json!(self.permission_type),
-            serde_json::json!(self.object_id),
-            serde_json::json!(self.content_key),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create multiple permission objects in a single transaction.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreatePermissionManyParams {
-    /// an owner of a content.
-    pub subject_account: String,
-    /// a vector of permission data, each containing: operator_account, permission_type, object_id, content_key.
-    pub permissions: Vec<PermissionCreateManyOperationPermissionData>,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreatePermissionManyParams {
-    const METHOD: &'static str = "create_permission_many";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.permissions),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create personal data with permission.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreatePersonalDataParams {
-    /// the owner of personal data.
-    pub subject_account: String,
-    /// an account who is permitted to use personal data.
-    pub operator_account: String,
-    /// a url to the content storage.
-    pub url: String,
-    /// a hash of a personal data.
-    pub hash: String,
-    /// data specific to the cloud storage (content id in the cloud storage).
-    pub storage_data: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreatePersonalDataParams {
-    const METHOD: &'static str = "create_personal_data";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.operator_account),
-            serde_json::json!(self.url),
-            serde_json::json!(self.hash),
-            serde_json::json!(self.storage_data),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create a room (encrypted thread).
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateRoomParams {
-    /// the account that will own the room.
-    pub owner: String,
-    /// the name of the room (max 256 characters).
-    pub name: String,
-    /// the encrypted room key for the owner.
-    pub room_key: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateRoomParams {
-    const METHOD: &'static str = "create_room";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner),
-            serde_json::json!(self.name),
-            serde_json::json!(self.room_key),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Creates a witness object owned by the given account.
-///
-/// An account can have at most one witness object.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateWitnessParams {
-    /// the name or id of the account which is creating the witness
-    pub owner_account: String,
-    /// a URL to include in the witness record in the blockchain. Clients may display this when showing a list of witnesses. May be blank.
-    pub url: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateWitnessParams {
-    const METHOD: &'static str = "create_witness";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner_account),
-            serde_json::json!(self.url),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Create a worker object.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct CreateWorkerParams {
-    /// The account which owns the worker and will be paid
-    pub owner_account: String,
-    /// When the work begins
-    pub work_begin_date: ::graphene_rpc::GrapheneTimePointSec,
-    /// When the work ends
-    pub work_end_date: ::graphene_rpc::GrapheneTimePointSec,
-    /// Amount of pay per day (NOT per maint interval)
-    pub daily_pay: i64,
-    /// Any text
-    pub name: String,
-    /// Any text
-    pub url: String,
-    /// {"type" : "burn"|"refund"|"vesting", "pay_vesting_period_days" : x}
-    pub worker_settings: (),
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for CreateWorkerParams {
-    const METHOD: &'static str = "create_worker";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner_account),
-            serde_json::json!(self.work_begin_date),
-            serde_json::json!(self.work_end_date),
-            serde_json::json!(self.daily_pay),
-            serde_json::json!(self.name),
-            serde_json::json!(self.url),
-            serde_json::json!(self.worker_settings),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DbgGenerateBlocksParams {
-    pub debug_wif_key: String,
-    pub count: u32,
-}
-
-impl OpenRpcParams for DbgGenerateBlocksParams {
-    const METHOD: &'static str = "dbg_generate_blocks";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.debug_wif_key),
-            serde_json::json!(self.count),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DbgMakeMiaParams {
-    pub creator: String,
-    pub symbol: String,
-}
-
-impl OpenRpcParams for DbgMakeMiaParams {
-    const METHOD: &'static str = "dbg_make_mia";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.creator),
-            serde_json::json!(self.symbol),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DbgMakeUiaParams {
-    pub creator: String,
-    pub symbol: String,
-}
-
-impl OpenRpcParams for DbgMakeUiaParams {
-    const METHOD: &'static str = "dbg_make_uia";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.creator),
-            serde_json::json!(self.symbol),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DbgPushBlocksParams {
-    pub src_filename: String,
-    pub count: u32,
-}
-
-impl OpenRpcParams for DbgPushBlocksParams {
-    const METHOD: &'static str = "dbg_push_blocks";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.src_filename),
-            serde_json::json!(self.count),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DbgStreamJsonObjectsParams {
-    pub filename: String,
-}
-
-impl OpenRpcParams for DbgStreamJsonObjectsParams {
-    const METHOD: &'static str = "dbg_stream_json_objects";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.filename),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DbgUpdateObjectParams {
-    pub update: serde_json::Value,
-}
-
-impl OpenRpcParams for DbgUpdateObjectParams {
-    const METHOD: &'static str = "dbg_update_object";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.update),
-        ]
-    }
-}
-
-/// Derive any number of possible owner keys from a given brain key.
-///
-/// NOTE: These keys may or may not match with the owner keys of any account. This function is merely intended to assist with account or key recovery.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct DeriveOwnerKeysFromBrainKeyParams {
-    /// Brain key
-    pub brain_key: String,
-    /// Number of desired keys
-    pub number_of_desired_keys: Int,
-}
-
-impl OpenRpcParams for DeriveOwnerKeysFromBrainKeyParams {
-    const METHOD: &'static str = "derive_owner_keys_from_brain_key";
-    type Response = Vec<BrainKeyInfo>;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.brain_key),
-            serde_json::json!(self.number_of_desired_keys),
-        ]
-    }
-}
-
-/// Dumps all private keys owned by the wallet.
-///
-/// The keys are printed in WIF format. You can import these keys into another wallet using import_key()
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct DumpPrivateKeysParams;
-
-impl OpenRpcParams for DumpPrivateKeysParams {
-    const METHOD: &'static str = "dump_private_keys";
-    type Response = std::collections::BTreeMap<String, String>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
@@ -846,149 +115,87 @@ impl OpenRpcParams for DumpPrivateKeysParams {
 }
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct FloodNetworkParams {
-    pub prefix: String,
-    pub number_of_transactions: u32,
+pub struct Get24VolumeParams {
+    /// symbol name or ID of the base asset
+    pub base: String,
+    /// symbol name or ID of the quote asset
+    pub quote: String,
 }
 
-impl OpenRpcParams for FloodNetworkParams {
-    const METHOD: &'static str = "flood_network";
-    type Response = ();
+impl OpenRpcParams for Get24VolumeParams {
+    const METHOD: &'static str = "get_24_volume";
+    type Response = MarketVolume;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.prefix),
-            serde_json::json!(self.number_of_transactions),
+            serde_json::json!(self.base),
+            serde_json::json!(self.quote),
         ]
     }
 }
 
-/// Pay into the fee pool for the given asset.
-///
-/// User-issued assets can optionally have a pool of the core asset which is automatically used to pay transaction fees for any transaction using that asset (using the asset's core exchange rate).
-///
-/// This command allows anyone to deposit the core asset into this fee pool.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct FundAssetFeePoolParams {
-    /// the name or id of the account sending the core asset
-    pub r#from: String,
-    /// the symbol or id of the asset whose fee pool you wish to fund
-    pub symbol_or_id: String,
-    /// the amount of the core asset to deposit
-    pub amount: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for FundAssetFeePoolParams {
-    const METHOD: &'static str = "fund_asset_fee_pool";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.r#from),
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Returns information about the given account.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAccountParams {
-    /// the name or ID of the account to provide information about
+pub struct GetAccountBalancesParams {
+    /// name or ID of the account to get balances for
     pub account_name_or_id: String,
+    /// IDs of the assets to get balances of; if empty, get all assets account has a balance in
+    pub assets: Vec<String>,
 }
 
-impl OpenRpcParams for GetAccountParams {
-    const METHOD: &'static str = "get_account";
-    type Response = AccountObject;
+impl OpenRpcParams for GetAccountBalancesParams {
+    const METHOD: &'static str = "get_account_balances";
+    type Response = Vec<Asset>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.assets),
         ]
     }
 }
 
-/// Returns the number of accounts registered on the blockchain
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetAccountByNameParams {
+    /// Name of the account to retrieve
+    pub name: String,
+}
+
+impl OpenRpcParams for GetAccountByNameParams {
+    const METHOD: &'static str = "get_account_by_name";
+    type Response = Option<AccountObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.name),
+        ]
+    }
+}
+
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct GetAccountCountParams;
 
 impl OpenRpcParams for GetAccountCountParams {
     const METHOD: &'static str = "get_account_count";
-    type Response = u64;
+    type Response = ::graphene_rpc::GrapheneUInt64;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
     }
 }
 
-/// Returns the most recent operations on the named account.
-///
-/// This returns a list of operation history objects, which describe activity on the account.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAccountHistoryParams {
-    /// the name or id of the account
-    pub account_name_or_id: String,
-    /// the number of entries to return (starting from the most recent)
-    pub limit: u32,
+pub struct GetAccountIdFromStringParams {
+    /// name or ID of the account
+    pub name_or_id: String,
 }
 
-impl OpenRpcParams for GetAccountHistoryParams {
-    const METHOD: &'static str = "get_account_history";
-    type Response = Vec<OperationDetail>;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.limit),
-        ]
-    }
-}
-
-/// Get operations relevant to the specified account filtering by operation type, with transaction id
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAccountHistoryByOperationsParams {
-    /// the name or id of the account, whose history shoulde be queried
-    pub account_name_or_id: String,
-    /// The IDs of the operation we want to get operations in the account ( 0 = transfer , 1 = limit order create, ...)
-    pub operation_types: Vec<u16>,
-    /// the sequence number where to start looping back throw the history
-    pub start: u32,
-    /// the max number of entries to return (from start number)
-    pub limit: u32,
-}
-
-impl OpenRpcParams for GetAccountHistoryByOperationsParams {
-    const METHOD: &'static str = "get_account_history_by_operations";
-    type Response = AccountHistoryOperationDetail;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.operation_types),
-            serde_json::json!(self.start),
-            serde_json::json!(self.limit),
-        ]
-    }
-}
-
-/// Lookup the id of a named account.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAccountIdParams {
-    /// the name or ID of the account to look up
-    pub account_name_or_id: String,
-}
-
-impl OpenRpcParams for GetAccountIdParams {
-    const METHOD: &'static str = "get_account_id";
+impl OpenRpcParams for GetAccountIdFromStringParams {
+    const METHOD: &'static str = "get_account_id_from_string";
     type Response = String;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.name_or_id),
         ]
     }
 }
@@ -996,14 +203,14 @@ impl OpenRpcParams for GetAccountIdParams {
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetAccountLimitOrdersParams {
     /// The name or ID of an account to retrieve
-    pub name_or_id: String,
+    pub account_name_or_id: String,
     /// Base asset
     pub base: String,
     /// Quote asset
     pub quote: String,
-    /// The limitation of items each query can fetch (max: 101)
+    /// The limitation of items each query can fetch, not greater than 101
     pub limit: u32,
-    /// Start order id, fetch orders which price are lower than or equal to this order
+    /// Start order id, fetch orders which price lower than this order, or price equal to this order but order ID greater than this order
     pub ostart_id: Option<String>,
     /// Fetch orders with price lower than or equal to this price
     pub ostart_price: Option<Price>,
@@ -1015,7 +222,7 @@ impl OpenRpcParams for GetAccountLimitOrdersParams {
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.name_or_id),
+            serde_json::json!(self.account_name_or_id),
             serde_json::json!(self.base),
             serde_json::json!(self.quote),
             serde_json::json!(self.limit),
@@ -1025,16 +232,15 @@ impl OpenRpcParams for GetAccountLimitOrdersParams {
     }
 }
 
-/// Lookup the name of an account.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAccountNameParams {
-    /// the name or ID of the account to look up
+pub struct GetAccountReferencesParams {
+    /// Account name or ID to query
     pub account_name_or_id: String,
 }
 
-impl OpenRpcParams for GetAccountNameParams {
-    const METHOD: &'static str = "get_account_name";
-    type Response = String;
+impl OpenRpcParams for GetAccountReferencesParams {
+    const METHOD: &'static str = "get_account_references";
+    type Response = Vec<String>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1043,154 +249,189 @@ impl OpenRpcParams for GetAccountNameParams {
     }
 }
 
-/// Get account_storage_object of an account by using the custom operations plugin.
-///
-/// Storage data added to the map with account_store_map will be returned.
+/// This function has semantics identical to get_objects
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAccountStorageParams {
-    /// Account name or ID to get stored data from.
-    pub account: String,
-    /// The catalog to retrieve.
-    pub catalog: String,
+pub struct GetAccountsParams {
+    /// names or IDs of the accounts to retrieve
+    pub account_names_or_ids: Vec<String>,
+    /// true to subscribe to the queried account objects; false to not subscribe; null to subscribe or not subscribe according to current auto-subscription setting (see set_auto_subscription)
+    pub subscribe: Option<bool>,
 }
 
-impl OpenRpcParams for GetAccountStorageParams {
-    const METHOD: &'static str = "get_account_storage";
-    type Response = Vec<AccountStorageObject>;
+impl OpenRpcParams for GetAccountsParams {
+    const METHOD: &'static str = "get_accounts";
+    type Response = Vec<Option<AccountObject>>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.account),
-            serde_json::json!(self.catalog),
+            serde_json::json!(self.account_names_or_ids),
+            serde_json::json!(self.subscribe),
         ]
     }
 }
 
-/// Returns information about the given asset.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAssetParams {
-    /// the symbol or id of the asset in question
-    pub asset_symbol_or_id: String,
+pub struct GetAllWorkersParams {
+    /// null for all workers, true for expired workers only, false for non-expired workers only
+    pub is_expired: Option<bool>,
 }
 
-impl OpenRpcParams for GetAssetParams {
-    const METHOD: &'static str = "get_asset";
-    type Response = ExtendedAssetObject;
+impl OpenRpcParams for GetAllWorkersParams {
+    const METHOD: &'static str = "get_all_workers";
+    type Response = Vec<WorkerObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.asset_symbol_or_id),
+            serde_json::json!(self.is_expired),
         ]
     }
 }
 
-/// Returns assets count registered on the blockchain.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct GetAssetCountParams;
 
 impl OpenRpcParams for GetAssetCountParams {
     const METHOD: &'static str = "get_asset_count";
-    type Response = u64;
+    type Response = ::graphene_rpc::GrapheneUInt64;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
     }
 }
 
-/// Lookup the id of an asset.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAssetIdParams {
-    /// the symbol or ID of an asset to look up
-    pub asset_symbol_or_id: String,
+pub struct GetAssetIdFromStringParams {
+    /// symbol name or ID of the asset
+    pub symbol_or_id: String,
 }
 
-impl OpenRpcParams for GetAssetIdParams {
-    const METHOD: &'static str = "get_asset_id";
+impl OpenRpcParams for GetAssetIdFromStringParams {
+    const METHOD: &'static str = "get_asset_id_from_string";
     type Response = String;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.asset_symbol_or_id),
+            serde_json::json!(self.symbol_or_id),
         ]
     }
 }
 
-/// Lookup the symbol of an asset. Synonym of get_asset_symbol.
+/// This function has semantics identical to get_objects
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAssetNameParams {
-    /// the symbol or ID of an asset to look up
-    pub asset_symbol_or_id: String,
+pub struct GetAssetsParams {
+    /// symbol names or IDs of the assets to retrieve
+    pub asset_symbols_or_ids: Vec<String>,
+    /// true to subscribe to the queried asset objects; false to not subscribe; null to subscribe or not subscribe according to current auto-subscription setting (see set_auto_subscription)
+    pub subscribe: Option<bool>,
 }
 
-impl OpenRpcParams for GetAssetNameParams {
-    const METHOD: &'static str = "get_asset_name";
-    type Response = String;
+impl OpenRpcParams for GetAssetsParams {
+    const METHOD: &'static str = "get_assets";
+    type Response = Vec<Option<ExtendedAssetObject>>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.asset_symbol_or_id),
+            serde_json::json!(self.asset_symbols_or_ids),
+            serde_json::json!(self.subscribe),
         ]
     }
 }
 
-/// Lookup the symbol of an asset.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetAssetSymbolParams {
-    /// the symbol or ID of an asset to look up
-    pub asset_symbol_or_id: String,
+pub struct GetAssetsByIssuerParams {
+    /// Account name or ID to get objects from
+    pub issuer_name_or_id: String,
+    /// Asset objects(1.3.X) before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of orders to retrieve
+    pub limit: u32,
 }
 
-impl OpenRpcParams for GetAssetSymbolParams {
-    const METHOD: &'static str = "get_asset_symbol";
-    type Response = String;
+impl OpenRpcParams for GetAssetsByIssuerParams {
+    const METHOD: &'static str = "get_assets_by_issuer";
+    type Response = Vec<ExtendedAssetObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.asset_symbol_or_id),
+            serde_json::json!(self.issuer_name_or_id),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns the BitAsset-specific data for a given asset. Market-issued assets's behavior are determined both by their "BitAsset Data" and their basic asset data, as returned by get_asset().
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetBitassetDataParams {
-    /// the symbol or id of the BitAsset in question
-    pub asset_symbol_or_id: String,
+pub struct GetBalanceObjectsParams {
+    /// a list of addresses
+    pub addrs: Vec<Address>,
 }
 
-impl OpenRpcParams for GetBitassetDataParams {
-    const METHOD: &'static str = "get_bitasset_data";
-    type Response = AssetBitassetDataObject;
+impl OpenRpcParams for GetBalanceObjectsParams {
+    const METHOD: &'static str = "get_balance_objects";
+    type Response = Vec<BalanceObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.asset_symbol_or_id),
+            serde_json::json!(self.addrs),
         ]
     }
 }
 
-/// Returns info about a specified block.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetBlockParams {
-    /// height of the block to retrieve
-    pub num: u32,
+    /// Height of the block to be returned
+    pub block_num: u32,
 }
 
 impl OpenRpcParams for GetBlockParams {
     const METHOD: &'static str = "get_block";
-    type Response = Option<SignedBlockWithInfo>;
+    type Response = Option<SignedBlock>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.num),
+            serde_json::json!(self.block_num),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetBlockHeaderParams {
+    /// Height of the block whose header should be returned
+    pub block_num: u32,
+}
+
+impl OpenRpcParams for GetBlockHeaderParams {
+    const METHOD: &'static str = "get_block_header";
+    type Response = Option<BlockHeader>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.block_num),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetBlockHeaderBatchParams {
+    /// vector containing heights of the block whose header should be returned
+    pub block_nums: Vec<u32>,
+}
+
+impl OpenRpcParams for GetBlockHeaderBatchParams {
+    const METHOD: &'static str = "get_block_header_batch";
+    type Response = std::collections::BTreeMap<String, Option<BlockHeader>>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.block_nums),
         ]
     }
 }
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetCallOrdersParams {
-    /// symbol or ID of the debt asset
-    pub asset_symbol_or_id: String,
+    /// symbol name or ID of the debt asset
+    pub a: String,
     /// Maximum number of orders to retrieve
     pub limit: u32,
 }
@@ -1201,40 +442,127 @@ impl OpenRpcParams for GetCallOrdersParams {
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.asset_symbol_or_id),
+            serde_json::json!(self.a),
             serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns information about the given committee_member.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetCommitteeMemberParams {
-    /// the name or id of the committee_member account owner, or the id of the committee_member
-    pub owner_account: String,
+pub struct GetCallOrdersByAccountParams {
+    /// Account name or ID to get objects from
+    pub account_name_or_id: String,
+    /// Asset objects(1.3.X) before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of objects to retrieve
+    pub limit: u32,
 }
 
-impl OpenRpcParams for GetCommitteeMemberParams {
-    const METHOD: &'static str = "get_committee_member";
-    type Response = CommitteeMemberObject;
+impl OpenRpcParams for GetCallOrdersByAccountParams {
+    const METHOD: &'static str = "get_call_orders_by_account";
+    type Response = Vec<CallOrderObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.owner_account),
+            serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns a content card object by id.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetChainIdParams;
+
+impl OpenRpcParams for GetChainIdParams {
+    const METHOD: &'static str = "get_chain_id";
+    type Response = ChainIdType;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        Vec::new()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetChainPropertiesParams;
+
+impl OpenRpcParams for GetChainPropertiesParams {
+    const METHOD: &'static str = "get_chain_properties";
+    type Response = ChainPropertyObject;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        Vec::new()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetCommitteeCountParams;
+
+impl OpenRpcParams for GetCommitteeCountParams {
+    const METHOD: &'static str = "get_committee_count";
+    type Response = ::graphene_rpc::GrapheneUInt64;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        Vec::new()
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetCommitteeMemberByAccountParams {
+    /// The name or ID of the account whose committee_member should be retrieved
+    pub account_name_or_id: String,
+}
+
+impl OpenRpcParams for GetCommitteeMemberByAccountParams {
+    const METHOD: &'static str = "get_committee_member_by_account";
+    type Response = Option<CommitteeMemberObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_name_or_id),
+        ]
+    }
+}
+
+/// This function has semantics identical to get_objects, but doesn't subscribe
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetCommitteeMembersParams {
+    /// IDs of the committee_members to retrieve
+    pub committee_member_ids: Vec<String>,
+}
+
+impl OpenRpcParams for GetCommitteeMembersParams {
+    const METHOD: &'static str = "get_committee_members";
+    type Response = Vec<Option<CommitteeMemberObject>>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.committee_member_ids),
+        ]
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetConfigParams;
+
+impl OpenRpcParams for GetConfigParams {
+    const METHOD: &'static str = "get_config";
+    type Response = serde_json::Value;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        Vec::new()
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetContentCardByIdParams {
-    /// an id of content card.
-    pub content_id: u64,
+    /// The id of content card
+    pub content_id: ContentCardIdType,
 }
 
 impl OpenRpcParams for GetContentCardByIdParams {
     const METHOD: &'static str = "get_content_card_by_id";
-    type Response = ContentCardObject;
+    type Response = Option<ContentCardObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1243,15 +571,14 @@ impl OpenRpcParams for GetContentCardByIdParams {
     }
 }
 
-/// Returns a list of content card objects for choosen account
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetContentCardsParams {
-    /// - a content owner account.
+    /// The owner account of the content
     pub subject_account: String,
-    /// a data will be received from this id.
-    pub content_id: u64,
-    /// depth of the content cards to retrieve
-    pub limit: Unsigned,
+    /// Lower bound of content id to start getting results
+    pub content_id: ContentCardIdType,
+    /// Maximum number of content card objects to fetch
+    pub limit: u32,
 }
 
 impl OpenRpcParams for GetContentCardsParams {
@@ -1267,15 +594,14 @@ impl OpenRpcParams for GetContentCardsParams {
     }
 }
 
-/// Returns a list of content card objects for the selected room.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetContentCardsByRoomParams {
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// lower bound of content instance id to start getting results.
-    pub start_content: u64,
-    /// depth of the content cards to retrieve.
-    pub limit: Unsigned,
+    /// The room id
+    pub room: RoomIdType,
+    /// Lower bound of content id to start getting results
+    pub content_id: ContentCardIdType,
+    /// Maximum number of content card objects to fetch
+    pub limit: u32,
 }
 
 impl OpenRpcParams for GetContentCardsByRoomParams {
@@ -1285,13 +611,12 @@ impl OpenRpcParams for GetContentCardsByRoomParams {
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.room),
-            serde_json::json!(self.start_content),
+            serde_json::json!(self.content_id),
             serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns the block chain's rapidly-changing properties. The returned object contains information that changes every block interval such as the head block number, the next witness, etc.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct GetDynamicGlobalPropertiesParams;
 
@@ -1304,25 +629,27 @@ impl OpenRpcParams for GetDynamicGlobalPropertiesParams {
     }
 }
 
-/// This function fetches all relevant objects for the given account. If the string of name_or_id cannot be tied to an account, that input will be ignored.
+/// This function fetches all relevant objects for the given accounts, and subscribes to updates to the given accounts. If any of the strings in names_or_ids cannot be tied to an account, that input will be ignored. All other accounts will be retrieved and subscribed.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetFullAccountParams {
-    /// Must be the name or ID of an account to retrieve
-    pub name_or_id: String,
+pub struct GetFullAccountsParams {
+    /// Each item must be the name or ID of an account to retrieve
+    pub names_or_ids: Vec<String>,
+    /// true to subscribe to the queried full account objects; false to not subscribe; null to subscribe or not subscribe according to current auto-subscription setting (see set_auto_subscription)
+    pub subscribe: Option<bool>,
 }
 
-impl OpenRpcParams for GetFullAccountParams {
-    const METHOD: &'static str = "get_full_account";
-    type Response = FullAccount;
+impl OpenRpcParams for GetFullAccountsParams {
+    const METHOD: &'static str = "get_full_accounts";
+    type Response = std::collections::BTreeMap<String, FullAccount>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.name_or_id),
+            serde_json::json!(self.names_or_ids),
+            serde_json::json!(self.subscribe),
         ]
     }
 }
 
-/// Returns the block chain's slowly-changing settings. This object contains all of the properties of the blockchain that are fixed or that change only once per maintenance interval (daily) such as the current list of witnesses, committee_members, block interval, etc.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct GetGlobalPropertiesParams;
 
@@ -1335,30 +662,92 @@ impl OpenRpcParams for GetGlobalPropertiesParams {
     }
 }
 
-/// Returns information about the given HTLC object.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetHtlcParams {
-    /// the id of the HTLC object.
-    pub htlc_id: String,
+    /// HTLC contract id
+    pub id: String,
+    /// true to subscribe to the queried HTLC objects; false to not subscribe; null to subscribe or not subscribe according to current auto-subscription setting (see set_auto_subscription)
+    pub subscribe: Option<bool>,
 }
 
 impl OpenRpcParams for GetHtlcParams {
     const METHOD: &'static str = "get_htlc";
-    type Response = Option<()>;
+    type Response = Option<HtlcObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.htlc_id),
+            serde_json::json!(self.id),
+            serde_json::json!(self.subscribe),
         ]
     }
 }
 
-/// Get key references.
-///
-/// Returns accounts related to given public keys.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetHtlcByFromParams {
+    /// Account name or ID to get objects from
+    pub account_name_or_id: String,
+    /// htlc objects before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of objects to retrieve
+    pub limit: u32,
+}
+
+impl OpenRpcParams for GetHtlcByFromParams {
+    const METHOD: &'static str = "get_htlc_by_from";
+    type Response = Vec<HtlcObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetHtlcByToParams {
+    /// Account name or ID to get objects from
+    pub account_name_or_id: String,
+    /// htlc objects before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of objects to retrieve
+    pub limit: u32,
+}
+
+impl OpenRpcParams for GetHtlcByToParams {
+    const METHOD: &'static str = "get_htlc_by_to";
+    type Response = Vec<HtlcObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetIcoBalanceObjectsParams {
+    /// a list of eth addresses
+    pub addrs: Vec<String>,
+}
+
+impl OpenRpcParams for GetIcoBalanceObjectsParams {
+    const METHOD: &'static str = "get_ico_balance_objects";
+    type Response = Vec<IcoBalanceObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.addrs),
+        ]
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetKeyReferencesParams {
-    /// public keys to search for related accounts
+    /// a list of public keys to query
     pub keys: Vec<String>,
 }
 
@@ -1373,18 +762,15 @@ impl OpenRpcParams for GetKeyReferencesParams {
     }
 }
 
-/// Returns last added personal data object.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetLastPersonalDataParams {
-    /// the owner of personal data.
     pub subject_account: String,
-    /// an account who is permitted to use personal data.
     pub operator_account: String,
 }
 
 impl OpenRpcParams for GetLastPersonalDataParams {
     const METHOD: &'static str = "get_last_personal_data";
-    type Response = PersonalDataObject;
+    type Response = Option<PersonalDataObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1418,60 +804,90 @@ impl OpenRpcParams for GetLimitOrdersParams {
 }
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetMarketHistoryParams {
-    /// symbol or ID of the base asset
-    pub symbol: String,
-    /// symbol or ID of the quote asset
-    pub symbol2: String,
-    /// length of each time bucket in seconds.
-    pub bucket: u32,
-    /// the start of a time range, E.G. "2018-01-01T00:00:00"
-    pub start: ::graphene_rpc::GrapheneTimePointSec,
-    /// the end of the time range
-    pub end: ::graphene_rpc::GrapheneTimePointSec,
+pub struct GetLimitOrdersByAccountParams {
+    /// The name or ID of an account to retrieve
+    pub account_name_or_id: String,
+    /// The limitation of items each query can fetch, not greater than a configured value
+    pub limit: Option<u32>,
+    /// Start order id, fetch orders whose IDs are greater than or equal to this order
+    pub start_id: Option<String>,
 }
 
-impl OpenRpcParams for GetMarketHistoryParams {
-    const METHOD: &'static str = "get_market_history";
-    type Response = Vec<BucketObject>;
+impl OpenRpcParams for GetLimitOrdersByAccountParams {
+    const METHOD: &'static str = "get_limit_orders_by_account";
+    type Response = Vec<LimitOrderObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.symbol),
-            serde_json::json!(self.symbol2),
-            serde_json::json!(self.bucket),
-            serde_json::json!(self.start),
-            serde_json::json!(self.end),
+            serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.limit),
+            serde_json::json!(self.start_id),
         ]
     }
 }
 
-/// Returns the blockchain object corresponding to the given id.
-///
-/// This generic function can be used to retrieve any object from the blockchain that is assigned an ID. Certain types of objects have specialized convenience functions to return their objects e.g., assets have get_asset(), accounts have get_account(), but this function will work for any object.
+/// Similar to get_call_orders_by_account, but without pagination.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetObjectParams {
-    /// the id of the object to return
-    pub id: String,
+pub struct GetMarginPositionsParams {
+    /// name or ID of an account
+    pub account_name_or_id: String,
 }
 
-impl OpenRpcParams for GetObjectParams {
-    const METHOD: &'static str = "get_object";
-    type Response = ();
+impl OpenRpcParams for GetMarginPositionsParams {
+    const METHOD: &'static str = "get_margin_positions";
+    type Response = Vec<CallOrderObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.id),
+            serde_json::json!(self.account_name_or_id),
         ]
     }
 }
 
-/// Returns the order book for the market base:quote.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetNamedAccountBalancesParams {
+    pub name: String,
+    pub assets: Vec<String>,
+}
+
+impl OpenRpcParams for GetNamedAccountBalancesParams {
+    const METHOD: &'static str = "get_named_account_balances";
+    type Response = Vec<Asset>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.name),
+            serde_json::json!(self.assets),
+        ]
+    }
+}
+
+/// If any of the provided IDs does not map to an object, a null variant is returned in its position.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetObjectsParams {
+    /// IDs of the objects to retrieve
+    pub ids: Vec<String>,
+    /// true to subscribe to the queried objects; false to not subscribe; null to subscribe or not subscribe according to current auto-subscription setting (see set_auto_subscription)
+    pub subscribe: Option<bool>,
+}
+
+impl OpenRpcParams for GetObjectsParams {
+    const METHOD: &'static str = "get_objects";
+    type Response = Vec<()>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.ids),
+            serde_json::json!(self.subscribe),
+        ]
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetOrderBookParams {
-    /// symbol or ID of the base asset
+    /// symbol name or ID of the base asset
     pub base: String,
-    /// symbol or ID of the quote asset
+    /// symbol name or ID of the quote asset
     pub quote: String,
     /// depth of the order book to retrieve, for bids and asks each, capped at 50
     pub limit: Unsigned,
@@ -1490,16 +906,15 @@ impl OpenRpcParams for GetOrderBookParams {
     }
 }
 
-/// Returns a permission object by id.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetPermissionByIdParams {
-    /// an id of permission object.
-    pub permission_id: u64,
+    /// The id of permission object
+    pub permission_id: PermissionIdType,
 }
 
 impl OpenRpcParams for GetPermissionByIdParams {
     const METHOD: &'static str = "get_permission_by_id";
-    type Response = PermissionObject;
+    type Response = Option<PermissionObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1508,15 +923,14 @@ impl OpenRpcParams for GetPermissionByIdParams {
     }
 }
 
-/// Returns a list of permission objects for choosen account
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetPermissionsParams {
-    /// - a content owner account.
+    /// The owner account of the permissions
     pub operator_account: String,
-    /// a data will be received from this id.
-    pub permission_id: u64,
-    /// depth of the permission objects to retrieve
-    pub limit: Unsigned,
+    /// Lower bound of permission id to start getting results
+    pub permission_id: PermissionIdType,
+    /// Maximum number of permission objects to fetch
+    pub limit: u32,
 }
 
 impl OpenRpcParams for GetPermissionsParams {
@@ -1532,12 +946,9 @@ impl OpenRpcParams for GetPermissionsParams {
     }
 }
 
-/// Returns the personal data object list.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetPersonalDataParams {
-    /// the owner of personal data.
     pub subject_account: String,
-    /// an account who is permitted to use personal data.
     pub operator_account: String,
 }
 
@@ -1553,117 +964,177 @@ impl OpenRpcParams for GetPersonalDataParams {
     }
 }
 
-/// Get the WIF private key corresponding to a public key. The private key must already be in the wallet.
+/// This method will return the set of all addresses that could possibly sign for a given transaction.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetPrivateKeyParams {
-    /// a public key in Base58 format
-    pub pubkey: String,
+pub struct GetPotentialAddressSignaturesParams {
+    /// the transaction to be signed
+    pub trx: SignedTransaction,
 }
 
-impl OpenRpcParams for GetPrivateKeyParams {
-    const METHOD: &'static str = "get_private_key";
-    type Response = String;
+impl OpenRpcParams for GetPotentialAddressSignaturesParams {
+    const METHOD: &'static str = "get_potential_address_signatures";
+    type Response = Vec<Address>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.pubkey),
+            serde_json::json!(self.trx),
         ]
     }
 }
 
-/// Returns an uninitialized object representing a given blockchain operation.
-///
-/// This returns a default-initialized object of the given type; it can be used during early development of the wallet when we don't yet have custom commands for creating all of the operations the blockchain supports.
-///
-/// Any operation the blockchain supports can be created using the transaction builder's add_operation_to_builder_transaction() , but to do that from the CLI you need to know what the JSON form of the operation looks like. This will give you a template you can fill in. It's better than nothing.
+/// This method will return the set of all public keys that could possibly sign for a given transaction. This call can be used by wallets to filter their set of public keys to just the relevant subset prior to calling get_required_signatures to get the minimum subset.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetPrototypeOperationParams {
-    /// the type of operation to return, must be one of the operations defined in graphene/protocol/operations.hpp (e.g., "global_parameters_update_operation")
-    pub operation_type: String,
+pub struct GetPotentialSignaturesParams {
+    /// the transaction to be signed
+    pub trx: SignedTransaction,
 }
 
-impl OpenRpcParams for GetPrototypeOperationParams {
-    const METHOD: &'static str = "get_prototype_operation";
-    type Response = Operation;
+impl OpenRpcParams for GetPotentialSignaturesParams {
+    const METHOD: &'static str = "get_potential_signatures";
+    type Response = Vec<String>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.operation_type),
+            serde_json::json!(self.trx),
         ]
     }
 }
 
-/// Get the public key associated with a given label.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetPublicKeyParams {
-    /// a label
-    pub label: String,
-}
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetProposedGlobalParametersParams;
 
-impl OpenRpcParams for GetPublicKeyParams {
-    const METHOD: &'static str = "get_public_key";
-    type Response = String;
+impl OpenRpcParams for GetProposedGlobalParametersParams {
+    const METHOD: &'static str = "get_proposed_global_parameters";
+    type Response = Vec<ProposalObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.label),
-        ]
+        Vec::new()
     }
 }
 
-/// Returns the relative operations on the named account from start number.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetRelativeAccountHistoryParams {
-    /// the name or id of the account
+pub struct GetProposedTransactionsParams {
+    /// The name or ID of an account
     pub account_name_or_id: String,
-    /// Sequence number of earliest operation.
-    pub stop: u32,
-    /// the number of entries to return
-    pub limit: u32,
-    /// the sequence number where to start looping back throw the history
-    pub start: u32,
 }
 
-impl OpenRpcParams for GetRelativeAccountHistoryParams {
-    const METHOD: &'static str = "get_relative_account_history";
-    type Response = Vec<OperationDetail>;
+impl OpenRpcParams for GetProposedTransactionsParams {
+    const METHOD: &'static str = "get_proposed_transactions";
+    type Response = Vec<ProposalObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.stop),
-            serde_json::json!(self.limit),
-            serde_json::json!(self.start),
         ]
     }
 }
 
-/// Returns a room object by id.
+/// If the transaction has not expired, this method will return the transaction for the given ID or it will return NULL if it is not known. Just because it is not known does not mean it wasn't included in the blockchain.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetRecentTransactionByIdParams {
+    /// hash of the transaction
+    pub txid: TransactionIdType,
+}
+
+impl OpenRpcParams for GetRecentTransactionByIdParams {
+    const METHOD: &'static str = "get_recent_transaction_by_id";
+    type Response = Option<SignedTransaction>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.txid),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetRequiredFeesParams {
+    /// a list of operations to be query for required fees
+    pub ops: Vec<Operation>,
+    /// symbol name or ID of an asset that to be used to pay the fees
+    pub asset_symbol_or_id: String,
+}
+
+impl OpenRpcParams for GetRequiredFeesParams {
+    const METHOD: &'static str = "get_required_fees";
+    type Response = Vec<()>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.ops),
+            serde_json::json!(self.asset_symbol_or_id),
+        ]
+    }
+}
+
+/// This API will take a partially signed transaction and a set of public keys that the owner has the ability to sign for and return the minimal subset of public keys that should add signatures to the transaction.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetRequiredSignaturesParams {
+    /// the transaction to be signed
+    pub trx: SignedTransaction,
+    /// a set of public keys
+    pub available_keys: Vec<String>,
+}
+
+impl OpenRpcParams for GetRequiredSignaturesParams {
+    const METHOD: &'static str = "get_required_signatures";
+    type Response = Vec<String>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.trx),
+            serde_json::json!(self.available_keys),
+        ]
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetRoomByIdParams {
-    /// an id of the room in canonical format (1.24.x).
-    pub room: String,
+    /// The id of the room
+    pub room_id: RoomIdType,
 }
 
 impl OpenRpcParams for GetRoomByIdParams {
     const METHOD: &'static str = "get_room_by_id";
-    type Response = RoomObject;
+    type Response = Option<RoomObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.room),
+            serde_json::json!(self.room_id),
         ]
     }
 }
 
-/// Returns key epochs for a participant in a room.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetRoomKeyEpochParams {
+    /// The room id
+    pub room: RoomIdType,
+    /// The epoch number
+    pub epoch: u32,
+    /// The participant account
+    pub participant: String,
+}
+
+impl OpenRpcParams for GetRoomKeyEpochParams {
+    const METHOD: &'static str = "get_room_key_epoch";
+    type Response = Option<RoomKeyEpochObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.room),
+            serde_json::json!(self.epoch),
+            serde_json::json!(self.participant),
+        ]
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetRoomKeyEpochsParams {
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// the participant account.
+    /// The room id
+    pub room: RoomIdType,
+    /// The participant account
     pub participant: String,
-    /// maximum number of epoch objects to retrieve.
+    /// Maximum number of epoch objects to fetch
     pub limit: u32,
 }
 
@@ -1680,15 +1151,34 @@ impl OpenRpcParams for GetRoomKeyEpochsParams {
     }
 }
 
-/// Returns a list of participants in a room.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetRoomParticipantParams {
+    /// The room to search in
+    pub room: RoomIdType,
+    /// The participant account to search for
+    pub participant: String,
+}
+
+impl OpenRpcParams for GetRoomParticipantParams {
+    const METHOD: &'static str = "get_room_participant";
+    type Response = Option<RoomParticipantObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.room),
+            serde_json::json!(self.participant),
+        ]
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetRoomParticipantsParams {
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// lower bound of participant instance id to start getting results.
-    pub start_participant: u64,
-    /// maximum number of participants to retrieve.
-    pub limit: Unsigned,
+    /// The room to get participants from
+    pub room: RoomIdType,
+    /// Lower bound of participant id to start getting results
+    pub participant_id: RoomParticipantIdType,
+    /// Maximum number of participant objects to fetch
+    pub limit: u32,
 }
 
 impl OpenRpcParams for GetRoomParticipantsParams {
@@ -1698,21 +1188,20 @@ impl OpenRpcParams for GetRoomParticipantsParams {
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.room),
-            serde_json::json!(self.start_participant),
+            serde_json::json!(self.participant_id),
             serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns a list of rooms owned by an account.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetRoomsByOwnerParams {
-    /// the owner account.
+    /// The owner account of the rooms
     pub owner: String,
-    /// lower bound of room instance id to start getting results.
-    pub start_room: u64,
-    /// maximum number of rooms to retrieve.
-    pub limit: Unsigned,
+    /// Lower bound of room id to start getting results
+    pub room_id: RoomIdType,
+    /// Maximum number of room objects to fetch
+    pub limit: u32,
 }
 
 impl OpenRpcParams for GetRoomsByOwnerParams {
@@ -1722,21 +1211,20 @@ impl OpenRpcParams for GetRoomsByOwnerParams {
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.owner),
-            serde_json::json!(self.start_room),
+            serde_json::json!(self.room_id),
             serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns a list of rooms a user is a participant of.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetRoomsByParticipantParams {
-    /// the participant account.
+    /// The participant account
     pub participant: String,
-    /// lower bound of participant instance id to start getting results.
-    pub start_record: u64,
-    /// maximum number of participant objects to retrieve.
-    pub limit: Unsigned,
+    /// Lower bound of participant object id to start getting results
+    pub participant_id: RoomParticipantIdType,
+    /// Maximum number of participant objects to fetch
+    pub limit: u32,
 }
 
 impl OpenRpcParams for GetRoomsByParticipantParams {
@@ -1746,7 +1234,7 @@ impl OpenRpcParams for GetRoomsByParticipantParams {
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.participant),
-            serde_json::json!(self.start_record),
+            serde_json::json!(self.participant_id),
             serde_json::json!(self.limit),
         ]
     }
@@ -1772,16 +1260,153 @@ impl OpenRpcParams for GetSettleOrdersParams {
     }
 }
 
-/// This method is used to convert a JSON transaction to its transactin ID.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetTransactionIdParams {
-    /// a JSON transaction
+pub struct GetSettleOrdersByAccountParams {
+    /// Account name or ID to get objects from
+    pub account_name_or_id: String,
+    /// Force settlement objects(1.4.X) before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of orders to retrieve
+    pub limit: u32,
+}
+
+impl OpenRpcParams for GetSettleOrdersByAccountParams {
+    const METHOD: &'static str = "get_settle_orders_by_account";
+    type Response = Vec<ForceSettlementObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_name_or_id),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetTickerParams {
+    /// symbol name or ID of the base asset
+    pub base: String,
+    /// symbol name or ID of the quote asset
+    pub quote: String,
+}
+
+impl OpenRpcParams for GetTickerParams {
+    const METHOD: &'static str = "get_ticker";
+    type Response = MarketTicker;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.base),
+            serde_json::json!(self.quote),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetTopMarketsParams {
+    /// Max number of results
+    pub limit: u32,
+}
+
+impl OpenRpcParams for GetTopMarketsParams {
+    const METHOD: &'static str = "get_top_markets";
+    type Response = Vec<MarketTicker>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetTradeHistoryParams {
+    /// symbol or ID of the base asset
+    pub base: String,
+    /// symbol or ID of the quote asset
+    pub quote: String,
+    /// Start time as a UNIX timestamp, the latest transactions to retrieve
+    pub start: ::graphene_rpc::GrapheneTimePointSec,
+    /// Stop time as a UNIX timestamp, the earliest transactions to retrieve
+    pub stop: ::graphene_rpc::GrapheneTimePointSec,
+    /// Maximum quantity of transactions to retrieve, capped at 100.
+    pub limit: Unsigned,
+}
+
+impl OpenRpcParams for GetTradeHistoryParams {
+    const METHOD: &'static str = "get_trade_history";
+    type Response = Vec<MarketTrade>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.base),
+            serde_json::json!(self.quote),
+            serde_json::json!(self.start),
+            serde_json::json!(self.stop),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetTradeHistoryBySequenceParams {
+    /// symbol or ID of the base asset
+    pub base: String,
+    /// symbol or ID of the quote asset
+    pub quote: String,
+    /// Start sequence as an Integer, the latest transaction to retrieve
+    pub start: i64,
+    /// Stop time as a UNIX timestamp, the earliest transactions to retrieve
+    pub stop: ::graphene_rpc::GrapheneTimePointSec,
+    /// Maximum quantity of transactions to retrieve, capped at 100
+    pub limit: Unsigned,
+}
+
+impl OpenRpcParams for GetTradeHistoryBySequenceParams {
+    const METHOD: &'static str = "get_trade_history_by_sequence";
+    type Response = Vec<MarketTrade>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.base),
+            serde_json::json!(self.quote),
+            serde_json::json!(self.start),
+            serde_json::json!(self.stop),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetTransactionParams {
+    /// height of the block to fetch
+    pub block_num: u32,
+    /// the index (sequence number) of the transaction in the block, starts from 0
+    pub trx_in_block: u32,
+}
+
+impl OpenRpcParams for GetTransactionParams {
+    const METHOD: &'static str = "get_transaction";
+    type Response = ProcessedTransaction;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.block_num),
+            serde_json::json!(self.trx_in_block),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetTransactionHexParams {
+    /// a transaction to get hexdump from
     pub trx: SignedTransaction,
 }
 
-impl OpenRpcParams for GetTransactionIdParams {
-    const METHOD: &'static str = "get_transaction_id";
-    type Response = TransactionIdType;
+impl OpenRpcParams for GetTransactionHexParams {
+    const METHOD: &'static str = "get_transaction_hex";
+    type Response = String;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
@@ -1790,321 +1415,188 @@ impl OpenRpcParams for GetTransactionIdParams {
     }
 }
 
-/// Get transaction signers.
-///
-/// Returns information about who signed the transaction, specifically, the corresponding public keys of the private keys used to sign the transaction.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetTransactionSignersParams {
-    /// the signed transaction
-    pub tx: SignedTransaction,
+pub struct GetTransactionHexWithoutSigParams {
+    /// a transaction to get hexdump from
+    pub trx: Transaction,
 }
 
-impl OpenRpcParams for GetTransactionSignersParams {
-    const METHOD: &'static str = "get_transaction_signers";
-    type Response = Vec<String>;
+impl OpenRpcParams for GetTransactionHexWithoutSigParams {
+    const METHOD: &'static str = "get_transaction_hex_without_sig";
+    type Response = String;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.tx),
+            serde_json::json!(self.trx),
         ]
     }
 }
 
-/// Get information about a vesting balance object or vesting balance objects owned by an account.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetVestedBalancesParams {
+    /// a list of balance object IDs
+    pub objs: Vec<String>,
+}
+
+impl OpenRpcParams for GetVestedBalancesParams {
+    const METHOD: &'static str = "get_vested_balances";
+    type Response = Vec<Asset>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.objs),
+        ]
+    }
+}
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct GetVestingBalancesParams {
-    /// An account name, account ID, or vesting balance object ID.
-    pub account_name: String,
+    /// name or ID of an account
+    pub account_name_or_id: String,
 }
 
 impl OpenRpcParams for GetVestingBalancesParams {
     const METHOD: &'static str = "get_vesting_balances";
-    type Response = Vec<VestingBalanceObjectWithInfo>;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_name),
-        ]
-    }
-}
-
-/// Returns information about the given witness.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GetWitnessParams {
-    /// the name or id of the witness account owner, or the id of the witness
-    pub owner_account: String,
-}
-
-impl OpenRpcParams for GetWitnessParams {
-    const METHOD: &'static str = "get_witness";
-    type Response = WitnessObject;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner_account),
-        ]
-    }
-}
-
-/// Returns detailed help on a single API command.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GethelpParams {
-    /// the name of the API command you want help with
-    pub method: String,
-}
-
-impl OpenRpcParams for GethelpParams {
-    const METHOD: &'static str = "gethelp";
-    type Response = String;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.method),
-        ]
-    }
-}
-
-/// Forces a global settling of the given asset (black swan or prediction markets).
-///
-/// In order to use this operation, asset_to_settle must have the global_settle permission set
-///
-/// When this operation is executed all open margin positions are called at the settle price. A pool will be formed containing the collateral got from the margin positions. Users owning an amount of the asset may use settle_asset() to claim collateral instantly at the settle price from the pool. If this asset is used as backing for other bitassets, those bitassets will not be affected.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct GlobalSettleAssetParams {
-    /// the symbol or id of the asset to globally settle
-    pub symbol_or_id: String,
-    /// the price at which to settle
-    pub settle_price: Price,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for GlobalSettleAssetParams {
-    const METHOD: &'static str = "global_settle_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.settle_price),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Returns a list of all commands supported by the wallet API.
-///
-/// This lists each command, along with its arguments and return types. For more detailed help on a single command, use gethelp()
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct HelpParams;
-
-impl OpenRpcParams for HelpParams {
-    const METHOD: &'static str = "help";
-    type Response = String;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
-    }
-}
-
-/// Create a hashed time lock contract
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct HtlcCreateParams {
-    /// The account that will reserve the funds (and pay the fee)
-    pub source: String,
-    /// The account that will receive the funds if the preimage is presented
-    pub destination: String,
-    /// the amount of the asset that is to be traded
-    pub amount: String,
-    /// The asset that is to be traded
-    pub asset_symbol_or_id: String,
-    /// the algorithm used to generate the hash from the preimage. Can be RIPEMD160, SHA1 or SHA256.
-    pub hash_algorithm: String,
-    /// the hash of the preimage
-    pub preimage_hash: String,
-    /// the size of the preimage in bytes
-    pub preimage_size: u32,
-    /// how long after creation until the lock expires
-    pub claim_period_seconds: u32,
-    /// the memo
-    pub memo: String,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for HtlcCreateParams {
-    const METHOD: &'static str = "htlc_create";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.source),
-            serde_json::json!(self.destination),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.asset_symbol_or_id),
-            serde_json::json!(self.hash_algorithm),
-            serde_json::json!(self.preimage_hash),
-            serde_json::json!(self.preimage_size),
-            serde_json::json!(self.claim_period_seconds),
-            serde_json::json!(self.memo),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct HtlcExtendParams {
-    pub htlc_id: String,
-    pub issuer: String,
-    pub seconds_to_add: u32,
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for HtlcExtendParams {
-    const METHOD: &'static str = "htlc_extend";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.htlc_id),
-            serde_json::json!(self.issuer),
-            serde_json::json!(self.seconds_to_add),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct HtlcRedeemParams {
-    pub htlc_id: String,
-    pub issuer: String,
-    pub preimage: String,
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for HtlcRedeemParams {
-    const METHOD: &'static str = "htlc_redeem";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.htlc_id),
-            serde_json::json!(self.issuer),
-            serde_json::json!(self.preimage),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct IcoImportBalanceParams {
-    pub account_name_or_id: String,
-    pub eth_pub_key: String,
-    pub eth_sign: String,
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for IcoImportBalanceParams {
-    const METHOD: &'static str = "ico_import_balance";
-    type Response = Vec<SignedTransaction>;
+    type Response = Vec<VestingBalanceObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.eth_pub_key),
-            serde_json::json!(self.eth_sign),
-            serde_json::json!(self.broadcast),
         ]
     }
 }
 
-/// This call will construct transaction(s) that will claim all balances controled by wif_keys and deposit them into the given account.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ImportBalanceParams {
-    /// name or ID of an account that to claim balances to
+pub struct GetWithdrawPermissionsByGiverParams {
+    /// Account name or ID to get objects from
     pub account_name_or_id: String,
-    /// private WIF keys of balance objects to claim balances from
-    pub wif_keys: Vec<String>,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
+    /// Withdraw permission objects(1.12.X) before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of objects to retrieve
+    pub limit: u32,
 }
 
-impl OpenRpcParams for ImportBalanceParams {
-    const METHOD: &'static str = "import_balance";
-    type Response = Vec<SignedTransaction>;
+impl OpenRpcParams for GetWithdrawPermissionsByGiverParams {
+    const METHOD: &'static str = "get_withdraw_permissions_by_giver";
+    type Response = Vec<WithdrawPermissionObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.wif_keys),
-            serde_json::json!(self.broadcast),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Imports the private key for an existing account.
-///
-/// The private key must match either an owner key or an active key for the named account.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ImportKeyParams {
-    /// the account owning the key
+pub struct GetWithdrawPermissionsByRecipientParams {
+    /// Account name or ID to get objects from
     pub account_name_or_id: String,
-    /// the private key in WIF format
-    pub wif_key: String,
+    /// Withdraw permission objects(1.12.X) before this ID will be skipped in results. Pagination purposes.
+    pub start: String,
+    /// Maximum number of objects to retrieve
+    pub limit: u32,
 }
 
-impl OpenRpcParams for ImportKeyParams {
-    const METHOD: &'static str = "import_key";
-    type Response = bool;
+impl OpenRpcParams for GetWithdrawPermissionsByRecipientParams {
+    const METHOD: &'static str = "get_withdraw_permissions_by_recipient";
+    type Response = Vec<WithdrawPermissionObject>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.wif_key),
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Returns info about head block, chain_id, maintenance, participation, current active witnesses and committee members.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct InfoParams;
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetWitnessByAccountParams {
+    /// The name or ID of the account whose witness should be retrieved
+    pub account_name_or_id: String,
+}
 
-impl OpenRpcParams for InfoParams {
-    const METHOD: &'static str = "info";
-    type Response = ();
+impl OpenRpcParams for GetWitnessByAccountParams {
+    const METHOD: &'static str = "get_witness_by_account";
+    type Response = Option<WitnessObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_name_or_id),
+        ]
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetWitnessCountParams;
+
+impl OpenRpcParams for GetWitnessCountParams {
+    const METHOD: &'static str = "get_witness_count";
+    type Response = ::graphene_rpc::GrapheneUInt64;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
     }
 }
 
-/// Checks whether the wallet is locked (is unable to use its private keys).
-///
-/// This state can be changed by calling lock() or unlock().
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct IsLockedParams;
+pub struct GetWitnessScheduleParams;
 
-impl OpenRpcParams for IsLockedParams {
-    const METHOD: &'static str = "is_locked";
-    type Response = bool;
+impl OpenRpcParams for GetWitnessScheduleParams {
+    const METHOD: &'static str = "get_witness_schedule";
+    type Response = WitnessScheduleObject;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
     }
 }
 
-/// Checks whether the wallet has just been created and has not yet had a password set.
-///
-/// Calling set_password will transition the wallet to the locked state.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct IsNewParams;
+/// This function has semantics identical to get_objects, but doesn't subscribe
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetWitnessesParams {
+    /// IDs of the witnesses to retrieve
+    pub witness_ids: Vec<String>,
+}
 
-impl OpenRpcParams for IsNewParams {
-    const METHOD: &'static str = "is_new";
-    type Response = bool;
+impl OpenRpcParams for GetWitnessesParams {
+    const METHOD: &'static str = "get_witnesses";
+    type Response = Vec<Option<WitnessObject>>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.witness_ids),
+        ]
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct GetWorkerCountParams;
+
+impl OpenRpcParams for GetWorkerCountParams {
+    const METHOD: &'static str = "get_worker_count";
+    type Response = ::graphene_rpc::GrapheneUInt64;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         Vec::new()
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct GetWorkersByAccountParams {
+    /// The name or ID of the account whose worker should be retrieved
+    pub account_name_or_id: String,
+}
+
+impl OpenRpcParams for GetWorkersByAccountParams {
+    const METHOD: &'static str = "get_workers_by_account";
+    type Response = Vec<WorkerObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_name_or_id),
+        ]
     }
 }
 
@@ -2126,85 +1618,11 @@ impl OpenRpcParams for IsPublicKeyRegisteredParams {
     }
 }
 
-/// Create the specified amount of the specified asset and credit into the specified account.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct IssueAssetParams {
-    /// the name or id of the account to receive the new supply
-    pub to_account: String,
-    /// the amount to issue, in nominal units
-    pub amount: String,
-    /// the ticker symbol or id of the asset to issue
-    pub symbol_or_id: String,
-    /// a memo to include in the transaction, readable by the recipient
-    pub memo: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for IssueAssetParams {
-    const METHOD: &'static str = "issue_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.to_account),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.memo),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// List the balances of an account. Each account can have multiple balances, one for each type of asset owned by that account. The returned list will only contain assets for which the account has a nonzero balance
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ListAccountBalancesParams {
-    /// the name or id of the account whose balances you want
-    pub account_name_or_id: String,
-}
-
-impl OpenRpcParams for ListAccountBalancesParams {
-    const METHOD: &'static str = "list_account_balances";
-    type Response = Vec<Asset>;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_name_or_id),
-        ]
-    }
-}
-
-/// Lists all accounts registered in the blockchain. This returns a list of all account names and their account ids, sorted by account name.
-///
-/// Use the lowerbound and limit parameters to page through the list. To retrieve all accounts, start by setting lowerbound to the empty string "", and then each iteration, pass the last account name returned as the lowerbound for the next list_accounts() call.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ListAccountsParams {
-    /// the name of the first account to return. If the named account does not exist, the list will start at the account that comes after lowerbound
-    pub lowerbound: String,
-    /// the maximum number of accounts to return (max: 1000)
-    pub limit: u32,
-}
-
-impl OpenRpcParams for ListAccountsParams {
-    const METHOD: &'static str = "list_accounts";
-    type Response = std::collections::BTreeMap<String, String>;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.lowerbound),
-            serde_json::json!(self.limit),
-        ]
-    }
-}
-
-/// Lists all assets registered on the blockchain.
-///
-/// To list all assets, pass the empty string "" for the lowerbound to start at the beginning of the list, and iterate as necessary.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct ListAssetsParams {
-    /// the symbol of the first asset to include in the list.
-    pub lowerbound: String,
-    /// the maximum number of assets to return (max: 100)
+    /// Lower bound of symbol names to retrieve
+    pub lower_bound_symbol: String,
+    /// Maximum number of assets to fetch (must not exceed 101)
     pub limit: u32,
 }
 
@@ -2214,1420 +1632,242 @@ impl OpenRpcParams for ListAssetsParams {
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.lowerbound),
+            serde_json::json!(self.lower_bound_symbol),
             serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Lists all committee_members registered in the blockchain. This returns a list of all account names that own committee_members, and the associated committee_member id, sorted by name. This lists committee_members whether they are currently voted in or not.
-///
-/// Use the lowerbound and limit parameters to page through the list. To retrieve all committee_members, start by setting lowerbound to the empty string "", and then each iteration, pass the last committee_member name returned as the lowerbound for the next list_committee_members() call.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ListCommitteeMembersParams {
-    /// the name of the first committee_member to return. If the named committee_member does not exist, the list will start at the committee_member that comes after lowerbound
-    pub lowerbound: String,
-    /// the maximum number of committee_members to return (max: 1000)
+pub struct ListHtlcsParams {
+    /// Lower bound of htlc id to start getting results
+    pub start: String,
+    /// Maximum number of htlc objects to fetch
     pub limit: u32,
 }
 
-impl OpenRpcParams for ListCommitteeMembersParams {
-    const METHOD: &'static str = "list_committee_members";
+impl OpenRpcParams for ListHtlcsParams {
+    const METHOD: &'static str = "list_htlcs";
+    type Response = Vec<HtlcObject>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.start),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+/// This function has semantics identical to get_objects, but doesn't subscribe.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct LookupAccountNamesParams {
+    /// Names of the accounts to retrieve
+    pub account_names: Vec<String>,
+}
+
+impl OpenRpcParams for LookupAccountNamesParams {
+    const METHOD: &'static str = "lookup_account_names";
+    type Response = Vec<Option<AccountObject>>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.account_names),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct LookupAccountsParams {
+    /// Lower bound of the first name to return
+    pub lower_bound_name: String,
+    /// Maximum number of results to return must not exceed 1000
+    pub limit: u32,
+    /// true to subscribe to the queried account objects; false to not subscribe; null to subscribe or not subscribe according to current auto-subscription setting (see set_auto_subscription)
+    pub subscribe: Option<bool>,
+}
+
+impl OpenRpcParams for LookupAccountsParams {
+    const METHOD: &'static str = "lookup_accounts";
     type Response = std::collections::BTreeMap<String, String>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.lowerbound),
+            serde_json::json!(self.lower_bound_name),
             serde_json::json!(self.limit),
+            serde_json::json!(self.subscribe),
         ]
     }
 }
 
-/// Lists all accounts controlled by this wallet. This returns a list of the full account objects for all accounts whose private keys we possess.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct ListMyAccountsParams;
+/// This function has semantics identical to get_objects, but doesn't subscribe
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct LookupAssetSymbolsParams {
+    /// symbol names or IDs of the assets to retrieve
+    pub symbols_or_ids: Vec<String>,
+}
 
-impl OpenRpcParams for ListMyAccountsParams {
-    const METHOD: &'static str = "list_my_accounts";
-    type Response = Vec<AccountObject>;
+impl OpenRpcParams for LookupAssetSymbolsParams {
+    const METHOD: &'static str = "lookup_asset_symbols";
+    type Response = Vec<Option<ExtendedAssetObject>>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
+        vec![
+            serde_json::json!(self.symbols_or_ids),
+        ]
     }
 }
 
-/// Lists all witnesses registered in the blockchain. This returns a list of all account names that own witnesses, and the associated witness id, sorted by name. This lists witnesses whether they are currently voted in or not.
-///
-/// Use the lowerbound and limit parameters to page through the list. To retrieve all witnesss, start by setting lowerbound to the empty string "", and then each iteration, pass the last witness name returned as the lowerbound for the next list_witnesss() call.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ListWitnessesParams {
-    /// the name of the first witness to return. If the named witness does not exist, the list will start at the witness that comes after lowerbound
-    pub lowerbound: String,
-    /// the maximum number of witnesss to return (max: 1000)
+pub struct LookupCommitteeMemberAccountsParams {
+    /// Lower bound of the first name to return
+    pub lower_bound_name: String,
+    /// Maximum number of results to return must not exceed 1000
     pub limit: u32,
 }
 
-impl OpenRpcParams for ListWitnessesParams {
-    const METHOD: &'static str = "list_witnesses";
+impl OpenRpcParams for LookupCommitteeMemberAccountsParams {
+    const METHOD: &'static str = "lookup_committee_member_accounts";
     type Response = std::collections::BTreeMap<String, String>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.lowerbound),
+            serde_json::json!(self.lower_bound_name),
             serde_json::json!(self.limit),
         ]
     }
 }
 
-/// Loads a specified R-Squared wallet.
+/// This will be a mixture of committee_member_objects, witness_objects, and worker_objects
 ///
-/// The current wallet is closed before the new wallet is loaded.
+/// The results will be in the same order as the votes. Null will be returned for any vote IDs that are not found.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct LoadWalletFileParams {
-    /// the filename of the wallet JSON file to load. If wallet_filename is empty, it reloads the existing wallet file
-    pub wallet_filename: String,
+pub struct LookupVoteIdsParams {
+    /// a list of vote IDs
+    pub votes: Vec<VoteIdType>,
 }
 
-impl OpenRpcParams for LoadWalletFileParams {
-    const METHOD: &'static str = "load_wallet_file";
-    type Response = bool;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.wallet_filename),
-        ]
-    }
-}
-
-/// Locks the wallet immediately.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct LockParams;
-
-impl OpenRpcParams for LockParams {
-    const METHOD: &'static str = "lock";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
-    }
-}
-
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct NetworkAddNodesParams {
-    pub nodes: Vec<String>,
-}
-
-impl OpenRpcParams for NetworkAddNodesParams {
-    const METHOD: &'static str = "network_add_nodes";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.nodes),
-        ]
-    }
-}
-
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct NetworkGetConnectedPeersParams;
-
-impl OpenRpcParams for NetworkGetConnectedPeersParams {
-    const METHOD: &'static str = "network_get_connected_peers";
+impl OpenRpcParams for LookupVoteIdsParams {
+    const METHOD: &'static str = "lookup_vote_ids";
     type Response = Vec<()>;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
+        vec![
+            serde_json::json!(self.votes),
+        ]
     }
 }
 
-/// Transforms a brain key to reduce the chance of errors when re-entering the key from memory.
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct LookupWitnessAccountsParams {
+    /// Lower bound of the first name to return
+    pub lower_bound_name: String,
+    /// Maximum number of results to return must not exceed 1000
+    pub limit: u32,
+}
+
+impl OpenRpcParams for LookupWitnessAccountsParams {
+    const METHOD: &'static str = "lookup_witness_accounts";
+    type Response = std::collections::BTreeMap<String, String>;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.lower_bound_name),
+            serde_json::json!(self.limit),
+        ]
+    }
+}
+
+/// Impacts behavior of these APIs: get_accounts get_assets get_objects lookup_accounts get_full_accounts get_htlc
 ///
-/// This takes a user-supplied brain key and normalizes it into the form used for generating private keys. In particular, this upper-cases all ASCII characters and collapses multiple spaces into one.
+/// Note: auto-subscription is enabled by default
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct NormalizeBrainKeyParams {
-    /// the brain key as supplied by the user
-    pub s: String,
+pub struct SetAutoSubscriptionParams {
+    /// whether follow-up API queries will automatically subscribe to queried objects
+    pub enable: bool,
 }
 
-impl OpenRpcParams for NormalizeBrainKeyParams {
-    const METHOD: &'static str = "normalize_brain_key";
-    type Response = String;
+impl OpenRpcParams for SetAutoSubscriptionParams {
+    const METHOD: &'static str = "set_auto_subscription";
+    type Response = ();
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.s),
+            serde_json::json!(self.enable),
         ]
     }
 }
 
-/// Show content of a transaction builder.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct PreviewBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub handle: TransactionHandleType,
+pub struct UnsubscribeFromMarketParams {
+    /// symbol name or ID of the first asset
+    pub a: String,
+    /// symbol name or ID of the second asset
+    pub b: String,
 }
 
-impl OpenRpcParams for PreviewBuilderTransactionParams {
-    const METHOD: &'static str = "preview_builder_transaction";
-    type Response = Transaction;
+impl OpenRpcParams for UnsubscribeFromMarketParams {
+    const METHOD: &'static str = "unsubscribe_from_market";
+    type Response = ();
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.handle),
+            serde_json::json!(self.a),
+            serde_json::json!(self.b),
         ]
     }
 }
 
-/// Create a proposal containing the operations in a transaction builder (create a new proposal_create operation, then replace the transaction builder with the new operation), then sign the transaction and optionally broadcast to the network.
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ProposeBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub handle: TransactionHandleType,
-    /// name or ID of the account who would pay fees for creating the proposal
+pub struct ValidateTransactionParams {
+    /// a transaction to be validated
+    pub trx: SignedTransaction,
+}
+
+impl OpenRpcParams for ValidateTransactionParams {
+    const METHOD: &'static str = "validate_transaction";
+    type Response = ProcessedTransaction;
+
+    fn into_positional_params(self) -> Vec<serde_json::Value> {
+        vec![
+            serde_json::json!(self.trx),
+        ]
+    }
+}
+
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct VerifyAccountAuthorityParams {
+    /// name or ID of an account to check
     pub account_name_or_id: String,
-    /// when the proposal will expire
-    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
-    /// review period of the proposal in seconds
-    pub review_period_seconds: u32,
-    /// whether to broadcast the signed transaction to the network
-    pub broadcast: bool,
+    /// the public keys
+    pub signers: Vec<String>,
 }
 
-impl OpenRpcParams for ProposeBuilderTransactionParams {
-    const METHOD: &'static str = "propose_builder_transaction";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.handle),
-            serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.expiration),
-            serde_json::json!(self.review_period_seconds),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Propose a fee change.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ProposeFeeChangeParams {
-    /// The account paying the fee to propose the tx
-    pub proposing_account: String,
-    /// Timestamp specifying when the proposal will either take effect or expire.
-    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
-    /// Map of operation type to new fee. Operations may be specified by name or ID. The "scale" key changes the scale. All other operations will maintain current values.
-    pub changed_values: serde_json::Value,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for ProposeFeeChangeParams {
-    const METHOD: &'static str = "propose_fee_change";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.proposing_account),
-            serde_json::json!(self.expiration_time),
-            serde_json::json!(self.changed_values),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Creates a transaction to propose a parameter change.
-///
-/// Multiple parameters can be specified if an atomic change is desired.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ProposeParameterChangeParams {
-    /// The account paying the fee to propose the tx
-    pub proposing_account: String,
-    /// Timestamp specifying when the proposal will either take effect or expire.
-    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
-    /// The values to change; all other chain parameters are filled in with default values
-    pub changed_values: serde_json::Value,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for ProposeParameterChangeParams {
-    const METHOD: &'static str = "propose_parameter_change";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.proposing_account),
-            serde_json::json!(self.expiration_time),
-            serde_json::json!(self.changed_values),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Creates a transaction to propose a parameter extension change.
-///
-/// Multiple parameters can be specified if an atomic change is desired.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ProposeParameterExtensionChangeParams {
-    /// The account paying the fee to propose the tx
-    pub proposing_account: String,
-    /// Timestamp specifying when the proposal will either take effect or expire.
-    pub expiration_time: ::graphene_rpc::GrapheneTimePointSec,
-    /// The values to change; all other chain parameters are filled in with default values
-    pub changed_extensions: serde_json::Value,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for ProposeParameterExtensionChangeParams {
-    const METHOD: &'static str = "propose_parameter_extension_change";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.proposing_account),
-            serde_json::json!(self.expiration_time),
-            serde_json::json!(self.changed_extensions),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Publishes a price feed for the named asset.
-///
-/// Price feed providers use this command to publish their price feeds for market-issued assets. A price feed is used to tune the market for a particular market-issued asset. For each value in the feed, the median across all committee_member feeds for that asset is calculated and the market for the asset is configured with the median of that value.
-///
-/// The feed object in this command contains three prices: a call price limit, a short price limit, and a settlement price. The call limit price is structured as (collateral asset) / (debt asset) and the short limit price is structured as (asset for sale) / (collateral asset). Note that the asset IDs are opposite to eachother, so if we're publishing a feed for USD, the call limit price will be CORE/USD and the short limit price will be USD/CORE. The settlement price may be flipped either direction, as long as it is a ratio between the market-issued asset and its collateral.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct PublishAssetFeedParams {
-    /// the account publishing the price feed
-    pub publishing_account: String,
-    /// the symbol or id of the asset whose feed we're publishing
-    pub symbol_or_id: String,
-    /// the price_feed object containing the three prices making up the feed
-    pub feed: PriceFeed,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for PublishAssetFeedParams {
-    const METHOD: &'static str = "publish_asset_feed";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.publishing_account),
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.feed),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Quit from the wallet.
-///
-/// The current wallet will be closed and saved.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct QuitParams;
-
-impl OpenRpcParams for QuitParams {
-    const METHOD: &'static str = "quit";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
-    }
-}
-
-/// Read a memo.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ReadMemoParams {
-    /// JSON-encoded memo.
-    pub memo: MemoData,
-}
-
-impl OpenRpcParams for ReadMemoParams {
-    const METHOD: &'static str = "read_memo";
-    type Response = String;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.memo),
-        ]
-    }
-}
-
-/// Registers a third party's account on the blockckain.
-///
-/// This function is used to register an account for which you do not own the private keys. When acting as a registrar, an end user will generate their own private keys and send you the public keys. The registrar will use this function to register the account on behalf of the end user.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RegisterAccountParams {
-    /// the name of the account, must be unique on the blockchain. Shorter names are more expensive to register; the rules are still in flux, but in general names of more than 8 characters with at least one digit will be cheap.
-    pub name: String,
-    /// the owner key for the new account
-    pub owner: String,
-    /// the active key for the new account
-    pub active: String,
-    /// the account which will pay the fee to register the user
-    pub registrar_account: String,
-    /// the account who is acting as a referrer, and may receive a portion of the user's transaction fees. This can be the same as the registrar_account if there is no referrer.
-    pub referrer_account: String,
-    /// the percentage (0 - 100) of the new user's transaction fees not claimed by the blockchain that will be distributed to the referrer; the rest will be sent to the registrar. Will be multiplied by GRAPHENE_1_PERCENT when constructing the transaction.
-    pub referrer_percent: u32,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for RegisterAccountParams {
-    const METHOD: &'static str = "register_account";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.name),
-            serde_json::json!(self.owner),
-            serde_json::json!(self.active),
-            serde_json::json!(self.registrar_account),
-            serde_json::json!(self.referrer_account),
-            serde_json::json!(self.referrer_percent),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Destroy a transaction builder.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RemoveBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub handle: TransactionHandleType,
-}
-
-impl OpenRpcParams for RemoveBuilderTransactionParams {
-    const METHOD: &'static str = "remove_builder_transaction";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.handle),
-        ]
-    }
-}
-
-/// Remove a content card.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RemoveContentCardParams {
-    /// an owner of a content.
-    pub subject_account: String,
-    /// a content card id.
-    pub content_id: u64,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for RemoveContentCardParams {
-    const METHOD: &'static str = "remove_content_card";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.content_id),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Remove a permission object.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RemovePermissionParams {
-    /// an owner of a content.
-    pub subject_account: String,
-    /// a permissin object id.
-    pub permission_id: u64,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for RemovePermissionParams {
-    const METHOD: &'static str = "remove_permission";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.permission_id),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Removes the personal data object.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RemovePersonalDataParams {
-    /// the owner of personal data.
-    pub subject_account: String,
-    /// an account who is permitted to use personal data.
-    pub operator_account: String,
-    /// a hash of a personal data
-    pub hash: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for RemovePersonalDataParams {
-    const METHOD: &'static str = "remove_personal_data";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.operator_account),
-            serde_json::json!(self.hash),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Remove a participant from a room.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RemoveRoomParticipantParams {
-    /// the account that owns the room.
-    pub owner: String,
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// the account to remove from the room.
-    pub participant: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for RemoveRoomParticipantParams {
-    const METHOD: &'static str = "remove_room_participant";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner),
-            serde_json::json!(self.room),
-            serde_json::json!(self.participant),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Replace an operation in a transaction builder with a new operation.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ReplaceOperationInBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub handle: TransactionHandleType,
-    /// the index of the old operation in the builder to be replaced
-    pub operation_index: Unsigned,
-    /// the new operation in JSON format
-    pub new_op: Operation,
-}
-
-impl OpenRpcParams for ReplaceOperationInBuilderTransactionParams {
-    const METHOD: &'static str = "replace_operation_in_builder_transaction";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.handle),
-            serde_json::json!(self.operation_index),
-            serde_json::json!(self.new_op),
-        ]
-    }
-}
-
-/// Burns an amount of given asset to its reserve pool.
-///
-/// This command burns an amount of given asset to reduce the amount in circulation.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ReserveAssetParams {
-    /// the account containing the asset you wish to burn
-    pub r#from: String,
-    /// the amount to burn, in nominal units
-    pub amount: String,
-    /// the symbol or id of the asset to burn
-    pub symbol_or_id: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for ReserveAssetParams {
-    const METHOD: &'static str = "reserve_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.r#from),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Rotate the room key, creating a new epoch.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct RotateRoomKeyParams {
-    /// the account that owns the room.
-    pub owner: String,
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// the new room key encrypted for the owner.
-    pub new_room_key: String,
-    /// map of account_name -> encrypted_key for each participant.
-    pub participant_keys: std::collections::BTreeMap<String, String>,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for RotateRoomKeyParams {
-    const METHOD: &'static str = "rotate_room_key";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner),
-            serde_json::json!(self.room),
-            serde_json::json!(self.new_room_key),
-            serde_json::json!(self.participant_keys),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Saves the current wallet to the given filename.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SaveWalletFileParams {
-    /// the filename of the new wallet JSON file to create or overwrite. If wallet_filename is empty, save to the current filename.
-    pub wallet_filename: String,
-}
-
-impl OpenRpcParams for SaveWalletFileParams {
-    const METHOD: &'static str = "save_wallet_file";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.wallet_filename),
-        ]
-    }
-}
-
-/// Place a limit order attempting to sell one asset for another.
-///
-/// Buying and selling are the same operation on R-Squared; if you want to buy RQRX with USD, you should sell USD for RQRX.
-///
-/// The blockchain will attempt to sell the symbol_or_id_to_sell for as much symbol_or_id_to_receive as possible, as long as the price is at least min_to_receive / amount_to_sell.
-///
-/// In addition to the transaction fees, market fees will apply as specified by the issuer of both the selling asset and the receiving asset as a percentage of the amount exchanged.
-///
-/// If either the selling asset or the receiving asset is whitelist restricted, the order will only be created if the seller is on the whitelist of the restricted asset type.
-///
-/// Market orders are matched in the order they are included in the block chain.
-///
-/// TodoDocument default/max expiration time
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SellAssetParams {
-    /// the account providing the asset being sold, and which will receive the proceeds of the sale.
-    pub seller_account: String,
-    /// the amount of the asset being sold to sell (in nominal units)
-    pub amount_to_sell: String,
-    /// the symbol or id of the asset to sell
-    pub symbol_or_id_to_sell: String,
-    /// the minimum amount you are willing to receive in return for selling the entire amount_to_sell
-    pub min_to_receive: String,
-    /// the symbol or id of the asset you wish to receive
-    pub symbol_or_id_to_receive: String,
-    /// if the order does not fill immediately, this is the length of time the order will remain on the order books before it is cancelled and the un-spent funds are returned to the seller's account
-    pub timeout_sec: u32,
-    /// if true, the order will only be included in the blockchain if it is filled immediately; if false, an open order will be left on the books to fill any amount that cannot be filled immediately.
-    pub fill_or_kill: bool,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SellAssetParams {
-    const METHOD: &'static str = "sell_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.seller_account),
-            serde_json::json!(self.amount_to_sell),
-            serde_json::json!(self.symbol_or_id_to_sell),
-            serde_json::json!(self.min_to_receive),
-            serde_json::json!(self.symbol_or_id_to_receive),
-            serde_json::json!(self.timeout_sec),
-            serde_json::json!(self.fill_or_kill),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Converts a signed_transaction in JSON form to its binary representation.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SerializeTransactionParams {
-    /// the transaction to serialize
-    pub tx: SignedTransaction,
-}
-
-impl OpenRpcParams for SerializeTransactionParams {
-    const METHOD: &'static str = "serialize_transaction";
-    type Response = String;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.tx),
-        ]
-    }
-}
-
-/// Set your vote for the number of witnesses and committee_members in the system.
-///
-/// Each account can voice their opinion on how many committee_members and how many witnesses there should be in the active committee_member/active witness list. These are independent of each other. You must vote your approval of at least as many committee_members or witnesses as you claim there should be (you can't say that there should be 20 committee_members but only vote for 10).
-///
-/// There are maximum values for each set in the blockchain parameters (currently defaulting to 1001).
-///
-/// This setting can be changed at any time. If your account has a voting proxy set, your preferences will be ignored.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SetDesiredWitnessAndCommitteeMemberCountParams {
-    /// the name or id of the account to update
-    pub account_to_modify: String,
-    /// desired number of active witnesses
-    pub desired_number_of_witnesses: u16,
-    /// desired number of active committee members
-    pub desired_number_of_committee_members: u16,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SetDesiredWitnessAndCommitteeMemberCountParams {
-    const METHOD: &'static str = "set_desired_witness_and_committee_member_count";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_to_modify),
-            serde_json::json!(self.desired_number_of_witnesses),
-            serde_json::json!(self.desired_number_of_committee_members),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Calculate and update fees for the operations in a transaction builder.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SetFeesOnBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub handle: TransactionHandleType,
-    /// symbol or ID of an asset that to be used to pay fees
-    pub fee_asset: String,
-}
-
-impl OpenRpcParams for SetFeesOnBuilderTransactionParams {
-    const METHOD: &'static str = "set_fees_on_builder_transaction";
-    type Response = Asset;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.handle),
-            serde_json::json!(self.fee_asset),
-        ]
-    }
-}
-
-/// Sets a new password on the wallet.
-///
-/// The wallet must be either 'new' or 'unlocked' to execute this command.
-///
-/// When used in command line, if typed "set_password" without a password followed, the user will be prompted to input a password without echo.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SetPasswordParams {
-    /// a new password
-    pub password: String,
-}
-
-impl OpenRpcParams for SetPasswordParams {
-    const METHOD: &'static str = "set_password";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.password),
-        ]
-    }
-}
-
-/// Set the voting proxy for an account.
-///
-/// If a user does not wish to take an active part in voting, they can choose to allow another account to vote their stake.
-///
-/// Setting a vote proxy does not remove your previous votes from the blockchain, they remain there but are ignored. If you later null out your vote proxy, your previous votes will take effect again.
-///
-/// This setting can be changed at any time.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SetVotingProxyParams {
-    /// the name or id of the account to update
-    pub account_to_modify: String,
-    /// the name or id of an account authorized to vote account_to_modify's shares, or null to vote your own shares
-    pub voting_account: Option<String>,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SetVotingProxyParams {
-    const METHOD: &'static str = "set_voting_proxy";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_to_modify),
-            serde_json::json!(self.voting_account),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Schedules a market-issued asset for automatic settlement.
-///
-/// Holders of market-issued assests may request a forced settlement for some amount of their asset. This means that the specified sum will be locked by the chain and held for the settlement period, after which time the chain will choose a margin posision holder and buy the settled asset using the margin's collateral. The price of this sale will be based on the feed price for the market-issued asset being settled. The exact settlement price will be the feed price at the time of settlement with an offset in favor of the margin position, where the offset is a blockchain parameter set in the asset's bitasset options.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SettleAssetParams {
-    /// the name or id of the account owning the asset
-    pub account_to_settle: String,
-    /// the amount of the asset to schedule for settlement
-    pub amount_to_settle: String,
-    /// the symbol or id of the asset to settle
-    pub symbol_or_id: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SettleAssetParams {
-    const METHOD: &'static str = "settle_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account_to_settle),
-            serde_json::json!(self.amount_to_settle),
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Sign the transaction in a transaction builder and optionally broadcast to the network.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SignBuilderTransactionParams {
-    /// handle of the transaction builder
-    pub transaction_handle: TransactionHandleType,
-    /// Keys that must be used when signing the transaction
-    pub signing_keys: Vec<String>,
-    /// whether to broadcast the signed transaction to the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SignBuilderTransactionParams {
-    const METHOD: &'static str = "sign_builder_transaction";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.transaction_handle),
-            serde_json::json!(self.signing_keys),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Sign a memo message.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SignMemoParams {
-    /// the name or id of signing account, or a public key, or a label of a public key
-    pub r#from: String,
-    /// the name or id of receiving account, or a public key, or a label of a public key
-    pub to: String,
-    /// text to sign
-    pub memo: String,
-}
-
-impl OpenRpcParams for SignMemoParams {
-    const METHOD: &'static str = "sign_memo";
-    type Response = MemoData;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.r#from),
-            serde_json::json!(self.to),
-            serde_json::json!(self.memo),
-        ]
-    }
-}
-
-/// Sign a message using an account's memo key. The signature is generated as in in https://github.com/xeroc/python-graphenelib/blob/d9634d74273ebacc92555499eca7c444217ecba0/graphenecommon/message.py#L64 .
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SignMessageParams {
-    /// the name or id of signing account
-    pub signer: String,
-    /// text to sign
-    pub message: String,
-}
-
-impl OpenRpcParams for SignMessageParams {
-    const METHOD: &'static str = "sign_message";
-    type Response = SignedMessage;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.signer),
-            serde_json::json!(self.message),
-        ]
-    }
-}
-
-/// Signs a transaction.
-///
-/// Given a fully-formed transaction that is only lacking signatures, this signs the transaction with the necessary keys and optionally broadcasts the transaction
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SignTransactionParams {
-    /// the unsigned transaction
-    pub tx: SignedTransaction,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SignTransactionParams {
-    const METHOD: &'static str = "sign_transaction";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.tx),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Signs a transaction.
-///
-/// Given a fully-formed transaction that is only lacking signatures, this signs the transaction with the inferred necessary keys and the explicitly provided keys, and optionally broadcasts the transaction
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct SignTransaction2Params {
-    /// the unsigned transaction
-    pub tx: SignedTransaction,
-    /// Keys that must be used when signing the transaction
-    pub signing_keys: Vec<String>,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for SignTransaction2Params {
-    const METHOD: &'static str = "sign_transaction2";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.tx),
-            serde_json::json!(self.signing_keys),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Suggests a safe brain key to use for creating your account. create_account_with_brain_key() requires you to specify a 'brain key', a long passphrase that provides enough entropy to generate cyrptographic keys. This function will suggest a suitably random string that should be easy to write down (and, with effort, memorize).
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct SuggestBrainKeyParams;
-
-impl OpenRpcParams for SuggestBrainKeyParams {
-    const METHOD: &'static str = "suggest_brain_key";
-    type Response = BrainKeyInfo;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        Vec::new()
-    }
-}
-
-/// Transfer an amount from one account to another.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct TransferParams {
-    /// the name or id of the account sending the funds
-    pub r#from: String,
-    /// the name or id of the account receiving the funds
-    pub to: String,
-    /// the amount to send (in nominal units to send half of a RQRX, specify 0.5)
-    pub amount: String,
-    /// the symbol or id of the asset to send
-    pub asset_symbol_or_id: String,
-    /// a memo to attach to the transaction. The memo will be encrypted in the transaction and readable for the receiver. There is no length limit other than the limit imposed by maximum transaction size, but transaction increase with transaction size
-    pub memo: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for TransferParams {
-    const METHOD: &'static str = "transfer";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.r#from),
-            serde_json::json!(self.to),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.asset_symbol_or_id),
-            serde_json::json!(self.memo),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Unlocks the wallet.
-///
-/// The wallet remain unlocked until the lock is called or the program exits.
-///
-/// When used in command line, if typed "unlock" without a password followed, the user will be prompted to input a password without echo.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UnlockParams {
-    /// the password previously set with set_password()
-    pub password: String,
-}
-
-impl OpenRpcParams for UnlockParams {
-    const METHOD: &'static str = "unlock";
-    type Response = ();
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.password),
-        ]
-    }
-}
-
-/// Update the core options on an asset. There are a number of options which all assets in the network use. These options are enumerated in the asset_object::asset_options struct. This command is used to update these options for an existing asset.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateAssetParams {
-    /// the symbol or id of the asset to update
-    pub symbol_or_id: String,
-    /// if changing the asset's issuer, the name or id of the new issuer. null if you wish to remain the issuer of the asset
-    pub new_issuer: Option<String>,
-    /// the new asset_options object, which will entirely replace the existing options.
-    pub new_options: AssetOptions,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateAssetParams {
-    const METHOD: &'static str = "update_asset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.new_issuer),
-            serde_json::json!(self.new_options),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update the set of feed-producing accounts for a BitAsset.
-///
-/// BitAssets have price feeds selected by taking the median values of recommendations from a set of feed producers. This command is used to specify which accounts may produce feeds for a given BitAsset.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateAssetFeedProducersParams {
-    /// the symbol or id of the asset to update
-    pub symbol_or_id: String,
-    /// a list of account names or ids which are authorized to produce feeds for the asset. this list will completely replace the existing list
-    pub new_feed_producers: Vec<String>,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateAssetFeedProducersParams {
-    const METHOD: &'static str = "update_asset_feed_producers";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.new_feed_producers),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update the issuer of an asset Since this call requires the owner authority of the current issuer to sign the transaction, a separated operation is used to change the issuer. This call simplifies the use of this action.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateAssetIssuerParams {
-    /// the symbol or id of the asset to update
-    pub symbol_or_id: String,
-    /// if changing the asset's issuer, the name or id of the new issuer.
-    pub new_issuer: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateAssetIssuerParams {
-    const METHOD: &'static str = "update_asset_issuer";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.new_issuer),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update the options specific to a BitAsset.
-///
-/// BitAssets have some options which are not relevant to other asset types. This operation is used to update those options an an existing BitAsset.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateBitassetParams {
-    /// the symbol or id of the asset to update, which must be a market-issued asset
-    pub symbol_or_id: String,
-    /// the new bitasset_options object, which will entirely replace the existing options.
-    pub new_options: BitassetOptions,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateBitassetParams {
-    const METHOD: &'static str = "update_bitasset";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.symbol_or_id),
-            serde_json::json!(self.new_options),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update a content card.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateContentCardParams {
-    /// an owner of a content.
-    pub subject_account: String,
-    /// an hash value getted from content.
-    pub hash: String,
-    /// a url to the content storage.
-    pub url: String,
-    /// a type of a content (jpg, mp3, mp4, html, est.).
-    pub r#type: String,
-    /// a text description of content to convenient full text search.
-    pub description: String,
-    /// a encrypted symmetric key to decrypt content, can be decrypted by subject account.
-    pub content_key: String,
-    /// data specific to the cloud storage (content id in the cloud storage).
-    pub storage_data: String,
-    /// optional room id for encrypted threads.
-    pub room: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateContentCardParams {
-    const METHOD: &'static str = "update_content_card";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.subject_account),
-            serde_json::json!(self.hash),
-            serde_json::json!(self.url),
-            serde_json::json!(self.r#type),
-            serde_json::json!(self.description),
-            serde_json::json!(self.content_key),
-            serde_json::json!(self.storage_data),
-            serde_json::json!(self.room),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update a room name.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateRoomParams {
-    /// the account that owns the room.
-    pub owner: String,
-    /// the room id in canonical format (1.24.x).
-    pub room: String,
-    /// the new name of the room.
-    pub name: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateRoomParams {
-    const METHOD: &'static str = "update_room";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.owner),
-            serde_json::json!(self.room),
-            serde_json::json!(self.name),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update a witness object owned by the given account.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateWitnessParams {
-    /// The name of the witness's owner account. Also accepts the ID of the owner account or the ID of the witness.
-    pub witness_name: String,
-    /// Same as for create_witness. The empty string makes it remain the same.
-    pub url: String,
-    /// The new block signing public key. The empty string makes it remain the same.
-    pub block_signing_key: String,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateWitnessParams {
-    const METHOD: &'static str = "update_witness";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.witness_name),
-            serde_json::json!(self.url),
-            serde_json::json!(self.block_signing_key),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Update your votes for workers
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpdateWorkerVotesParams {
-    /// The account which will pay the fee and update votes.
-    pub account: String,
-    /// {"vote_against" : [...], "vote_for" : [...]}
-    pub delta: WorkerVoteDelta,
-    /// true if you wish to broadcast the transaction.
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpdateWorkerVotesParams {
-    const METHOD: &'static str = "update_worker_votes";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.account),
-            serde_json::json!(self.delta),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Upgrades an account to prime status. This makes the account holder a 'lifetime member'.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct UpgradeAccountParams {
-    /// the name or id of the account to upgrade
-    pub account_name_or_id: String,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for UpgradeAccountParams {
-    const METHOD: &'static str = "upgrade_account";
-    type Response = SignedTransaction;
+impl OpenRpcParams for VerifyAccountAuthorityParams {
+    const METHOD: &'static str = "verify_account_authority";
+    type Response = bool;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
             serde_json::json!(self.account_name_or_id),
-            serde_json::json!(self.broadcast),
+            serde_json::json!(self.signers),
         ]
     }
 }
 
-/// Verify a message signed with sign_message, in its encapsulated form.
+/// Check whether a transaction has all of the required signatures
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct VerifyEncapsulatedMessageParams {
-    /// the complete encapsulated message string including separators and line feeds
-    pub message: String,
+pub struct VerifyAuthorityParams {
+    /// a transaction to be verified
+    pub trx: SignedTransaction,
 }
 
-impl OpenRpcParams for VerifyEncapsulatedMessageParams {
-    const METHOD: &'static str = "verify_encapsulated_message";
+impl OpenRpcParams for VerifyAuthorityParams {
+    const METHOD: &'static str = "verify_authority";
     type Response = bool;
 
     fn into_positional_params(self) -> Vec<serde_json::Value> {
         vec![
-            serde_json::json!(self.message),
-        ]
-    }
-}
-
-/// Verify a message signed with sign_message using the given account's memo key.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct VerifyMessageParams {
-    /// the message text
-    pub message: String,
-    /// the account name of the message
-    pub account: String,
-    /// the block number of the message
-    pub block: Int,
-    /// the timestamp of the message
-    pub time: String,
-    /// the message signature
-    pub sig: CompactSignature,
-}
-
-impl OpenRpcParams for VerifyMessageParams {
-    const METHOD: &'static str = "verify_message";
-    type Response = bool;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.message),
-            serde_json::json!(self.account),
-            serde_json::json!(self.block),
-            serde_json::json!(self.time),
-            serde_json::json!(self.sig),
-        ]
-    }
-}
-
-/// Verify a message signed with sign_message
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct VerifySignedMessageParams {
-    /// the signed_message structure containing message, meta data and signature
-    pub message: SignedMessage,
-}
-
-impl OpenRpcParams for VerifySignedMessageParams {
-    const METHOD: &'static str = "verify_signed_message";
-    type Response = bool;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.message),
-        ]
-    }
-}
-
-/// Vote for a given committee_member.
-///
-/// An account can publish a list of all committee_members they approve of. This command allows you to add or remove committee_members from this list. Each account's vote is weighted according to the number of shares of the core asset owned by that account at the time the votes are tallied.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct VoteForCommitteeMemberParams {
-    /// the name or id of the account who is voting with their shares
-    pub voting_account: String,
-    /// the name or id of the committee_member's owner account
-    pub committee_member: String,
-    /// true if you wish to vote in favor of that committee_member, false to remove your vote in favor of that committee_member
-    pub approve: bool,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for VoteForCommitteeMemberParams {
-    const METHOD: &'static str = "vote_for_committee_member";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.voting_account),
-            serde_json::json!(self.committee_member),
-            serde_json::json!(self.approve),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Vote for a given witness.
-///
-/// An account can publish a list of all witnesses they approve of. This command allows you to add or remove witnesses from this list. Each account's vote is weighted according to the number of shares of the core asset owned by that account at the time the votes are tallied.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct VoteForWitnessParams {
-    /// the name or id of the account who is voting with their shares
-    pub voting_account: String,
-    /// the name or id of the witness' owner account
-    pub witness: String,
-    /// true if you wish to vote in favor of that witness, false to remove your vote in favor of that witness
-    pub approve: bool,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for VoteForWitnessParams {
-    const METHOD: &'static str = "vote_for_witness";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.voting_account),
-            serde_json::json!(self.witness),
-            serde_json::json!(self.approve),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Whitelist and blacklist accounts, primarily for transacting in whitelisted assets.
-///
-/// Accounts can freely specify opinions about other accounts, in the form of either whitelisting or blacklisting them. This information is used in chain validation only to determine whether an account is authorized to transact in an asset type which enforces a whitelist, but third parties can use this information for other uses as well, as long as it does not conflict with the use of whitelisted assets.
-///
-/// An asset which enforces a whitelist specifies a list of accounts to maintain its whitelist, and a list of accounts to maintain its blacklist. In order for a given account A to hold and transact in a whitelisted asset S, A must be whitelisted by at least one of S's whitelist_authorities and blacklisted by none of S's blacklist_authorities. If A receives a balance of S, and is later removed from the whitelist(s) which allowed it to hold S, or added to any blacklist S specifies as authoritative, A's balance of S will be frozen until A's authorization is reinstated.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct WhitelistAccountParams {
-    /// the account who is doing the whitelisting
-    pub authorizing_account: String,
-    /// the account being whitelisted
-    pub account_to_list: String,
-    /// the new whitelisting status
-    pub new_listing_status: AccountWhitelistOperationAccountListing,
-    /// true to broadcast the transaction on the network
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for WhitelistAccountParams {
-    const METHOD: &'static str = "whitelist_account";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.authorizing_account),
-            serde_json::json!(self.account_to_list),
-            serde_json::json!(self.new_listing_status),
-            serde_json::json!(self.broadcast),
-        ]
-    }
-}
-
-/// Withdraw a vesting balance.
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct WithdrawVestingParams {
-    /// The account name of the witness, also accepts account ID or vesting balance ID type.
-    pub witness_name: String,
-    /// The amount to withdraw.
-    pub amount: String,
-    /// The symbol or id of the asset to withdraw.
-    pub asset_symbol_or_id: String,
-    /// true if you wish to broadcast the transaction
-    pub broadcast: bool,
-}
-
-impl OpenRpcParams for WithdrawVestingParams {
-    const METHOD: &'static str = "withdraw_vesting";
-    type Response = SignedTransaction;
-
-    fn into_positional_params(self) -> Vec<serde_json::Value> {
-        vec![
-            serde_json::json!(self.witness_name),
-            serde_json::json!(self.amount),
-            serde_json::json!(self.asset_symbol_or_id),
-            serde_json::json!(self.broadcast),
+            serde_json::json!(self.trx),
         ]
     }
 }
