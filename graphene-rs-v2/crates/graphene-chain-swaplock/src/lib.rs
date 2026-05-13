@@ -19,4 +19,6 @@ pub mod generated {
     include!("generated/rpc.rs");
 }
 
+mod codec;
+
 pub use generated::*;

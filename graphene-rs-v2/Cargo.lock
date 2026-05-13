@@ -164,6 +164,7 @@ name = "graphene-chain-swaplock"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "graphene-codec",
  "graphene-rpc",
  "regress",
  "serde",

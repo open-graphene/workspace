@@ -16,11 +16,18 @@ pub trait GrapheneDecode: Sized {
     fn decode_graphene<R: Read>(reader: &mut R) -> Result<Self, DecodeError>;
 }
 
+pub fn to_graphene_bytes<T: GrapheneEncode + ?Sized>(value: &T) -> Result<Vec<u8>, EncodeError> {
+    value.to_graphene_bytes()
+}
+
 #[derive(Debug)]
 pub enum EncodeError {
     Io(io::Error),
     LengthOverflow { len: usize },
+    InvalidObjectId { value: String },
     ObjectIdInstanceOverflow { instance: u64 },
+    TimestampOutOfRange { seconds: i64 },
+    Unsupported { feature: &'static str },
 }
 
 impl fmt::Display for EncodeError {
@@ -36,9 +43,21 @@ impl fmt::Display for EncodeError {
                     "container length {len} does not fit in Graphene varint"
                 )
             }
+            Self::InvalidObjectId { value } => write!(
+                formatter,
+                "object id value {value:?} cannot be encoded as a Graphene object id",
+            ),
             Self::ObjectIdInstanceOverflow { instance } => write!(
                 formatter,
                 "object id instance {instance} does not fit in Graphene typed object id encoding",
+            ),
+            Self::TimestampOutOfRange { seconds } => write!(
+                formatter,
+                "timestamp seconds value {seconds} does not fit in Graphene time_point_sec",
+            ),
+            Self::Unsupported { feature } => write!(
+                formatter,
+                "Graphene binary encoding for {feature} is not implemented yet",
             ),
         }
     }
@@ -48,7 +67,11 @@ impl std::error::Error for EncodeError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Self::Io(error) => Some(error),
-            Self::LengthOverflow { .. } | Self::ObjectIdInstanceOverflow { .. } => None,
+            Self::LengthOverflow { .. }
+            | Self::InvalidObjectId { .. }
+            | Self::ObjectIdInstanceOverflow { .. }
+            | Self::TimestampOutOfRange { .. }
+            | Self::Unsupported { .. } => None,
         }
     }
 }
