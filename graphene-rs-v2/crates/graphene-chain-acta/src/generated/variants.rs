@@ -781,225 +781,225 @@ impl<'de> Deserialize<'de> for VestingPolicyInitializer {
 /// Schema: `components.schemas.fee_parameters`.
 #[derive(Clone, Debug)]
 pub enum FeeParameters {
-    /// Wire index `0` — C++ `transfer_operation::fee_params_t`
-    FeeParamsT(TransferOperationFeeParamsT),
-    /// Wire index `1` — C++ `account_create_operation::fee_params_t`
-    FeeParamsT2(AccountCreateOperationFeeParamsT),
-    /// Wire index `2` — C++ `account_update_operation::fee_params_t`
-    FeeParamsT3(AccountUpdateOperationFeeParamsT),
-    /// Wire index `3` — C++ `account_whitelist_operation::fee_params_t`
-    FeeParamsT4(AccountWhitelistOperationFeeParamsT),
-    /// Wire index `4` — C++ `account_upgrade_operation::fee_params_t`
-    FeeParamsT5(AccountUpgradeOperationFeeParamsT),
-    /// Wire index `5` — C++ `account_transfer_operation::fee_params_t`
-    FeeParamsT6(AccountTransferOperationFeeParamsT),
-    /// Wire index `6` — C++ `asset_create_operation::fee_params_t`
-    FeeParamsT7(AssetCreateOperationFeeParamsT),
-    /// Wire index `7` — C++ `asset_update_operation::fee_params_t`
-    FeeParamsT8(AssetUpdateOperationFeeParamsT),
-    /// Wire index `8` — C++ `asset_update_bitasset_operation::fee_params_t`
-    FeeParamsT9(AssetUpdateBitassetOperationFeeParamsT),
-    /// Wire index `9` — C++ `asset_update_feed_producers_operation::fee_params_t`
-    FeeParamsT10(AssetUpdateFeedProducersOperationFeeParamsT),
-    /// Wire index `10` — C++ `asset_issue_operation::fee_params_t`
-    FeeParamsT11(AssetIssueOperationFeeParamsT),
-    /// Wire index `11` — C++ `asset_reserve_operation::fee_params_t`
-    FeeParamsT12(AssetReserveOperationFeeParamsT),
-    /// Wire index `12` — C++ `asset_fund_fee_pool_operation::fee_params_t`
-    FeeParamsT13(AssetFundFeePoolOperationFeeParamsT),
-    /// Wire index `13` — C++ `asset_settle_operation::fee_params_t`
-    FeeParamsT14(AssetSettleOperationFeeParamsT),
-    /// Wire index `14` — C++ `asset_global_settle_operation::fee_params_t`
-    FeeParamsT15(AssetGlobalSettleOperationFeeParamsT),
-    /// Wire index `15` — C++ `asset_publish_feed_operation::fee_params_t`
-    FeeParamsT16(AssetPublishFeedOperationFeeParamsT),
-    /// Wire index `16` — C++ `witness_create_operation::fee_params_t`
-    FeeParamsT17(WitnessCreateOperationFeeParamsT),
-    /// Wire index `17` — C++ `witness_update_operation::fee_params_t`
-    FeeParamsT18(WitnessUpdateOperationFeeParamsT),
-    /// Wire index `18` — C++ `proposal_create_operation::fee_params_t`
-    FeeParamsT19(ProposalCreateOperationFeeParamsT),
-    /// Wire index `19` — C++ `proposal_update_operation::fee_params_t`
-    FeeParamsT20(ProposalUpdateOperationFeeParamsT),
-    /// Wire index `20` — C++ `proposal_delete_operation::fee_params_t`
-    FeeParamsT21(ProposalDeleteOperationFeeParamsT),
-    /// Wire index `21` — C++ `withdraw_permission_create_operation::fee_params_t`
-    FeeParamsT22(WithdrawPermissionCreateOperationFeeParamsT),
-    /// Wire index `22` — C++ `withdraw_permission_update_operation::fee_params_t`
-    FeeParamsT23(WithdrawPermissionUpdateOperationFeeParamsT),
-    /// Wire index `23` — C++ `withdraw_permission_claim_operation::fee_params_t`
-    FeeParamsT24(WithdrawPermissionClaimOperationFeeParamsT),
-    /// Wire index `24` — C++ `withdraw_permission_delete_operation::fee_params_t`
-    FeeParamsT25(WithdrawPermissionDeleteOperationFeeParamsT),
-    /// Wire index `25` — C++ `committee_member_create_operation::fee_params_t`
-    FeeParamsT26(CommitteeMemberCreateOperationFeeParamsT),
-    /// Wire index `26` — C++ `committee_member_update_operation::fee_params_t`
-    FeeParamsT27(CommitteeMemberUpdateOperationFeeParamsT),
-    /// Wire index `27` — C++ `committee_member_update_global_parameters_operation::fee_params_t`
-    FeeParamsT28(CommitteeMemberUpdateGlobalParametersOperationFeeParamsT),
-    /// Wire index `28` — C++ `vesting_balance_create_operation::fee_params_t`
-    FeeParamsT29(VestingBalanceCreateOperationFeeParamsT),
-    /// Wire index `29` — C++ `vesting_balance_withdraw_operation::fee_params_t`
-    FeeParamsT30(VestingBalanceWithdrawOperationFeeParamsT),
-    /// Wire index `30` — C++ `custom_operation::fee_params_t`
-    FeeParamsT31(CustomOperationFeeParamsT),
-    /// Wire index `31` — C++ `assert_operation::fee_params_t`
-    FeeParamsT32(AssertOperationFeeParamsT),
-    /// Wire index `32` — C++ `balance_claim_operation::fee_params_t`
-    FeeParamsT33(BalanceClaimOperationFeeParamsT),
-    /// Wire index `33` — C++ `override_transfer_operation::fee_params_t`
-    FeeParamsT34(OverrideTransferOperationFeeParamsT),
-    /// Wire index `34` — C++ `asset_settle_cancel_operation::fee_params_t`
-    FeeParamsT35(AssetSettleCancelOperationFeeParamsT),
-    /// Wire index `35` — C++ `asset_claim_fees_operation::fee_params_t`
-    FeeParamsT36(AssetClaimFeesOperationFeeParamsT),
-    /// Wire index `36` — C++ `fba_distribute_operation::fee_params_t`
-    FeeParamsT37(FbaDistributeOperationFeeParamsT),
-    /// Wire index `37` — C++ `asset_claim_pool_operation::fee_params_t`
-    FeeParamsT38(AssetClaimPoolOperationFeeParamsT),
-    /// Wire index `38` — C++ `asset_update_issuer_operation::fee_params_t`
-    FeeParamsT39(AssetUpdateIssuerOperationFeeParamsT),
-    /// Wire index `39` — C++ `personal_data_create_operation::fee_params_t`
-    FeeParamsT40(PersonalDataCreateOperationFeeParamsT),
-    /// Wire index `40` — C++ `personal_data_remove_operation::fee_params_t`
-    FeeParamsT41(PersonalDataRemoveOperationFeeParamsT),
-    /// Wire index `41` — C++ `content_card_create_operation::fee_params_t`
-    FeeParamsT42(ContentCardCreateOperationFeeParamsT),
-    /// Wire index `42` — C++ `content_card_update_operation::fee_params_t`
-    FeeParamsT43(ContentCardUpdateOperationFeeParamsT),
-    /// Wire index `43` — C++ `content_card_remove_operation::fee_params_t`
-    FeeParamsT44(ContentCardRemoveOperationFeeParamsT),
-    /// Wire index `44` — C++ `permission_create_operation::fee_params_t`
-    FeeParamsT45(PermissionCreateOperationFeeParamsT),
-    /// Wire index `45` — C++ `permission_remove_operation::fee_params_t`
-    FeeParamsT46(PermissionRemoveOperationFeeParamsT),
-    /// Wire index `46` — C++ `commit_create_operation::fee_params_t`
-    FeeParamsT47(CommitCreateOperationFeeParamsT),
-    /// Wire index `47` — C++ `reveal_create_operation::fee_params_t`
-    FeeParamsT48(RevealCreateOperationFeeParamsT),
-    /// Wire index `48` — C++ `worker_create_operation::fee_params_t`
-    FeeParamsT49(WorkerCreateOperationFeeParamsT),
-    /// Wire index `49` — C++ `htlc_create_operation::fee_params_t`
-    FeeParamsT50(HtlcCreateOperationFeeParamsT),
-    /// Wire index `50` — C++ `htlc_redeem_operation::fee_params_t`
-    FeeParamsT51(HtlcRedeemOperationFeeParamsT),
-    /// Wire index `51` — C++ `htlc_redeemed_operation::fee_params_t`
-    FeeParamsT52(HtlcRedeemedOperationFeeParamsT),
-    /// Wire index `52` — C++ `htlc_extend_operation::fee_params_t`
-    FeeParamsT53(HtlcExtendOperationFeeParamsT),
-    /// Wire index `53` — C++ `htlc_refund_operation::fee_params_t`
-    FeeParamsT54(HtlcRefundOperationFeeParamsT),
-    /// Wire index `54` — C++ `limit_order_create_operation::fee_params_t`
-    FeeParamsT55(LimitOrderCreateOperationFeeParamsT),
-    /// Wire index `55` — C++ `limit_order_cancel_operation::fee_params_t`
-    FeeParamsT56(LimitOrderCancelOperationFeeParamsT),
-    /// Wire index `56` — C++ `call_order_update_operation::fee_params_t`
-    FeeParamsT57(CallOrderUpdateOperationFeeParamsT),
-    /// Wire index `57` — C++ `fill_order_operation::fee_params_t`
-    FeeParamsT58(FillOrderOperationFeeParamsT),
-    /// Wire index `58` — C++ `custom_authority_create_operation::fee_params_t`
-    FeeParamsT59(CustomAuthorityCreateOperationFeeParamsT),
-    /// Wire index `59` — C++ `custom_authority_update_operation::fee_params_t`
-    FeeParamsT60(CustomAuthorityUpdateOperationFeeParamsT),
-    /// Wire index `60` — C++ `custom_authority_delete_operation::fee_params_t`
-    FeeParamsT61(CustomAuthorityDeleteOperationFeeParamsT),
-    /// Wire index `61` — C++ `ticket_create_operation::fee_params_t`
-    FeeParamsT62(TicketCreateOperationFeeParamsT),
-    /// Wire index `62` — C++ `ticket_update_operation::fee_params_t`
-    FeeParamsT63(TicketUpdateOperationFeeParamsT),
-    /// Wire index `63` — C++ `ico_balance_claim_operation::fee_params_t`
-    FeeParamsT64(IcoBalanceClaimOperationFeeParamsT),
-    /// Wire index `64` — C++ `permission_create_many_operation::fee_params_t`
-    FeeParamsT65(PermissionCreateManyOperationFeeParamsT),
-    /// Wire index `65` — C++ `room_create_operation::fee_params_t`
-    FeeParamsT66(RoomCreateOperationFeeParamsT),
-    /// Wire index `66` — C++ `room_update_operation::fee_params_t`
-    FeeParamsT67(RoomUpdateOperationFeeParamsT),
-    /// Wire index `67` — C++ `room_add_participant_operation::fee_params_t`
-    FeeParamsT68(RoomAddParticipantOperationFeeParamsT),
-    /// Wire index `68` — C++ `room_remove_participant_operation::fee_params_t`
-    FeeParamsT69(RoomRemoveParticipantOperationFeeParamsT),
-    /// Wire index `69` — C++ `room_rotate_key_operation::fee_params_t`
-    FeeParamsT70(RoomRotateKeyOperationFeeParamsT),
-    /// Wire index `70` — C++ `room_update_participant_operation::fee_params_t`
-    FeeParamsT71(RoomUpdateParticipantOperationFeeParamsT),
+    /// Wire index `0` — C++ `transfer_operation::fee_parameters_type`
+    FeeParametersType(TransferOperationFeeParametersType),
+    /// Wire index `1` — C++ `account_create_operation::fee_parameters_type`
+    FeeParametersType2(AccountCreateOperationFeeParametersType),
+    /// Wire index `2` — C++ `account_update_operation::fee_parameters_type`
+    FeeParametersType3(AccountUpdateOperationFeeParametersType),
+    /// Wire index `3` — C++ `account_whitelist_operation::fee_parameters_type`
+    FeeParametersType4(AccountWhitelistOperationFeeParametersType),
+    /// Wire index `4` — C++ `account_upgrade_operation::fee_parameters_type`
+    FeeParametersType5(AccountUpgradeOperationFeeParametersType),
+    /// Wire index `5` — C++ `account_transfer_operation::fee_parameters_type`
+    FeeParametersType6(AccountTransferOperationFeeParametersType),
+    /// Wire index `6` — C++ `asset_create_operation::fee_parameters_type`
+    FeeParametersType7(AssetCreateOperationFeeParametersType),
+    /// Wire index `7` — C++ `asset_update_operation::fee_parameters_type`
+    FeeParametersType8(AssetUpdateOperationFeeParametersType),
+    /// Wire index `8` — C++ `asset_update_bitasset_operation::fee_parameters_type`
+    FeeParametersType9(AssetUpdateBitassetOperationFeeParametersType),
+    /// Wire index `9` — C++ `asset_update_feed_producers_operation::fee_parameters_type`
+    FeeParametersType10(AssetUpdateFeedProducersOperationFeeParametersType),
+    /// Wire index `10` — C++ `asset_issue_operation::fee_parameters_type`
+    FeeParametersType11(AssetIssueOperationFeeParametersType),
+    /// Wire index `11` — C++ `asset_reserve_operation::fee_parameters_type`
+    FeeParametersType12(AssetReserveOperationFeeParametersType),
+    /// Wire index `12` — C++ `asset_fund_fee_pool_operation::fee_parameters_type`
+    FeeParametersType13(AssetFundFeePoolOperationFeeParametersType),
+    /// Wire index `13` — C++ `asset_settle_operation::fee_parameters_type`
+    FeeParametersType14(AssetSettleOperationFeeParametersType),
+    /// Wire index `14` — C++ `asset_global_settle_operation::fee_parameters_type`
+    FeeParametersType15(AssetGlobalSettleOperationFeeParametersType),
+    /// Wire index `15` — C++ `asset_publish_feed_operation::fee_parameters_type`
+    FeeParametersType16(AssetPublishFeedOperationFeeParametersType),
+    /// Wire index `16` — C++ `witness_create_operation::fee_parameters_type`
+    FeeParametersType17(WitnessCreateOperationFeeParametersType),
+    /// Wire index `17` — C++ `witness_update_operation::fee_parameters_type`
+    FeeParametersType18(WitnessUpdateOperationFeeParametersType),
+    /// Wire index `18` — C++ `proposal_create_operation::fee_parameters_type`
+    FeeParametersType19(ProposalCreateOperationFeeParametersType),
+    /// Wire index `19` — C++ `proposal_update_operation::fee_parameters_type`
+    FeeParametersType20(ProposalUpdateOperationFeeParametersType),
+    /// Wire index `20` — C++ `proposal_delete_operation::fee_parameters_type`
+    FeeParametersType21(ProposalDeleteOperationFeeParametersType),
+    /// Wire index `21` — C++ `withdraw_permission_create_operation::fee_parameters_type`
+    FeeParametersType22(WithdrawPermissionCreateOperationFeeParametersType),
+    /// Wire index `22` — C++ `withdraw_permission_update_operation::fee_parameters_type`
+    FeeParametersType23(WithdrawPermissionUpdateOperationFeeParametersType),
+    /// Wire index `23` — C++ `withdraw_permission_claim_operation::fee_parameters_type`
+    FeeParametersType24(WithdrawPermissionClaimOperationFeeParametersType),
+    /// Wire index `24` — C++ `withdraw_permission_delete_operation::fee_parameters_type`
+    FeeParametersType25(WithdrawPermissionDeleteOperationFeeParametersType),
+    /// Wire index `25` — C++ `committee_member_create_operation::fee_parameters_type`
+    FeeParametersType26(CommitteeMemberCreateOperationFeeParametersType),
+    /// Wire index `26` — C++ `committee_member_update_operation::fee_parameters_type`
+    FeeParametersType27(CommitteeMemberUpdateOperationFeeParametersType),
+    /// Wire index `27` — C++ `committee_member_update_global_parameters_operation::fee_parameters_type`
+    FeeParametersType28(CommitteeMemberUpdateGlobalParametersOperationFeeParametersType),
+    /// Wire index `28` — C++ `vesting_balance_create_operation::fee_parameters_type`
+    FeeParametersType29(VestingBalanceCreateOperationFeeParametersType),
+    /// Wire index `29` — C++ `vesting_balance_withdraw_operation::fee_parameters_type`
+    FeeParametersType30(VestingBalanceWithdrawOperationFeeParametersType),
+    /// Wire index `30` — C++ `custom_operation::fee_parameters_type`
+    FeeParametersType31(CustomOperationFeeParametersType),
+    /// Wire index `31` — C++ `assert_operation::fee_parameters_type`
+    FeeParametersType32(AssertOperationFeeParametersType),
+    /// Wire index `32` — C++ `balance_claim_operation::fee_parameters_type`
+    FeeParametersType33(BalanceClaimOperationFeeParametersType),
+    /// Wire index `33` — C++ `override_transfer_operation::fee_parameters_type`
+    FeeParametersType34(OverrideTransferOperationFeeParametersType),
+    /// Wire index `34` — C++ `asset_settle_cancel_operation::fee_parameters_type`
+    FeeParametersType35(AssetSettleCancelOperationFeeParametersType),
+    /// Wire index `35` — C++ `asset_claim_fees_operation::fee_parameters_type`
+    FeeParametersType36(AssetClaimFeesOperationFeeParametersType),
+    /// Wire index `36` — C++ `fba_distribute_operation::fee_parameters_type`
+    FeeParametersType37(FbaDistributeOperationFeeParametersType),
+    /// Wire index `37` — C++ `asset_claim_pool_operation::fee_parameters_type`
+    FeeParametersType38(AssetClaimPoolOperationFeeParametersType),
+    /// Wire index `38` — C++ `asset_update_issuer_operation::fee_parameters_type`
+    FeeParametersType39(AssetUpdateIssuerOperationFeeParametersType),
+    /// Wire index `39` — C++ `personal_data_create_operation::fee_parameters_type`
+    FeeParametersType40(PersonalDataCreateOperationFeeParametersType),
+    /// Wire index `40` — C++ `personal_data_remove_operation::fee_parameters_type`
+    FeeParametersType41(PersonalDataRemoveOperationFeeParametersType),
+    /// Wire index `41` — C++ `content_card_create_operation::fee_parameters_type`
+    FeeParametersType42(ContentCardCreateOperationFeeParametersType),
+    /// Wire index `42` — C++ `content_card_update_operation::fee_parameters_type`
+    FeeParametersType43(ContentCardUpdateOperationFeeParametersType),
+    /// Wire index `43` — C++ `content_card_remove_operation::fee_parameters_type`
+    FeeParametersType44(ContentCardRemoveOperationFeeParametersType),
+    /// Wire index `44` — C++ `permission_create_operation::fee_parameters_type`
+    FeeParametersType45(PermissionCreateOperationFeeParametersType),
+    /// Wire index `45` — C++ `permission_remove_operation::fee_parameters_type`
+    FeeParametersType46(PermissionRemoveOperationFeeParametersType),
+    /// Wire index `46` — C++ `commit_create_operation::fee_parameters_type`
+    FeeParametersType47(CommitCreateOperationFeeParametersType),
+    /// Wire index `47` — C++ `reveal_create_operation::fee_parameters_type`
+    FeeParametersType48(RevealCreateOperationFeeParametersType),
+    /// Wire index `48` — C++ `worker_create_operation::fee_parameters_type`
+    FeeParametersType49(WorkerCreateOperationFeeParametersType),
+    /// Wire index `49` — C++ `htlc_create_operation::fee_parameters_type`
+    FeeParametersType50(HtlcCreateOperationFeeParametersType),
+    /// Wire index `50` — C++ `htlc_redeem_operation::fee_parameters_type`
+    FeeParametersType51(HtlcRedeemOperationFeeParametersType),
+    /// Wire index `51` — C++ `htlc_redeemed_operation::fee_parameters_type`
+    FeeParametersType52(HtlcRedeemedOperationFeeParametersType),
+    /// Wire index `52` — C++ `htlc_extend_operation::fee_parameters_type`
+    FeeParametersType53(HtlcExtendOperationFeeParametersType),
+    /// Wire index `53` — C++ `htlc_refund_operation::fee_parameters_type`
+    FeeParametersType54(HtlcRefundOperationFeeParametersType),
+    /// Wire index `54` — C++ `limit_order_create_operation::fee_parameters_type`
+    FeeParametersType55(LimitOrderCreateOperationFeeParametersType),
+    /// Wire index `55` — C++ `limit_order_cancel_operation::fee_parameters_type`
+    FeeParametersType56(LimitOrderCancelOperationFeeParametersType),
+    /// Wire index `56` — C++ `call_order_update_operation::fee_parameters_type`
+    FeeParametersType57(CallOrderUpdateOperationFeeParametersType),
+    /// Wire index `57` — C++ `fill_order_operation::fee_parameters_type`
+    FeeParametersType58(FillOrderOperationFeeParametersType),
+    /// Wire index `58` — C++ `custom_authority_create_operation::fee_parameters_type`
+    FeeParametersType59(CustomAuthorityCreateOperationFeeParametersType),
+    /// Wire index `59` — C++ `custom_authority_update_operation::fee_parameters_type`
+    FeeParametersType60(CustomAuthorityUpdateOperationFeeParametersType),
+    /// Wire index `60` — C++ `custom_authority_delete_operation::fee_parameters_type`
+    FeeParametersType61(CustomAuthorityDeleteOperationFeeParametersType),
+    /// Wire index `61` — C++ `ticket_create_operation::fee_parameters_type`
+    FeeParametersType62(TicketCreateOperationFeeParametersType),
+    /// Wire index `62` — C++ `ticket_update_operation::fee_parameters_type`
+    FeeParametersType63(TicketUpdateOperationFeeParametersType),
+    /// Wire index `63` — C++ `ico_balance_claim_operation::fee_parameters_type`
+    FeeParametersType64(IcoBalanceClaimOperationFeeParametersType),
+    /// Wire index `64` — C++ `permission_create_many_operation::fee_parameters_type`
+    FeeParametersType65(PermissionCreateManyOperationFeeParametersType),
+    /// Wire index `65` — C++ `room_create_operation::fee_parameters_type`
+    FeeParametersType66(RoomCreateOperationFeeParametersType),
+    /// Wire index `66` — C++ `room_update_operation::fee_parameters_type`
+    FeeParametersType67(RoomUpdateOperationFeeParametersType),
+    /// Wire index `67` — C++ `room_add_participant_operation::fee_parameters_type`
+    FeeParametersType68(RoomAddParticipantOperationFeeParametersType),
+    /// Wire index `68` — C++ `room_remove_participant_operation::fee_parameters_type`
+    FeeParametersType69(RoomRemoveParticipantOperationFeeParametersType),
+    /// Wire index `69` — C++ `room_rotate_key_operation::fee_parameters_type`
+    FeeParametersType70(RoomRotateKeyOperationFeeParametersType),
+    /// Wire index `70` — C++ `room_update_participant_operation::fee_parameters_type`
+    FeeParametersType71(RoomUpdateParticipantOperationFeeParametersType),
 }
 
 impl Serialize for FeeParameters {
     fn serialize<__S: Serializer>(&self, ser: __S) -> ::core::result::Result<__S::Ok, __S::Error> {
         let mut tuple = ser.serialize_tuple(2)?;
         match self {
-            FeeParameters::FeeParamsT(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT2(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT3(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT4(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT5(value) => { tuple.serialize_element(&4u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT6(value) => { tuple.serialize_element(&5u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT7(value) => { tuple.serialize_element(&6u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT8(value) => { tuple.serialize_element(&7u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT9(value) => { tuple.serialize_element(&8u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT10(value) => { tuple.serialize_element(&9u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT11(value) => { tuple.serialize_element(&10u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT12(value) => { tuple.serialize_element(&11u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT13(value) => { tuple.serialize_element(&12u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT14(value) => { tuple.serialize_element(&13u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT15(value) => { tuple.serialize_element(&14u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT16(value) => { tuple.serialize_element(&15u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT17(value) => { tuple.serialize_element(&16u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT18(value) => { tuple.serialize_element(&17u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT19(value) => { tuple.serialize_element(&18u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT20(value) => { tuple.serialize_element(&19u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT21(value) => { tuple.serialize_element(&20u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT22(value) => { tuple.serialize_element(&21u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT23(value) => { tuple.serialize_element(&22u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT24(value) => { tuple.serialize_element(&23u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT25(value) => { tuple.serialize_element(&24u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT26(value) => { tuple.serialize_element(&25u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT27(value) => { tuple.serialize_element(&26u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT28(value) => { tuple.serialize_element(&27u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT29(value) => { tuple.serialize_element(&28u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT30(value) => { tuple.serialize_element(&29u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT31(value) => { tuple.serialize_element(&30u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT32(value) => { tuple.serialize_element(&31u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT33(value) => { tuple.serialize_element(&32u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT34(value) => { tuple.serialize_element(&33u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT35(value) => { tuple.serialize_element(&34u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT36(value) => { tuple.serialize_element(&35u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT37(value) => { tuple.serialize_element(&36u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT38(value) => { tuple.serialize_element(&37u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT39(value) => { tuple.serialize_element(&38u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT40(value) => { tuple.serialize_element(&39u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT41(value) => { tuple.serialize_element(&40u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT42(value) => { tuple.serialize_element(&41u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT43(value) => { tuple.serialize_element(&42u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT44(value) => { tuple.serialize_element(&43u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT45(value) => { tuple.serialize_element(&44u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT46(value) => { tuple.serialize_element(&45u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT47(value) => { tuple.serialize_element(&46u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT48(value) => { tuple.serialize_element(&47u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT49(value) => { tuple.serialize_element(&48u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT50(value) => { tuple.serialize_element(&49u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT51(value) => { tuple.serialize_element(&50u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT52(value) => { tuple.serialize_element(&51u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT53(value) => { tuple.serialize_element(&52u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT54(value) => { tuple.serialize_element(&53u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT55(value) => { tuple.serialize_element(&54u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT56(value) => { tuple.serialize_element(&55u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT57(value) => { tuple.serialize_element(&56u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT58(value) => { tuple.serialize_element(&57u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT59(value) => { tuple.serialize_element(&58u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT60(value) => { tuple.serialize_element(&59u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT61(value) => { tuple.serialize_element(&60u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT62(value) => { tuple.serialize_element(&61u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT63(value) => { tuple.serialize_element(&62u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT64(value) => { tuple.serialize_element(&63u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT65(value) => { tuple.serialize_element(&64u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT66(value) => { tuple.serialize_element(&65u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT67(value) => { tuple.serialize_element(&66u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT68(value) => { tuple.serialize_element(&67u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT69(value) => { tuple.serialize_element(&68u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT70(value) => { tuple.serialize_element(&69u32)?; tuple.serialize_element(value)?; }
-            FeeParameters::FeeParamsT71(value) => { tuple.serialize_element(&70u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType(value) => { tuple.serialize_element(&0u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType2(value) => { tuple.serialize_element(&1u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType3(value) => { tuple.serialize_element(&2u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType4(value) => { tuple.serialize_element(&3u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType5(value) => { tuple.serialize_element(&4u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType6(value) => { tuple.serialize_element(&5u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType7(value) => { tuple.serialize_element(&6u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType8(value) => { tuple.serialize_element(&7u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType9(value) => { tuple.serialize_element(&8u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType10(value) => { tuple.serialize_element(&9u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType11(value) => { tuple.serialize_element(&10u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType12(value) => { tuple.serialize_element(&11u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType13(value) => { tuple.serialize_element(&12u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType14(value) => { tuple.serialize_element(&13u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType15(value) => { tuple.serialize_element(&14u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType16(value) => { tuple.serialize_element(&15u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType17(value) => { tuple.serialize_element(&16u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType18(value) => { tuple.serialize_element(&17u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType19(value) => { tuple.serialize_element(&18u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType20(value) => { tuple.serialize_element(&19u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType21(value) => { tuple.serialize_element(&20u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType22(value) => { tuple.serialize_element(&21u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType23(value) => { tuple.serialize_element(&22u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType24(value) => { tuple.serialize_element(&23u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType25(value) => { tuple.serialize_element(&24u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType26(value) => { tuple.serialize_element(&25u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType27(value) => { tuple.serialize_element(&26u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType28(value) => { tuple.serialize_element(&27u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType29(value) => { tuple.serialize_element(&28u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType30(value) => { tuple.serialize_element(&29u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType31(value) => { tuple.serialize_element(&30u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType32(value) => { tuple.serialize_element(&31u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType33(value) => { tuple.serialize_element(&32u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType34(value) => { tuple.serialize_element(&33u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType35(value) => { tuple.serialize_element(&34u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType36(value) => { tuple.serialize_element(&35u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType37(value) => { tuple.serialize_element(&36u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType38(value) => { tuple.serialize_element(&37u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType39(value) => { tuple.serialize_element(&38u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType40(value) => { tuple.serialize_element(&39u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType41(value) => { tuple.serialize_element(&40u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType42(value) => { tuple.serialize_element(&41u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType43(value) => { tuple.serialize_element(&42u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType44(value) => { tuple.serialize_element(&43u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType45(value) => { tuple.serialize_element(&44u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType46(value) => { tuple.serialize_element(&45u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType47(value) => { tuple.serialize_element(&46u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType48(value) => { tuple.serialize_element(&47u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType49(value) => { tuple.serialize_element(&48u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType50(value) => { tuple.serialize_element(&49u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType51(value) => { tuple.serialize_element(&50u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType52(value) => { tuple.serialize_element(&51u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType53(value) => { tuple.serialize_element(&52u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType54(value) => { tuple.serialize_element(&53u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType55(value) => { tuple.serialize_element(&54u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType56(value) => { tuple.serialize_element(&55u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType57(value) => { tuple.serialize_element(&56u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType58(value) => { tuple.serialize_element(&57u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType59(value) => { tuple.serialize_element(&58u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType60(value) => { tuple.serialize_element(&59u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType61(value) => { tuple.serialize_element(&60u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType62(value) => { tuple.serialize_element(&61u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType63(value) => { tuple.serialize_element(&62u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType64(value) => { tuple.serialize_element(&63u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType65(value) => { tuple.serialize_element(&64u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType66(value) => { tuple.serialize_element(&65u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType67(value) => { tuple.serialize_element(&66u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType68(value) => { tuple.serialize_element(&67u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType69(value) => { tuple.serialize_element(&68u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType70(value) => { tuple.serialize_element(&69u32)?; tuple.serialize_element(value)?; }
+            FeeParameters::FeeParametersType71(value) => { tuple.serialize_element(&70u32)?; tuple.serialize_element(value)?; }
         }
         tuple.end()
     }
@@ -1009,77 +1009,77 @@ impl<'de> Deserialize<'de> for FeeParameters {
     fn deserialize<__D: Deserializer<'de>>(de: __D) -> ::core::result::Result<Self, __D::Error> {
         let (index, payload): (u32, ::serde_json::Value) = Deserialize::deserialize(de)?;
         match index {
-            0 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT).map_err(__D::Error::custom),
-            1 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT2).map_err(__D::Error::custom),
-            2 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT3).map_err(__D::Error::custom),
-            3 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT4).map_err(__D::Error::custom),
-            4 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT5).map_err(__D::Error::custom),
-            5 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT6).map_err(__D::Error::custom),
-            6 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT7).map_err(__D::Error::custom),
-            7 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT8).map_err(__D::Error::custom),
-            8 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT9).map_err(__D::Error::custom),
-            9 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT10).map_err(__D::Error::custom),
-            10 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT11).map_err(__D::Error::custom),
-            11 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT12).map_err(__D::Error::custom),
-            12 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT13).map_err(__D::Error::custom),
-            13 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT14).map_err(__D::Error::custom),
-            14 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT15).map_err(__D::Error::custom),
-            15 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT16).map_err(__D::Error::custom),
-            16 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT17).map_err(__D::Error::custom),
-            17 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT18).map_err(__D::Error::custom),
-            18 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT19).map_err(__D::Error::custom),
-            19 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT20).map_err(__D::Error::custom),
-            20 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT21).map_err(__D::Error::custom),
-            21 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT22).map_err(__D::Error::custom),
-            22 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT23).map_err(__D::Error::custom),
-            23 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT24).map_err(__D::Error::custom),
-            24 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT25).map_err(__D::Error::custom),
-            25 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT26).map_err(__D::Error::custom),
-            26 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT27).map_err(__D::Error::custom),
-            27 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT28).map_err(__D::Error::custom),
-            28 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT29).map_err(__D::Error::custom),
-            29 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT30).map_err(__D::Error::custom),
-            30 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT31).map_err(__D::Error::custom),
-            31 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT32).map_err(__D::Error::custom),
-            32 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT33).map_err(__D::Error::custom),
-            33 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT34).map_err(__D::Error::custom),
-            34 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT35).map_err(__D::Error::custom),
-            35 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT36).map_err(__D::Error::custom),
-            36 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT37).map_err(__D::Error::custom),
-            37 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT38).map_err(__D::Error::custom),
-            38 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT39).map_err(__D::Error::custom),
-            39 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT40).map_err(__D::Error::custom),
-            40 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT41).map_err(__D::Error::custom),
-            41 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT42).map_err(__D::Error::custom),
-            42 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT43).map_err(__D::Error::custom),
-            43 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT44).map_err(__D::Error::custom),
-            44 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT45).map_err(__D::Error::custom),
-            45 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT46).map_err(__D::Error::custom),
-            46 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT47).map_err(__D::Error::custom),
-            47 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT48).map_err(__D::Error::custom),
-            48 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT49).map_err(__D::Error::custom),
-            49 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT50).map_err(__D::Error::custom),
-            50 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT51).map_err(__D::Error::custom),
-            51 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT52).map_err(__D::Error::custom),
-            52 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT53).map_err(__D::Error::custom),
-            53 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT54).map_err(__D::Error::custom),
-            54 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT55).map_err(__D::Error::custom),
-            55 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT56).map_err(__D::Error::custom),
-            56 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT57).map_err(__D::Error::custom),
-            57 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT58).map_err(__D::Error::custom),
-            58 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT59).map_err(__D::Error::custom),
-            59 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT60).map_err(__D::Error::custom),
-            60 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT61).map_err(__D::Error::custom),
-            61 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT62).map_err(__D::Error::custom),
-            62 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT63).map_err(__D::Error::custom),
-            63 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT64).map_err(__D::Error::custom),
-            64 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT65).map_err(__D::Error::custom),
-            65 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT66).map_err(__D::Error::custom),
-            66 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT67).map_err(__D::Error::custom),
-            67 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT68).map_err(__D::Error::custom),
-            68 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT69).map_err(__D::Error::custom),
-            69 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT70).map_err(__D::Error::custom),
-            70 => ::serde_json::from_value(payload).map(FeeParameters::FeeParamsT71).map_err(__D::Error::custom),
+            0 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType).map_err(__D::Error::custom),
+            1 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType2).map_err(__D::Error::custom),
+            2 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType3).map_err(__D::Error::custom),
+            3 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType4).map_err(__D::Error::custom),
+            4 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType5).map_err(__D::Error::custom),
+            5 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType6).map_err(__D::Error::custom),
+            6 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType7).map_err(__D::Error::custom),
+            7 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType8).map_err(__D::Error::custom),
+            8 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType9).map_err(__D::Error::custom),
+            9 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType10).map_err(__D::Error::custom),
+            10 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType11).map_err(__D::Error::custom),
+            11 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType12).map_err(__D::Error::custom),
+            12 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType13).map_err(__D::Error::custom),
+            13 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType14).map_err(__D::Error::custom),
+            14 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType15).map_err(__D::Error::custom),
+            15 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType16).map_err(__D::Error::custom),
+            16 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType17).map_err(__D::Error::custom),
+            17 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType18).map_err(__D::Error::custom),
+            18 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType19).map_err(__D::Error::custom),
+            19 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType20).map_err(__D::Error::custom),
+            20 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType21).map_err(__D::Error::custom),
+            21 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType22).map_err(__D::Error::custom),
+            22 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType23).map_err(__D::Error::custom),
+            23 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType24).map_err(__D::Error::custom),
+            24 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType25).map_err(__D::Error::custom),
+            25 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType26).map_err(__D::Error::custom),
+            26 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType27).map_err(__D::Error::custom),
+            27 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType28).map_err(__D::Error::custom),
+            28 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType29).map_err(__D::Error::custom),
+            29 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType30).map_err(__D::Error::custom),
+            30 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType31).map_err(__D::Error::custom),
+            31 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType32).map_err(__D::Error::custom),
+            32 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType33).map_err(__D::Error::custom),
+            33 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType34).map_err(__D::Error::custom),
+            34 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType35).map_err(__D::Error::custom),
+            35 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType36).map_err(__D::Error::custom),
+            36 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType37).map_err(__D::Error::custom),
+            37 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType38).map_err(__D::Error::custom),
+            38 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType39).map_err(__D::Error::custom),
+            39 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType40).map_err(__D::Error::custom),
+            40 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType41).map_err(__D::Error::custom),
+            41 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType42).map_err(__D::Error::custom),
+            42 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType43).map_err(__D::Error::custom),
+            43 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType44).map_err(__D::Error::custom),
+            44 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType45).map_err(__D::Error::custom),
+            45 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType46).map_err(__D::Error::custom),
+            46 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType47).map_err(__D::Error::custom),
+            47 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType48).map_err(__D::Error::custom),
+            48 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType49).map_err(__D::Error::custom),
+            49 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType50).map_err(__D::Error::custom),
+            50 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType51).map_err(__D::Error::custom),
+            51 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType52).map_err(__D::Error::custom),
+            52 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType53).map_err(__D::Error::custom),
+            53 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType54).map_err(__D::Error::custom),
+            54 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType55).map_err(__D::Error::custom),
+            55 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType56).map_err(__D::Error::custom),
+            56 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType57).map_err(__D::Error::custom),
+            57 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType58).map_err(__D::Error::custom),
+            58 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType59).map_err(__D::Error::custom),
+            59 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType60).map_err(__D::Error::custom),
+            60 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType61).map_err(__D::Error::custom),
+            61 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType62).map_err(__D::Error::custom),
+            62 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType63).map_err(__D::Error::custom),
+            63 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType64).map_err(__D::Error::custom),
+            64 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType65).map_err(__D::Error::custom),
+            65 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType66).map_err(__D::Error::custom),
+            66 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType67).map_err(__D::Error::custom),
+            67 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType68).map_err(__D::Error::custom),
+            68 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType69).map_err(__D::Error::custom),
+            69 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType70).map_err(__D::Error::custom),
+            70 => ::serde_json::from_value(payload).map(FeeParameters::FeeParametersType71).map_err(__D::Error::custom),
             other => Err(__D::Error::custom(format!("unknown FeeParameters variant index: {}", other))),
         }
     }

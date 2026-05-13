@@ -9607,7 +9607,7 @@ impl<'de> ::serde::Deserialize<'de> for BlindedBalanceObjectAssetId {
 ///  ],
 ///  "properties": {
 ///    "id": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    }
 ///  },
@@ -9617,7 +9617,7 @@ impl<'de> ::serde::Deserialize<'de> for BlindedBalanceObjectAssetId {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct BlockIdPredicate {
-    pub id: BlockIdType,
+    pub id: ::std::string::String,
 }
 impl ::std::convert::From<&BlockIdPredicate> for BlockIdPredicate {
     fn from(value: &BlockIdPredicate) -> Self {
@@ -9627,63 +9627,6 @@ impl ::std::convert::From<&BlockIdPredicate> for BlockIdPredicate {
 impl BlockIdPredicate {
     pub fn builder() -> builder::BlockIdPredicate {
         Default::default()
-    }
-}
-///Alias for fc::ripemd160
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Alias for fc::ripemd160",
-///  "type": "string",
-///  "x-cpp-type": "graphene::protocol::block_id_type"
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-#[serde(transparent)]
-pub struct BlockIdType(pub ::std::string::String);
-impl ::std::ops::Deref for BlockIdType {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<BlockIdType> for ::std::string::String {
-    fn from(value: BlockIdType) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&BlockIdType> for BlockIdType {
-    fn from(value: &BlockIdType) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<::std::string::String> for BlockIdType {
-    fn from(value: ::std::string::String) -> Self {
-        Self(value)
-    }
-}
-impl ::std::str::FromStr for BlockIdType {
-    type Err = ::std::convert::Infallible;
-    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::fmt::Display for BlockIdType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        self.0.fmt(f)
     }
 }
 ///`BurnWorkerInitializer`
@@ -10998,7 +10941,7 @@ impl ChainParametersExt {
 ///  ],
 ///  "properties": {
 ///    "chain_id": {
-///      "$ref": "#/$defs/chain_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "chain_id_type"
 ///    },
 ///    "immutable_parameters": {
@@ -11012,7 +10955,7 @@ impl ChainParametersExt {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ChainPropertyObject {
-    pub chain_id: ChainIdType,
+    pub chain_id: ::std::string::String,
     pub immutable_parameters: ImmutableChainParameters,
 }
 impl ::std::convert::From<&ChainPropertyObject> for ChainPropertyObject {
@@ -11023,63 +10966,6 @@ impl ::std::convert::From<&ChainPropertyObject> for ChainPropertyObject {
 impl ChainPropertyObject {
     pub fn builder() -> builder::ChainPropertyObject {
         Default::default()
-    }
-}
-///Alias for fc::ripemd160
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Alias for fc::ripemd160",
-///  "type": "string",
-///  "x-cpp-type": "graphene::protocol::checksum_type"
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-#[serde(transparent)]
-pub struct ChecksumType(pub ::std::string::String);
-impl ::std::ops::Deref for ChecksumType {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ChecksumType> for ::std::string::String {
-    fn from(value: ChecksumType) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ChecksumType> for ChecksumType {
-    fn from(value: &ChecksumType) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<::std::string::String> for ChecksumType {
-    fn from(value: ::std::string::String) -> Self {
-        Self(value)
-    }
-}
-impl ::std::str::FromStr for ChecksumType {
-    type Err = ::std::convert::Infallible;
-    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::fmt::Display for ChecksumType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        self.0.fmt(f)
     }
 }
 ///`CollateralBidObject`
@@ -16443,7 +16329,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "head_block_id": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    },
 ///    "head_block_number": {
@@ -16509,7 +16395,7 @@ pub struct DynamicGlobalPropertyObject {
     pub current_aslot: ::graphene_rpc::GrapheneUInt64,
     pub current_witness: DynamicGlobalPropertyObjectCurrentWitness,
     pub dynamic_flags: u32,
-    pub head_block_id: BlockIdType,
+    pub head_block_id: ::std::string::String,
     pub head_block_number: u32,
     pub last_budget_time: ::graphene_rpc::GrapheneTimePointSec,
     pub last_irreversible_block_num: u32,
@@ -29195,7 +29081,7 @@ impl MarketVolume {
 ///      "x-cpp-type": "extensions_type"
 ///    },
 ///    "previous": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    },
 ///    "timestamp": {
@@ -29203,7 +29089,7 @@ impl MarketVolume {
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "transaction_merkle_root": {
-///      "$ref": "#/$defs/checksum_type",
+///      "type": "string",
 ///      "x-cpp-type": "checksum_type"
 ///    },
 ///    "witness": {
@@ -29226,9 +29112,9 @@ impl MarketVolume {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct MaybeSignedBlockHeader {
     pub extensions: ExtensionsType,
-    pub previous: BlockIdType,
+    pub previous: ::std::string::String,
     pub timestamp: ::graphene_rpc::GrapheneTimePointSec,
-    pub transaction_merkle_root: ChecksumType,
+    pub transaction_merkle_root: ::std::string::String,
     pub witness: MaybeSignedBlockHeaderWitness,
     pub witness_signature: ::std::option::Option<::std::string::String>,
 }
@@ -33878,7 +33764,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundUpdateOperationOwnerAccount {
 ///      "x-cpp-type": "extensions_type"
 ///    },
 ///    "previous": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    },
 ///    "timestamp": {
@@ -33886,7 +33772,7 @@ impl<'de> ::serde::Deserialize<'de> for SametFundUpdateOperationOwnerAccount {
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "transaction_merkle_root": {
-///      "$ref": "#/$defs/checksum_type",
+///      "type": "string",
 ///      "x-cpp-type": "checksum_type"
 ///    },
 ///    "transactions": {
@@ -33913,9 +33799,9 @@ impl<'de> ::serde::Deserialize<'de> for SametFundUpdateOperationOwnerAccount {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SignedBlock {
     pub extensions: ExtensionsType,
-    pub previous: BlockIdType,
+    pub previous: ::std::string::String,
     pub timestamp: ::graphene_rpc::GrapheneTimePointSec,
-    pub transaction_merkle_root: ChecksumType,
+    pub transaction_merkle_root: ::std::string::String,
     pub transactions: ::std::vec::Vec<ProcessedTransaction>,
     pub witness: SignedBlockWitness,
     pub witness_signature: ::std::string::String,
@@ -46686,7 +46572,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct BlockIdPredicate {
-        id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        id: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for BlockIdPredicate {
         fn default() -> Self {
@@ -46698,7 +46584,7 @@ pub mod builder {
     impl BlockIdPredicate {
         pub fn id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.id = value
@@ -48085,7 +47971,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct ChainPropertyObject {
-        chain_id: ::std::result::Result<super::ChainIdType, ::std::string::String>,
+        chain_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         immutable_parameters: ::std::result::Result<
             super::ImmutableChainParameters,
             ::std::string::String,
@@ -48104,7 +47990,7 @@ pub mod builder {
     impl ChainPropertyObject {
         pub fn chain_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ChainIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.chain_id = value
@@ -51828,7 +51714,10 @@ pub mod builder {
             ::std::string::String,
         >,
         dynamic_flags: ::std::result::Result<u32, ::std::string::String>,
-        head_block_id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        head_block_id: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
         head_block_number: ::std::result::Result<u32, ::std::string::String>,
         last_budget_time: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
@@ -51959,7 +51848,7 @@ pub mod builder {
         }
         pub fn head_block_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.head_block_id = value
@@ -59099,13 +58988,13 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct MaybeSignedBlockHeader {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
-        previous: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        previous: ::std::result::Result<::std::string::String, ::std::string::String>,
         timestamp: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         transaction_merkle_root: ::std::result::Result<
-            super::ChecksumType,
+            ::std::string::String,
             ::std::string::String,
         >,
         witness: ::std::result::Result<
@@ -59148,7 +59037,7 @@ pub mod builder {
         }
         pub fn previous<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.previous = value
@@ -59172,7 +59061,7 @@ pub mod builder {
         }
         pub fn transaction_merkle_root<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ChecksumType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.transaction_merkle_root = value
@@ -62335,13 +62224,13 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct SignedBlock {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
-        previous: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        previous: ::std::result::Result<::std::string::String, ::std::string::String>,
         timestamp: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         transaction_merkle_root: ::std::result::Result<
-            super::ChecksumType,
+            ::std::string::String,
             ::std::string::String,
         >,
         transactions: ::std::result::Result<
@@ -62386,7 +62275,7 @@ pub mod builder {
         }
         pub fn previous<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.previous = value
@@ -62410,7 +62299,7 @@ pub mod builder {
         }
         pub fn transaction_merkle_root<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ChecksumType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.transaction_merkle_root = value

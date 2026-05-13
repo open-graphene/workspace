@@ -411,40 +411,53 @@ impl AccountCreateOperationExt {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AccountCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "account_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "basic_fee",
+///    "premium_fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "basic_fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "premium_fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::account_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AccountCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AccountCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AccountCreateOperationFeeParametersType {
+    pub basic_fee: ::graphene_rpc::GrapheneUInt64,
+    pub premium_fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<AccountCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AccountCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AccountCreateOperationFeeParamsT>
-for AccountCreateOperationFeeParamsT {
-    fn from(value: &AccountCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AccountCreateOperationFeeParametersType>
+for AccountCreateOperationFeeParametersType {
+    fn from(value: &AccountCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AccountCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AccountCreateOperationFeeParametersType {
+    pub fn builder() -> builder::AccountCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AccountCreateOperationReferrer`
@@ -2426,40 +2439,39 @@ impl<'de> ::serde::Deserialize<'de> for AccountTransferOperationAccountId {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AccountTransferOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "account_transfer_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::account_transfer_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AccountTransferOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AccountTransferOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AccountTransferOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AccountTransferOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AccountTransferOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AccountTransferOperationFeeParamsT>
-for AccountTransferOperationFeeParamsT {
-    fn from(value: &AccountTransferOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AccountTransferOperationFeeParametersType>
+for AccountTransferOperationFeeParametersType {
+    fn from(value: &AccountTransferOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AccountTransferOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AccountTransferOperationFeeParametersType {
+    pub fn builder() -> builder::AccountTransferOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AccountTransferOperationNewOwner`
@@ -2779,40 +2791,47 @@ impl AccountUpdateOperationExt {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AccountUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "account_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneInt64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::account_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AccountUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AccountUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AccountUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<AccountUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AccountUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AccountUpdateOperationFeeParamsT>
-for AccountUpdateOperationFeeParamsT {
-    fn from(value: &AccountUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AccountUpdateOperationFeeParametersType>
+for AccountUpdateOperationFeeParametersType {
+    fn from(value: &AccountUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AccountUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AccountUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::AccountUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AccountUpgradeOperation`
@@ -2952,40 +2971,45 @@ impl<'de> ::serde::Deserialize<'de> for AccountUpgradeOperationAccountToUpgrade 
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AccountUpgradeOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "account_upgrade_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "membership_annual_fee",
+///    "membership_lifetime_fee"
+///  ],
+///  "properties": {
+///    "membership_annual_fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "membership_lifetime_fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::account_upgrade_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AccountUpgradeOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AccountUpgradeOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AccountUpgradeOperationFeeParametersType {
+    pub membership_annual_fee: ::graphene_rpc::GrapheneUInt64,
+    pub membership_lifetime_fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AccountUpgradeOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AccountUpgradeOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AccountUpgradeOperationFeeParamsT>
-for AccountUpgradeOperationFeeParamsT {
-    fn from(value: &AccountUpgradeOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AccountUpgradeOperationFeeParametersType>
+for AccountUpgradeOperationFeeParametersType {
+    fn from(value: &AccountUpgradeOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AccountUpgradeOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AccountUpgradeOperationFeeParametersType {
+    pub fn builder() -> builder::AccountUpgradeOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AccountWhitelistOperation`
@@ -3218,40 +3242,39 @@ impl<'de> ::serde::Deserialize<'de> for AccountWhitelistOperationAuthorizingAcco
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AccountWhitelistOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "account_whitelist_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneInt64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::account_whitelist_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AccountWhitelistOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AccountWhitelistOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AccountWhitelistOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneInt64,
 }
-impl ::std::convert::From<AccountWhitelistOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AccountWhitelistOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AccountWhitelistOperationFeeParamsT>
-for AccountWhitelistOperationFeeParamsT {
-    fn from(value: &AccountWhitelistOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AccountWhitelistOperationFeeParametersType>
+for AccountWhitelistOperationFeeParametersType {
+    fn from(value: &AccountWhitelistOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AccountWhitelistOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AccountWhitelistOperationFeeParametersType {
+    pub fn builder() -> builder::AccountWhitelistOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AdditionalAssetOptions`
@@ -3542,39 +3565,39 @@ impl AssertOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssertOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "assert_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::assert_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssertOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssertOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssertOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssertOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssertOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssertOperationFeeParamsT> for AssertOperationFeeParamsT {
-    fn from(value: &AssertOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssertOperationFeeParametersType>
+for AssertOperationFeeParametersType {
+    fn from(value: &AssertOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssertOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssertOperationFeeParametersType {
+    pub fn builder() -> builder::AssertOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssertOperationFeePayingAccount`
@@ -4049,40 +4072,39 @@ for AssetClaimFeesOperationAdditionalOptionsTypeClaimFromAssetId {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetClaimFeesOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_claim_fees_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_claim_fees_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetClaimFeesOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetClaimFeesOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetClaimFeesOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetClaimFeesOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetClaimFeesOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetClaimFeesOperationFeeParamsT>
-for AssetClaimFeesOperationFeeParamsT {
-    fn from(value: &AssetClaimFeesOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetClaimFeesOperationFeeParametersType>
+for AssetClaimFeesOperationFeeParametersType {
+    fn from(value: &AssetClaimFeesOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetClaimFeesOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetClaimFeesOperationFeeParametersType {
+    pub fn builder() -> builder::AssetClaimFeesOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetClaimFeesOperationIssuer`
@@ -4307,40 +4329,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetClaimPoolOperationAssetId {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetClaimPoolOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_claim_pool_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_claim_pool_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetClaimPoolOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetClaimPoolOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetClaimPoolOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetClaimPoolOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetClaimPoolOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetClaimPoolOperationFeeParamsT>
-for AssetClaimPoolOperationFeeParamsT {
-    fn from(value: &AssetClaimPoolOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetClaimPoolOperationFeeParametersType>
+for AssetClaimPoolOperationFeeParametersType {
+    fn from(value: &AssetClaimPoolOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetClaimPoolOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetClaimPoolOperationFeeParametersType {
+    pub fn builder() -> builder::AssetClaimPoolOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetClaimPoolOperationIssuer`
@@ -4510,40 +4531,59 @@ impl AssetCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "long_symbol",
+///    "price_per_kbyte",
+///    "symbol3",
+///    "symbol4"
+///  ],
+///  "properties": {
+///    "long_symbol": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    },
+///    "symbol3": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "symbol4": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetCreateOperationFeeParametersType {
+    pub long_symbol: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
+    pub symbol3: ::graphene_rpc::GrapheneUInt64,
+    pub symbol4: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetCreateOperationFeeParamsT>
-for AssetCreateOperationFeeParamsT {
-    fn from(value: &AssetCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetCreateOperationFeeParametersType>
+for AssetCreateOperationFeeParametersType {
+    fn from(value: &AssetCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetCreateOperationFeeParametersType {
+    pub fn builder() -> builder::AssetCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetCreateOperationIssuer`
@@ -4769,40 +4809,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetFundFeePoolOperationAssetId {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetFundFeePoolOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_fund_fee_pool_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_fund_fee_pool_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetFundFeePoolOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetFundFeePoolOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetFundFeePoolOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetFundFeePoolOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetFundFeePoolOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetFundFeePoolOperationFeeParamsT>
-for AssetFundFeePoolOperationFeeParamsT {
-    fn from(value: &AssetFundFeePoolOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetFundFeePoolOperationFeeParametersType>
+for AssetFundFeePoolOperationFeeParametersType {
+    fn from(value: &AssetFundFeePoolOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetFundFeePoolOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetFundFeePoolOperationFeeParametersType {
+    pub fn builder() -> builder::AssetFundFeePoolOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetFundFeePoolOperationFromAccount`
@@ -5033,40 +5072,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetGlobalSettleOperationAssetToSettle 
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetGlobalSettleOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_global_settle_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_global_settle_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetGlobalSettleOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetGlobalSettleOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetGlobalSettleOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetGlobalSettleOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetGlobalSettleOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetGlobalSettleOperationFeeParamsT>
-for AssetGlobalSettleOperationFeeParamsT {
-    fn from(value: &AssetGlobalSettleOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetGlobalSettleOperationFeeParametersType>
+for AssetGlobalSettleOperationFeeParametersType {
+    fn from(value: &AssetGlobalSettleOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetGlobalSettleOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetGlobalSettleOperationFeeParametersType {
+    pub fn builder() -> builder::AssetGlobalSettleOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetGlobalSettleOperationIssuer`
@@ -5225,40 +5263,47 @@ impl AssetIssueOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetIssueOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_issue_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_issue_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetIssueOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetIssueOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetIssueOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<AssetIssueOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetIssueOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetIssueOperationFeeParamsT>
-for AssetIssueOperationFeeParamsT {
-    fn from(value: &AssetIssueOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetIssueOperationFeeParametersType>
+for AssetIssueOperationFeeParametersType {
+    fn from(value: &AssetIssueOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetIssueOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetIssueOperationFeeParametersType {
+    pub fn builder() -> builder::AssetIssueOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetIssueOperationIssueToAccount`
@@ -6063,40 +6108,39 @@ impl AssetPublishFeedOperationExt {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetPublishFeedOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_publish_feed_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_publish_feed_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetPublishFeedOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetPublishFeedOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetPublishFeedOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetPublishFeedOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetPublishFeedOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetPublishFeedOperationFeeParamsT>
-for AssetPublishFeedOperationFeeParamsT {
-    fn from(value: &AssetPublishFeedOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetPublishFeedOperationFeeParametersType>
+for AssetPublishFeedOperationFeeParametersType {
+    fn from(value: &AssetPublishFeedOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetPublishFeedOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetPublishFeedOperationFeeParametersType {
+    pub fn builder() -> builder::AssetPublishFeedOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetPublishFeedOperationPublisher`
@@ -6235,40 +6279,39 @@ impl AssetReserveOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetReserveOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_reserve_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_reserve_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetReserveOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetReserveOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetReserveOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetReserveOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetReserveOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetReserveOperationFeeParamsT>
-for AssetReserveOperationFeeParamsT {
-    fn from(value: &AssetReserveOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetReserveOperationFeeParametersType>
+for AssetReserveOperationFeeParametersType {
+    fn from(value: &AssetReserveOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetReserveOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetReserveOperationFeeParametersType {
+    pub fn builder() -> builder::AssetReserveOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetReserveOperationPayer`
@@ -6488,39 +6531,45 @@ impl<'de> ::serde::Deserialize<'de> for AssetSettleCancelOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetSettleCancelOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_settle_cancel_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::asset_settle_cancel_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct AssetSettleCancelOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetSettleCancelOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct AssetSettleCancelOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for AssetSettleCancelOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<AssetSettleCancelOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetSettleCancelOperationFeeParamsT) -> Self {
+impl ::std::convert::From<AssetSettleCancelOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: AssetSettleCancelOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&AssetSettleCancelOperationFeeParamsT>
-for AssetSettleCancelOperationFeeParamsT {
-    fn from(value: &AssetSettleCancelOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetSettleCancelOperationFeeParametersType>
+for AssetSettleCancelOperationFeeParametersType {
+    fn from(value: &AssetSettleCancelOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetSettleCancelOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for AssetSettleCancelOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -6741,40 +6790,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetSettleOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetSettleOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_settle_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_settle_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetSettleOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetSettleOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetSettleOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetSettleOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetSettleOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetSettleOperationFeeParamsT>
-for AssetSettleOperationFeeParamsT {
-    fn from(value: &AssetSettleOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetSettleOperationFeeParametersType>
+for AssetSettleOperationFeeParametersType {
+    fn from(value: &AssetSettleOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetSettleOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetSettleOperationFeeParametersType {
+    pub fn builder() -> builder::AssetSettleOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetSymbolEqLitPredicate`
@@ -7046,42 +7094,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateBitassetOperationAssetToUpdat
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetUpdateBitassetOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_update_bitasset_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_update_bitasset_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetUpdateBitassetOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetUpdateBitassetOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetUpdateBitassetOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetUpdateBitassetOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: AssetUpdateBitassetOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetUpdateBitassetOperationFeeParamsT>
-for AssetUpdateBitassetOperationFeeParamsT {
-    fn from(value: &AssetUpdateBitassetOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetUpdateBitassetOperationFeeParametersType>
+for AssetUpdateBitassetOperationFeeParametersType {
+    fn from(value: &AssetUpdateBitassetOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for AssetUpdateBitassetOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetUpdateBitassetOperationFeeParametersType {
+    pub fn builder() -> builder::AssetUpdateBitassetOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetUpdateBitassetOperationIssuer`
@@ -7317,42 +7362,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateFeedProducersOperationAssetTo
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetUpdateFeedProducersOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_update_feed_producers_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_update_feed_producers_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetUpdateFeedProducersOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetUpdateFeedProducersOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetUpdateFeedProducersOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetUpdateFeedProducersOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: AssetUpdateFeedProducersOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetUpdateFeedProducersOperationFeeParamsT>
-for AssetUpdateFeedProducersOperationFeeParamsT {
-    fn from(value: &AssetUpdateFeedProducersOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetUpdateFeedProducersOperationFeeParametersType>
+for AssetUpdateFeedProducersOperationFeeParametersType {
+    fn from(value: &AssetUpdateFeedProducersOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for AssetUpdateFeedProducersOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetUpdateFeedProducersOperationFeeParametersType {
+    pub fn builder() -> builder::AssetUpdateFeedProducersOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetUpdateFeedProducersOperationIssuer`
@@ -7669,40 +7711,39 @@ impl<'de> ::serde::Deserialize<'de> for AssetUpdateIssuerOperationAssetToUpdate 
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetUpdateIssuerOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_update_issuer_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_update_issuer_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetUpdateIssuerOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetUpdateIssuerOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetUpdateIssuerOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<AssetUpdateIssuerOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetUpdateIssuerOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetUpdateIssuerOperationFeeParamsT>
-for AssetUpdateIssuerOperationFeeParamsT {
-    fn from(value: &AssetUpdateIssuerOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetUpdateIssuerOperationFeeParametersType>
+for AssetUpdateIssuerOperationFeeParametersType {
+    fn from(value: &AssetUpdateIssuerOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetUpdateIssuerOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetUpdateIssuerOperationFeeParametersType {
+    pub fn builder() -> builder::AssetUpdateIssuerOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetUpdateIssuerOperationIssuer`
@@ -8073,40 +8114,47 @@ impl AssetUpdateOperationExt {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`AssetUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "asset_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::asset_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct AssetUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for AssetUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct AssetUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<AssetUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: AssetUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&AssetUpdateOperationFeeParamsT>
-for AssetUpdateOperationFeeParamsT {
-    fn from(value: &AssetUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&AssetUpdateOperationFeeParametersType>
+for AssetUpdateOperationFeeParametersType {
+    fn from(value: &AssetUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for AssetUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl AssetUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::AssetUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`AssetUpdateOperationIssuer`
@@ -8601,39 +8649,45 @@ impl<'de> ::serde::Deserialize<'de> for BalanceClaimOperationDepositToAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`BalanceClaimOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "balance_claim_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::balance_claim_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct BalanceClaimOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for BalanceClaimOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct BalanceClaimOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for BalanceClaimOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<BalanceClaimOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: BalanceClaimOperationFeeParamsT) -> Self {
+impl ::std::convert::From<BalanceClaimOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: BalanceClaimOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&BalanceClaimOperationFeeParamsT>
-for BalanceClaimOperationFeeParamsT {
-    fn from(value: &BalanceClaimOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&BalanceClaimOperationFeeParametersType>
+for BalanceClaimOperationFeeParametersType {
+    fn from(value: &BalanceClaimOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for BalanceClaimOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for BalanceClaimOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -8974,7 +9028,7 @@ impl<'de> ::serde::Deserialize<'de> for BitassetOptionsShortBackingAsset {
 ///      "x-cpp-type": "extensions_type"
 ///    },
 ///    "previous": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    },
 ///    "timestamp": {
@@ -8982,7 +9036,7 @@ impl<'de> ::serde::Deserialize<'de> for BitassetOptionsShortBackingAsset {
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "transaction_merkle_root": {
-///      "$ref": "#/$defs/checksum_type",
+///      "type": "string",
 ///      "x-cpp-type": "checksum_type"
 ///    },
 ///    "witness": {
@@ -8998,9 +9052,9 @@ impl<'de> ::serde::Deserialize<'de> for BitassetOptionsShortBackingAsset {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct BlockHeader {
     pub extensions: ExtensionsType,
-    pub previous: BlockIdType,
+    pub previous: ::std::string::String,
     pub timestamp: ::graphene_rpc::GrapheneTimePointSec,
-    pub transaction_merkle_root: ChecksumType,
+    pub transaction_merkle_root: ::std::string::String,
     pub witness: BlockHeaderWitness,
 }
 impl ::std::convert::From<&BlockHeader> for BlockHeader {
@@ -9105,7 +9159,7 @@ impl<'de> ::serde::Deserialize<'de> for BlockHeaderWitness {
 ///  ],
 ///  "properties": {
 ///    "id": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    }
 ///  },
@@ -9115,7 +9169,7 @@ impl<'de> ::serde::Deserialize<'de> for BlockHeaderWitness {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct BlockIdPredicate {
-    pub id: BlockIdType,
+    pub id: ::std::string::String,
 }
 impl ::std::convert::From<&BlockIdPredicate> for BlockIdPredicate {
     fn from(value: &BlockIdPredicate) -> Self {
@@ -9125,63 +9179,6 @@ impl ::std::convert::From<&BlockIdPredicate> for BlockIdPredicate {
 impl BlockIdPredicate {
     pub fn builder() -> builder::BlockIdPredicate {
         Default::default()
-    }
-}
-///Alias for fc::ripemd160
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Alias for fc::ripemd160",
-///  "type": "string",
-///  "x-cpp-type": "graphene::protocol::block_id_type"
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-#[serde(transparent)]
-pub struct BlockIdType(pub ::std::string::String);
-impl ::std::ops::Deref for BlockIdType {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<BlockIdType> for ::std::string::String {
-    fn from(value: BlockIdType) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&BlockIdType> for BlockIdType {
-    fn from(value: &BlockIdType) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<::std::string::String> for BlockIdType {
-    fn from(value: ::std::string::String) -> Self {
-        Self(value)
-    }
-}
-impl ::std::str::FromStr for BlockIdType {
-    type Err = ::std::convert::Infallible;
-    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::fmt::Display for BlockIdType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        self.0.fmt(f)
     }
 }
 ///`BurnWorkerInitializer`
@@ -9804,40 +9801,39 @@ for CallOrderUpdateOperationExtensionsType {
         Self(value)
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CallOrderUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "call_order_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::call_order_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CallOrderUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CallOrderUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CallOrderUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<CallOrderUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: CallOrderUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CallOrderUpdateOperationFeeParamsT>
-for CallOrderUpdateOperationFeeParamsT {
-    fn from(value: &CallOrderUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CallOrderUpdateOperationFeeParametersType>
+for CallOrderUpdateOperationFeeParametersType {
+    fn from(value: &CallOrderUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for CallOrderUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CallOrderUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::CallOrderUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CallOrderUpdateOperationFundingAccount`
@@ -10550,7 +10546,7 @@ impl ChainParametersExt {
 ///  ],
 ///  "properties": {
 ///    "chain_id": {
-///      "$ref": "#/$defs/chain_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "chain_id_type"
 ///    },
 ///    "immutable_parameters": {
@@ -10564,7 +10560,7 @@ impl ChainParametersExt {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ChainPropertyObject {
-    pub chain_id: ChainIdType,
+    pub chain_id: ::std::string::String,
     pub immutable_parameters: ImmutableChainParameters,
 }
 impl ::std::convert::From<&ChainPropertyObject> for ChainPropertyObject {
@@ -10575,63 +10571,6 @@ impl ::std::convert::From<&ChainPropertyObject> for ChainPropertyObject {
 impl ChainPropertyObject {
     pub fn builder() -> builder::ChainPropertyObject {
         Default::default()
-    }
-}
-///Alias for fc::ripemd160
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Alias for fc::ripemd160",
-///  "type": "string",
-///  "x-cpp-type": "graphene::protocol::checksum_type"
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-#[serde(transparent)]
-pub struct ChecksumType(pub ::std::string::String);
-impl ::std::ops::Deref for ChecksumType {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ChecksumType> for ::std::string::String {
-    fn from(value: ChecksumType) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ChecksumType> for ChecksumType {
-    fn from(value: &ChecksumType) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<::std::string::String> for ChecksumType {
-    fn from(value: ::std::string::String) -> Self {
-        Self(value)
-    }
-}
-impl ::std::str::FromStr for ChecksumType {
-    type Err = ::std::convert::Infallible;
-    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::fmt::Display for ChecksumType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        self.0.fmt(f)
     }
 }
 ///`CommitCreateOperation`
@@ -10776,39 +10715,45 @@ impl<'de> ::serde::Deserialize<'de> for CommitCreateOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CommitCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "commit_create_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::commit_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct CommitCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CommitCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct CommitCreateOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for CommitCreateOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<CommitCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: CommitCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<CommitCreateOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: CommitCreateOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&CommitCreateOperationFeeParamsT>
-for CommitCreateOperationFeeParamsT {
-    fn from(value: &CommitCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CommitCreateOperationFeeParametersType>
+for CommitCreateOperationFeeParametersType {
+    fn from(value: &CommitCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for CommitCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for CommitCreateOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -10946,42 +10891,39 @@ for CommitteeMemberCreateOperationCommitteeMemberAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CommitteeMemberCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "committee_member_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::committee_member_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CommitteeMemberCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CommitteeMemberCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CommitteeMemberCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<CommitteeMemberCreateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: CommitteeMemberCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CommitteeMemberCreateOperationFeeParamsT>
-for CommitteeMemberCreateOperationFeeParamsT {
-    fn from(value: &CommitteeMemberCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CommitteeMemberCreateOperationFeeParametersType>
+for CommitteeMemberCreateOperationFeeParametersType {
+    fn from(value: &CommitteeMemberCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for CommitteeMemberCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CommitteeMemberCreateOperationFeeParametersType {
+    pub fn builder() -> builder::CommitteeMemberCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CommitteeMemberObject`
@@ -11243,44 +11185,42 @@ impl CommitteeMemberUpdateGlobalParametersOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CommitteeMemberUpdateGlobalParametersOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "committee_member_update_global_parameters_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::committee_member_update_global_parameters_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CommitteeMemberUpdateGlobalParametersOperationFeeParamsT(
-    pub ::serde_json::Value,
-);
-impl ::std::ops::Deref for CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<CommitteeMemberUpdateGlobalParametersOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: CommitteeMemberUpdateGlobalParametersOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CommitteeMemberUpdateGlobalParametersOperationFeeParamsT>
-for CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
-    fn from(value: &CommitteeMemberUpdateGlobalParametersOperationFeeParamsT) -> Self {
+impl ::std::convert::From<
+    &CommitteeMemberUpdateGlobalParametersOperationFeeParametersType,
+> for CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+    fn from(
+        value: &CommitteeMemberUpdateGlobalParametersOperationFeeParametersType,
+    ) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for CommitteeMemberUpdateGlobalParametersOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+    pub fn builder() -> builder::CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CommitteeMemberUpdateOperation`
@@ -11511,42 +11451,39 @@ for CommitteeMemberUpdateOperationCommitteeMemberAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CommitteeMemberUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "committee_member_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::committee_member_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CommitteeMemberUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CommitteeMemberUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CommitteeMemberUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<CommitteeMemberUpdateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: CommitteeMemberUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CommitteeMemberUpdateOperationFeeParamsT>
-for CommitteeMemberUpdateOperationFeeParamsT {
-    fn from(value: &CommitteeMemberUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CommitteeMemberUpdateOperationFeeParametersType>
+for CommitteeMemberUpdateOperationFeeParametersType {
+    fn from(value: &CommitteeMemberUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for CommitteeMemberUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CommitteeMemberUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::CommitteeMemberUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ContentCardCreateOperation`
@@ -11627,40 +11564,47 @@ impl ContentCardCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ContentCardCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "content_card_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::content_card_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct ContentCardCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for ContentCardCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct ContentCardCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<ContentCardCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: ContentCardCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ContentCardCreateOperationFeeParamsT>
-for ContentCardCreateOperationFeeParamsT {
-    fn from(value: &ContentCardCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&ContentCardCreateOperationFeeParametersType>
+for ContentCardCreateOperationFeeParametersType {
+    fn from(value: &ContentCardCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ContentCardCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ContentCardCreateOperationFeeParametersType {
+    pub fn builder() -> builder::ContentCardCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ContentCardCreateOperationSubjectAccount`
@@ -11747,27 +11691,28 @@ impl<'de> ::serde::Deserialize<'de> for ContentCardCreateOperationSubjectAccount
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ContentCardIdType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
 ///  "x-cpp-type": "content_card_id_type"
 ///}
 /// ```
 /// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct ContentCardIdType(pub ::serde_json::Value);
+pub struct ContentCardIdType(::std::string::String);
 impl ::std::ops::Deref for ContentCardIdType {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<ContentCardIdType> for ::serde_json::Value {
+impl ::std::convert::From<ContentCardIdType> for ::std::string::String {
     fn from(value: ContentCardIdType) -> Self {
         value.0
     }
@@ -11777,9 +11722,53 @@ impl ::std::convert::From<&ContentCardIdType> for ContentCardIdType {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ContentCardIdType {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ::std::str::FromStr for ContentCardIdType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ContentCardIdType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ContentCardIdType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ContentCardIdType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ContentCardIdType {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`ContentCardObject`
@@ -11949,7 +11938,8 @@ impl<'de> ::serde::Deserialize<'de> for ContentCardObjectSubjectAccount {
 ///  ],
 ///  "properties": {
 ///    "content_id": {
-///      "$ref": "#/$defs/content_card_id_type",
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
 ///      "x-cpp-type": "content_card_id_type"
 ///    },
 ///    "fee": {
@@ -11968,7 +11958,7 @@ impl<'de> ::serde::Deserialize<'de> for ContentCardObjectSubjectAccount {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ContentCardRemoveOperation {
-    pub content_id: ContentCardIdType,
+    pub content_id: ContentCardRemoveOperationContentId,
     pub fee: Asset,
     pub subject_account: ContentCardRemoveOperationSubjectAccount,
 }
@@ -11982,40 +11972,123 @@ impl ContentCardRemoveOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ContentCardRemoveOperationContentId`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "content_card_remove_operation::fee_params_t"
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "content_card_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ContentCardRemoveOperationContentId(::std::string::String);
+impl ::std::ops::Deref for ContentCardRemoveOperationContentId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ContentCardRemoveOperationContentId>
+for ::std::string::String {
+    fn from(value: ContentCardRemoveOperationContentId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&ContentCardRemoveOperationContentId>
+for ContentCardRemoveOperationContentId {
+    fn from(value: &ContentCardRemoveOperationContentId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for ContentCardRemoveOperationContentId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ContentCardRemoveOperationContentId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ContentCardRemoveOperationContentId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ContentCardRemoveOperationContentId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ContentCardRemoveOperationContentId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ContentCardRemoveOperationFeeParametersType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::content_card_remove_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct ContentCardRemoveOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for ContentCardRemoveOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct ContentCardRemoveOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<ContentCardRemoveOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: ContentCardRemoveOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ContentCardRemoveOperationFeeParamsT>
-for ContentCardRemoveOperationFeeParamsT {
-    fn from(value: &ContentCardRemoveOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&ContentCardRemoveOperationFeeParametersType>
+for ContentCardRemoveOperationFeeParametersType {
+    fn from(value: &ContentCardRemoveOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ContentCardRemoveOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ContentCardRemoveOperationFeeParametersType {
+    pub fn builder() -> builder::ContentCardRemoveOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ContentCardRemoveOperationSubjectAccount`
@@ -12180,40 +12253,47 @@ impl ContentCardUpdateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ContentCardUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "content_card_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::content_card_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct ContentCardUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for ContentCardUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct ContentCardUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<ContentCardUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: ContentCardUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ContentCardUpdateOperationFeeParamsT>
-for ContentCardUpdateOperationFeeParamsT {
-    fn from(value: &ContentCardUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&ContentCardUpdateOperationFeeParametersType>
+for ContentCardUpdateOperationFeeParametersType {
+    fn from(value: &ContentCardUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ContentCardUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ContentCardUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::ContentCardUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ContentCardUpdateOperationSubjectAccount`
@@ -12474,42 +12554,47 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityCreateOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CustomAuthorityCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "custom_authority_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "basic_fee",
+///    "price_per_byte"
+///  ],
+///  "properties": {
+///    "basic_fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_byte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::custom_authority_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CustomAuthorityCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CustomAuthorityCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CustomAuthorityCreateOperationFeeParametersType {
+    pub basic_fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_byte: u32,
 }
-impl ::std::convert::From<CustomAuthorityCreateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: CustomAuthorityCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CustomAuthorityCreateOperationFeeParamsT>
-for CustomAuthorityCreateOperationFeeParamsT {
-    fn from(value: &CustomAuthorityCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CustomAuthorityCreateOperationFeeParametersType>
+for CustomAuthorityCreateOperationFeeParametersType {
+    fn from(value: &CustomAuthorityCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for CustomAuthorityCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CustomAuthorityCreateOperationFeeParametersType {
+    pub fn builder() -> builder::CustomAuthorityCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CustomAuthorityDeleteOperation`
@@ -12735,42 +12820,39 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityDeleteOperationAuthorityT
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CustomAuthorityDeleteOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "custom_authority_delete_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::custom_authority_delete_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CustomAuthorityDeleteOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CustomAuthorityDeleteOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CustomAuthorityDeleteOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<CustomAuthorityDeleteOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: CustomAuthorityDeleteOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CustomAuthorityDeleteOperationFeeParamsT>
-for CustomAuthorityDeleteOperationFeeParamsT {
-    fn from(value: &CustomAuthorityDeleteOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CustomAuthorityDeleteOperationFeeParametersType>
+for CustomAuthorityDeleteOperationFeeParametersType {
+    fn from(value: &CustomAuthorityDeleteOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for CustomAuthorityDeleteOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CustomAuthorityDeleteOperationFeeParametersType {
+    pub fn builder() -> builder::CustomAuthorityDeleteOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CustomAuthorityOptionsType`
@@ -13125,42 +13207,47 @@ impl<'de> ::serde::Deserialize<'de> for CustomAuthorityUpdateOperationAuthorityT
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CustomAuthorityUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "custom_authority_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "basic_fee",
+///    "price_per_byte"
+///  ],
+///  "properties": {
+///    "basic_fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_byte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::custom_authority_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CustomAuthorityUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CustomAuthorityUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CustomAuthorityUpdateOperationFeeParametersType {
+    pub basic_fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_byte: u32,
 }
-impl ::std::convert::From<CustomAuthorityUpdateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: CustomAuthorityUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CustomAuthorityUpdateOperationFeeParamsT>
-for CustomAuthorityUpdateOperationFeeParamsT {
-    fn from(value: &CustomAuthorityUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CustomAuthorityUpdateOperationFeeParametersType>
+for CustomAuthorityUpdateOperationFeeParametersType {
+    fn from(value: &CustomAuthorityUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for CustomAuthorityUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CustomAuthorityUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::CustomAuthorityUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CustomOperation`
@@ -13315,39 +13402,47 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationDataItem {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`CustomOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "custom_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::custom_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct CustomOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for CustomOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct CustomOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<CustomOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: CustomOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&CustomOperationFeeParamsT> for CustomOperationFeeParamsT {
-    fn from(value: &CustomOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&CustomOperationFeeParametersType>
+for CustomOperationFeeParametersType {
+    fn from(value: &CustomOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for CustomOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl CustomOperationFeeParametersType {
+    pub fn builder() -> builder::CustomOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`CustomOperationPayer`
@@ -13559,7 +13654,7 @@ impl<'de> ::serde::Deserialize<'de> for CustomOperationRequiredAuthsItem {
 ///      "x-cpp-type": "uint32_t"
 ///    },
 ///    "head_block_id": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    },
 ///    "head_block_number": {
@@ -13621,7 +13716,7 @@ pub struct DynamicGlobalPropertyObject {
     pub current_aslot: ::graphene_rpc::GrapheneUInt64,
     pub current_witness: DynamicGlobalPropertyObjectCurrentWitness,
     pub dynamic_flags: u32,
-    pub head_block_id: BlockIdType,
+    pub head_block_id: ::std::string::String,
     pub head_block_number: u32,
     pub last_budget_time: ::graphene_rpc::GrapheneTimePointSec,
     pub last_irreversible_block_num: u32,
@@ -14995,39 +15090,45 @@ impl<'de> ::serde::Deserialize<'de> for FbaDistributeOperationFbaId {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`FbaDistributeOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "fba_distribute_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::fba_distribute_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct FbaDistributeOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for FbaDistributeOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct FbaDistributeOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for FbaDistributeOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<FbaDistributeOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: FbaDistributeOperationFeeParamsT) -> Self {
+impl ::std::convert::From<FbaDistributeOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: FbaDistributeOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&FbaDistributeOperationFeeParamsT>
-for FbaDistributeOperationFeeParamsT {
-    fn from(value: &FbaDistributeOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&FbaDistributeOperationFeeParametersType>
+for FbaDistributeOperationFeeParametersType {
+    fn from(value: &FbaDistributeOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for FbaDistributeOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for FbaDistributeOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -15229,39 +15330,45 @@ impl<'de> ::serde::Deserialize<'de> for FillOrderOperationAccountId {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`FillOrderOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "fill_order_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::fill_order_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct FillOrderOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for FillOrderOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct FillOrderOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for FillOrderOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<FillOrderOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: FillOrderOperationFeeParamsT) -> Self {
+impl ::std::convert::From<FillOrderOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: FillOrderOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&FillOrderOperationFeeParamsT>
-for FillOrderOperationFeeParamsT {
-    fn from(value: &FillOrderOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&FillOrderOperationFeeParametersType>
+for FillOrderOperationFeeParametersType {
+    fn from(value: &FillOrderOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for FillOrderOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for FillOrderOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -16697,40 +16804,45 @@ impl HtlcCreateOperationAdditionalOptionsType {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`HtlcCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "htlc_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "fee_per_day"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "fee_per_day": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::htlc_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct HtlcCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for HtlcCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct HtlcCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub fee_per_day: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<HtlcCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: HtlcCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&HtlcCreateOperationFeeParamsT>
-for HtlcCreateOperationFeeParamsT {
-    fn from(value: &HtlcCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&HtlcCreateOperationFeeParametersType>
+for HtlcCreateOperationFeeParametersType {
+    fn from(value: &HtlcCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for HtlcCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl HtlcCreateOperationFeeParametersType {
+    pub fn builder() -> builder::HtlcCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`HtlcCreateOperationFrom`
@@ -16955,40 +17067,45 @@ impl HtlcExtendOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`HtlcExtendOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "htlc_extend_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "fee_per_day"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "fee_per_day": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::htlc_extend_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct HtlcExtendOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for HtlcExtendOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct HtlcExtendOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub fee_per_day: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<HtlcExtendOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: HtlcExtendOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&HtlcExtendOperationFeeParamsT>
-for HtlcExtendOperationFeeParamsT {
-    fn from(value: &HtlcExtendOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&HtlcExtendOperationFeeParametersType>
+for HtlcExtendOperationFeeParametersType {
+    fn from(value: &HtlcExtendOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for HtlcExtendOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl HtlcExtendOperationFeeParametersType {
+    pub fn builder() -> builder::HtlcExtendOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`HtlcExtendOperationHtlcId`
@@ -17167,8 +17284,8 @@ impl<'de> ::serde::Deserialize<'de> for HtlcExtendOperationUpdateIssuer {
 ///  ],
 ///  "properties": {
 ///    "conditions": {
-///      "description": "TODO: could not resolve declaration of conditions in graphene::chain::htlc_object",
-///      "x-cpp-type": "?"
+///      "$ref": "#/$defs/htlc_object__condition_info",
+///      "x-cpp-type": "condition_info"
 ///    },
 ///    "memo": {
 ///      "oneOf": [
@@ -17182,25 +17299,19 @@ impl<'de> ::serde::Deserialize<'de> for HtlcExtendOperationUpdateIssuer {
 ///      "x-cpp-type": "fc::optional<memo_data>"
 ///    },
 ///    "transfer": {
-///      "description": "TODO: could not resolve declaration of transfer in graphene::chain::htlc_object",
-///      "x-cpp-type": "?"
+///      "$ref": "#/$defs/htlc_object__transfer_info",
+///      "x-cpp-type": "transfer_info"
 ///    }
 ///  },
-///  "x-cpp-type": "graphene::chain::htlc_object",
-///  "x-unresolved-fields": [
-///    "transfer",
-///    "conditions"
-///  ]
+///  "x-cpp-type": "graphene::chain::htlc_object"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct HtlcObject {
-    ///TODO: could not resolve declaration of conditions in graphene::chain::htlc_object
-    pub conditions: ::serde_json::Value,
+    pub conditions: HtlcObjectConditionInfo,
     pub memo: ::std::option::Option<MemoData>,
-    ///TODO: could not resolve declaration of transfer in graphene::chain::htlc_object
-    pub transfer: ::serde_json::Value,
+    pub transfer: HtlcObjectTransferInfo,
 }
 impl ::std::convert::From<&HtlcObject> for HtlcObject {
     fn from(value: &HtlcObject) -> Self {
@@ -17210,6 +17321,420 @@ impl ::std::convert::From<&HtlcObject> for HtlcObject {
 impl HtlcObject {
     pub fn builder() -> builder::HtlcObject {
         Default::default()
+    }
+}
+///`HtlcObjectConditionInfo`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "hash_lock",
+///    "time_lock"
+///  ],
+///  "properties": {
+///    "hash_lock": {
+///      "$ref": "#/$defs/htlc_object__condition_info__hash_lock_info",
+///      "x-cpp-type": "hash_lock_info"
+///    },
+///    "time_lock": {
+///      "$ref": "#/$defs/htlc_object__condition_info__time_lock_info",
+///      "x-cpp-type": "time_lock_info"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::htlc_object::condition_info"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct HtlcObjectConditionInfo {
+    pub hash_lock: HtlcObjectConditionInfoHashLockInfo,
+    pub time_lock: HtlcObjectConditionInfoTimeLockInfo,
+}
+impl ::std::convert::From<&HtlcObjectConditionInfo> for HtlcObjectConditionInfo {
+    fn from(value: &HtlcObjectConditionInfo) -> Self {
+        value.clone()
+    }
+}
+impl HtlcObjectConditionInfo {
+    pub fn builder() -> builder::HtlcObjectConditionInfo {
+        Default::default()
+    }
+}
+///`HtlcObjectConditionInfoHashLockInfo`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "preimage_hash",
+///    "preimage_size"
+///  ],
+///  "properties": {
+///    "preimage_hash": {
+///      "$ref": "#/$defs/htlc_hash",
+///      "x-cpp-type": "htlc_hash"
+///    },
+///    "preimage_size": {
+///      "type": "integer",
+///      "format": "uint16",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint16_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::htlc_object::condition_info::hash_lock_info"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct HtlcObjectConditionInfoHashLockInfo {
+    pub preimage_hash: HtlcHash,
+    pub preimage_size: u16,
+}
+impl ::std::convert::From<&HtlcObjectConditionInfoHashLockInfo>
+for HtlcObjectConditionInfoHashLockInfo {
+    fn from(value: &HtlcObjectConditionInfoHashLockInfo) -> Self {
+        value.clone()
+    }
+}
+impl HtlcObjectConditionInfoHashLockInfo {
+    pub fn builder() -> builder::HtlcObjectConditionInfoHashLockInfo {
+        Default::default()
+    }
+}
+///`HtlcObjectConditionInfoTimeLockInfo`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "expiration"
+///  ],
+///  "properties": {
+///    "expiration": {
+///      "$ref": "#/$defs/GrapheneTimePointSec",
+///      "x-cpp-type": "fc::time_point_sec"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::htlc_object::condition_info::time_lock_info"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct HtlcObjectConditionInfoTimeLockInfo {
+    pub expiration: ::graphene_rpc::GrapheneTimePointSec,
+}
+impl ::std::convert::From<&HtlcObjectConditionInfoTimeLockInfo>
+for HtlcObjectConditionInfoTimeLockInfo {
+    fn from(value: &HtlcObjectConditionInfoTimeLockInfo) -> Self {
+        value.clone()
+    }
+}
+impl HtlcObjectConditionInfoTimeLockInfo {
+    pub fn builder() -> builder::HtlcObjectConditionInfoTimeLockInfo {
+        Default::default()
+    }
+}
+///`HtlcObjectTransferInfo`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "asset_id",
+///    "from",
+///    "to"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "$ref": "#/$defs/GrapheneInt64",
+///      "x-cpp-type": "share_type"
+///    },
+///    "asset_id": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "asset_id_type"
+///    },
+///    "from": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    },
+///    "to": {
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///      "x-cpp-type": "account_id_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::chain::htlc_object::transfer_info"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct HtlcObjectTransferInfo {
+    pub amount: ::graphene_rpc::GrapheneInt64,
+    pub asset_id: HtlcObjectTransferInfoAssetId,
+    pub from: HtlcObjectTransferInfoFrom,
+    pub to: HtlcObjectTransferInfoTo,
+}
+impl ::std::convert::From<&HtlcObjectTransferInfo> for HtlcObjectTransferInfo {
+    fn from(value: &HtlcObjectTransferInfo) -> Self {
+        value.clone()
+    }
+}
+impl HtlcObjectTransferInfo {
+    pub fn builder() -> builder::HtlcObjectTransferInfo {
+        Default::default()
+    }
+}
+///`HtlcObjectTransferInfoAssetId`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "asset_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct HtlcObjectTransferInfoAssetId(::std::string::String);
+impl ::std::ops::Deref for HtlcObjectTransferInfoAssetId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<HtlcObjectTransferInfoAssetId> for ::std::string::String {
+    fn from(value: HtlcObjectTransferInfoAssetId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&HtlcObjectTransferInfoAssetId>
+for HtlcObjectTransferInfoAssetId {
+    fn from(value: &HtlcObjectTransferInfoAssetId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for HtlcObjectTransferInfoAssetId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for HtlcObjectTransferInfoAssetId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for HtlcObjectTransferInfoAssetId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for HtlcObjectTransferInfoAssetId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for HtlcObjectTransferInfoAssetId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`HtlcObjectTransferInfoFrom`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct HtlcObjectTransferInfoFrom(::std::string::String);
+impl ::std::ops::Deref for HtlcObjectTransferInfoFrom {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<HtlcObjectTransferInfoFrom> for ::std::string::String {
+    fn from(value: HtlcObjectTransferInfoFrom) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&HtlcObjectTransferInfoFrom> for HtlcObjectTransferInfoFrom {
+    fn from(value: &HtlcObjectTransferInfoFrom) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for HtlcObjectTransferInfoFrom {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for HtlcObjectTransferInfoFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for HtlcObjectTransferInfoFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for HtlcObjectTransferInfoFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for HtlcObjectTransferInfoFrom {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`HtlcObjectTransferInfoTo`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "account_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct HtlcObjectTransferInfoTo(::std::string::String);
+impl ::std::ops::Deref for HtlcObjectTransferInfoTo {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<HtlcObjectTransferInfoTo> for ::std::string::String {
+    fn from(value: HtlcObjectTransferInfoTo) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&HtlcObjectTransferInfoTo> for HtlcObjectTransferInfoTo {
+    fn from(value: &HtlcObjectTransferInfoTo) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for HtlcObjectTransferInfoTo {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for HtlcObjectTransferInfoTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for HtlcObjectTransferInfoTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for HtlcObjectTransferInfoTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for HtlcObjectTransferInfoTo {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`HtlcOptions`
@@ -17321,40 +17846,45 @@ impl HtlcRedeemOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`HtlcRedeemOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "htlc_redeem_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "fee_per_kb"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "fee_per_kb": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::htlc_redeem_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct HtlcRedeemOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for HtlcRedeemOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct HtlcRedeemOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub fee_per_kb: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<HtlcRedeemOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: HtlcRedeemOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&HtlcRedeemOperationFeeParamsT>
-for HtlcRedeemOperationFeeParamsT {
-    fn from(value: &HtlcRedeemOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&HtlcRedeemOperationFeeParametersType>
+for HtlcRedeemOperationFeeParametersType {
+    fn from(value: &HtlcRedeemOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for HtlcRedeemOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl HtlcRedeemOperationFeeParametersType {
+    pub fn builder() -> builder::HtlcRedeemOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`HtlcRedeemOperationHtlcId`
@@ -17693,39 +18223,45 @@ impl HtlcRedeemedOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`HtlcRedeemedOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "htlc_redeemed_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::htlc_redeemed_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct HtlcRedeemedOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for HtlcRedeemedOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct HtlcRedeemedOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for HtlcRedeemedOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<HtlcRedeemedOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: HtlcRedeemedOperationFeeParamsT) -> Self {
+impl ::std::convert::From<HtlcRedeemedOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: HtlcRedeemedOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&HtlcRedeemedOperationFeeParamsT>
-for HtlcRedeemedOperationFeeParamsT {
-    fn from(value: &HtlcRedeemedOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&HtlcRedeemedOperationFeeParametersType>
+for HtlcRedeemedOperationFeeParametersType {
+    fn from(value: &HtlcRedeemedOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for HtlcRedeemedOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for HtlcRedeemedOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -18209,39 +18745,45 @@ impl HtlcRefundOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`HtlcRefundOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "htlc_refund_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::htlc_refund_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct HtlcRefundOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for HtlcRefundOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct HtlcRefundOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for HtlcRefundOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<HtlcRefundOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: HtlcRefundOperationFeeParamsT) -> Self {
+impl ::std::convert::From<HtlcRefundOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: HtlcRefundOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&HtlcRefundOperationFeeParamsT>
-for HtlcRefundOperationFeeParamsT {
-    fn from(value: &HtlcRefundOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&HtlcRefundOperationFeeParametersType>
+for HtlcRefundOperationFeeParametersType {
+    fn from(value: &HtlcRefundOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for HtlcRefundOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for HtlcRefundOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -18505,7 +19047,8 @@ impl<'de> ::serde::Deserialize<'de> for HtlcRefundOperationTo {
 ///  ],
 ///  "properties": {
 ///    "balance_to_claim": {
-///      "$ref": "#/$defs/ico_balance_id_type",
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
 ///      "x-cpp-type": "ico_balance_id_type"
 ///    },
 ///    "deposit_to_account": {
@@ -18532,7 +19075,7 @@ impl<'de> ::serde::Deserialize<'de> for HtlcRefundOperationTo {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct IcoBalanceClaimOperation {
-    pub balance_to_claim: IcoBalanceIdType,
+    pub balance_to_claim: IcoBalanceClaimOperationBalanceToClaim,
     pub deposit_to_account: IcoBalanceClaimOperationDepositToAccount,
     pub eth_pub_key: ::std::string::String,
     pub eth_sign: ::std::string::String,
@@ -18546,6 +19089,90 @@ impl ::std::convert::From<&IcoBalanceClaimOperation> for IcoBalanceClaimOperatio
 impl IcoBalanceClaimOperation {
     pub fn builder() -> builder::IcoBalanceClaimOperation {
         Default::default()
+    }
+}
+///`IcoBalanceClaimOperationBalanceToClaim`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "ico_balance_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct IcoBalanceClaimOperationBalanceToClaim(::std::string::String);
+impl ::std::ops::Deref for IcoBalanceClaimOperationBalanceToClaim {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<IcoBalanceClaimOperationBalanceToClaim>
+for ::std::string::String {
+    fn from(value: IcoBalanceClaimOperationBalanceToClaim) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&IcoBalanceClaimOperationBalanceToClaim>
+for IcoBalanceClaimOperationBalanceToClaim {
+    fn from(value: &IcoBalanceClaimOperationBalanceToClaim) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for IcoBalanceClaimOperationBalanceToClaim {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IcoBalanceClaimOperationBalanceToClaim {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for IcoBalanceClaimOperationBalanceToClaim {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for IcoBalanceClaimOperationBalanceToClaim {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for IcoBalanceClaimOperationBalanceToClaim {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`IcoBalanceClaimOperationDepositToAccount`
@@ -18632,74 +19259,45 @@ impl<'de> ::serde::Deserialize<'de> for IcoBalanceClaimOperationDepositToAccount
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`IcoBalanceClaimOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "ico_balance_claim_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::ico_balance_claim_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct IcoBalanceClaimOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for IcoBalanceClaimOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct IcoBalanceClaimOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for IcoBalanceClaimOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<IcoBalanceClaimOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: IcoBalanceClaimOperationFeeParamsT) -> Self {
+impl ::std::convert::From<IcoBalanceClaimOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: IcoBalanceClaimOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&IcoBalanceClaimOperationFeeParamsT>
-for IcoBalanceClaimOperationFeeParamsT {
-    fn from(value: &IcoBalanceClaimOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&IcoBalanceClaimOperationFeeParametersType>
+for IcoBalanceClaimOperationFeeParametersType {
+    fn from(value: &IcoBalanceClaimOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for IcoBalanceClaimOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
-    }
-}
-///TODO: fill from FC_REFLECT walker
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "ico_balance_id_type"
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct IcoBalanceIdType(pub ::serde_json::Value);
-impl ::std::ops::Deref for IcoBalanceIdType {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
-}
-impl ::std::convert::From<IcoBalanceIdType> for ::serde_json::Value {
-    fn from(value: IcoBalanceIdType) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&IcoBalanceIdType> for IcoBalanceIdType {
-    fn from(value: &IcoBalanceIdType) -> Self {
-        value.clone()
-    }
-}
-impl ::std::convert::From<::serde_json::Value> for IcoBalanceIdType {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for IcoBalanceClaimOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -18940,40 +19538,39 @@ impl LimitOrderCancelOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`LimitOrderCancelOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "limit_order_cancel_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::limit_order_cancel_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct LimitOrderCancelOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for LimitOrderCancelOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct LimitOrderCancelOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<LimitOrderCancelOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: LimitOrderCancelOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&LimitOrderCancelOperationFeeParamsT>
-for LimitOrderCancelOperationFeeParamsT {
-    fn from(value: &LimitOrderCancelOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&LimitOrderCancelOperationFeeParametersType>
+for LimitOrderCancelOperationFeeParametersType {
+    fn from(value: &LimitOrderCancelOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for LimitOrderCancelOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl LimitOrderCancelOperationFeeParametersType {
+    pub fn builder() -> builder::LimitOrderCancelOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`LimitOrderCancelOperationFeePayingAccount`
@@ -19212,40 +19809,39 @@ impl LimitOrderCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`LimitOrderCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "limit_order_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::limit_order_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct LimitOrderCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for LimitOrderCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct LimitOrderCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<LimitOrderCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: LimitOrderCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&LimitOrderCreateOperationFeeParamsT>
-for LimitOrderCreateOperationFeeParamsT {
-    fn from(value: &LimitOrderCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&LimitOrderCreateOperationFeeParametersType>
+for LimitOrderCreateOperationFeeParametersType {
+    fn from(value: &LimitOrderCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for LimitOrderCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl LimitOrderCreateOperationFeeParametersType {
+    pub fn builder() -> builder::LimitOrderCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`LimitOrderCreateOperationSeller`
@@ -20566,40 +21162,47 @@ impl OverrideTransferOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`OverrideTransferOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "override_transfer_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::override_transfer_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct OverrideTransferOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for OverrideTransferOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct OverrideTransferOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<OverrideTransferOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: OverrideTransferOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&OverrideTransferOperationFeeParamsT>
-for OverrideTransferOperationFeeParamsT {
-    fn from(value: &OverrideTransferOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&OverrideTransferOperationFeeParametersType>
+for OverrideTransferOperationFeeParametersType {
+    fn from(value: &OverrideTransferOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for OverrideTransferOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl OverrideTransferOperationFeeParametersType {
+    pub fn builder() -> builder::OverrideTransferOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`OverrideTransferOperationFrom`
@@ -20915,40 +21518,39 @@ impl PermissionCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`PermissionCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "permission_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneInt64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::permission_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct PermissionCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for PermissionCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct PermissionCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneInt64,
 }
-impl ::std::convert::From<PermissionCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: PermissionCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&PermissionCreateOperationFeeParamsT>
-for PermissionCreateOperationFeeParamsT {
-    fn from(value: &PermissionCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&PermissionCreateOperationFeeParametersType>
+for PermissionCreateOperationFeeParametersType {
+    fn from(value: &PermissionCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for PermissionCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl PermissionCreateOperationFeeParametersType {
+    pub fn builder() -> builder::PermissionCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`PermissionCreateOperationObjectId`
@@ -21202,27 +21804,28 @@ impl<'de> ::serde::Deserialize<'de> for PermissionCreateOperationSubjectAccount 
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`PermissionIdType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
 ///  "x-cpp-type": "permission_id_type"
 ///}
 /// ```
 /// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[serde(transparent)]
-pub struct PermissionIdType(pub ::serde_json::Value);
+pub struct PermissionIdType(::std::string::String);
 impl ::std::ops::Deref for PermissionIdType {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
         &self.0
     }
 }
-impl ::std::convert::From<PermissionIdType> for ::serde_json::Value {
+impl ::std::convert::From<PermissionIdType> for ::std::string::String {
     fn from(value: PermissionIdType) -> Self {
         value.0
     }
@@ -21232,9 +21835,53 @@ impl ::std::convert::From<&PermissionIdType> for PermissionIdType {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for PermissionIdType {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ::std::str::FromStr for PermissionIdType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PermissionIdType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PermissionIdType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PermissionIdType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PermissionIdType {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`PermissionObject`
@@ -21568,7 +22215,8 @@ impl<'de> ::serde::Deserialize<'de> for PermissionObjectSubjectAccount {
 ///      "x-cpp-type": "asset"
 ///    },
 ///    "permission_id": {
-///      "$ref": "#/$defs/permission_id_type",
+///      "type": "string",
+///      "pattern": "^\\d+\\.\\d+\\.\\d+$",
 ///      "x-cpp-type": "permission_id_type"
 ///    },
 ///    "subject_account": {
@@ -21584,7 +22232,7 @@ impl<'de> ::serde::Deserialize<'de> for PermissionObjectSubjectAccount {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct PermissionRemoveOperation {
     pub fee: Asset,
-    pub permission_id: PermissionIdType,
+    pub permission_id: PermissionRemoveOperationPermissionId,
     pub subject_account: PermissionRemoveOperationSubjectAccount,
 }
 impl ::std::convert::From<&PermissionRemoveOperation> for PermissionRemoveOperation {
@@ -21597,40 +22245,123 @@ impl PermissionRemoveOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`PermissionRemoveOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "permission_remove_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::permission_remove_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct PermissionRemoveOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for PermissionRemoveOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct PermissionRemoveOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<PermissionRemoveOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: PermissionRemoveOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&PermissionRemoveOperationFeeParamsT>
-for PermissionRemoveOperationFeeParamsT {
-    fn from(value: &PermissionRemoveOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&PermissionRemoveOperationFeeParametersType>
+for PermissionRemoveOperationFeeParametersType {
+    fn from(value: &PermissionRemoveOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for PermissionRemoveOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl PermissionRemoveOperationFeeParametersType {
+    pub fn builder() -> builder::PermissionRemoveOperationFeeParametersType {
+        Default::default()
+    }
+}
+///`PermissionRemoveOperationPermissionId`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+///  "x-cpp-type": "permission_id_type"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PermissionRemoveOperationPermissionId(::std::string::String);
+impl ::std::ops::Deref for PermissionRemoveOperationPermissionId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PermissionRemoveOperationPermissionId>
+for ::std::string::String {
+    fn from(value: PermissionRemoveOperationPermissionId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<&PermissionRemoveOperationPermissionId>
+for PermissionRemoveOperationPermissionId {
+    fn from(value: &PermissionRemoveOperationPermissionId) -> Self {
+        value.clone()
+    }
+}
+impl ::std::str::FromStr for PermissionRemoveOperationPermissionId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PermissionRemoveOperationPermissionId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PermissionRemoveOperationPermissionId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PermissionRemoveOperationPermissionId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PermissionRemoveOperationPermissionId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`PermissionRemoveOperationSubjectAccount`
@@ -21783,42 +22514,47 @@ impl PersonalDataCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`PersonalDataCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "personal_data_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::personal_data_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct PersonalDataCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for PersonalDataCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct PersonalDataCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<PersonalDataCreateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: PersonalDataCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&PersonalDataCreateOperationFeeParamsT>
-for PersonalDataCreateOperationFeeParamsT {
-    fn from(value: &PersonalDataCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&PersonalDataCreateOperationFeeParametersType>
+for PersonalDataCreateOperationFeeParametersType {
+    fn from(value: &PersonalDataCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for PersonalDataCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl PersonalDataCreateOperationFeeParametersType {
+    pub fn builder() -> builder::PersonalDataCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`PersonalDataCreateOperationOperatorAccount`
@@ -22269,42 +23005,39 @@ impl PersonalDataRemoveOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`PersonalDataRemoveOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "personal_data_remove_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::personal_data_remove_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct PersonalDataRemoveOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for PersonalDataRemoveOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct PersonalDataRemoveOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<PersonalDataRemoveOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: PersonalDataRemoveOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&PersonalDataRemoveOperationFeeParamsT>
-for PersonalDataRemoveOperationFeeParamsT {
-    fn from(value: &PersonalDataRemoveOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&PersonalDataRemoveOperationFeeParametersType>
+for PersonalDataRemoveOperationFeeParametersType {
+    fn from(value: &PersonalDataRemoveOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for PersonalDataRemoveOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl PersonalDataRemoveOperationFeeParametersType {
+    pub fn builder() -> builder::PersonalDataRemoveOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`PersonalDataRemoveOperationOperatorAccount`
@@ -22727,40 +23460,47 @@ impl ProposalCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ProposalCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "proposal_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::proposal_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct ProposalCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for ProposalCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct ProposalCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<ProposalCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: ProposalCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ProposalCreateOperationFeeParamsT>
-for ProposalCreateOperationFeeParamsT {
-    fn from(value: &ProposalCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&ProposalCreateOperationFeeParametersType>
+for ProposalCreateOperationFeeParametersType {
+    fn from(value: &ProposalCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ProposalCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ProposalCreateOperationFeeParametersType {
+    pub fn builder() -> builder::ProposalCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ProposalCreateOperationFeePayingAccount`
@@ -22907,40 +23647,39 @@ impl ProposalDeleteOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ProposalDeleteOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "proposal_delete_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::proposal_delete_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct ProposalDeleteOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for ProposalDeleteOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct ProposalDeleteOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<ProposalDeleteOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: ProposalDeleteOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ProposalDeleteOperationFeeParamsT>
-for ProposalDeleteOperationFeeParamsT {
-    fn from(value: &ProposalDeleteOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&ProposalDeleteOperationFeeParametersType>
+for ProposalDeleteOperationFeeParametersType {
+    fn from(value: &ProposalDeleteOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ProposalDeleteOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ProposalDeleteOperationFeeParametersType {
+    pub fn builder() -> builder::ProposalDeleteOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ProposalDeleteOperationFeePayingAccount`
@@ -23931,40 +24670,47 @@ for ProposalUpdateOperationActiveApprovalsToRemoveItem {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`ProposalUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "proposal_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::proposal_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct ProposalUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for ProposalUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct ProposalUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<ProposalUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: ProposalUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&ProposalUpdateOperationFeeParamsT>
-for ProposalUpdateOperationFeeParamsT {
-    fn from(value: &ProposalUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&ProposalUpdateOperationFeeParametersType>
+for ProposalUpdateOperationFeeParametersType {
+    fn from(value: &ProposalUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for ProposalUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl ProposalUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::ProposalUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`ProposalUpdateOperationFeePayingAccount`
@@ -24628,39 +25374,45 @@ impl<'de> ::serde::Deserialize<'de> for RevealCreateOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`RevealCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "reveal_create_operation::fee_params_t"
+///  "type": "object",
+///  "x-cpp-type": "graphene::protocol::reveal_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct RevealCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for RevealCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+pub struct RevealCreateOperationFeeParametersType(
+    pub ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+);
+impl ::std::ops::Deref for RevealCreateOperationFeeParametersType {
+    type Target = ::serde_json::Map<::std::string::String, ::serde_json::Value>;
+    fn deref(&self) -> &::serde_json::Map<::std::string::String, ::serde_json::Value> {
         &self.0
     }
 }
-impl ::std::convert::From<RevealCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: RevealCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<RevealCreateOperationFeeParametersType>
+for ::serde_json::Map<::std::string::String, ::serde_json::Value> {
+    fn from(value: RevealCreateOperationFeeParametersType) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<&RevealCreateOperationFeeParamsT>
-for RevealCreateOperationFeeParamsT {
-    fn from(value: &RevealCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&RevealCreateOperationFeeParametersType>
+for RevealCreateOperationFeeParametersType {
+    fn from(value: &RevealCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for RevealCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for RevealCreateOperationFeeParametersType {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
         Self(value)
     }
 }
@@ -24720,7 +25472,7 @@ impl ::std::convert::From<::serde_json::Value> for RsquaredTypesRoot {
 ///      "x-cpp-type": "extensions_type"
 ///    },
 ///    "previous": {
-///      "$ref": "#/$defs/block_id_type",
+///      "type": "string",
 ///      "x-cpp-type": "block_id_type"
 ///    },
 ///    "timestamp": {
@@ -24728,7 +25480,7 @@ impl ::std::convert::From<::serde_json::Value> for RsquaredTypesRoot {
 ///      "x-cpp-type": "fc::time_point_sec"
 ///    },
 ///    "transaction_merkle_root": {
-///      "$ref": "#/$defs/checksum_type",
+///      "type": "string",
 ///      "x-cpp-type": "checksum_type"
 ///    },
 ///    "transactions": {
@@ -24755,9 +25507,9 @@ impl ::std::convert::From<::serde_json::Value> for RsquaredTypesRoot {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct SignedBlock {
     pub extensions: ExtensionsType,
-    pub previous: BlockIdType,
+    pub previous: ::std::string::String,
     pub timestamp: ::graphene_rpc::GrapheneTimePointSec,
-    pub transaction_merkle_root: ChecksumType,
+    pub transaction_merkle_root: ::std::string::String,
     pub transactions: ::std::vec::Vec<ProcessedTransaction>,
     pub witness: SignedBlockWitness,
     pub witness_signature: ::std::string::String,
@@ -25069,40 +25821,39 @@ impl<'de> ::serde::Deserialize<'de> for TicketCreateOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`TicketCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "ticket_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::ticket_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct TicketCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for TicketCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct TicketCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<TicketCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: TicketCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&TicketCreateOperationFeeParamsT>
-for TicketCreateOperationFeeParamsT {
-    fn from(value: &TicketCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&TicketCreateOperationFeeParametersType>
+for TicketCreateOperationFeeParametersType {
+    fn from(value: &TicketCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for TicketCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl TicketCreateOperationFeeParametersType {
+    pub fn builder() -> builder::TicketCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`TicketUpdateOperation`
@@ -25262,40 +26013,39 @@ impl<'de> ::serde::Deserialize<'de> for TicketUpdateOperationAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`TicketUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "ticket_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::ticket_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct TicketUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for TicketUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct TicketUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<TicketUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: TicketUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&TicketUpdateOperationFeeParamsT>
-for TicketUpdateOperationFeeParamsT {
-    fn from(value: &TicketUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&TicketUpdateOperationFeeParametersType>
+for TicketUpdateOperationFeeParametersType {
+    fn from(value: &TicketUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for TicketUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl TicketUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::TicketUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`TicketUpdateOperationTicket`
@@ -25698,39 +26448,47 @@ impl TransferOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`TransferOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "transfer_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::transfer_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct TransferOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for TransferOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct TransferOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<TransferOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: TransferOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&TransferOperationFeeParamsT> for TransferOperationFeeParamsT {
-    fn from(value: &TransferOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&TransferOperationFeeParametersType>
+for TransferOperationFeeParametersType {
+    fn from(value: &TransferOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for TransferOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl TransferOperationFeeParametersType {
+    pub fn builder() -> builder::TransferOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`TransferOperationFrom`
@@ -25893,27 +26651,29 @@ impl<'de> ::serde::Deserialize<'de> for TransferOperationTo {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`Unsigned`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
+///  "type": "integer",
+///  "format": "uint32",
+///  "minimum": 0.0,
 ///  "x-cpp-type": "unsigned"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 #[serde(transparent)]
-pub struct Unsigned(pub ::serde_json::Value);
+pub struct Unsigned(pub u32);
 impl ::std::ops::Deref for Unsigned {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
+    type Target = u32;
+    fn deref(&self) -> &u32 {
         &self.0
     }
 }
-impl ::std::convert::From<Unsigned> for ::serde_json::Value {
+impl ::std::convert::From<Unsigned> for u32 {
     fn from(value: Unsigned) -> Self {
         value.0
     }
@@ -25923,9 +26683,38 @@ impl ::std::convert::From<&Unsigned> for Unsigned {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for Unsigned {
-    fn from(value: ::serde_json::Value) -> Self {
+impl ::std::convert::From<u32> for Unsigned {
+    fn from(value: u32) -> Self {
         Self(value)
+    }
+}
+impl ::std::str::FromStr for Unsigned {
+    type Err = <u32 as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for Unsigned {
+    type Error = <u32 as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&String> for Unsigned {
+    type Error = <u32 as ::std::str::FromStr>::Err;
+    fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for Unsigned {
+    type Error = <u32 as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::fmt::Display for Unsigned {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
     }
 }
 ///`VestingBalanceCreateOperation`
@@ -26073,42 +26862,39 @@ impl<'de> ::serde::Deserialize<'de> for VestingBalanceCreateOperationCreator {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`VestingBalanceCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "vesting_balance_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::vesting_balance_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct VestingBalanceCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for VestingBalanceCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct VestingBalanceCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<VestingBalanceCreateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: VestingBalanceCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&VestingBalanceCreateOperationFeeParamsT>
-for VestingBalanceCreateOperationFeeParamsT {
-    fn from(value: &VestingBalanceCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&VestingBalanceCreateOperationFeeParametersType>
+for VestingBalanceCreateOperationFeeParametersType {
+    fn from(value: &VestingBalanceCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for VestingBalanceCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl VestingBalanceCreateOperationFeeParametersType {
+    pub fn builder() -> builder::VestingBalanceCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`VestingBalanceCreateOperationOwner`
@@ -26479,42 +27265,39 @@ impl VestingBalanceWithdrawOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`VestingBalanceWithdrawOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "vesting_balance_withdraw_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::vesting_balance_withdraw_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct VestingBalanceWithdrawOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for VestingBalanceWithdrawOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct VestingBalanceWithdrawOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<VestingBalanceWithdrawOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: VestingBalanceWithdrawOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&VestingBalanceWithdrawOperationFeeParamsT>
-for VestingBalanceWithdrawOperationFeeParamsT {
-    fn from(value: &VestingBalanceWithdrawOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&VestingBalanceWithdrawOperationFeeParametersType>
+for VestingBalanceWithdrawOperationFeeParametersType {
+    fn from(value: &VestingBalanceWithdrawOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for VestingBalanceWithdrawOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl VestingBalanceWithdrawOperationFeeParametersType {
+    pub fn builder() -> builder::VestingBalanceWithdrawOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`VestingBalanceWithdrawOperationOwner`
@@ -26992,42 +27775,47 @@ impl WithdrawPermissionClaimOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WithdrawPermissionClaimOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "withdraw_permission_claim_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee",
+///    "price_per_kbyte"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    },
+///    "price_per_kbyte": {
+///      "type": "integer",
+///      "format": "uint32",
+///      "minimum": 0.0,
+///      "x-cpp-type": "uint32_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::withdraw_permission_claim_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WithdrawPermissionClaimOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WithdrawPermissionClaimOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WithdrawPermissionClaimOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
+    pub price_per_kbyte: u32,
 }
-impl ::std::convert::From<WithdrawPermissionClaimOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: WithdrawPermissionClaimOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WithdrawPermissionClaimOperationFeeParamsT>
-for WithdrawPermissionClaimOperationFeeParamsT {
-    fn from(value: &WithdrawPermissionClaimOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WithdrawPermissionClaimOperationFeeParametersType>
+for WithdrawPermissionClaimOperationFeeParametersType {
+    fn from(value: &WithdrawPermissionClaimOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for WithdrawPermissionClaimOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WithdrawPermissionClaimOperationFeeParametersType {
+    pub fn builder() -> builder::WithdrawPermissionClaimOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WithdrawPermissionClaimOperationWithdrawFromAccount`
@@ -27451,42 +28239,39 @@ for WithdrawPermissionCreateOperationAuthorizedAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WithdrawPermissionCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "withdraw_permission_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::withdraw_permission_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WithdrawPermissionCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WithdrawPermissionCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WithdrawPermissionCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<WithdrawPermissionCreateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: WithdrawPermissionCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WithdrawPermissionCreateOperationFeeParamsT>
-for WithdrawPermissionCreateOperationFeeParamsT {
-    fn from(value: &WithdrawPermissionCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WithdrawPermissionCreateOperationFeeParametersType>
+for WithdrawPermissionCreateOperationFeeParametersType {
+    fn from(value: &WithdrawPermissionCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for WithdrawPermissionCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WithdrawPermissionCreateOperationFeeParametersType {
+    pub fn builder() -> builder::WithdrawPermissionCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WithdrawPermissionCreateOperationWithdrawFromAccount`
@@ -27717,42 +28502,39 @@ for WithdrawPermissionDeleteOperationAuthorizedAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WithdrawPermissionDeleteOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "withdraw_permission_delete_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::withdraw_permission_delete_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WithdrawPermissionDeleteOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WithdrawPermissionDeleteOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WithdrawPermissionDeleteOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<WithdrawPermissionDeleteOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: WithdrawPermissionDeleteOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WithdrawPermissionDeleteOperationFeeParamsT>
-for WithdrawPermissionDeleteOperationFeeParamsT {
-    fn from(value: &WithdrawPermissionDeleteOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WithdrawPermissionDeleteOperationFeeParametersType>
+for WithdrawPermissionDeleteOperationFeeParametersType {
+    fn from(value: &WithdrawPermissionDeleteOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for WithdrawPermissionDeleteOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WithdrawPermissionDeleteOperationFeeParametersType {
+    pub fn builder() -> builder::WithdrawPermissionDeleteOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WithdrawPermissionDeleteOperationWithdrawFromAccount`
@@ -28339,42 +29121,39 @@ for WithdrawPermissionUpdateOperationAuthorizedAccount {
             })
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WithdrawPermissionUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "withdraw_permission_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::withdraw_permission_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WithdrawPermissionUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WithdrawPermissionUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WithdrawPermissionUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<WithdrawPermissionUpdateOperationFeeParamsT>
-for ::serde_json::Value {
-    fn from(value: WithdrawPermissionUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WithdrawPermissionUpdateOperationFeeParamsT>
-for WithdrawPermissionUpdateOperationFeeParamsT {
-    fn from(value: &WithdrawPermissionUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WithdrawPermissionUpdateOperationFeeParametersType>
+for WithdrawPermissionUpdateOperationFeeParametersType {
+    fn from(value: &WithdrawPermissionUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value>
-for WithdrawPermissionUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WithdrawPermissionUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::WithdrawPermissionUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WithdrawPermissionUpdateOperationPermissionToUpdate`
@@ -28602,40 +29381,39 @@ impl WitnessCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WitnessCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "witness_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::witness_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WitnessCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WitnessCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WitnessCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<WitnessCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: WitnessCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WitnessCreateOperationFeeParamsT>
-for WitnessCreateOperationFeeParamsT {
-    fn from(value: &WitnessCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WitnessCreateOperationFeeParametersType>
+for WitnessCreateOperationFeeParametersType {
+    fn from(value: &WitnessCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for WitnessCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WitnessCreateOperationFeeParametersType {
+    pub fn builder() -> builder::WitnessCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WitnessCreateOperationWitnessAccount`
@@ -29243,40 +30021,39 @@ impl WitnessUpdateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WitnessUpdateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "witness_update_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneInt64",
+///      "x-cpp-type": "share_type"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::witness_update_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WitnessUpdateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WitnessUpdateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WitnessUpdateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneInt64,
 }
-impl ::std::convert::From<WitnessUpdateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: WitnessUpdateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WitnessUpdateOperationFeeParamsT>
-for WitnessUpdateOperationFeeParamsT {
-    fn from(value: &WitnessUpdateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WitnessUpdateOperationFeeParametersType>
+for WitnessUpdateOperationFeeParametersType {
+    fn from(value: &WitnessUpdateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for WitnessUpdateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WitnessUpdateOperationFeeParametersType {
+    pub fn builder() -> builder::WitnessUpdateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WitnessUpdateOperationWitness`
@@ -29521,40 +30298,39 @@ impl WorkerCreateOperation {
         Default::default()
     }
 }
-///TODO: fill from FC_REFLECT walker
+///`WorkerCreateOperationFeeParametersType`
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "TODO: fill from FC_REFLECT walker",
-///  "x-cpp-type": "worker_create_operation::fee_params_t"
+///  "type": "object",
+///  "required": [
+///    "fee"
+///  ],
+///  "properties": {
+///    "fee": {
+///      "$ref": "#/$defs/GrapheneUInt64",
+///      "x-cpp-type": "uint64_t"
+///    }
+///  },
+///  "x-cpp-type": "graphene::protocol::worker_create_operation::fee_parameters_type"
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
-#[serde(transparent)]
-pub struct WorkerCreateOperationFeeParamsT(pub ::serde_json::Value);
-impl ::std::ops::Deref for WorkerCreateOperationFeeParamsT {
-    type Target = ::serde_json::Value;
-    fn deref(&self) -> &::serde_json::Value {
-        &self.0
-    }
+pub struct WorkerCreateOperationFeeParametersType {
+    pub fee: ::graphene_rpc::GrapheneUInt64,
 }
-impl ::std::convert::From<WorkerCreateOperationFeeParamsT> for ::serde_json::Value {
-    fn from(value: WorkerCreateOperationFeeParamsT) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::From<&WorkerCreateOperationFeeParamsT>
-for WorkerCreateOperationFeeParamsT {
-    fn from(value: &WorkerCreateOperationFeeParamsT) -> Self {
+impl ::std::convert::From<&WorkerCreateOperationFeeParametersType>
+for WorkerCreateOperationFeeParametersType {
+    fn from(value: &WorkerCreateOperationFeeParametersType) -> Self {
         value.clone()
     }
 }
-impl ::std::convert::From<::serde_json::Value> for WorkerCreateOperationFeeParamsT {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self(value)
+impl WorkerCreateOperationFeeParametersType {
+    pub fn builder() -> builder::WorkerCreateOperationFeeParametersType {
+        Default::default()
     }
 }
 ///`WorkerCreateOperationOwner`
@@ -30376,6 +31152,88 @@ pub mod builder {
                 buyback_options: Ok(value.buyback_options),
                 null_ext: Ok(value.null_ext),
                 owner_special_authority: Ok(value.owner_special_authority),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AccountCreateOperationFeeParametersType {
+        basic_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        premium_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for AccountCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                basic_fee: Err("no value supplied for basic_fee".to_string()),
+                premium_fee: Err("no value supplied for premium_fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl AccountCreateOperationFeeParametersType {
+        pub fn basic_fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.basic_fee = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for basic_fee: {}", e)
+                });
+            self
+        }
+        pub fn premium_fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.premium_fee = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for premium_fee: {}", e)
+                });
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AccountCreateOperationFeeParametersType>
+    for super::AccountCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AccountCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                basic_fee: value.basic_fee?,
+                premium_fee: value.premium_fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::AccountCreateOperationFeeParametersType>
+    for AccountCreateOperationFeeParametersType {
+        fn from(value: super::AccountCreateOperationFeeParametersType) -> Self {
+            Self {
+                basic_fee: Ok(value.basic_fee),
+                premium_fee: Ok(value.premium_fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
             }
         }
     }
@@ -31535,6 +32393,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AccountTransferOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AccountTransferOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AccountTransferOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AccountTransferOperationFeeParametersType>
+    for super::AccountTransferOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AccountTransferOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AccountTransferOperationFeeParametersType>
+    for AccountTransferOperationFeeParametersType {
+        fn from(value: super::AccountTransferOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AccountUpdateOperation {
         account: ::std::result::Result<
             super::AccountUpdateOperationAccount,
@@ -31766,6 +32665,64 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AccountUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<::graphene_rpc::GrapheneInt64, ::std::string::String>,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for AccountUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl AccountUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AccountUpdateOperationFeeParametersType>
+    for super::AccountUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AccountUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::AccountUpdateOperationFeeParametersType>
+    for AccountUpdateOperationFeeParametersType {
+        fn from(value: super::AccountUpdateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AccountUpgradeOperation {
         account_to_upgrade: ::std::result::Result<
             super::AccountUpgradeOperationAccountToUpgrade,
@@ -31864,6 +32821,82 @@ pub mod builder {
                 extensions: Ok(value.extensions),
                 fee: Ok(value.fee),
                 upgrade_to_lifetime_member: Ok(value.upgrade_to_lifetime_member),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AccountUpgradeOperationFeeParametersType {
+        membership_annual_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        membership_lifetime_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AccountUpgradeOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                membership_annual_fee: Err(
+                    "no value supplied for membership_annual_fee".to_string(),
+                ),
+                membership_lifetime_fee: Err(
+                    "no value supplied for membership_lifetime_fee".to_string(),
+                ),
+            }
+        }
+    }
+    impl AccountUpgradeOperationFeeParametersType {
+        pub fn membership_annual_fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.membership_annual_fee = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for membership_annual_fee: {}",
+                        e
+                    )
+                });
+            self
+        }
+        pub fn membership_lifetime_fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.membership_lifetime_fee = value
+                .try_into()
+                .map_err(|e| {
+                    format!(
+                        "error converting supplied value for membership_lifetime_fee: {}",
+                        e
+                    )
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AccountUpgradeOperationFeeParametersType>
+    for super::AccountUpgradeOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AccountUpgradeOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                membership_annual_fee: value.membership_annual_fee?,
+                membership_lifetime_fee: value.membership_lifetime_fee?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::AccountUpgradeOperationFeeParametersType>
+    for AccountUpgradeOperationFeeParametersType {
+        fn from(value: super::AccountUpgradeOperationFeeParametersType) -> Self {
+            Self {
+                membership_annual_fee: Ok(value.membership_annual_fee),
+                membership_lifetime_fee: Ok(value.membership_lifetime_fee),
             }
         }
     }
@@ -31985,6 +33018,44 @@ pub mod builder {
                 fee: Ok(value.fee),
                 new_listing: Ok(value.new_listing),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AccountWhitelistOperationFeeParametersType {
+        fee: ::std::result::Result<::graphene_rpc::GrapheneInt64, ::std::string::String>,
+    }
+    impl ::std::default::Default for AccountWhitelistOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AccountWhitelistOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AccountWhitelistOperationFeeParametersType>
+    for super::AccountWhitelistOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AccountWhitelistOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AccountWhitelistOperationFeeParametersType>
+    for AccountWhitelistOperationFeeParametersType {
+        fn from(value: super::AccountWhitelistOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -32240,6 +33311,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssertOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssertOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssertOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssertOperationFeeParametersType>
+    for super::AssertOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssertOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssertOperationFeeParametersType>
+    for AssertOperationFeeParametersType {
+        fn from(value: super::AssertOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct Asset {
         amount: ::std::result::Result<
             ::graphene_rpc::GrapheneInt64,
@@ -32458,6 +33570,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetClaimFeesOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetClaimFeesOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetClaimFeesOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetClaimFeesOperationFeeParametersType>
+    for super::AssetClaimFeesOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetClaimFeesOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetClaimFeesOperationFeeParametersType>
+    for AssetClaimFeesOperationFeeParametersType {
+        fn from(value: super::AssetClaimFeesOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetClaimPoolOperation {
         amount_to_claim: ::std::result::Result<super::Asset, ::std::string::String>,
         asset_id: ::std::result::Result<
@@ -32569,6 +33722,47 @@ pub mod builder {
                 fee: Ok(value.fee),
                 issuer: Ok(value.issuer),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AssetClaimPoolOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetClaimPoolOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetClaimPoolOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetClaimPoolOperationFeeParametersType>
+    for super::AssetClaimPoolOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetClaimPoolOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetClaimPoolOperationFeeParametersType>
+    for AssetClaimPoolOperationFeeParametersType {
+        fn from(value: super::AssetClaimPoolOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -32737,6 +33931,109 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetCreateOperationFeeParametersType {
+        long_symbol: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+        symbol3: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        symbol4: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                long_symbol: Err("no value supplied for long_symbol".to_string()),
+                price_per_kbyte: Err(
+                    "no value supplied for price_per_kbyte".to_string(),
+                ),
+                symbol3: Err("no value supplied for symbol3".to_string()),
+                symbol4: Err("no value supplied for symbol4".to_string()),
+            }
+        }
+    }
+    impl AssetCreateOperationFeeParametersType {
+        pub fn long_symbol<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.long_symbol = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for long_symbol: {}", e)
+                });
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+        pub fn symbol3<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.symbol3 = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for symbol3: {}", e)
+                });
+            self
+        }
+        pub fn symbol4<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.symbol4 = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for symbol4: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetCreateOperationFeeParametersType>
+    for super::AssetCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                long_symbol: value.long_symbol?,
+                price_per_kbyte: value.price_per_kbyte?,
+                symbol3: value.symbol3?,
+                symbol4: value.symbol4?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::AssetCreateOperationFeeParametersType>
+    for AssetCreateOperationFeeParametersType {
+        fn from(value: super::AssetCreateOperationFeeParametersType) -> Self {
+            Self {
+                long_symbol: Ok(value.long_symbol),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+                symbol3: Ok(value.symbol3),
+                symbol4: Ok(value.symbol4),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetFundFeePoolOperation {
         amount: ::std::result::Result<
             ::graphene_rpc::GrapheneInt64,
@@ -32852,6 +34149,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetFundFeePoolOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetFundFeePoolOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetFundFeePoolOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetFundFeePoolOperationFeeParametersType>
+    for super::AssetFundFeePoolOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetFundFeePoolOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetFundFeePoolOperationFeeParametersType>
+    for AssetFundFeePoolOperationFeeParametersType {
+        fn from(value: super::AssetFundFeePoolOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetGlobalSettleOperation {
         asset_to_settle: ::std::result::Result<
             super::AssetGlobalSettleOperationAssetToSettle,
@@ -32963,6 +34301,47 @@ pub mod builder {
                 issuer: Ok(value.issuer),
                 settle_price: Ok(value.settle_price),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AssetGlobalSettleOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetGlobalSettleOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetGlobalSettleOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetGlobalSettleOperationFeeParametersType>
+    for super::AssetGlobalSettleOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetGlobalSettleOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetGlobalSettleOperationFeeParametersType>
+    for AssetGlobalSettleOperationFeeParametersType {
+        fn from(value: super::AssetGlobalSettleOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -33093,6 +34472,67 @@ pub mod builder {
                 issue_to_account: Ok(value.issue_to_account),
                 issuer: Ok(value.issuer),
                 memo: Ok(value.memo),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AssetIssueOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for AssetIssueOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl AssetIssueOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetIssueOperationFeeParametersType>
+    for super::AssetIssueOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetIssueOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::AssetIssueOperationFeeParametersType>
+    for AssetIssueOperationFeeParametersType {
+        fn from(value: super::AssetIssueOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
             }
         }
     }
@@ -33531,6 +34971,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetPublishFeedOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetPublishFeedOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetPublishFeedOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetPublishFeedOperationFeeParametersType>
+    for super::AssetPublishFeedOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetPublishFeedOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetPublishFeedOperationFeeParametersType>
+    for AssetPublishFeedOperationFeeParametersType {
+        fn from(value: super::AssetPublishFeedOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetReserveOperation {
         amount_to_reserve: ::std::result::Result<super::Asset, ::std::string::String>,
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
@@ -33624,6 +35105,47 @@ pub mod builder {
                 fee: Ok(value.fee),
                 payer: Ok(value.payer),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AssetReserveOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetReserveOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetReserveOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetReserveOperationFeeParametersType>
+    for super::AssetReserveOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetReserveOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetReserveOperationFeeParametersType>
+    for AssetReserveOperationFeeParametersType {
+        fn from(value: super::AssetReserveOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -33814,6 +35336,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetSettleOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetSettleOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetSettleOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetSettleOperationFeeParametersType>
+    for super::AssetSettleOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetSettleOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetSettleOperationFeeParametersType>
+    for AssetSettleOperationFeeParametersType {
+        fn from(value: super::AssetSettleOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetSymbolEqLitPredicate {
         asset_id: ::std::result::Result<
             super::AssetSymbolEqLitPredicateAssetId,
@@ -33994,6 +35557,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetUpdateBitassetOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetUpdateBitassetOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetUpdateBitassetOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetUpdateBitassetOperationFeeParametersType>
+    for super::AssetUpdateBitassetOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetUpdateBitassetOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetUpdateBitassetOperationFeeParametersType>
+    for AssetUpdateBitassetOperationFeeParametersType {
+        fn from(value: super::AssetUpdateBitassetOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetUpdateFeedProducersOperation {
         asset_to_update: ::std::result::Result<
             super::AssetUpdateFeedProducersOperationAssetToUpdate,
@@ -34119,6 +35723,49 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct AssetUpdateFeedProducersOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetUpdateFeedProducersOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetUpdateFeedProducersOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetUpdateFeedProducersOperationFeeParametersType>
+    for super::AssetUpdateFeedProducersOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetUpdateFeedProducersOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetUpdateFeedProducersOperationFeeParametersType>
+    for AssetUpdateFeedProducersOperationFeeParametersType {
+        fn from(
+            value: super::AssetUpdateFeedProducersOperationFeeParametersType,
+        ) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct AssetUpdateIssuerOperation {
         asset_to_update: ::std::result::Result<
             super::AssetUpdateIssuerOperationAssetToUpdate,
@@ -34233,6 +35880,47 @@ pub mod builder {
                 issuer: Ok(value.issuer),
                 new_issuer: Ok(value.new_issuer),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AssetUpdateIssuerOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for AssetUpdateIssuerOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl AssetUpdateIssuerOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetUpdateIssuerOperationFeeParametersType>
+    for super::AssetUpdateIssuerOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetUpdateIssuerOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::AssetUpdateIssuerOperationFeeParametersType>
+    for AssetUpdateIssuerOperationFeeParametersType {
+        fn from(value: super::AssetUpdateIssuerOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -34439,6 +36127,67 @@ pub mod builder {
             Self {
                 new_precision: Ok(value.new_precision),
                 skip_core_exchange_rate: Ok(value.skip_core_exchange_rate),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct AssetUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for AssetUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl AssetUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<AssetUpdateOperationFeeParametersType>
+    for super::AssetUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: AssetUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::AssetUpdateOperationFeeParametersType>
+    for AssetUpdateOperationFeeParametersType {
+        fn from(value: super::AssetUpdateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
             }
         }
     }
@@ -35121,13 +36870,13 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct BlockHeader {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
-        previous: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        previous: ::std::result::Result<::std::string::String, ::std::string::String>,
         timestamp: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         transaction_merkle_root: ::std::result::Result<
-            super::ChecksumType,
+            ::std::string::String,
             ::std::string::String,
         >,
         witness: ::std::result::Result<super::BlockHeaderWitness, ::std::string::String>,
@@ -35160,7 +36909,7 @@ pub mod builder {
         }
         pub fn previous<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.previous = value
@@ -35184,7 +36933,7 @@ pub mod builder {
         }
         pub fn transaction_merkle_root<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ChecksumType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.transaction_merkle_root = value
@@ -35237,7 +36986,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct BlockIdPredicate {
-        id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        id: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for BlockIdPredicate {
         fn default() -> Self {
@@ -35249,7 +36998,7 @@ pub mod builder {
     impl BlockIdPredicate {
         pub fn id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.id = value
@@ -35639,6 +37388,47 @@ pub mod builder {
                 fee: Ok(value.fee),
                 funding_account: Ok(value.funding_account),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CallOrderUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CallOrderUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl CallOrderUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CallOrderUpdateOperationFeeParametersType>
+    for super::CallOrderUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CallOrderUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::CallOrderUpdateOperationFeeParametersType>
+    for CallOrderUpdateOperationFeeParametersType {
+        fn from(value: super::CallOrderUpdateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -36659,7 +38449,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct ChainPropertyObject {
-        chain_id: ::std::result::Result<super::ChainIdType, ::std::string::String>,
+        chain_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         immutable_parameters: ::std::result::Result<
             super::ImmutableChainParameters,
             ::std::string::String,
@@ -36678,7 +38468,7 @@ pub mod builder {
     impl ChainPropertyObject {
         pub fn chain_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ChainIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.chain_id = value
@@ -36915,6 +38705,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CommitteeMemberCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CommitteeMemberCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl CommitteeMemberCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CommitteeMemberCreateOperationFeeParametersType>
+    for super::CommitteeMemberCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CommitteeMemberCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::CommitteeMemberCreateOperationFeeParametersType>
+    for CommitteeMemberCreateOperationFeeParametersType {
+        fn from(value: super::CommitteeMemberCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CommitteeMemberObject {
         committee_member_account: ::std::result::Result<
             super::CommitteeMemberObjectCommitteeMemberAccount,
@@ -37081,6 +38912,52 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default
+    for CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<
+        CommitteeMemberUpdateGlobalParametersOperationFeeParametersType,
+    > for super::CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CommitteeMemberUpdateGlobalParametersOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<
+        super::CommitteeMemberUpdateGlobalParametersOperationFeeParametersType,
+    > for CommitteeMemberUpdateGlobalParametersOperationFeeParametersType {
+        fn from(
+            value: super::CommitteeMemberUpdateGlobalParametersOperationFeeParametersType,
+        ) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CommitteeMemberUpdateOperation {
         committee_member: ::std::result::Result<
             super::CommitteeMemberUpdateOperationCommitteeMember,
@@ -37190,6 +39067,47 @@ pub mod builder {
                 fee: Ok(value.fee),
                 new_url: Ok(value.new_url),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CommitteeMemberUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CommitteeMemberUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl CommitteeMemberUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CommitteeMemberUpdateOperationFeeParametersType>
+    for super::CommitteeMemberUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CommitteeMemberUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::CommitteeMemberUpdateOperationFeeParametersType>
+    for CommitteeMemberUpdateOperationFeeParametersType {
+        fn from(value: super::CommitteeMemberUpdateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -37351,6 +39269,67 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct ContentCardCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for ContentCardCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl ContentCardCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ContentCardCreateOperationFeeParametersType>
+    for super::ContentCardCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ContentCardCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ContentCardCreateOperationFeeParametersType>
+    for ContentCardCreateOperationFeeParametersType {
+        fn from(value: super::ContentCardCreateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct ContentCardObject {
         content_key: ::std::result::Result<::std::string::String, ::std::string::String>,
         description: ::std::result::Result<::std::string::String, ::std::string::String>,
@@ -37498,7 +39477,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct ContentCardRemoveOperation {
         content_id: ::std::result::Result<
-            super::ContentCardIdType,
+            super::ContentCardRemoveOperationContentId,
             ::std::string::String,
         >,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -37519,7 +39498,7 @@ pub mod builder {
     impl ContentCardRemoveOperation {
         pub fn content_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ContentCardIdType>,
+            T: ::std::convert::TryInto<super::ContentCardRemoveOperationContentId>,
             T::Error: ::std::fmt::Display,
         {
             self.content_id = value
@@ -37573,6 +39552,47 @@ pub mod builder {
                 fee: Ok(value.fee),
                 subject_account: Ok(value.subject_account),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct ContentCardRemoveOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for ContentCardRemoveOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl ContentCardRemoveOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ContentCardRemoveOperationFeeParametersType>
+    for super::ContentCardRemoveOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ContentCardRemoveOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::ContentCardRemoveOperationFeeParametersType>
+    for ContentCardRemoveOperationFeeParametersType {
+        fn from(value: super::ContentCardRemoveOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -37730,6 +39750,67 @@ pub mod builder {
                 subject_account: Ok(value.subject_account),
                 type_: Ok(value.type_),
                 url: Ok(value.url),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct ContentCardUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for ContentCardUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl ContentCardUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ContentCardUpdateOperationFeeParametersType>
+    for super::ContentCardUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ContentCardUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ContentCardUpdateOperationFeeParametersType>
+    for ContentCardUpdateOperationFeeParametersType {
+        fn from(value: super::ContentCardUpdateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
             }
         }
     }
@@ -37914,6 +39995,69 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CustomAuthorityCreateOperationFeeParametersType {
+        basic_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_byte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for CustomAuthorityCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                basic_fee: Err("no value supplied for basic_fee".to_string()),
+                price_per_byte: Err("no value supplied for price_per_byte".to_string()),
+            }
+        }
+    }
+    impl CustomAuthorityCreateOperationFeeParametersType {
+        pub fn basic_fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.basic_fee = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for basic_fee: {}", e)
+                });
+            self
+        }
+        pub fn price_per_byte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_byte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_byte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CustomAuthorityCreateOperationFeeParametersType>
+    for super::CustomAuthorityCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CustomAuthorityCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                basic_fee: value.basic_fee?,
+                price_per_byte: value.price_per_byte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CustomAuthorityCreateOperationFeeParametersType>
+    for CustomAuthorityCreateOperationFeeParametersType {
+        fn from(value: super::CustomAuthorityCreateOperationFeeParametersType) -> Self {
+            Self {
+                basic_fee: Ok(value.basic_fee),
+                price_per_byte: Ok(value.price_per_byte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CustomAuthorityDeleteOperation {
         account: ::std::result::Result<
             super::CustomAuthorityDeleteOperationAccount,
@@ -38013,6 +40157,47 @@ pub mod builder {
                 extensions: Ok(value.extensions),
                 fee: Ok(value.fee),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CustomAuthorityDeleteOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CustomAuthorityDeleteOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl CustomAuthorityDeleteOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CustomAuthorityDeleteOperationFeeParametersType>
+    for super::CustomAuthorityDeleteOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CustomAuthorityDeleteOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::CustomAuthorityDeleteOperationFeeParametersType>
+    for CustomAuthorityDeleteOperationFeeParametersType {
+        fn from(value: super::CustomAuthorityDeleteOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -38381,6 +40566,69 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CustomAuthorityUpdateOperationFeeParametersType {
+        basic_fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_byte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for CustomAuthorityUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                basic_fee: Err("no value supplied for basic_fee".to_string()),
+                price_per_byte: Err("no value supplied for price_per_byte".to_string()),
+            }
+        }
+    }
+    impl CustomAuthorityUpdateOperationFeeParametersType {
+        pub fn basic_fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.basic_fee = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for basic_fee: {}", e)
+                });
+            self
+        }
+        pub fn price_per_byte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_byte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_byte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CustomAuthorityUpdateOperationFeeParametersType>
+    for super::CustomAuthorityUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CustomAuthorityUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                basic_fee: value.basic_fee?,
+                price_per_byte: value.price_per_byte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CustomAuthorityUpdateOperationFeeParametersType>
+    for CustomAuthorityUpdateOperationFeeParametersType {
+        fn from(value: super::CustomAuthorityUpdateOperationFeeParametersType) -> Self {
+            Self {
+                basic_fee: Ok(value.basic_fee),
+                price_per_byte: Ok(value.price_per_byte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CustomOperation {
         data: ::std::result::Result<
             ::std::vec::Vec<super::CustomOperationDataItem>,
@@ -38487,6 +40735,67 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CustomOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for CustomOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl CustomOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CustomOperationFeeParametersType>
+    for super::CustomOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CustomOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CustomOperationFeeParametersType>
+    for CustomOperationFeeParametersType {
+        fn from(value: super::CustomOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct DynamicGlobalPropertyObject {
         accounts_registered_this_interval: ::std::result::Result<
             u32,
@@ -38501,7 +40810,10 @@ pub mod builder {
             ::std::string::String,
         >,
         dynamic_flags: ::std::result::Result<u32, ::std::string::String>,
-        head_block_id: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        head_block_id: ::std::result::Result<
+            ::std::string::String,
+            ::std::string::String,
+        >,
         head_block_number: ::std::result::Result<u32, ::std::string::String>,
         last_budget_time: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
@@ -38625,7 +40937,7 @@ pub mod builder {
         }
         pub fn head_block_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.head_block_id = value
@@ -40521,6 +42833,70 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct HtlcCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        fee_per_day: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for HtlcCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                fee_per_day: Err("no value supplied for fee_per_day".to_string()),
+            }
+        }
+    }
+    impl HtlcCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn fee_per_day<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee_per_day = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for fee_per_day: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcCreateOperationFeeParametersType>
+    for super::HtlcCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                fee_per_day: value.fee_per_day?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcCreateOperationFeeParametersType>
+    for HtlcCreateOperationFeeParametersType {
+        fn from(value: super::HtlcCreateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                fee_per_day: Ok(value.fee_per_day),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct HtlcExtendOperation {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -40631,13 +43007,83 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct HtlcExtendOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        fee_per_day: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for HtlcExtendOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                fee_per_day: Err("no value supplied for fee_per_day".to_string()),
+            }
+        }
+    }
+    impl HtlcExtendOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn fee_per_day<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee_per_day = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for fee_per_day: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcExtendOperationFeeParametersType>
+    for super::HtlcExtendOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcExtendOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                fee_per_day: value.fee_per_day?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcExtendOperationFeeParametersType>
+    for HtlcExtendOperationFeeParametersType {
+        fn from(value: super::HtlcExtendOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                fee_per_day: Ok(value.fee_per_day),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct HtlcObject {
-        conditions: ::std::result::Result<::serde_json::Value, ::std::string::String>,
+        conditions: ::std::result::Result<
+            super::HtlcObjectConditionInfo,
+            ::std::string::String,
+        >,
         memo: ::std::result::Result<
             ::std::option::Option<super::MemoData>,
             ::std::string::String,
         >,
-        transfer: ::std::result::Result<::serde_json::Value, ::std::string::String>,
+        transfer: ::std::result::Result<
+            super::HtlcObjectTransferInfo,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for HtlcObject {
         fn default() -> Self {
@@ -40651,7 +43097,7 @@ pub mod builder {
     impl HtlcObject {
         pub fn conditions<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::serde_json::Value>,
+            T: ::std::convert::TryInto<super::HtlcObjectConditionInfo>,
             T::Error: ::std::fmt::Display,
         {
             self.conditions = value
@@ -40673,7 +43119,7 @@ pub mod builder {
         }
         pub fn transfer<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::serde_json::Value>,
+            T: ::std::convert::TryInto<super::HtlcObjectTransferInfo>,
             T::Error: ::std::fmt::Display,
         {
             self.transfer = value
@@ -40702,6 +43148,278 @@ pub mod builder {
                 conditions: Ok(value.conditions),
                 memo: Ok(value.memo),
                 transfer: Ok(value.transfer),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct HtlcObjectConditionInfo {
+        hash_lock: ::std::result::Result<
+            super::HtlcObjectConditionInfoHashLockInfo,
+            ::std::string::String,
+        >,
+        time_lock: ::std::result::Result<
+            super::HtlcObjectConditionInfoTimeLockInfo,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for HtlcObjectConditionInfo {
+        fn default() -> Self {
+            Self {
+                hash_lock: Err("no value supplied for hash_lock".to_string()),
+                time_lock: Err("no value supplied for time_lock".to_string()),
+            }
+        }
+    }
+    impl HtlcObjectConditionInfo {
+        pub fn hash_lock<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::HtlcObjectConditionInfoHashLockInfo>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hash_lock = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for hash_lock: {}", e)
+                });
+            self
+        }
+        pub fn time_lock<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::HtlcObjectConditionInfoTimeLockInfo>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.time_lock = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for time_lock: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcObjectConditionInfo>
+    for super::HtlcObjectConditionInfo {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcObjectConditionInfo,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                hash_lock: value.hash_lock?,
+                time_lock: value.time_lock?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcObjectConditionInfo>
+    for HtlcObjectConditionInfo {
+        fn from(value: super::HtlcObjectConditionInfo) -> Self {
+            Self {
+                hash_lock: Ok(value.hash_lock),
+                time_lock: Ok(value.time_lock),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct HtlcObjectConditionInfoHashLockInfo {
+        preimage_hash: ::std::result::Result<super::HtlcHash, ::std::string::String>,
+        preimage_size: ::std::result::Result<u16, ::std::string::String>,
+    }
+    impl ::std::default::Default for HtlcObjectConditionInfoHashLockInfo {
+        fn default() -> Self {
+            Self {
+                preimage_hash: Err("no value supplied for preimage_hash".to_string()),
+                preimage_size: Err("no value supplied for preimage_size".to_string()),
+            }
+        }
+    }
+    impl HtlcObjectConditionInfoHashLockInfo {
+        pub fn preimage_hash<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::HtlcHash>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.preimage_hash = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for preimage_hash: {}", e)
+                });
+            self
+        }
+        pub fn preimage_size<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u16>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.preimage_size = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for preimage_size: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcObjectConditionInfoHashLockInfo>
+    for super::HtlcObjectConditionInfoHashLockInfo {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcObjectConditionInfoHashLockInfo,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                preimage_hash: value.preimage_hash?,
+                preimage_size: value.preimage_size?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcObjectConditionInfoHashLockInfo>
+    for HtlcObjectConditionInfoHashLockInfo {
+        fn from(value: super::HtlcObjectConditionInfoHashLockInfo) -> Self {
+            Self {
+                preimage_hash: Ok(value.preimage_hash),
+                preimage_size: Ok(value.preimage_size),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct HtlcObjectConditionInfoTimeLockInfo {
+        expiration: ::std::result::Result<
+            ::graphene_rpc::GrapheneTimePointSec,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for HtlcObjectConditionInfoTimeLockInfo {
+        fn default() -> Self {
+            Self {
+                expiration: Err("no value supplied for expiration".to_string()),
+            }
+        }
+    }
+    impl HtlcObjectConditionInfoTimeLockInfo {
+        pub fn expiration<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneTimePointSec>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.expiration = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for expiration: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcObjectConditionInfoTimeLockInfo>
+    for super::HtlcObjectConditionInfoTimeLockInfo {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcObjectConditionInfoTimeLockInfo,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                expiration: value.expiration?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcObjectConditionInfoTimeLockInfo>
+    for HtlcObjectConditionInfoTimeLockInfo {
+        fn from(value: super::HtlcObjectConditionInfoTimeLockInfo) -> Self {
+            Self {
+                expiration: Ok(value.expiration),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct HtlcObjectTransferInfo {
+        amount: ::std::result::Result<
+            ::graphene_rpc::GrapheneInt64,
+            ::std::string::String,
+        >,
+        asset_id: ::std::result::Result<
+            super::HtlcObjectTransferInfoAssetId,
+            ::std::string::String,
+        >,
+        from: ::std::result::Result<
+            super::HtlcObjectTransferInfoFrom,
+            ::std::string::String,
+        >,
+        to: ::std::result::Result<
+            super::HtlcObjectTransferInfoTo,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for HtlcObjectTransferInfo {
+        fn default() -> Self {
+            Self {
+                amount: Err("no value supplied for amount".to_string()),
+                asset_id: Err("no value supplied for asset_id".to_string()),
+                from: Err("no value supplied for from".to_string()),
+                to: Err("no value supplied for to".to_string()),
+            }
+        }
+    }
+    impl HtlcObjectTransferInfo {
+        pub fn amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for amount: {}", e)
+                });
+            self
+        }
+        pub fn asset_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::HtlcObjectTransferInfoAssetId>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.asset_id = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for asset_id: {}", e)
+                });
+            self
+        }
+        pub fn from<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::HtlcObjectTransferInfoFrom>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.from = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for from: {}", e));
+            self
+        }
+        pub fn to<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::HtlcObjectTransferInfoTo>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.to = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for to: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcObjectTransferInfo>
+    for super::HtlcObjectTransferInfo {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcObjectTransferInfo,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                amount: value.amount?,
+                asset_id: value.asset_id?,
+                from: value.from?,
+                to: value.to?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcObjectTransferInfo> for HtlcObjectTransferInfo {
+        fn from(value: super::HtlcObjectTransferInfo) -> Self {
+            Self {
+                amount: Ok(value.amount),
+                asset_id: Ok(value.asset_id),
+                from: Ok(value.from),
+                to: Ok(value.to),
             }
         }
     }
@@ -40883,6 +43601,70 @@ pub mod builder {
                 htlc_id: Ok(value.htlc_id),
                 preimage: Ok(value.preimage),
                 redeemer: Ok(value.redeemer),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct HtlcRedeemOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        fee_per_kb: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for HtlcRedeemOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                fee_per_kb: Err("no value supplied for fee_per_kb".to_string()),
+            }
+        }
+    }
+    impl HtlcRedeemOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn fee_per_kb<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee_per_kb = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for fee_per_kb: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HtlcRedeemOperationFeeParametersType>
+    for super::HtlcRedeemOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: HtlcRedeemOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                fee_per_kb: value.fee_per_kb?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HtlcRedeemOperationFeeParametersType>
+    for HtlcRedeemOperationFeeParametersType {
+        fn from(value: super::HtlcRedeemOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                fee_per_kb: Ok(value.fee_per_kb),
             }
         }
     }
@@ -41235,7 +44017,7 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct IcoBalanceClaimOperation {
         balance_to_claim: ::std::result::Result<
-            super::IcoBalanceIdType,
+            super::IcoBalanceClaimOperationBalanceToClaim,
             ::std::string::String,
         >,
         deposit_to_account: ::std::result::Result<
@@ -41264,7 +44046,7 @@ pub mod builder {
     impl IcoBalanceClaimOperation {
         pub fn balance_to_claim<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::IcoBalanceIdType>,
+            T: ::std::convert::TryInto<super::IcoBalanceClaimOperationBalanceToClaim>,
             T::Error: ::std::fmt::Display,
         {
             self.balance_to_claim = value
@@ -41620,6 +44402,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct LimitOrderCancelOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for LimitOrderCancelOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl LimitOrderCancelOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<LimitOrderCancelOperationFeeParametersType>
+    for super::LimitOrderCancelOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: LimitOrderCancelOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::LimitOrderCancelOperationFeeParametersType>
+    for LimitOrderCancelOperationFeeParametersType {
+        fn from(value: super::LimitOrderCancelOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct LimitOrderCreateOperation {
         amount_to_sell: ::std::result::Result<super::Asset, ::std::string::String>,
         expiration: ::std::result::Result<
@@ -41761,6 +44584,47 @@ pub mod builder {
                 min_to_receive: Ok(value.min_to_receive),
                 seller: Ok(value.seller),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct LimitOrderCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for LimitOrderCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl LimitOrderCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<LimitOrderCreateOperationFeeParametersType>
+    for super::LimitOrderCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: LimitOrderCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::LimitOrderCreateOperationFeeParametersType>
+    for LimitOrderCreateOperationFeeParametersType {
+        fn from(value: super::LimitOrderCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -43310,6 +46174,67 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct OverrideTransferOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for OverrideTransferOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl OverrideTransferOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<OverrideTransferOperationFeeParametersType>
+    for super::OverrideTransferOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: OverrideTransferOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::OverrideTransferOperationFeeParametersType>
+    for OverrideTransferOperationFeeParametersType {
+        fn from(value: super::OverrideTransferOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct PermissionCreateOperation {
         content_key: ::std::result::Result<::std::string::String, ::std::string::String>,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -43449,6 +46374,44 @@ pub mod builder {
                 permission_type: Ok(value.permission_type),
                 subject_account: Ok(value.subject_account),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct PermissionCreateOperationFeeParametersType {
+        fee: ::std::result::Result<::graphene_rpc::GrapheneInt64, ::std::string::String>,
+    }
+    impl ::std::default::Default for PermissionCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl PermissionCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<PermissionCreateOperationFeeParametersType>
+    for super::PermissionCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: PermissionCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::PermissionCreateOperationFeeParametersType>
+    for PermissionCreateOperationFeeParametersType {
+        fn from(value: super::PermissionCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -43602,7 +46565,7 @@ pub mod builder {
     pub struct PermissionRemoveOperation {
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
         permission_id: ::std::result::Result<
-            super::PermissionIdType,
+            super::PermissionRemoveOperationPermissionId,
             ::std::string::String,
         >,
         subject_account: ::std::result::Result<
@@ -43632,7 +46595,7 @@ pub mod builder {
         }
         pub fn permission_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::PermissionIdType>,
+            T: ::std::convert::TryInto<super::PermissionRemoveOperationPermissionId>,
             T::Error: ::std::fmt::Display,
         {
             self.permission_id = value
@@ -43676,6 +46639,47 @@ pub mod builder {
                 permission_id: Ok(value.permission_id),
                 subject_account: Ok(value.subject_account),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct PermissionRemoveOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for PermissionRemoveOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl PermissionRemoveOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<PermissionRemoveOperationFeeParametersType>
+    for super::PermissionRemoveOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: PermissionRemoveOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::PermissionRemoveOperationFeeParametersType>
+    for PermissionRemoveOperationFeeParametersType {
+        fn from(value: super::PermissionRemoveOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -43810,6 +46814,67 @@ pub mod builder {
                 storage_data: Ok(value.storage_data),
                 subject_account: Ok(value.subject_account),
                 url: Ok(value.url),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct PersonalDataCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for PersonalDataCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl PersonalDataCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<PersonalDataCreateOperationFeeParametersType>
+    for super::PersonalDataCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: PersonalDataCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::PersonalDataCreateOperationFeeParametersType>
+    for PersonalDataCreateOperationFeeParametersType {
+        fn from(value: super::PersonalDataCreateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
             }
         }
     }
@@ -44028,6 +47093,47 @@ pub mod builder {
                 operator_account: Ok(value.operator_account),
                 subject_account: Ok(value.subject_account),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct PersonalDataRemoveOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for PersonalDataRemoveOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl PersonalDataRemoveOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<PersonalDataRemoveOperationFeeParametersType>
+    for super::PersonalDataRemoveOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: PersonalDataRemoveOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::PersonalDataRemoveOperationFeeParametersType>
+    for PersonalDataRemoveOperationFeeParametersType {
+        fn from(value: super::PersonalDataRemoveOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -44498,6 +47604,67 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct ProposalCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for ProposalCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl ProposalCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ProposalCreateOperationFeeParametersType>
+    for super::ProposalCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ProposalCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ProposalCreateOperationFeeParametersType>
+    for ProposalCreateOperationFeeParametersType {
+        fn from(value: super::ProposalCreateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct ProposalDeleteOperation {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
         fee: ::std::result::Result<super::Asset, ::std::string::String>,
@@ -44616,6 +47783,47 @@ pub mod builder {
                 proposal: Ok(value.proposal),
                 using_owner_authority: Ok(value.using_owner_authority),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct ProposalDeleteOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for ProposalDeleteOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl ProposalDeleteOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ProposalDeleteOperationFeeParametersType>
+    for super::ProposalDeleteOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ProposalDeleteOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::ProposalDeleteOperationFeeParametersType>
+    for ProposalDeleteOperationFeeParametersType {
+        fn from(value: super::ProposalDeleteOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -45128,6 +48336,67 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct ProposalUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for ProposalUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl ProposalUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<ProposalUpdateOperationFeeParametersType>
+    for super::ProposalUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: ProposalUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::ProposalUpdateOperationFeeParametersType>
+    for ProposalUpdateOperationFeeParametersType {
+        fn from(value: super::ProposalUpdateOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct RefundWorkerType {
         total_burned: ::std::result::Result<
             ::graphene_rpc::GrapheneInt64,
@@ -45387,13 +48656,13 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct SignedBlock {
         extensions: ::std::result::Result<super::ExtensionsType, ::std::string::String>,
-        previous: ::std::result::Result<super::BlockIdType, ::std::string::String>,
+        previous: ::std::result::Result<::std::string::String, ::std::string::String>,
         timestamp: ::std::result::Result<
             ::graphene_rpc::GrapheneTimePointSec,
             ::std::string::String,
         >,
         transaction_merkle_root: ::std::result::Result<
-            super::ChecksumType,
+            ::std::string::String,
             ::std::string::String,
         >,
         transactions: ::std::result::Result<
@@ -45438,7 +48707,7 @@ pub mod builder {
         }
         pub fn previous<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::BlockIdType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.previous = value
@@ -45462,7 +48731,7 @@ pub mod builder {
         }
         pub fn transaction_merkle_root<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<super::ChecksumType>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.transaction_merkle_root = value
@@ -45787,6 +49056,47 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct TicketCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for TicketCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl TicketCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<TicketCreateOperationFeeParametersType>
+    for super::TicketCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: TicketCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::TicketCreateOperationFeeParametersType>
+    for TicketCreateOperationFeeParametersType {
+        fn from(value: super::TicketCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct TicketUpdateOperation {
         account: ::std::result::Result<
             super::TicketUpdateOperationAccount,
@@ -45919,6 +49229,47 @@ pub mod builder {
                 target_type: Ok(value.target_type),
                 ticket: Ok(value.ticket),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct TicketUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for TicketUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl TicketUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<TicketUpdateOperationFeeParametersType>
+    for super::TicketUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: TicketUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::TicketUpdateOperationFeeParametersType>
+    for TicketUpdateOperationFeeParametersType {
+        fn from(value: super::TicketUpdateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -46218,6 +49569,67 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct TransferOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for TransferOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl TransferOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<TransferOperationFeeParametersType>
+    for super::TransferOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: TransferOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::TransferOperationFeeParametersType>
+    for TransferOperationFeeParametersType {
+        fn from(value: super::TransferOperationFeeParametersType) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct VestingBalanceCreateOperation {
         amount: ::std::result::Result<super::Asset, ::std::string::String>,
         creator: ::std::result::Result<
@@ -46330,6 +49742,47 @@ pub mod builder {
                 owner: Ok(value.owner),
                 policy: Ok(value.policy),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct VestingBalanceCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for VestingBalanceCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl VestingBalanceCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<VestingBalanceCreateOperationFeeParametersType>
+    for super::VestingBalanceCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: VestingBalanceCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::VestingBalanceCreateOperationFeeParametersType>
+    for VestingBalanceCreateOperationFeeParametersType {
+        fn from(value: super::VestingBalanceCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -46524,6 +49977,47 @@ pub mod builder {
                 owner: Ok(value.owner),
                 vesting_balance: Ok(value.vesting_balance),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct VestingBalanceWithdrawOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for VestingBalanceWithdrawOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl VestingBalanceWithdrawOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<VestingBalanceWithdrawOperationFeeParametersType>
+    for super::VestingBalanceWithdrawOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: VestingBalanceWithdrawOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::VestingBalanceWithdrawOperationFeeParametersType>
+    for VestingBalanceWithdrawOperationFeeParametersType {
+        fn from(value: super::VestingBalanceWithdrawOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -46774,6 +50268,69 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct WithdrawPermissionClaimOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+        price_per_kbyte: ::std::result::Result<u32, ::std::string::String>,
+    }
+    impl ::std::default::Default for WithdrawPermissionClaimOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+                price_per_kbyte: Err("no value supplied for price_per_kbyte".to_string()),
+            }
+        }
+    }
+    impl WithdrawPermissionClaimOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+        pub fn price_per_kbyte<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<u32>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.price_per_kbyte = value
+                .try_into()
+                .map_err(|e| {
+                    format!("error converting supplied value for price_per_kbyte: {}", e)
+                });
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WithdrawPermissionClaimOperationFeeParametersType>
+    for super::WithdrawPermissionClaimOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WithdrawPermissionClaimOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                fee: value.fee?,
+                price_per_kbyte: value.price_per_kbyte?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::WithdrawPermissionClaimOperationFeeParametersType>
+    for WithdrawPermissionClaimOperationFeeParametersType {
+        fn from(
+            value: super::WithdrawPermissionClaimOperationFeeParametersType,
+        ) -> Self {
+            Self {
+                fee: Ok(value.fee),
+                price_per_kbyte: Ok(value.price_per_kbyte),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct WithdrawPermissionCreateOperation {
         authorized_account: ::std::result::Result<
             super::WithdrawPermissionCreateOperationAuthorizedAccount,
@@ -46952,6 +50509,49 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct WithdrawPermissionCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for WithdrawPermissionCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl WithdrawPermissionCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WithdrawPermissionCreateOperationFeeParametersType>
+    for super::WithdrawPermissionCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WithdrawPermissionCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::WithdrawPermissionCreateOperationFeeParametersType>
+    for WithdrawPermissionCreateOperationFeeParametersType {
+        fn from(
+            value: super::WithdrawPermissionCreateOperationFeeParametersType,
+        ) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct WithdrawPermissionDeleteOperation {
         authorized_account: ::std::result::Result<
             super::WithdrawPermissionDeleteOperationAuthorizedAccount,
@@ -47068,6 +50668,49 @@ pub mod builder {
                 withdraw_from_account: Ok(value.withdraw_from_account),
                 withdrawal_permission: Ok(value.withdrawal_permission),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct WithdrawPermissionDeleteOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for WithdrawPermissionDeleteOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl WithdrawPermissionDeleteOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WithdrawPermissionDeleteOperationFeeParametersType>
+    for super::WithdrawPermissionDeleteOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WithdrawPermissionDeleteOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::WithdrawPermissionDeleteOperationFeeParametersType>
+    for WithdrawPermissionDeleteOperationFeeParametersType {
+        fn from(
+            value: super::WithdrawPermissionDeleteOperationFeeParametersType,
+        ) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -47457,6 +51100,49 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct WithdrawPermissionUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for WithdrawPermissionUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl WithdrawPermissionUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WithdrawPermissionUpdateOperationFeeParametersType>
+    for super::WithdrawPermissionUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WithdrawPermissionUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::WithdrawPermissionUpdateOperationFeeParametersType>
+    for WithdrawPermissionUpdateOperationFeeParametersType {
+        fn from(
+            value: super::WithdrawPermissionUpdateOperationFeeParametersType,
+        ) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct WitnessCreateOperation {
         block_signing_key: ::std::result::Result<
             ::std::string::String,
@@ -47551,6 +51237,47 @@ pub mod builder {
                 url: Ok(value.url),
                 witness_account: Ok(value.witness_account),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct WitnessCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for WitnessCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl WitnessCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WitnessCreateOperationFeeParametersType>
+    for super::WitnessCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WitnessCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::WitnessCreateOperationFeeParametersType>
+    for WitnessCreateOperationFeeParametersType {
+        fn from(value: super::WitnessCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]
@@ -47917,6 +51644,44 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct WitnessUpdateOperationFeeParametersType {
+        fee: ::std::result::Result<::graphene_rpc::GrapheneInt64, ::std::string::String>,
+    }
+    impl ::std::default::Default for WitnessUpdateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl WitnessUpdateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WitnessUpdateOperationFeeParametersType>
+    for super::WitnessUpdateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WitnessUpdateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::WitnessUpdateOperationFeeParametersType>
+    for WitnessUpdateOperationFeeParametersType {
+        fn from(value: super::WitnessUpdateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct WorkerCreateOperation {
         daily_pay: ::std::result::Result<
             ::graphene_rpc::GrapheneInt64,
@@ -48080,6 +51845,47 @@ pub mod builder {
                 work_begin_date: Ok(value.work_begin_date),
                 work_end_date: Ok(value.work_end_date),
             }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct WorkerCreateOperationFeeParametersType {
+        fee: ::std::result::Result<
+            ::graphene_rpc::GrapheneUInt64,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for WorkerCreateOperationFeeParametersType {
+        fn default() -> Self {
+            Self {
+                fee: Err("no value supplied for fee".to_string()),
+            }
+        }
+    }
+    impl WorkerCreateOperationFeeParametersType {
+        pub fn fee<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::graphene_rpc::GrapheneUInt64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.fee = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for fee: {}", e));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WorkerCreateOperationFeeParametersType>
+    for super::WorkerCreateOperationFeeParametersType {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WorkerCreateOperationFeeParametersType,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self { fee: value.fee? })
+        }
+    }
+    impl ::std::convert::From<super::WorkerCreateOperationFeeParametersType>
+    for WorkerCreateOperationFeeParametersType {
+        fn from(value: super::WorkerCreateOperationFeeParametersType) -> Self {
+            Self { fee: Ok(value.fee) }
         }
     }
     #[derive(Clone, Debug)]

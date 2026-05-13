@@ -499,6 +499,12 @@ def find_field_type(body: str, field_name: str) -> str | None:
     recover the type expression.
     """
     flat = _flatten_body(body)
+    inline_decl = re.search(
+        r"(?:struct|class)\s+([A-Za-z_]\w*)\s*\{\}\s+" + re.escape(field_name) + r"\s*(?:[=;,{])",
+        flat,
+    )
+    if inline_decl:
+        return inline_decl.group(1)
     pattern = re.compile(
         r"(?<![\w:])" + re.escape(field_name) +
         r"\s*(?:\[[^]]*\])?\s*(?=[=;,(){}])"
@@ -521,6 +527,9 @@ def find_field_type(body: str, field_name: str) -> str | None:
         # part of the signature; initializer chains leave `=`. Both disqualify.
         if "(" in prefix or "=" in prefix:
             continue
+        inline_struct = re.match(r"^(?:struct|class)\s+([A-Za-z_]\w*)\s*\{\}\s*$", prefix)
+        if inline_struct:
+            return inline_struct.group(1)
         if prefix.startswith(("typedef ", "using ", "friend ", "static_assert", "enum ", "struct ", "class ", "namespace ", "//", "/*")):
             continue
         # Multi-declaration: `Type a, b, c;` — when looking up `b` or `c`, the
@@ -584,6 +593,7 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "uint16_t": {"type": "integer", "format": "uint16", "minimum": 0},
     "uint32_t": {"type": "integer", "format": "uint32", "minimum": 0},
     "uint64_t": {"$ref": "#/components/schemas/GrapheneUInt64"},
+    "unsigned": {"type": "integer", "format": "uint32", "minimum": 0},
     "float":    {"type": "number", "format": "float"},
     "double":   {"type": "number", "format": "double"},
     "share_type":   {"$ref": "#/components/schemas/GrapheneInt64"},
@@ -610,6 +620,9 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "fc::mutable_variant_object": {"type": "object"},
     "blind_factor_type": {"type": "string"},
     "commitment_type": {"type": "string"},
+    "block_id_type": {"type": "string"},
+    "chain_id_type": {"type": "string"},
+    "checksum_type": {"type": "string"},
     "transaction_id_type": {"type": "string"},
     "uint128_t":     {"type": "string", "pattern": r"^\d+$", "description": "Unsigned 128-bit integer serialized as a decimal string."},
     "fc::uint128_t": {"type": "string", "pattern": r"^\d+$", "description": "Unsigned 128-bit integer serialized as a decimal string."},
@@ -627,6 +640,18 @@ PRIMITIVE_MAP: dict[str, dict] = {
     "fc::ecc::commitment_type": {"type": "string", "description": "Pedersen commitment, hex-encoded."},
     "range_proof_type":         {"type": "string", "description": "Confidential range proof, hex-encoded."},
 }
+
+_HASH_LIKE_ID_TYPES = {
+    "block_id_type",
+    "chain_id_type",
+    "checksum_type",
+    "transaction_id_type",
+}
+
+
+def _is_graphene_object_id_type(t: str) -> bool:
+    return re.match(r"^[A-Za-z_]\w*_id_type$", t) is not None and t not in _HASH_LIKE_ID_TYPES
+
 
 # Additional graphene::chain id types — same `1.X.Y` shape as the protocol ids.
 _CHAIN_ID_TYPES = {
@@ -756,6 +781,14 @@ def _lookup_qualified(reg: Registry, name: str, *, owner: str | None = None) -> 
     return candidates[0]
 
 
+def _fee_parameters_type_for(alternative: str, reg: Registry) -> str:
+    for nested in ("fee_params_t", "fee_parameters_type"):
+        candidate = f"{alternative}::{nested}"
+        if _lookup_qualified(reg, candidate) is not None:
+            return candidate
+    return f"{alternative}::fee_params_t"
+
+
 def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
              *, owner: str | None = None) -> dict:
     """Map a C++ type expression to a JSON Schema fragment.
@@ -798,7 +831,7 @@ def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
         variant_name = m.group(1).strip()
         var_qname = _lookup_qualified(reg, variant_name)
         if var_qname is not None and var_qname in reg.variants:
-            alts = [f"{a}::fee_params_t" for a in reg.variants[var_qname].alternatives]
+            alts = [_fee_parameters_type_for(a, reg) for a in reg.variants[var_qname].alternatives]
             return _variant_schema_from_alternatives(alts, reg, pending)
 
     # Inline static_variant<...> — produces a [index, payload] oneOf
@@ -809,6 +842,8 @@ def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
     # Direct primitive
     if t in PRIMITIVE_MAP:
         return dict(PRIMITIVE_MAP[t])
+    if _is_graphene_object_id_type(t):
+        return {"type": "string", "pattern": r"^\d+\.\d+\.\d+$"}
 
     # Containers
     m = re.match(r"^([A-Za-z_][\w:]*)\s*<(.+)>\s*$", t)
@@ -1116,6 +1151,18 @@ def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
         # 4. struct?
         elif qname is not None and qname in reg.reflected_structs:
             schemas[ref_name] = schema_for_struct(reg.reflected_structs[qname], reg, new_pending)
+            resolved += 1
+        # 5. primitive / macro-declared id typename?
+        elif cpp_type in PRIMITIVE_MAP:
+            schemas[ref_name] = dict(PRIMITIVE_MAP[cpp_type])
+            schemas[ref_name].setdefault("x-cpp-type", cpp_type)
+            resolved += 1
+        elif _is_graphene_object_id_type(cpp_type):
+            schemas[ref_name] = {
+                "type": "string",
+                "pattern": r"^\d+\.\d+\.\d+$",
+                "x-cpp-type": cpp_type,
+            }
             resolved += 1
         else:
             # Leave the placeholder, mark unresolved
