@@ -1,4 +1,5 @@
-use graphene_chain_swaplock::{OpenRpcParams, SignedTransaction, TransferParams};
+use graphene_chain_swaplock::{SignedTransaction, TransferParams};
+use graphene_rpc::OpenRpcParams;
 use serde_json::json;
 
 #[test]

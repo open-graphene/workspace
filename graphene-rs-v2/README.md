@@ -24,6 +24,7 @@ crates/graphene-codegen/
     extract_typify_schema.py    # OpenRPC schemas -> JSON Schema $defs for typify
     gen_rust_variants.py        # static_variant schemas -> Rust [tag, payload] enums
     gen_rust_rpc.py             # OpenRPC methods -> Rust params/response bindings
+crates/graphene-rpc/            # hand-written typed RPC runtime primitives
 crates/graphene-chain-acta/
 crates/graphene-chain-bitshares/
 crates/graphene-chain-rsquared/
@@ -34,6 +35,10 @@ crates/graphene-chain-swaplock/
 `graphene-codegen` is the pipeline owner. The OpenRPC directory still contains
 Python/shell backend stages, but the orchestration entrypoint is Rust. `gen.sh`
 is intentionally only a small project-local convenience wrapper.
+
+`graphene-rpc` is the first hand-written SDK/runtime layer. It owns the shared
+`OpenRpcParams` trait, `RpcTransport`, `RpcClient`, and `RpcError`; generated
+chain crates implement that shared trait instead of defining their own copy.
 
 ## Generate all configured chains
 
@@ -88,6 +93,6 @@ cargo run -p graphene-codegen --bin openrpc-typify -- \
 ## Next steps
 
 1. Add a repeatable generated-output audit command under `graphene-codegen`.
-2. Port the Python Rust-facing backend stages into Rust modules incrementally.
-3. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
-4. Build the typed RPC SDK only after the codegen ownership boundary is stable.
+2. Add chain-specific roundtrip/fixture tests for BitShares, Acta, and RSquared.
+3. Add a concrete HTTP or WebSocket `RpcTransport` implementation.
+4. Port the Python Rust-facing backend stages into Rust modules incrementally.
