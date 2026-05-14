@@ -1,3 +1,4 @@
+pub mod database_callbacks;
 mod error;
 mod http;
 mod jsonrpc;

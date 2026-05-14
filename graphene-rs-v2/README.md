@@ -40,12 +40,15 @@ is intentionally only a small project-local convenience wrapper.
 `graphene-rpc` is the first hand-written SDK/runtime layer. It owns the shared
 `OpenRpcParams` and `OpenRpcCallbackParams` traits, `RpcTransport`, `RpcClient`,
 `RpcError`, blocking `HttpTransport`, and the session-oriented WebSocket runtime.
-The runtime code is split into focused modules (`error`, `params`, `scalar`,
-`http`, `jsonrpc`, and `ws`) while `lib.rs` keeps the public re-export surface
-stable. The `ws` module is further split between session-facing APIs, dispatcher
-internals, shared protocol helpers, public handle types, and an explicit
-one-shot WebSocket transport for simple one-call-per-socket flows. Generated
-chain crates implement the shared traits instead of defining their own copies.
+The runtime code is split into focused modules (`database_callbacks`, `error`,
+`params`, `scalar`, `http`, `jsonrpc`, and `ws`) while `lib.rs` keeps the public
+re-export surface stable. The `ws` module is further split between
+session-facing APIs, dispatcher internals, shared protocol helpers, public
+handle types, and an explicit one-shot WebSocket transport for simple
+one-call-per-socket flows. Generated chain crates implement the shared traits
+instead of defining their own copies. Reusable database callback params such as
+`set_block_applied_callback` live in `database_callbacks`, while chain crates keep
+their small chain-facing helper functions and public re-exports.
 
 `graphene-transaction` contains chain-independent transaction primitives that
 were proven across Swaplock and Acta first: exact account lookup result
