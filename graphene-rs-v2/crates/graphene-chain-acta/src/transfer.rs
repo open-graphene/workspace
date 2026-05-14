@@ -9,6 +9,11 @@ use crate::generated::{
 };
 use crate::transaction::PreparedTransaction;
 
+/// Converts a chain-independent [`TransferDraft`] into this chain's generated transfer operation.
+///
+/// The operation is built with a zero fee placeholder. Call
+/// [`fetch_required_fee_for_transfer`] or [`prepare_transfer_transaction`] before
+/// signing or broadcasting.
 pub fn build_transfer_operation(
     draft: TransferDraft,
 ) -> Result<TransferOperation, BuildTransactionError> {
@@ -30,6 +35,11 @@ pub fn build_transfer_operation(
     })
 }
 
+/// Applies a decoded required-fee response to a transfer operation.
+///
+/// Graphene can return nested fee shapes for proposal-like operations. A plain
+/// transfer must receive a single asset fee; nested shapes are rejected so callers
+/// do not accidentally sign a transaction with an unsupported fee model.
 pub fn apply_required_fee(
     operation: &mut TransferOperation,
     fee: RequiredFee,
@@ -38,6 +48,12 @@ pub fn apply_required_fee(
     Ok(())
 }
 
+/// Fetches the required fee for a transfer operation from the database API.
+///
+/// `fee_asset_symbol_or_id` is passed through to `get_required_fees`, so callers
+/// can choose the fee asset by symbol or object id according to what the node
+/// accepts. The returned fee is a generated chain-local `asset` value ready to
+/// assign to `transfer.fee`.
 pub fn fetch_required_fee_for_transfer<T>(
     client: &RpcClient<T>,
     operation: &TransferOperation,
@@ -65,6 +81,13 @@ fn required_fee_asset(fee: RequiredFee) -> Result<Asset, BuildTransactionError> 
     }
 }
 
+/// Prepares a signed-transfer-ready transaction using the proven low-level flow.
+///
+/// This is a thin convenience helper, not a wallet abstraction. It builds the
+/// transfer operation, fetches the required fee, reads dynamic global properties,
+/// derives the expiration from the current chain time plus `expiration_lifetime`,
+/// and returns a [`PreparedTransaction`] for the caller to sign. The caller still
+/// owns account lookup, chain-id lookup, signer selection, and broadcast choice.
 pub fn prepare_transfer_transaction<T>(
     client: &RpcClient<T>,
     draft: TransferDraft,
@@ -81,6 +104,11 @@ where
     prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
 }
 
+/// Builds a prepared transaction from already-constructed operations and dynamic globals.
+///
+/// Use this when you need manual control over the operation list. It only fills
+/// transaction header fields from `dynamic`; it does not fetch fees, resolve
+/// accounts, sign, validate, or broadcast.
 pub fn prepare_transaction(
     dynamic: &DynamicGlobalPropertyObject,
     operations: Vec<Operation>,

@@ -196,6 +196,31 @@ use graphene_chain_swaplock::{
 };
 ```
 
+A transfer remains explicit and low-level. The helper prepares the transaction;
+the caller still chooses the accounts, fee asset, signer, and broadcast path:
+
+```rust
+let from = lookup_exact_account_id(&database_client, SWAPLOCK_TESTNET_FROM_ACCOUNT)?;
+let to = lookup_exact_account_id(&database_client, SWAPLOCK_TESTNET_TO_ACCOUNT)?;
+let chain_id = database_client.call(GetChainIdParams)?;
+let chain_id = ChainId::try_from(chain_id.as_str())?;
+
+let prepared = prepare_transfer_transaction(
+    &database_client,
+    TransferDraft {
+        from,
+        to,
+        amount: SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
+        asset_id: SWAPLOCK_TESTNET_TRANSFER_ASSET.to_owned(),
+    },
+    SWAPLOCK_TESTNET_TRANSFER_ASSET,
+    chrono::Duration::minutes(5),
+)?;
+
+let signed = prepared.sign(&chain_id, &signer)?;
+let response = broadcast_signed_transaction_synchronous_typed(&broadcast_client, signed)?;
+```
+
 Internally these are split into small handwritten modules: `account.rs` for
 account lookup helpers, `transfer.rs` for transfer/fee/transaction preparation
 including the `prepare_transfer_transaction` builder, `transaction.rs` for

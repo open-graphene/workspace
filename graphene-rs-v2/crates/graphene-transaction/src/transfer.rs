@@ -4,11 +4,21 @@ use graphene_rpc::RpcError;
 
 use crate::block_id::BlockIdError;
 
+/// Chain-independent transfer input before it is converted into a generated operation.
+///
+/// The fields are intentionally low-level Graphene values, not wallet concepts:
+/// callers provide already-resolved account object ids, an integer amount in the
+/// asset's precision, and an asset object id such as `"1.3.0"`. Chain crates turn
+/// this draft into their own generated `transfer_operation` type.
 #[derive(Clone, Debug)]
 pub struct TransferDraft {
+    /// Sender account object id, for example `"1.2.100"`.
     pub from: String,
+    /// Recipient account object id, for example `"1.2.101"`.
     pub to: String,
+    /// Amount in the asset's smallest unit, matching Graphene's `share_type`.
     pub amount: i64,
+    /// Asset object id for the amount being transferred, for example `"1.3.0"`.
     pub asset_id: String,
 }
 
