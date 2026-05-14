@@ -5,6 +5,7 @@
 //! generate a JSON Schema for editor/CI use, and run domain validation before
 //! later generator work consumes the document.
 
+pub mod emit;
 pub mod ir;
 pub mod lower;
 pub mod model;
