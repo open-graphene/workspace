@@ -2,6 +2,7 @@ use std::fmt;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+pub mod dart;
 pub mod typescript;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
