@@ -1,9 +1,9 @@
 use graphene_chain_acta::{
     broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
     fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
+    GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
     ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL, ACTA_TESTNET_TO_ACCOUNT,
     ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
-    GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
     PUBLIC_ACTA_TESTNET_WIF,
 };
 use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketTransport, HttpTransport, RpcClient};
@@ -23,8 +23,8 @@ fn live_broadcast_client() -> RpcClient<GrapheneWebSocketTransport> {
 #[test]
 #[ignore = "requires network access and broadcasts a tiny Acta testnet transfer"]
 fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
-    let signer = WifSigner::from_wif(PUBLIC_ACTA_TESTNET_WIF)
-        .expect("public Acta testnet WIF should parse");
+    let signer =
+        WifSigner::from_wif(PUBLIC_ACTA_TESTNET_WIF).expect("public Acta testnet WIF should parse");
 
     let client = live_client();
     let from = lookup_exact_account_id(&client, ACTA_TESTNET_FROM_ACCOUNT)
@@ -36,7 +36,9 @@ fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
     let dynamic = client
         .call(GetDynamicGlobalPropertiesParams)
         .expect("dynamic global properties should decode");
-    let chain_id = client.call(GetChainIdParams).expect("chain id should decode");
+    let chain_id = client
+        .call(GetChainIdParams)
+        .expect("chain id should decode");
     let chain_id = ChainId::try_from(chain_id.as_str()).expect("chain id should parse");
     let expiration =
         GrapheneTimePointSec::new(dynamic.time.naive_utc() + chrono::Duration::minutes(5));
@@ -48,12 +50,8 @@ fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
         asset_id: ACTA_TESTNET_TRANSFER_ASSET.to_owned(),
     })
     .expect("transfer draft should build");
-    transfer.fee = fetch_required_fee_for_transfer(
-        &client,
-        &transfer,
-        ACTA_TESTNET_TRANSFER_ASSET,
-    )
-    .expect("required fee lookup should succeed");
+    transfer.fee = fetch_required_fee_for_transfer(&client, &transfer, ACTA_TESTNET_TRANSFER_ASSET)
+        .expect("required fee lookup should succeed");
 
     let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
         .expect("transaction should prepare from dynamic global properties");

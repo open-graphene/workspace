@@ -143,10 +143,32 @@ transfer-only binary `codec.rs`. The chain config contains a separate
 mirroring Swaplock's split between public `database_api` reads and broadcast
 RPC while preserving one config file per chain.
 
-The current Acta coverage is intentionally offline-only until safe testnet
-fixture constants are added: transfer construction, required-fee shape handling,
-transaction reference-block preparation, account lookup RPC params, and compile
-coverage for signing/broadcast helpers.
+Run the checked live broadcast fixture:
+
+```sh
+cargo test -p graphene-chain-acta \
+  live_signs_and_broadcasts_tiny_transfer_with_wif \
+  -- --ignored --nocapture
+```
+
+Run the executable example:
+
+```sh
+cargo run -p graphene-chain-acta --example acta_broadcast_transfer
+```
+
+Both send a tiny Acta testnet transfer from the shared test account to
+`committee-account` and print only the transaction id, block number, and
+transaction index. The testnet constants are exported by the crate as:
+
+```rust
+use graphene_chain_acta::{
+    ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL,
+    ACTA_TESTNET_TO_ACCOUNT, ACTA_TESTNET_TRANSFER_AMOUNT,
+    ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
+    PUBLIC_ACTA_TESTNET_WIF,
+};
+```
 
 ## Generate all configured chains
 

@@ -1,9 +1,9 @@
 use graphene_chain_acta::{
     broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
     fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
+    GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
     ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL, ACTA_TESTNET_TO_ACCOUNT,
     ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
-    GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
     PUBLIC_ACTA_TESTNET_WIF,
 };
 use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketTransport, HttpTransport, RpcClient};
@@ -35,11 +35,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         amount: ACTA_TESTNET_TRANSFER_AMOUNT,
         asset_id: ACTA_TESTNET_TRANSFER_ASSET.to_owned(),
     })?;
-    transfer.fee = fetch_required_fee_for_transfer(
-        &database_client,
-        &transfer,
-        ACTA_TESTNET_TRANSFER_ASSET,
-    )?;
+    transfer.fee =
+        fetch_required_fee_for_transfer(&database_client, &transfer, ACTA_TESTNET_TRANSFER_ASSET)?;
 
     let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)?;
     let signed = prepared.sign(&chain_id, &signer)?;
