@@ -1,8 +1,6 @@
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, SyncSender};
 
-use serde_json::Value;
-
 use crate::RpcError;
 
 use super::dispatcher::DispatcherCommand;
@@ -23,22 +21,6 @@ impl ApiHandle {
 
     pub fn id(&self) -> u64 {
         self.api_id
-    }
-}
-
-/// Local callback route handle allocated by a `GrapheneWebSocketSession`.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct CallbackHandle {
-    callback_id: u64,
-}
-
-impl CallbackHandle {
-    pub(super) fn new(callback_id: u64) -> Self {
-        Self { callback_id }
-    }
-
-    pub fn id(&self) -> u64 {
-        self.callback_id
     }
 }
 
@@ -64,10 +46,6 @@ impl CallbackSubscription {
 
     pub fn id(&self) -> u64 {
         self.callback_id
-    }
-
-    pub fn handle(&self) -> CallbackHandle {
-        CallbackHandle::new(self.callback_id)
     }
 
     pub fn unsubscribe(&self) -> Result<(), RpcError> {
@@ -101,11 +79,4 @@ impl Drop for CallbackSubscription {
             response_tx: None,
         });
     }
-}
-
-/// Graphene server-pushed `notice` message routed by callback id.
-#[derive(Clone, Debug, PartialEq)]
-pub struct GrapheneNotice {
-    pub callback_id: u64,
-    pub payload: Value,
 }

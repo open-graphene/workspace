@@ -40,7 +40,8 @@ pub use generated::*;
 pub use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
 pub use testnet::{
     PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
-    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
+    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,
+    SWAPLOCK_TESTNET_WS_URL,
 };
 pub use transaction::{
     broadcast_signed_transaction, broadcast_signed_transaction_synchronous,

@@ -13,10 +13,8 @@ mod session;
 mod types;
 
 pub use one_shot_transport::GrapheneWebSocketOneShotTransport;
-#[allow(deprecated)]
-pub use one_shot_transport::GrapheneWebSocketTransport;
 pub use session::{GrapheneWebSocketApiTransport, GrapheneWebSocketSession};
-pub use types::{ApiHandle, CallbackHandle, CallbackSubscription, GrapheneNotice};
+pub use types::{ApiHandle, CallbackSubscription};
 
 #[cfg(test)]
 // Re-export protocol helpers only for crate-level unit tests in lib.rs.

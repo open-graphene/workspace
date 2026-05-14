@@ -13,7 +13,8 @@ use graphene_chain_swaplock::{
     LookupCommitteeMemberAccountsParams, LookupVoteIdObject, LookupVoteIdsParams,
     LookupWitnessAccountsParams, Operation, RequiredFee, Transaction, TransferDraft,
     OPENRPC_METHODS, PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT,
-    SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
+    SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
+    SWAPLOCK_TESTNET_TRANSFER_ASSET, SWAPLOCK_TESTNET_WS_URL,
 };
 use graphene_codec::to_graphene_bytes;
 use graphene_rpc::{
@@ -272,12 +273,13 @@ fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
     let mut transfer = build_transfer_operation(TransferDraft {
         from,
         to,
-        amount: 1,
-        asset_id: "1.3.0".to_owned(),
+        amount: SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
+        asset_id: SWAPLOCK_TESTNET_TRANSFER_ASSET.to_owned(),
     })
     .expect("transfer draft should build");
-    transfer.fee = fetch_required_fee_for_transfer(&client, &transfer, "1.3.0")
-        .expect("required fee lookup should succeed");
+    transfer.fee =
+        fetch_required_fee_for_transfer(&client, &transfer, SWAPLOCK_TESTNET_TRANSFER_ASSET)
+            .expect("required fee lookup should succeed");
 
     let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
         .expect("transaction should prepare from dynamic global properties");
@@ -321,12 +323,13 @@ fn live_broadcasts_tiny_transfer_with_callback() {
     let mut transfer = build_transfer_operation(TransferDraft {
         from,
         to,
-        amount: 1,
-        asset_id: "1.3.0".to_owned(),
+        amount: SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
+        asset_id: SWAPLOCK_TESTNET_TRANSFER_ASSET.to_owned(),
     })
     .expect("transfer draft should build");
-    transfer.fee = fetch_required_fee_for_transfer(&client, &transfer, "1.3.0")
-        .expect("required fee lookup should succeed");
+    transfer.fee =
+        fetch_required_fee_for_transfer(&client, &transfer, SWAPLOCK_TESTNET_TRANSFER_ASSET)
+            .expect("required fee lookup should succeed");
 
     let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
         .expect("transaction should prepare from dynamic global properties");

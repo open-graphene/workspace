@@ -3,7 +3,8 @@ use graphene_chain_swaplock::{
     fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
     GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
     PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
-    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
+    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,
+    SWAPLOCK_TESTNET_WS_URL,
 };
 use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketSession, HttpTransport, RpcClient};
 use graphene_signing::{ChainId, WifSigner};
@@ -31,10 +32,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut transfer = build_transfer_operation(TransferDraft {
         from,
         to,
-        amount: 1,
-        asset_id: "1.3.0".to_owned(),
+        amount: SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
+        asset_id: SWAPLOCK_TESTNET_TRANSFER_ASSET.to_owned(),
     })?;
-    transfer.fee = fetch_required_fee_for_transfer(&database_client, &transfer, "1.3.0")?;
+    transfer.fee = fetch_required_fee_for_transfer(
+        &database_client,
+        &transfer,
+        SWAPLOCK_TESTNET_TRANSFER_ASSET,
+    )?;
 
     let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)?;
     let signed = prepared.sign(&chain_id, &signer)?;

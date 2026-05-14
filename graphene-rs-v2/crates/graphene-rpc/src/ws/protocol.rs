@@ -12,7 +12,11 @@ use tungstenite::{Message, WebSocket};
 
 use crate::RpcError;
 
-use super::types::GrapheneNotice;
+#[derive(Clone, Debug, PartialEq)]
+pub(crate) struct ParsedGrapheneNotice {
+    pub(crate) callback_id: u64,
+    pub(crate) payload: Value,
+}
 
 pub(crate) fn build_graphene_ws_call_request(
     id: u64,
@@ -51,7 +55,9 @@ pub(super) fn read_websocket_json(
     }
 }
 
-pub(crate) fn parse_graphene_notice(response: &Value) -> Result<Option<GrapheneNotice>, RpcError> {
+pub(crate) fn parse_graphene_notice(
+    response: &Value,
+) -> Result<Option<ParsedGrapheneNotice>, RpcError> {
     if response.get("method").and_then(Value::as_str) != Some("notice") {
         return Ok(None);
     }
@@ -67,7 +73,7 @@ pub(crate) fn parse_graphene_notice(response: &Value) -> Result<Option<GrapheneN
         .get(1)
         .cloned()
         .ok_or_else(|| RpcError::protocol("notice", "Graphene notice is missing payload"))?;
-    Ok(Some(GrapheneNotice {
+    Ok(Some(ParsedGrapheneNotice {
         callback_id,
         payload,
     }))

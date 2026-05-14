@@ -13,7 +13,7 @@ use super::dispatcher::{
     DEFAULT_WS_COMMAND_QUEUE_CAPACITY, DEFAULT_WS_READ_TIMEOUT,
 };
 use super::protocol::{build_graphene_ws_call_request, callback_params};
-use super::types::{ApiHandle, CallbackHandle, CallbackSubscription, GrapheneNotice};
+use super::types::{ApiHandle, CallbackSubscription};
 
 /// Long-lived blocking Graphene WebSocket session.
 ///
@@ -217,34 +217,6 @@ impl GrapheneWebSocketSession {
             params.into_positional_params_after_callback(),
         )?;
         P::decode_callback(raw)
-    }
-
-    #[deprecated(note = "use call_with_callback_once_raw or typed call_with_callback_once")]
-    pub fn call_with_callback_raw_wait(
-        &self,
-        api: &ApiHandle,
-        method: &str,
-        params_after_callback: Vec<Value>,
-    ) -> Result<Value, RpcError> {
-        self.call_with_callback_once_raw(api, method, params_after_callback)
-    }
-
-    #[deprecated(
-        note = "the dispatcher is now the sole WebSocket reader; register a callback with subscribe/call_with_callback_raw instead"
-    )]
-    pub fn wait_for_next_notice(&self) -> Result<GrapheneNotice, RpcError> {
-        Err(RpcError::protocol(
-            "notice",
-            "wait_for_next_notice is deprecated after the dispatcher became the sole WebSocket reader; register a callback instead",
-        ))
-    }
-
-    #[deprecated(note = "use CallbackSubscription::unsubscribe for callback lifecycle cleanup")]
-    pub fn remove_callback(&self, handle: &CallbackHandle) {
-        let _ = self.commands.send(DispatcherCommand::Unsubscribe {
-            callback_id: handle.id(),
-            response_tx: None,
-        });
     }
 
     pub fn shutdown(&self) -> Result<(), RpcError> {

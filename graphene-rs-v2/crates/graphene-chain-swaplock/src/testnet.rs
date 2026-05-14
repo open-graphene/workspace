@@ -15,3 +15,9 @@ pub const SWAPLOCK_TESTNET_FROM_ACCOUNT: &str = "swaplock";
 
 /// Shared Swaplock testnet recipient account used by examples and live tests.
 pub const SWAPLOCK_TESTNET_TO_ACCOUNT: &str = "committee-account";
+
+/// Core asset used by Swaplock testnet transfer examples and live tests.
+pub const SWAPLOCK_TESTNET_TRANSFER_ASSET: &str = "1.3.0";
+
+/// Tiny amount used by Swaplock testnet transfer examples and live tests.
+pub const SWAPLOCK_TESTNET_TRANSFER_AMOUNT: i64 = 1;

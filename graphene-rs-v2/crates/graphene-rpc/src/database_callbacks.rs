@@ -3,7 +3,9 @@ use std::fmt;
 
 use serde_json::Value;
 
-use crate::{OpenRpcCallbackParams, RpcError};
+use crate::{
+    ApiHandle, CallbackSubscription, GrapheneWebSocketSession, OpenRpcCallbackParams, RpcError,
+};
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BlockAppliedNotice {
@@ -72,6 +74,19 @@ impl OpenRpcCallbackParams for SetBlockAppliedCallbackParams {
         BlockAppliedNotice::try_from(value)
             .map_err(|source| RpcError::protocol(Self::METHOD, source.to_string()))
     }
+}
+
+pub fn set_block_applied_callback<F>(
+    session: &GrapheneWebSocketSession,
+    database_api: &ApiHandle,
+    callback: F,
+) -> Result<CallbackSubscription, RpcError>
+where
+    F: FnMut(BlockAppliedNotice) + Send + 'static,
+{
+    let (subscription, ()) =
+        session.subscribe(database_api, SetBlockAppliedCallbackParams, callback)?;
+    Ok(subscription)
 }
 
 #[cfg(test)]

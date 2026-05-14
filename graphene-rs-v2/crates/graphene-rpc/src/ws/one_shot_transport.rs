@@ -87,9 +87,6 @@ impl RpcTransport for GrapheneWebSocketOneShotTransport {
     }
 }
 
-#[deprecated(note = "use GrapheneWebSocketOneShotTransport or GrapheneWebSocketSession")]
-pub type GrapheneWebSocketTransport = GrapheneWebSocketOneShotTransport;
-
 fn websocket_json_rpc_call(
     socket: &mut WebSocket<MaybeTlsStream<TcpStream>>,
     method: &str,

@@ -47,8 +47,8 @@ session-facing APIs, dispatcher internals, shared protocol helpers, public
 handle types, and an explicit one-shot WebSocket transport for simple
 one-call-per-socket flows. Generated chain crates implement the shared traits
 instead of defining their own copies. Reusable database callback params such as
-`set_block_applied_callback` live in `database_callbacks`, while chain crates keep
-their small chain-facing helper functions and public re-exports.
+`set_block_applied_callback` live in `database_callbacks`; chain crates re-export
+that shared helper alongside the shared callback payload types for convenience.
 
 `graphene-transaction` contains chain-independent transaction primitives that
 were proven across Swaplock and Acta first: exact account lookup result
@@ -174,14 +174,15 @@ and exits.
 
 The broadcast example and live broadcast tests send a tiny Swaplock testnet transfer from the shared test account to
 `committee-account` and print only the transaction id, block number, and
-transaction index. The example intentionally uses direct constants for the
-shared testnet endpoint, accounts, and WIF so the happy path stays readable.
-Those constants are exported by the crate as:
+transaction index. The example intentionally uses direct constants for the shared testnet endpoint,
+accounts, transfer asset, transfer amount, and WIF so the happy path stays
+readable. Those constants are exported by the crate as:
 
 ```rust
 use graphene_chain_swaplock::{
     PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT,
     SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT,
+    SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,
     SWAPLOCK_TESTNET_WS_URL,
 };
 ```

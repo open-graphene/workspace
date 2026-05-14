@@ -10,10 +10,8 @@ pub use error::RpcError;
 pub use http::HttpTransport;
 pub use params::{OpenRpcCallbackParams, OpenRpcParams, RpcClient, RpcTransport};
 pub use scalar::{GrapheneInt64, GrapheneTimePointSec, GrapheneUInt64};
-#[allow(deprecated)]
-pub use ws::GrapheneWebSocketTransport;
 pub use ws::{
-    ApiHandle, CallbackHandle, CallbackSubscription, GrapheneNotice, GrapheneWebSocketApiTransport,
+    ApiHandle, CallbackSubscription, GrapheneWebSocketApiTransport,
     GrapheneWebSocketOneShotTransport, GrapheneWebSocketSession,
 };
 
@@ -26,9 +24,8 @@ pub(crate) use ws::{build_graphene_ws_call_request, callback_params, parse_graph
 mod tests {
     use super::{
         build_graphene_ws_call_request, build_json_rpc_request, callback_params,
-        parse_graphene_notice, parse_json_rpc_response, GrapheneInt64, GrapheneNotice,
-        GrapheneTimePointSec, GrapheneUInt64, HttpTransport, OpenRpcParams, RpcClient, RpcError,
-        RpcTransport,
+        parse_graphene_notice, parse_json_rpc_response, GrapheneInt64, GrapheneTimePointSec,
+        GrapheneUInt64, HttpTransport, OpenRpcParams, RpcClient, RpcError, RpcTransport,
     };
     use chrono::NaiveDate;
     use serde::Deserialize;
@@ -164,13 +161,8 @@ mod tests {
         .unwrap()
         .expect("notice should parse");
 
-        assert_eq!(
-            notice,
-            GrapheneNotice {
-                callback_id: 42,
-                payload: json!([{ "id": "2.1.0" }]),
-            }
-        );
+        assert_eq!(notice.callback_id, 42);
+        assert_eq!(notice.payload, json!([{ "id": "2.1.0" }]));
     }
 
     #[test]

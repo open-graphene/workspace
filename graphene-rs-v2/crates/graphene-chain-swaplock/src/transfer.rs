@@ -22,10 +22,12 @@ pub struct TransferDraft {
 pub fn build_transfer_operation(
     draft: TransferDraft,
 ) -> Result<TransferOperation, BuildTransactionError> {
+    let asset_id = parse_asset_id(&draft.asset_id)?;
+
     Ok(TransferOperation {
         fee: Asset {
             amount: GrapheneInt64::new(0),
-            asset_id: parse_asset_id(&draft.asset_id)?,
+            asset_id: asset_id.clone(),
         },
         from: TransferOperationFrom::try_from(draft.from.as_str()).map_err(|source| {
             BuildTransactionError::InvalidObjectId {
@@ -43,7 +45,7 @@ pub fn build_transfer_operation(
         })?,
         amount: Asset {
             amount: GrapheneInt64::new(draft.amount),
-            asset_id: parse_asset_id(&draft.asset_id)?,
+            asset_id,
         },
         memo: None,
         extensions: ExtensionsType(vec![]),
@@ -54,15 +56,8 @@ pub fn apply_required_fee(
     operation: &mut TransferOperation,
     fee: RequiredFee,
 ) -> Result<(), BuildTransactionError> {
-    match fee {
-        RequiredFee::Asset(asset) => {
-            operation.fee = asset;
-            Ok(())
-        }
-        other => Err(BuildTransactionError::UnsupportedFeeShape(format!(
-            "{other:#?}"
-        ))),
-    }
+    operation.fee = required_fee_asset(fee)?;
+    Ok(())
 }
 
 pub fn fetch_required_fee_for_transfer<T>(
@@ -77,12 +72,18 @@ where
         ops: vec![Operation::Transfer(operation.clone())],
         asset_symbol_or_id: fee_asset_symbol_or_id.into(),
     })?;
-    match fees.into_iter().next() {
-        Some(RequiredFee::Asset(asset)) => Ok(asset),
-        Some(other) => Err(BuildTransactionError::UnsupportedFeeShape(format!(
+    let Some(fee) = fees.into_iter().next() else {
+        return Err(BuildTransactionError::MissingRequiredFee);
+    };
+    required_fee_asset(fee)
+}
+
+fn required_fee_asset(fee: RequiredFee) -> Result<Asset, BuildTransactionError> {
+    match fee {
+        RequiredFee::Asset(asset) => Ok(asset),
+        other => Err(BuildTransactionError::UnsupportedFeeShape(format!(
             "{other:#?}"
         ))),
-        None => Err(BuildTransactionError::MissingRequiredFee),
     }
 }
 
