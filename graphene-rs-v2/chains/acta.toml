@@ -3,6 +3,16 @@ name = "acta"
 core_root = "../../chains/acta-network/acta-network-core"
 
 [openrpc]
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[[surfaces]]
+name = "acta"
 api_header = "libraries/app/include/graphene/app/database_api.hpp"
 api_qualified_name = "graphene::app::database_api"
 excluded_methods = [
@@ -12,18 +22,24 @@ excluded_methods = [
   "subscribe_to_market",
 ]
 output = "../target/generated/acta/spec.json"
-header_roots = [
-  "libraries/protocol",
-  "libraries/chain",
-  "libraries/app",
-  "libraries/wallet",
-  "libraries/plugins",
-]
-
-[rust]
 schema_output = "../target/generated/acta/schema.json"
 variants_rs = "../crates/graphene-chain-acta/src/generated/variants.rs"
 variants_names = "../crates/graphene-chain-acta/src/generated/variants.names"
 types_rs = "../crates/graphene-chain-acta/src/generated/types.rs"
 rpc_rs = "../crates/graphene-chain-acta/src/generated/rpc.rs"
 schema_title = "acta_types_root"
+
+[[surfaces]]
+name = "acta_broadcast"
+api_header = "libraries/app/include/graphene/app/api.hpp"
+api_qualified_name = "graphene::app::network_broadcast_api"
+excluded_methods = [
+  "broadcast_transaction_with_callback",
+]
+output = "../target/generated/acta-broadcast/spec.json"
+schema_output = "../target/generated/acta-broadcast/schema.json"
+variants_rs = "../target/generated/acta-broadcast/variants.rs"
+variants_names = "../target/generated/acta-broadcast/variants.names"
+types_rs = "../target/generated/acta-broadcast/types.rs"
+rpc_rs = "../crates/graphene-chain-acta/src/generated/broadcast_rpc.rs"
+schema_title = "acta_broadcast_types_root"

@@ -54,83 +54,92 @@ struct GenerationConfig {
 
 fn generate(config_path: &Path) -> Result<(), Box<dyn Error>> {
     let workspace_root = find_workspace_root(env::current_dir()?)?;
-    let config = load_config(&workspace_root, config_path)?;
+    let configs = load_config(&workspace_root, config_path)?;
     let openrpc_dir = workspace_root.join("crates/graphene-codegen/openrpc");
 
-    run(Command::new(openrpc_dir.join("gen_openrpc.sh"))
-        .arg("--chain-name")
-        .arg(&config.chain_name)
-        .arg("--core-root")
-        .arg(&config.core_root)
-        .arg("--api-header")
-        .arg(&config.api_header)
-        .arg("--api-qualified-name")
-        .arg(&config.api_qualified_name)
-        .args(
-            config
-                .excluded_methods
-                .iter()
-                .flat_map(|method| [OsString::from("--exclude-method"), OsString::from(method)]),
-        )
-        .arg("--output")
-        .arg(&config.spec_output)
-        .args(
-            config
-                .header_roots
-                .iter()
-                .flat_map(|root| [OsString::from("--header-root"), OsString::from(root)]),
-        ))?;
+    for config in configs {
+        run(Command::new(openrpc_dir.join("gen_openrpc.sh"))
+            .arg("--chain-name")
+            .arg(&config.chain_name)
+            .arg("--core-root")
+            .arg(&config.core_root)
+            .arg("--api-header")
+            .arg(&config.api_header)
+            .arg("--api-qualified-name")
+            .arg(&config.api_qualified_name)
+            .args(
+                config.excluded_methods.iter().flat_map(|method| {
+                    [OsString::from("--exclude-method"), OsString::from(method)]
+                }),
+            )
+            .arg("--output")
+            .arg(&config.spec_output)
+            .args(
+                config
+                    .header_roots
+                    .iter()
+                    .flat_map(|root| [OsString::from("--header-root"), OsString::from(root)]),
+            ))?;
 
-    run(Command::new(openrpc_dir.join("extract_typify_schema.py"))
-        .arg("--spec")
-        .arg(&config.spec_output)
-        .arg("--output")
-        .arg(&config.schema_output)
-        .arg("--title")
-        .arg(&config.schema_title))?;
+        run(Command::new(openrpc_dir.join("extract_typify_schema.py"))
+            .arg("--spec")
+            .arg(&config.spec_output)
+            .arg("--output")
+            .arg(&config.schema_output)
+            .arg("--title")
+            .arg(&config.schema_title))?;
 
-    run(Command::new(openrpc_dir.join("gen_rust_variants.py"))
-        .arg("--spec")
-        .arg(&config.spec_output)
-        .arg("--out-rs")
-        .arg(&config.variants_rs)
-        .arg("--out-names")
-        .arg(&config.variants_names)
-        .arg("--source-label")
-        .arg(&config.spec_output))?;
+        run(Command::new(openrpc_dir.join("gen_rust_variants.py"))
+            .arg("--spec")
+            .arg(&config.spec_output)
+            .arg("--out-rs")
+            .arg(&config.variants_rs)
+            .arg("--out-names")
+            .arg(&config.variants_names)
+            .arg("--source-label")
+            .arg(&config.spec_output))?;
 
-    run(Command::new(openrpc_dir.join("gen_rust_rpc.py"))
-        .arg("--spec")
-        .arg(&config.spec_output)
-        .arg("--out-rs")
-        .arg(&config.rpc_rs)
-        .arg("--source-label")
-        .arg(&config.spec_output))?;
+        run(Command::new(openrpc_dir.join("gen_rust_rpc.py"))
+            .arg("--spec")
+            .arg(&config.spec_output)
+            .arg("--out-rs")
+            .arg(&config.rpc_rs)
+            .arg("--source-label")
+            .arg(&config.spec_output))?;
 
-    run(Command::new("cargo")
-        .arg("run")
-        .arg("--quiet")
-        .arg("--manifest-path")
-        .arg(workspace_root.join("Cargo.toml"))
-        .arg("-p")
-        .arg("graphene-codegen")
-        .arg("--bin")
-        .arg("openrpc-typify")
-        .arg("--")
-        .arg("--schema")
-        .arg(&config.schema_output)
-        .arg("--out")
-        .arg(&config.types_rs)
-        .arg("--strip-names")
-        .arg(&config.variants_names))?;
+        run(Command::new("cargo")
+            .arg("run")
+            .arg("--quiet")
+            .arg("--manifest-path")
+            .arg(workspace_root.join("Cargo.toml"))
+            .arg("-p")
+            .arg("graphene-codegen")
+            .arg("--bin")
+            .arg("openrpc-typify")
+            .arg("--")
+            .arg("--schema")
+            .arg(&config.schema_output)
+            .arg("--out")
+            .arg(&config.types_rs)
+            .arg("--strip-names")
+            .arg(&config.variants_names))?;
+    }
 
     Ok(())
 }
 
 fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
     let workspace_root = find_workspace_root(env::current_dir()?)?;
-    let config = load_config(&workspace_root, config_path)?;
+    let configs = load_config(&workspace_root, config_path)?;
 
+    for config in configs {
+        audit_config(&config)?;
+    }
+
+    Ok(())
+}
+
+fn audit_config(config: &GenerationConfig) -> Result<(), Box<dyn Error>> {
     let spec_source = fs::read_to_string(&config.spec_output).map_err(|error| {
         format!(
             "failed to read OpenRPC spec {}: {error}",
@@ -376,7 +385,7 @@ fn collect_rpc_dynamic_map_responses(rpc_rs: &str) -> Vec<String> {
 fn load_config(
     workspace_root: &Path,
     config_path: &Path,
-) -> Result<GenerationConfig, Box<dyn Error>> {
+) -> Result<Vec<GenerationConfig>, Box<dyn Error>> {
     let config_path = absolutize(workspace_root, config_path);
     let config_dir = config_path
         .parent()
@@ -385,11 +394,65 @@ fn load_config(
     let config: TomlValue = toml::from_str(&config)?;
 
     let chain = table(&config, "chain")?;
-    let openrpc = table(&config, "openrpc")?;
-    let rust = table(&config, "rust")?;
-
     let chain_name = string(chain, "name")?.to_owned();
     let core_root = resolve(config_dir, string(chain, "core_root")?);
+
+    if let Some(surfaces) = config.get("surfaces").and_then(TomlValue::as_array) {
+        if surfaces.is_empty() {
+            return Err("[[surfaces]] must contain at least one surface".into());
+        }
+        let inherited_header_roots = config
+            .get("openrpc")
+            .and_then(TomlValue::as_table)
+            .map(|openrpc| string_array(openrpc, "header_roots", "[openrpc].header_roots"))
+            .transpose()?
+            .flatten()
+            .unwrap_or_default();
+
+        return surfaces
+            .iter()
+            .map(|surface| {
+                let surface = surface
+                    .as_table()
+                    .ok_or("[[surfaces]] entries must be tables")?;
+                load_surface_config(
+                    &chain_name,
+                    &core_root,
+                    surface,
+                    surface,
+                    config_dir,
+                    &inherited_header_roots,
+                )
+            })
+            .collect();
+    }
+
+    let openrpc = table(&config, "openrpc")?;
+    let rust = table(&config, "rust")?;
+    Ok(vec![load_surface_config(
+        &chain_name,
+        &core_root,
+        openrpc,
+        rust,
+        config_dir,
+        &[],
+    )?])
+}
+
+fn load_surface_config(
+    fallback_chain_name: &str,
+    core_root: &Path,
+    openrpc: &toml::map::Map<String, TomlValue>,
+    rust: &toml::map::Map<String, TomlValue>,
+    config_dir: &Path,
+    inherited_header_roots: &[String],
+) -> Result<GenerationConfig, Box<dyn Error>> {
+    let chain_name = openrpc
+        .get("name")
+        .and_then(TomlValue::as_str)
+        .filter(|value| !value.is_empty())
+        .unwrap_or(fallback_chain_name)
+        .to_owned();
     let api_header = openrpc
         .get("api_header")
         .and_then(TomlValue::as_str)
@@ -401,38 +464,10 @@ fn load_config(
         .and_then(TomlValue::as_str)
         .unwrap_or("graphene::wallet::wallet_api")
         .to_owned();
-    let excluded_methods = openrpc
-        .get("excluded_methods")
-        .and_then(TomlValue::as_array)
-        .map(|values| {
-            values
-                .iter()
-                .map(|value| {
-                    value
-                        .as_str()
-                        .map(ToOwned::to_owned)
-                        .ok_or("[openrpc].excluded_methods must contain only strings")
-                })
-                .collect::<Result<Vec<_>, _>>()
-        })
-        .transpose()?
-        .unwrap_or_default();
-    let header_roots = openrpc
-        .get("header_roots")
-        .and_then(TomlValue::as_array)
-        .map(|values| {
-            values
-                .iter()
-                .map(|value| {
-                    value
-                        .as_str()
-                        .map(ToOwned::to_owned)
-                        .ok_or("[openrpc].header_roots must contain only strings")
-                })
-                .collect::<Result<Vec<_>, _>>()
-        })
-        .transpose()?
-        .unwrap_or_default();
+    let excluded_methods =
+        string_array(openrpc, "excluded_methods", "excluded_methods")?.unwrap_or_default();
+    let header_roots = string_array(openrpc, "header_roots", "header_roots")?
+        .unwrap_or_else(|| inherited_header_roots.to_vec());
     let schema_title = rust
         .get("schema_title")
         .and_then(TomlValue::as_str)
@@ -441,7 +476,7 @@ fn load_config(
 
     Ok(GenerationConfig {
         chain_name,
-        core_root,
+        core_root: core_root.to_path_buf(),
         api_header,
         api_qualified_name,
         excluded_methods,
@@ -454,6 +489,30 @@ fn load_config(
         rpc_rs: resolve(config_dir, string(rust, "rpc_rs")?),
         schema_title,
     })
+}
+
+fn string_array(
+    table: &toml::map::Map<String, TomlValue>,
+    key: &str,
+    label: &str,
+) -> Result<Option<Vec<String>>, Box<dyn Error>> {
+    table
+        .get(key)
+        .map(|value| {
+            value
+                .as_array()
+                .ok_or_else(|| format!("{label} must be an array"))?
+                .iter()
+                .map(|value| {
+                    value
+                        .as_str()
+                        .map(ToOwned::to_owned)
+                        .ok_or_else(|| format!("{label} must contain only strings"))
+                })
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .transpose()
+        .map_err(Into::into)
 }
 
 fn is_static_variant_schema(schema: &JsonValue) -> bool {

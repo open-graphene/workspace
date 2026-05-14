@@ -3,6 +3,16 @@ name = "swaplock"
 core_root = "../../chains/swaplock/swaplock-core"
 
 [openrpc]
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[[surfaces]]
+name = "swaplock"
 api_header = "libraries/app/include/graphene/app/database_api.hpp"
 api_qualified_name = "graphene::app::database_api"
 excluded_methods = [
@@ -12,18 +22,24 @@ excluded_methods = [
   "subscribe_to_market",
 ]
 output = "../target/generated/swaplock/spec.json"
-header_roots = [
-  "libraries/protocol",
-  "libraries/chain",
-  "libraries/app",
-  "libraries/wallet",
-  "libraries/plugins",
-]
-
-[rust]
 schema_output = "../target/generated/swaplock/schema.json"
 variants_rs = "../crates/graphene-chain-swaplock/src/generated/variants.rs"
 variants_names = "../crates/graphene-chain-swaplock/src/generated/variants.names"
 types_rs = "../crates/graphene-chain-swaplock/src/generated/types.rs"
 rpc_rs = "../crates/graphene-chain-swaplock/src/generated/rpc.rs"
 schema_title = "swaplock_types_root"
+
+[[surfaces]]
+name = "swaplock_broadcast"
+api_header = "libraries/app/include/graphene/app/api.hpp"
+api_qualified_name = "graphene::app::network_broadcast_api"
+excluded_methods = [
+  "broadcast_transaction_with_callback",
+]
+output = "../target/generated/swaplock-broadcast/spec.json"
+schema_output = "../target/generated/swaplock-broadcast/schema.json"
+variants_rs = "../target/generated/swaplock-broadcast/variants.rs"
+variants_names = "../target/generated/swaplock-broadcast/variants.names"
+types_rs = "../target/generated/swaplock-broadcast/types.rs"
+rpc_rs = "../crates/graphene-chain-swaplock/src/generated/broadcast_rpc.rs"
+schema_title = "swaplock_broadcast_types_root"

@@ -3,6 +3,16 @@ name = "rsquared"
 core_root = "../../chains/rsquared/R-Squared-core"
 
 [openrpc]
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[[surfaces]]
+name = "rsquared"
 api_header = "libraries/app/include/graphene/app/database_api.hpp"
 api_qualified_name = "graphene::app::database_api"
 excluded_methods = [
@@ -12,15 +22,6 @@ excluded_methods = [
   "subscribe_to_market",
 ]
 output = "../target/generated/rsquared/spec.json"
-header_roots = [
-  "libraries/protocol",
-  "libraries/chain",
-  "libraries/app",
-  "libraries/wallet",
-  "libraries/plugins",
-]
-
-[rust]
 schema_output = "../target/generated/rsquared/schema.json"
 variants_rs = "../crates/graphene-chain-rsquared/src/generated/variants.rs"
 variants_names = "../crates/graphene-chain-rsquared/src/generated/variants.names"

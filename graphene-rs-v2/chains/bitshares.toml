@@ -3,6 +3,16 @@ name = "bitshares"
 core_root = "../../chains/bitshares/bitshares-core"
 
 [openrpc]
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[[surfaces]]
+name = "bitshares"
 api_header = "libraries/app/include/graphene/app/database_api.hpp"
 api_qualified_name = "graphene::app::database_api"
 excluded_methods = [
@@ -12,15 +22,6 @@ excluded_methods = [
   "subscribe_to_market",
 ]
 output = "../target/generated/bitshares/spec.json"
-header_roots = [
-  "libraries/protocol",
-  "libraries/chain",
-  "libraries/app",
-  "libraries/wallet",
-  "libraries/plugins",
-]
-
-[rust]
 schema_output = "../target/generated/bitshares/schema.json"
 variants_rs = "../crates/graphene-chain-bitshares/src/generated/variants.rs"
 variants_names = "../crates/graphene-chain-bitshares/src/generated/variants.names"

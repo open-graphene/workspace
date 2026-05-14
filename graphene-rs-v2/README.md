@@ -10,7 +10,7 @@ Graphene-like blockchain before building higher-level SDK ergonomics.
 ```text
 bin/gen.sh                      # one-command regeneration for all configured chains
 chains/                         # per-chain generation configs
-  acta.toml
+  acta.toml                     # may contain multiple API surfaces
   bitshares.toml
   rsquared.toml
   swaplock.toml
@@ -125,6 +125,29 @@ account lookup helpers, `transfer.rs` for transfer/fee/transaction preparation,
 `transaction.rs` for prepared/signed transaction and broadcast helpers, and
 `testnet.rs` for the shared Swaplock testnet constants.
 
+## Acta transfer/broadcast adapter
+
+Acta now has the same low-level handwritten adapter shape as Swaplock, with
+chain-local generated types preserved at the boundary:
+
+```rust
+use graphene_chain_acta::{
+    build_transfer_operation, lookup_exact_account_id, prepare_transaction,
+    TransferDraft,
+};
+```
+
+The Acta crate includes `account.rs`, `transfer.rs`, `transaction.rs`, and a
+transfer-only binary `codec.rs`. The chain config contains a separate
+`network_broadcast_api` surface that generates `graphene_chain_acta::broadcast`,
+mirroring Swaplock's split between public `database_api` reads and broadcast
+RPC while preserving one config file per chain.
+
+The current Acta coverage is intentionally offline-only until safe testnet
+fixture constants are added: transfer construction, required-fee shape handling,
+transaction reference-block preparation, account lookup RPC params, and compile
+coverage for signing/broadcast helpers.
+
 ## Generate all configured chains
 
 From this directory:
@@ -141,10 +164,13 @@ cargo fmt
 cargo test
 ```
 
-Each chain runs the same pipeline:
+Each chain config may contain one or more `[[surfaces]]`; Acta and Swaplock use
+that to generate both their public `database_api` bindings and separate
+`network_broadcast_api` bindings from one chain config. Each surface runs the
+same pipeline:
 
 ```text
-C++ app database_api/core headers
+C++ app API/core headers
   -> OpenRPC spec
   -> typify schema
   -> Rust static variants
@@ -166,7 +192,8 @@ cargo run -p graphene-codegen --bin graphene-codegen -- audit chains/bitshares.t
 ```
 
 Swap the config path for `chains/acta.toml`, `chains/rsquared.toml`, or
-`chains/swaplock.toml` to target another chain.
+`chains/swaplock.toml` to target another chain. When a config has multiple
+surfaces, the command generates/audits all of them in file order.
 
 ## Audit checks
 

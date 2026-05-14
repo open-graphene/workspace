@@ -284,7 +284,9 @@ name = "graphene-chain-acta"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "graphene-codec",
  "graphene-rpc",
+ "graphene-signing",
  "regress",
  "serde",
  "serde_json",
