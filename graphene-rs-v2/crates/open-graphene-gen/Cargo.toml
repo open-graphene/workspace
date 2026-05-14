@@ -1,0 +1,18 @@
+[package]
+name = "open-graphene-gen"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[dependencies]
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[lib]
+name = "open_graphene_gen"
+path = "src/lib.rs"
+
+[[bin]]
+name = "open-graphene-gen"
+path = "src/main.rs"
