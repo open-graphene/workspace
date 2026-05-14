@@ -1,6 +1,7 @@
 use std::fmt;
 
 use graphene_rpc::{GrapheneInt64, GrapheneTimePointSec, RpcClient, RpcError, RpcTransport};
+use graphene_transaction::block_id::{ref_block_prefix, BlockIdError};
 
 use crate::generated::{
     Asset, AssetAssetId, DynamicGlobalPropertyObject, ExtensionsType, GetRequiredFeesParams,
@@ -91,7 +92,8 @@ pub fn prepare_transaction(
 ) -> Result<PreparedTransaction, BuildTransactionError> {
     Ok(PreparedTransaction::new(Transaction {
         ref_block_num: (dynamic.head_block_number & 0xffff) as u16,
-        ref_block_prefix: ref_block_prefix(&dynamic.head_block_id)?,
+        ref_block_prefix: ref_block_prefix(&dynamic.head_block_id)
+            .map_err(BuildTransactionError::from)?,
         expiration,
         operations,
         extensions: ExtensionsType(vec![]),
@@ -104,43 +106,6 @@ fn parse_asset_id(value: &str) -> Result<AssetAssetId, BuildTransactionError> {
         value: value.to_owned(),
         source: source.to_string(),
     })
-}
-
-fn ref_block_prefix(block_id: &str) -> Result<u32, BuildTransactionError> {
-    let bytes = hex_to_bytes(block_id)?;
-    if bytes.len() < 8 {
-        return Err(BuildTransactionError::InvalidBlockId {
-            value: block_id.to_owned(),
-            reason: format!("expected at least 8 bytes, got {}", bytes.len()),
-        });
-    }
-    Ok(u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]))
-}
-
-fn hex_to_bytes(value: &str) -> Result<Vec<u8>, BuildTransactionError> {
-    if value.len() % 2 != 0 {
-        return Err(BuildTransactionError::InvalidBlockId {
-            value: value.to_owned(),
-            reason: "hex string has odd length".to_owned(),
-        });
-    }
-    value
-        .as_bytes()
-        .chunks_exact(2)
-        .map(|chunk| Ok((hex_nibble(chunk[0], value)? << 4) | hex_nibble(chunk[1], value)?))
-        .collect()
-}
-
-fn hex_nibble(byte: u8, value: &str) -> Result<u8, BuildTransactionError> {
-    match byte {
-        b'0'..=b'9' => Ok(byte - b'0'),
-        b'a'..=b'f' => Ok(byte - b'a' + 10),
-        b'A'..=b'F' => Ok(byte - b'A' + 10),
-        _ => Err(BuildTransactionError::InvalidBlockId {
-            value: value.to_owned(),
-            reason: format!("invalid hex byte 0x{byte:02x}"),
-        }),
-    }
 }
 
 #[derive(Debug)]
@@ -189,6 +154,15 @@ impl std::error::Error for BuildTransactionError {
             | Self::InvalidBlockId { .. }
             | Self::MissingRequiredFee
             | Self::UnsupportedFeeShape(_) => None,
+        }
+    }
+}
+
+impl From<BlockIdError> for BuildTransactionError {
+    fn from(error: BlockIdError) -> Self {
+        Self::InvalidBlockId {
+            value: error.value,
+            reason: error.reason,
         }
     }
 }

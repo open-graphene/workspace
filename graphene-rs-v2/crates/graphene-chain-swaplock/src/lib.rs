@@ -32,6 +32,7 @@ mod transfer;
 
 pub use account::{lookup_exact_account_id, LookupAccountError};
 pub use generated::*;
+pub use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
 pub use testnet::{
     PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
     SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
@@ -39,8 +40,7 @@ pub use testnet::{
 pub use transaction::{
     broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
     broadcast_signed_transaction_synchronous_typed, sign_transaction, validate_signed_transaction,
-    BroadcastResultError, PreparedTransaction, SignTransactionError, SignedTransactionEnvelope,
-    SynchronousBroadcastResult,
+    PreparedTransaction, SignTransactionError, SignedTransactionEnvelope,
 };
 pub use transfer::{
     apply_required_fee, build_transfer_operation, fetch_required_fee_for_transfer,

@@ -25,6 +25,7 @@ crates/graphene-codegen/
     gen_rust_variants.py        # static_variant schemas -> Rust [tag, payload] enums
     gen_rust_rpc.py             # OpenRPC methods -> Rust params/response bindings
 crates/graphene-rpc/            # hand-written typed RPC runtime primitives
+crates/graphene-transaction/    # shared transaction parsing/preparation primitives
 crates/graphene-chain-acta/
 crates/graphene-chain-bitshares/
 crates/graphene-chain-rsquared/
@@ -40,6 +41,11 @@ is intentionally only a small project-local convenience wrapper.
 `OpenRpcParams` trait, `RpcTransport`, `RpcClient`, `RpcError`, and a blocking
 `HttpTransport`; generated chain crates implement the shared trait instead of
 defining their own copy.
+
+`graphene-transaction` contains chain-independent transaction primitives that
+were proven across Swaplock and Acta first: reference-block prefix parsing from
+Graphene block ids and typed synchronous broadcast result parsing. Chain crates
+still keep generated transaction/operation types chain-local.
 
 ## Typed RPC usage shape
 

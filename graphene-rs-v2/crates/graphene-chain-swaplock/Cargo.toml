@@ -8,6 +8,7 @@ publish.workspace = true
 graphene-codec.workspace = true
 graphene-rpc.workspace = true
 graphene-signing.workspace = true
+graphene-transaction.workspace = true
 chrono.workspace = true
 regress.workspace = true
 serde.workspace = true

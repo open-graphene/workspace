@@ -8,6 +8,7 @@ members = [
     "crates/graphene-codec",
     "crates/graphene-rpc",
     "crates/graphene-signing",
+    "crates/graphene-transaction",
 ]
 resolver = "2"
 
@@ -21,6 +22,7 @@ chrono = { version = "0.4", default-features = false, features = ["serde", "allo
 graphene-codec = { path = "crates/graphene-codec" }
 graphene-rpc = { path = "crates/graphene-rpc" }
 graphene-signing = { path = "crates/graphene-signing" }
+graphene-transaction = { path = "crates/graphene-transaction" }
 prettyplease = "0.2"
 regress = "0.10"
 schemars = "0.8"

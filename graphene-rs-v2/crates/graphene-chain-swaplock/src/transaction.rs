@@ -3,6 +3,7 @@ use std::fmt;
 use graphene_codec::{to_graphene_bytes, EncodeError};
 use graphene_rpc::{RpcClient, RpcError, RpcTransport};
 use graphene_signing::{signing_digest, ChainId, SignError, Signature, Signer};
+use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
 
 use crate::broadcast::{BroadcastTransactionParams, BroadcastTransactionSynchronousParams};
 use crate::generated::{
@@ -129,92 +130,6 @@ where
 {
     let raw = broadcast_signed_transaction_synchronous(client, signed)?;
     SynchronousBroadcastResult::try_from(raw)
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct SynchronousBroadcastResult {
-    pub id: String,
-    pub block_num: u32,
-    pub trx_num: u32,
-    pub raw: serde_json::Value,
-}
-
-impl TryFrom<serde_json::Value> for SynchronousBroadcastResult {
-    type Error = BroadcastResultError;
-
-    fn try_from(raw: serde_json::Value) -> Result<Self, Self::Error> {
-        let id = raw
-            .get("id")
-            .and_then(serde_json::Value::as_str)
-            .ok_or(BroadcastResultError::MissingField("id"))?
-            .to_owned();
-        let block_num = u64_to_u32_field(
-            raw.get("block_num")
-                .and_then(serde_json::Value::as_u64)
-                .ok_or(BroadcastResultError::MissingField("block_num"))?,
-            "block_num",
-        )?;
-        let trx_num = u64_to_u32_field(
-            raw.get("trx_num")
-                .and_then(serde_json::Value::as_u64)
-                .ok_or(BroadcastResultError::MissingField("trx_num"))?,
-            "trx_num",
-        )?;
-
-        Ok(Self {
-            id,
-            block_num,
-            trx_num,
-            raw,
-        })
-    }
-}
-
-fn u64_to_u32_field(value: u64, field: &'static str) -> Result<u32, BroadcastResultError> {
-    u32::try_from(value).map_err(|_| BroadcastResultError::FieldOutOfRange { field, value })
-}
-
-#[derive(Debug)]
-pub enum BroadcastResultError {
-    Rpc(RpcError),
-    MissingField(&'static str),
-    FieldOutOfRange { field: &'static str, value: u64 },
-}
-
-impl fmt::Display for BroadcastResultError {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Rpc(error) => write!(
-                formatter,
-                "RPC error while broadcasting transaction: {error}"
-            ),
-            Self::MissingField(field) => {
-                write!(
-                    formatter,
-                    "synchronous broadcast result is missing field {field}"
-                )
-            }
-            Self::FieldOutOfRange { field, value } => write!(
-                formatter,
-                "synchronous broadcast result field {field} is out of u32 range: {value}"
-            ),
-        }
-    }
-}
-
-impl std::error::Error for BroadcastResultError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        match self {
-            Self::Rpc(error) => Some(error),
-            Self::MissingField(_) | Self::FieldOutOfRange { .. } => None,
-        }
-    }
-}
-
-impl From<RpcError> for BroadcastResultError {
-    fn from(error: RpcError) -> Self {
-        Self::Rpc(error)
-    }
 }
 
 #[derive(Debug)]
