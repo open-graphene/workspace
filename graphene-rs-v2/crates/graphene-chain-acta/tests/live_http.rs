@@ -2,8 +2,8 @@ use graphene_chain_acta::{
     broadcast_signed_transaction_synchronous_typed,
     broadcast_signed_transaction_with_callback_typed, build_transfer_operation,
     fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
-    GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
-    ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL, ACTA_TESTNET_TO_ACCOUNT,
+    set_block_applied_callback, GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation,
+    TransferDraft, ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL, ACTA_TESTNET_TO_ACCOUNT,
     ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
     PUBLIC_ACTA_TESTNET_WIF,
 };
@@ -12,7 +12,7 @@ use graphene_rpc::{
     RpcClient,
 };
 use graphene_signing::{ChainId, WifSigner};
-use std::sync::Arc;
+use std::sync::{mpsc, Arc};
 
 fn live_client() -> RpcClient<HttpTransport> {
     RpcClient::new(HttpTransport::new(ACTA_TESTNET_HTTP_URL))
@@ -82,6 +82,47 @@ fn live_broadcasts_tiny_transfer_with_callback() {
         response.id, response.block_num, response.trx_num
     );
     assert!(!response.id.is_empty());
+}
+
+#[test]
+#[ignore = "requires network access and waits for an Acta testnet block notice"]
+fn live_receives_block_applied_callback_notice() {
+    let session = GrapheneWebSocketSession::connect(ACTA_TESTNET_WS_URL)
+        .expect("Acta WebSocket session should connect");
+    let database_api = session
+        .login_api("database")
+        .expect("database API should log in");
+
+    let (notice_tx, notice_rx) = mpsc::sync_channel(1);
+    let subscription = set_block_applied_callback(&session, &database_api, move |notice| {
+        let _ = notice_tx.send(notice);
+    })
+    .expect("set_block_applied_callback should register callback");
+
+    let notice = notice_rx
+        .recv()
+        .expect("registered callback should receive the notice payload");
+
+    let block_id = notice.block_id;
+    println!(
+        "set_block_applied_callback => callback_id={}, block_id={block_id}",
+        subscription.id()
+    );
+    assert_eq!(
+        block_id.len(),
+        40,
+        "Graphene block ids should be 20-byte hex strings"
+    );
+    assert!(
+        block_id
+            .chars()
+            .all(|character| character.is_ascii_hexdigit()),
+        "Graphene block id should be hex"
+    );
+
+    subscription
+        .unsubscribe()
+        .expect("callback subscription should unsubscribe locally");
 }
 
 #[test]

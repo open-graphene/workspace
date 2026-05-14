@@ -24,12 +24,17 @@ pub mod broadcast {
 }
 
 mod account;
+mod callbacks;
 mod codec;
 mod testnet;
 mod transaction;
 mod transfer;
 
 pub use account::{lookup_exact_account_id, LookupAccountError};
+pub use callbacks::{
+    set_block_applied_callback, BlockAppliedNotice, BlockAppliedNoticeError,
+    SetBlockAppliedCallbackParams,
+};
 pub use generated::*;
 pub use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
 pub use testnet::{

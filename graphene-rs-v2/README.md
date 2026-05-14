@@ -206,17 +206,17 @@ chain-local generated types preserved at the boundary:
 ```rust
 use graphene_chain_acta::{
     build_transfer_operation, lookup_exact_account_id, prepare_transaction,
-    TransferDraft,
+    set_block_applied_callback, TransferDraft,
 };
 ```
 
-The Acta crate includes `account.rs`, `transfer.rs`, `transaction.rs`, and a
-transfer-only binary `codec.rs`. The chain config contains a separate
+The Acta crate includes `account.rs`, `callbacks.rs`, `transfer.rs`,
+`transaction.rs`, and a transfer-only binary `codec.rs`. The chain config contains a separate
 `network_broadcast_api` surface that generates `graphene_chain_acta::broadcast`,
 mirroring Swaplock's split between public `database_api` reads and broadcast
 RPC while preserving one config file per chain.
 
-Run the checked live broadcast fixture:
+Run the checked live broadcast and non-mutating callback fixtures:
 
 ```sh
 cargo test -p graphene-chain-acta \
@@ -226,10 +226,16 @@ cargo test -p graphene-chain-acta \
 cargo test -p graphene-chain-acta \
   live_broadcasts_tiny_transfer_with_callback \
   -- --ignored --nocapture
+
+cargo test -p graphene-chain-acta \
+  live_receives_block_applied_callback_notice \
+  -- --ignored --nocapture
 ```
 
-The Acta callback proof has also been verified against its testnet, giving the
-WebSocket callback ABI two live-proven chains: Swaplock and Acta.
+The Acta broadcast callback proof has also been verified against its testnet,
+giving the WebSocket callback ABI two live-proven broadcast-callback chains:
+Swaplock and Acta. Acta now also exposes the same typed non-mutating
+`set_block_applied_callback` helper and ignored live fixture shape as Swaplock.
 
 Run the executable example:
 
