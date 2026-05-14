@@ -199,9 +199,6 @@ mod tests {
         let error = prepare_transaction(&dynamic, vec![], expiration)
             .expect_err("bad head block id should fail");
 
-        assert!(matches!(
-            error,
-            BuildTransactionError::InvalidBlockId { .. }
-        ));
+        assert!(matches!(error, BuildTransactionError::InvalidBlockId(_)));
     }
 }

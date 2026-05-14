@@ -19,10 +19,7 @@ pub enum BuildTransactionError {
         value: String,
         source: String,
     },
-    InvalidBlockId {
-        value: String,
-        reason: String,
-    },
+    InvalidBlockId(BlockIdError),
     MissingRequiredFee,
     UnsupportedFeeShape(String),
     Rpc(RpcError),
@@ -50,8 +47,8 @@ impl fmt::Display for BuildTransactionError {
             } => {
                 write!(formatter, "invalid {field} object id {value:?}: {source}")
             }
-            Self::InvalidBlockId { value, reason } => {
-                write!(formatter, "invalid block id {value:?}: {reason}")
+            Self::InvalidBlockId(error) => {
+                write!(formatter, "invalid transaction head block id: {error}")
             }
             Self::Rpc(error) => {
                 write!(formatter, "RPC error while building transaction: {error}")
@@ -70,9 +67,9 @@ impl fmt::Display for BuildTransactionError {
 impl std::error::Error for BuildTransactionError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
+            Self::InvalidBlockId(error) => Some(error),
             Self::Rpc(error) => Some(error),
             Self::InvalidObjectId { .. }
-            | Self::InvalidBlockId { .. }
             | Self::MissingRequiredFee
             | Self::UnsupportedFeeShape(_) => None,
         }
@@ -81,10 +78,7 @@ impl std::error::Error for BuildTransactionError {
 
 impl From<BlockIdError> for BuildTransactionError {
     fn from(error: BlockIdError) -> Self {
-        Self::InvalidBlockId {
-            value: error.value,
-            reason: error.reason,
-        }
+        Self::InvalidBlockId(error)
     }
 }
 
