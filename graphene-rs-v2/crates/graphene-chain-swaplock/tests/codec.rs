@@ -2,10 +2,10 @@ use std::cell::RefCell;
 use std::str::FromStr;
 
 use graphene_chain_swaplock::{
-    broadcast, broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
+    broadcast, broadcast_signed_transaction, broadcast_signed_transaction_synchronous_typed,
     sign_transaction, validate_signed_transaction, Asset, AssetAssetId, ExtensionsType, Operation,
-    ProcessedTransaction, Transaction, TransferOperation, TransferOperationFrom,
-    TransferOperationTo,
+    ProcessedTransaction, SynchronousBroadcastResult, Transaction, TransferOperation,
+    TransferOperationFrom, TransferOperationTo,
 };
 use graphene_codec::{to_graphene_bytes, GrapheneEncode};
 use graphene_rpc::{
@@ -352,11 +352,31 @@ fn synchronous_broadcast_helper_returns_raw_variant_response() {
     let transport = RecordingTransport::default();
     let client = RpcClient::new(transport);
 
-    let response = broadcast_signed_transaction_synchronous(&client, signed)
-        .expect("mock synchronous broadcast should decode raw variant response");
+    let response = broadcast_signed_transaction_synchronous_typed(&client, signed)
+        .expect("mock synchronous broadcast should decode typed variant response");
 
-    assert_eq!(response["id"], serde_json::json!("fixture-transaction-id"));
+    assert_eq!(response.id, "fixture-transaction-id");
+    assert_eq!(response.block_num, 42);
+    assert_eq!(response.trx_num, 0);
     let calls = client.transport().calls.borrow();
     assert_eq!(calls.len(), 1);
     assert_eq!(calls[0].0, "broadcast_transaction_synchronous");
+}
+
+#[test]
+fn synchronous_broadcast_result_parses_raw_variant_shape() {
+    let raw = serde_json::json!({
+        "id": "abc123",
+        "block_num": 99,
+        "trx_num": 7,
+        "trx": { "signatures": [] }
+    });
+
+    let result = SynchronousBroadcastResult::try_from(raw.clone())
+        .expect("raw synchronous broadcast result should parse");
+
+    assert_eq!(result.id, "abc123");
+    assert_eq!(result.block_num, 99);
+    assert_eq!(result.trx_num, 7);
+    assert_eq!(result.raw, raw);
 }

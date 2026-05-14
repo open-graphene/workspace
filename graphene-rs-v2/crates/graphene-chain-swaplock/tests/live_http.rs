@@ -1,8 +1,8 @@
 use std::collections::BTreeSet;
 
 use graphene_chain_swaplock::{
-    broadcast_signed_transaction_synchronous, build_transfer_operation,
-    fetch_required_fee_for_transfer, prepare_transaction, sign_transaction, GetAccountCountParams,
+    broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
+    fetch_required_fee_for_transfer, prepare_transaction, GetAccountCountParams,
     GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams, GetBlockHeaderParams,
     GetBlockParams, GetChainIdParams, GetChainPropertiesParams, GetCommitteeCountParams,
     GetCommitteeMembersParams, GetConfigParams, GetDynamicGlobalPropertiesParams,
@@ -300,32 +300,20 @@ fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
     transfer.fee = fetch_required_fee_for_transfer(&client, &transfer, "1.3.0")
         .expect("required fee lookup should succeed");
 
-    let transaction =
-        prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
-            .expect("transaction should prepare from dynamic global properties");
-    let signed =
-        sign_transaction(&chain_id, transaction, &signer).expect("transaction should sign");
+    let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
+        .expect("transaction should prepare from dynamic global properties");
+    let signed = prepared
+        .sign(&chain_id, &signer)
+        .expect("transaction should sign");
     let broadcast_client = live_broadcast_client();
-    let response = broadcast_signed_transaction_synchronous(&broadcast_client, signed)
+    let response = broadcast_signed_transaction_synchronous_typed(&broadcast_client, signed)
         .expect("signed transfer should broadcast synchronously");
 
-    let tx_id = response
-        .get("id")
-        .and_then(serde_json::Value::as_str)
-        .expect("synchronous broadcast response should include transaction id");
-    let block_num = response
-        .get("block_num")
-        .and_then(serde_json::Value::as_u64)
-        .expect("synchronous broadcast response should include block number");
-    let trx_num = response
-        .get("trx_num")
-        .and_then(serde_json::Value::as_u64)
-        .expect("synchronous broadcast response should include transaction number");
-
     println!(
-        "broadcast_transaction_synchronous => id={tx_id}, block_num={block_num}, trx_num={trx_num}"
+        "broadcast_transaction_synchronous => id={}, block_num={}, trx_num={}",
+        response.id, response.block_num, response.trx_num
     );
-    assert!(!tx_id.is_empty());
+    assert!(!response.id.is_empty());
 }
 
 #[test]

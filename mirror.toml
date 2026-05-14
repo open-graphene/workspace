@@ -2,9 +2,9 @@
 git = "git@github.com:mirrorboards/mirror.git"
 path = "./mirror"
 
-[[repositories]]
-git = "git@github.com:bitshares/bitshares-core.git"
-path = "chains/bitshares/bitshares-core"
+# [[repositories]]
+# git = "git@github.com:bitshares/bitshares-core.git"
+# path = "chains/bitshares/bitshares-core"
 
 [[repositories]]
 git = "git@github.com:bitshares/open-explorer.git"
@@ -78,9 +78,9 @@ path = "chains/rsquared/SmartContract"
 git = "git@github.com:R-Squared-Project/ws-pp-library.git"
 path = "chains/rsquared/ws-pp-library"
 
-[[repositories]]
-git = "git@github.com:swaplock/swaplock-core.git"
-path = "chains/swaplock/swaplock-core"
+# [[repositories]]
+# git = "git@github.com:swaplock/swaplock-core.git"
+# path = "chains/swaplock/swaplock-core"
 
 [[repositories]]
 git = "git@github.com:acta-network/acta-network-core.git"

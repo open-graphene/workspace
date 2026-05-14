@@ -97,15 +97,9 @@ cargo run -p graphene-chain-swaplock --example swaplock_broadcast_transfer
 ```
 
 Both send a tiny Swaplock testnet transfer from the shared test account to
-`committee-account` by default and print only the transaction id, block number,
-and transaction index. Override endpoints or accounts with:
-
-```sh
-SWAPLOCK_RPC_URL=https://node01.swaplock.chainpool.online:8090
-SWAPLOCK_WS_URL=wss://node01.swaplock.chainpool.online:8090
-SWAPLOCK_FROM_ACCOUNT=swaplock
-SWAPLOCK_TO_ACCOUNT=committee-account
-```
+`committee-account` and print only the transaction id, block number, and
+transaction index. The example intentionally uses direct constants for the
+shared testnet endpoint, accounts, and WIF so the happy path stays readable.
 
 The reusable pieces live in `graphene-chain-swaplock::transaction` and are
 re-exported by the crate root:
@@ -113,7 +107,7 @@ re-exported by the crate root:
 ```rust
 use graphene_chain_swaplock::{
     build_transfer_operation, fetch_required_fee_for_transfer, prepare_transaction,
-    sign_transaction, broadcast_signed_transaction_synchronous, TransferDraft,
+    broadcast_signed_transaction_synchronous_typed, TransferDraft,
 };
 ```
 
