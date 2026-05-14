@@ -105,12 +105,13 @@ let broadcast_client = RpcClient::new(session.api_transport(&broadcast_api));
 The session keeps Graphene API ids scoped to their owning socket. A background
 WebSocket dispatcher owns all socket reads and writes: generated RPC responses
 are routed by JSON-RPC request id, and Graphene server pushes are routed by
-callback id. Callback methods prepend a local callback id to the params, and
-server pushes arrive as `method: "notice"` with `params[0]` equal to that
-callback id. The dispatcher fails pending requests and clears callback routing on
-disconnect; reconnect/resubscribe policy is intentionally out of scope for this
-step. The chain crates expose a first callback proof helper for signed
-transactions:
+callback id. Ordinary generated request/response methods implement
+`OpenRpcParams`; callback-aware methods implement the separate
+`OpenRpcCallbackParams` trait so the WebSocket session can allocate and prepend
+the local callback id before method-specific params. The dispatcher fails
+pending requests and clears callback routing on disconnect; reconnect/resubscribe
+policy is intentionally out of scope for this step. The chain crates expose a
+first callback proof helper for signed transactions:
 
 ```rust
 use graphene_chain_swaplock::broadcast_signed_transaction_with_callback_typed;
@@ -144,9 +145,12 @@ callback notice payload arrives as a single-argument array containing the
 returns that object directly. `broadcast_transaction_with_callback` is kept as a
 handwritten helper for now, not a generated `OpenRpcParams` method, because the
 first wire parameter is a local callback id allocated by the WebSocket session
-rather than user-supplied RPC input. `set_block_applied_callback` has also been
-verified live as the first persistent callback proof: it registers a callback on
-the database API and receives a later block id through `method: "notice"`.
+rather than user-supplied RPC input. Internally it now uses
+`OpenRpcCallbackParams` and the typed `call_with_callback_once(...)` runtime path
+instead of ad-hoc raw parameter assembly. `set_block_applied_callback` has also
+been verified live as the first persistent callback proof: it registers a
+callback on the database API and receives a later block id through
+`method: "notice"`.
 
 Run the executable examples:
 

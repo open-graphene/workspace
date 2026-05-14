@@ -1,7 +1,9 @@
 use std::error::Error;
 use std::fmt;
 
-use graphene_rpc::{ApiHandle, CallbackSubscription, GrapheneWebSocketSession, RpcError};
+use graphene_rpc::{
+    ApiHandle, CallbackSubscription, GrapheneWebSocketSession, OpenRpcCallbackParams, RpcError,
+};
 use serde_json::Value;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -44,39 +46,52 @@ impl TryFrom<Value> for BlockAppliedNotice {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct SetBlockAppliedCallbackParams;
+
+impl OpenRpcCallbackParams for SetBlockAppliedCallbackParams {
+    const METHOD: &'static str = "set_block_applied_callback";
+    type Response = ();
+    type Callback = BlockAppliedNotice;
+
+    fn into_positional_params_after_callback(self) -> Vec<Value> {
+        Vec::new()
+    }
+
+    fn decode_response(value: Value) -> Result<Self::Response, RpcError> {
+        if value.is_null() {
+            Ok(())
+        } else {
+            Err(RpcError::protocol(
+                Self::METHOD,
+                format!("expected null acknowledgement, got {value}"),
+            ))
+        }
+    }
+
+    fn decode_callback(value: Value) -> Result<Self::Callback, RpcError> {
+        BlockAppliedNotice::try_from(value)
+            .map_err(|source| RpcError::protocol(Self::METHOD, source.to_string()))
+    }
+}
+
 pub fn set_block_applied_callback<F>(
     session: &GrapheneWebSocketSession,
     database_api: &ApiHandle,
-    mut callback: F,
+    callback: F,
 ) -> Result<CallbackSubscription, RpcError>
 where
     F: FnMut(BlockAppliedNotice) + Send + 'static,
 {
-    let (subscription, response) = session.call_with_callback_raw(
-        database_api,
-        "set_block_applied_callback",
-        Vec::new(),
-        move |payload| {
-            if let Ok(notice) = BlockAppliedNotice::try_from(payload) {
-                callback(notice);
-            }
-        },
-    )?;
-
-    if !response.is_null() {
-        subscription.unsubscribe()?;
-        return Err(RpcError::protocol(
-            "set_block_applied_callback",
-            format!("expected null acknowledgement, got {response}"),
-        ));
-    }
-
+    let (subscription, ()) =
+        session.subscribe(database_api, SetBlockAppliedCallbackParams, callback)?;
     Ok(subscription)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{BlockAppliedNotice, BlockAppliedNoticeError};
+    use super::{BlockAppliedNotice, BlockAppliedNoticeError, SetBlockAppliedCallbackParams};
+    use graphene_rpc::OpenRpcCallbackParams;
     use serde_json::json;
 
     #[test]
@@ -103,5 +118,20 @@ mod tests {
         let error = BlockAppliedNotice::try_from(raw.clone()).unwrap_err();
 
         assert_eq!(error, BlockAppliedNoticeError::UnexpectedShape(raw));
+    }
+
+    #[test]
+    fn set_block_applied_callback_params_decode_null_ack() {
+        assert_eq!(
+            SetBlockAppliedCallbackParams::decode_response(json!(null)).unwrap(),
+            ()
+        );
+    }
+
+    #[test]
+    fn set_block_applied_callback_params_reject_non_null_ack() {
+        let error = SetBlockAppliedCallbackParams::decode_response(json!(true)).unwrap_err();
+
+        assert!(error.to_string().contains("expected null acknowledgement"));
     }
 }

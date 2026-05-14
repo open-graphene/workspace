@@ -306,6 +306,23 @@ pub trait OpenRpcParams {
     fn into_positional_params(self) -> Vec<Value>;
 }
 
+/// Callback-aware Graphene RPC parameter structs implement this trait.
+///
+/// Graphene callback methods are not ordinary request/response calls: the first
+/// wire parameter is a local callback id allocated by the WebSocket session.
+/// Implementations return only the parameters that come after that callback id.
+pub trait OpenRpcCallbackParams {
+    const METHOD: &'static str;
+    type Response;
+    type Callback;
+
+    fn into_positional_params_after_callback(self) -> Vec<Value>;
+
+    fn decode_response(value: Value) -> Result<Self::Response, RpcError>;
+
+    fn decode_callback(value: Value) -> Result<Self::Callback, RpcError>;
+}
+
 /// Minimal transport abstraction for typed JSON-RPC calls.
 ///
 /// Concrete HTTP/WebSocket transports can be added without changing the
@@ -627,6 +644,46 @@ impl GrapheneWebSocketSession {
             .map_err(|_| RpcError::transport("WebSocket dispatcher closed callback payload"));
         subscription.unsubscribe()?;
         payload
+    }
+
+    pub fn subscribe<P, F>(
+        &self,
+        api: &ApiHandle,
+        params: P,
+        mut callback: F,
+    ) -> Result<(CallbackSubscription, P::Response), RpcError>
+    where
+        P: OpenRpcCallbackParams,
+        F: FnMut(P::Callback) + Send + 'static,
+    {
+        let (subscription, response) = self.call_with_callback_raw(
+            api,
+            P::METHOD,
+            params.into_positional_params_after_callback(),
+            move |payload| {
+                if let Ok(decoded) = P::decode_callback(payload) {
+                    callback(decoded);
+                }
+            },
+        )?;
+        let response = P::decode_response(response)?;
+        Ok((subscription, response))
+    }
+
+    pub fn call_with_callback_once<P>(
+        &self,
+        api: &ApiHandle,
+        params: P,
+    ) -> Result<P::Callback, RpcError>
+    where
+        P: OpenRpcCallbackParams,
+    {
+        let raw = self.call_with_callback_once_raw(
+            api,
+            P::METHOD,
+            params.into_positional_params_after_callback(),
+        )?;
+        P::decode_callback(raw)
     }
 
     pub fn call_with_callback_raw_wait(

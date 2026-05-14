@@ -1,4 +1,6 @@
-use graphene_rpc::{ApiHandle, GrapheneWebSocketSession, RpcClient, RpcError, RpcTransport};
+use graphene_rpc::{
+    ApiHandle, GrapheneWebSocketSession, OpenRpcCallbackParams, RpcClient, RpcError, RpcTransport,
+};
 use graphene_signing::{ChainId, Signature, Signer};
 use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
 use graphene_transaction::signing::sign_transaction_bytes;
@@ -129,15 +131,46 @@ where
     SynchronousBroadcastResult::try_from(raw)
 }
 
+#[derive(Clone, Debug)]
+pub struct BroadcastTransactionWithCallbackParams {
+    pub trx: SignedTransaction,
+}
+
+impl OpenRpcCallbackParams for BroadcastTransactionWithCallbackParams {
+    const METHOD: &'static str = "broadcast_transaction_with_callback";
+    type Response = ();
+    type Callback = serde_json::Value;
+
+    fn into_positional_params_after_callback(self) -> Vec<serde_json::Value> {
+        vec![serde_json::json!(self.trx)]
+    }
+
+    fn decode_response(value: serde_json::Value) -> Result<Self::Response, RpcError> {
+        if value.is_null() {
+            Ok(())
+        } else {
+            Err(RpcError::protocol(
+                Self::METHOD,
+                format!("expected null acknowledgement, got {value}"),
+            ))
+        }
+    }
+
+    fn decode_callback(value: serde_json::Value) -> Result<Self::Callback, RpcError> {
+        Ok(value)
+    }
+}
+
 pub fn broadcast_signed_transaction_with_callback(
     session: &GrapheneWebSocketSession,
     broadcast_api: &ApiHandle,
     signed: SignedTransactionEnvelope,
 ) -> Result<serde_json::Value, RpcError> {
-    session.call_with_callback_raw_wait(
+    session.call_with_callback_once(
         broadcast_api,
-        "broadcast_transaction_with_callback",
-        vec![serde_json::json!(signed.into_generated())],
+        BroadcastTransactionWithCallbackParams {
+            trx: signed.into_generated(),
+        },
     )
 }
 
