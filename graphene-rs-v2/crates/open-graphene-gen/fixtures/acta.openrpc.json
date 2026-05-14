@@ -1,0 +1,69 @@
+{
+  "openrpc": "1.2.6",
+  "info": {
+    "title": "Acta Graphene RPC",
+    "version": "0.1.0"
+  },
+  "methods": [
+    {
+      "name": "get_dynamic_global_properties",
+      "params": [],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/DynamicGlobalPropertyObject"
+        }
+      }
+    },
+    {
+      "name": "broadcast_transaction",
+      "params": [
+        {
+          "name": "trx",
+          "schema": {
+            "$ref": "#/components/schemas/SignedTransaction"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/void"
+        }
+      }
+    },
+    {
+      "name": "broadcast_transaction_synchronous",
+      "params": [
+        {
+          "name": "trx",
+          "schema": {
+            "$ref": "#/components/schemas/SignedTransaction"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/SynchronousBroadcastResult"
+        }
+      }
+    }
+  ],
+  "components": {
+    "schemas": {
+      "void": {
+        "description": "No Graphene result value."
+      },
+      "SignedTransaction": {
+        "type": "object"
+      },
+      "DynamicGlobalPropertyObject": {
+        "type": "object"
+      },
+      "SynchronousBroadcastResult": {
+        "type": "object"
+      }
+    }
+  }
+}

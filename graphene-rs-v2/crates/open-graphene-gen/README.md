@@ -50,16 +50,18 @@ Important source areas:
 
 ## Contract file layout
 
-The canonical compact example is:
+The canonical compact examples cover the two mandatory M001 chains:
 
 ```text
 crates/open-graphene-gen/fixtures/swaplock.opengraphene.json
+crates/open-graphene-gen/fixtures/acta.opengraphene.json
 ```
 
-It may be paired with OpenRPC metadata for method descriptions, parameters, and results:
+They may be paired with OpenRPC metadata for method descriptions, parameters, and results:
 
 ```text
 crates/open-graphene-gen/fixtures/swaplock.openrpc.json
+crates/open-graphene-gen/fixtures/acta.openrpc.json
 ```
 
 A v0.1 OpenGraphene document contains these root sections:
@@ -253,8 +255,9 @@ Validation requires both `path` and `reason` to be non-empty. These diagnostics 
 Run these commands from the repository root.
 
 ```sh
-# 1. Validate the canonical OpenGraphene contract.
+# 1. Validate the canonical OpenGraphene contracts.
 cargo run -p open-graphene-gen -- validate crates/open-graphene-gen/fixtures/swaplock.opengraphene.json
+cargo run -p open-graphene-gen -- validate crates/open-graphene-gen/fixtures/acta.opengraphene.json
 
 # 2. Print the JSON Schema for the contract model.
 cargo run -p open-graphene-gen -- schema
@@ -263,6 +266,9 @@ cargo run -p open-graphene-gen -- schema
 cargo run -p open-graphene-gen -- inspect-ir \
   crates/open-graphene-gen/fixtures/swaplock.opengraphene.json \
   --openrpc crates/open-graphene-gen/fixtures/swaplock.openrpc.json
+cargo run -p open-graphene-gen -- inspect-ir \
+  crates/open-graphene-gen/fixtures/acta.opengraphene.json \
+  --openrpc crates/open-graphene-gen/fixtures/acta.openrpc.json
 
 # 4. Generate TypeScript and Dart samples into a scratch directory.
 rm -rf /tmp/open-graphene-gen-samples
@@ -283,7 +289,7 @@ cargo test -p open-graphene-gen
 
 Expected success signals:
 
-- `validate` prints `<path>: valid OpenGraphene contract`.
+- `validate` prints `<path>: valid OpenGraphene contract` for both Swaplock and Acta fixtures.
 - `schema` prints JSON with title `OpenGrapheneDocument`.
 - `inspect-ir` prints JSON containing `methods`, `operations`, `callbacks`, and `transaction` metadata.
 - `generate --target all` prints `generated target 'all' into <dir>` and writes TypeScript plus Dart outputs.
@@ -381,7 +387,7 @@ Conformance fixture generation failures name the failed component as `operation_
 
 ## Validation and test coverage
 
-The test suite validates the Swaplock fixture and broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, emitter output, generated sample stability, and conformance fixture contents.
+The test suite validates the Swaplock and Acta fixtures plus broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, emitter output, generated sample stability, and conformance fixture contents.
 
 ```sh
 cargo test -p open-graphene-gen

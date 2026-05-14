@@ -1,0 +1,194 @@
+{
+  "openGraphene": "0.1",
+  "openrpc": "./acta.openrpc.json",
+  "chain": {
+    "name": "acta",
+    "chainId": "2267f694d96b7ffdcba1a98c63c09e720a18a85ad34954e299c66d5a42234098",
+    "wsEndpoints": [
+      "wss://node01.acta.chainpool.online:8090"
+    ],
+    "httpEndpoints": [
+      "https://node01.acta.chainpool.online:8090"
+    ]
+  },
+  "apis": {
+    "database": {
+      "grapheneName": "database",
+      "access": "default"
+    },
+    "network_broadcast": {
+      "grapheneName": "network_broadcast",
+      "access": "login_api"
+    }
+  },
+  "methodBindings": {
+    "get_dynamic_global_properties": {
+      "api": "database"
+    },
+    "broadcast_transaction": {
+      "api": "network_broadcast"
+    },
+    "broadcast_transaction_synchronous": {
+      "api": "network_broadcast"
+    }
+  },
+  "codec": {
+    "types": {
+      "Asset": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "int64"
+          },
+          {
+            "name": "asset_id",
+            "type": "object_id"
+          }
+        ]
+      },
+      "TransferOperation": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "fee",
+            "type": "Asset"
+          },
+          {
+            "name": "from",
+            "type": "object_id"
+          },
+          {
+            "name": "to",
+            "type": "object_id"
+          },
+          {
+            "name": "amount",
+            "type": "Asset"
+          },
+          {
+            "name": "memo",
+            "type": {
+              "optional": "bytes"
+            }
+          },
+          {
+            "name": "extensions",
+            "type": {
+              "array": "bytes"
+            }
+          }
+        ]
+      },
+      "SignedTransaction": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ref_block_num",
+            "type": "uint16"
+          },
+          {
+            "name": "ref_block_prefix",
+            "type": "uint32"
+          },
+          {
+            "name": "expiration",
+            "type": "time_point_sec"
+          },
+          {
+            "name": "operations",
+            "type": {
+              "array": "Operation"
+            }
+          },
+          {
+            "name": "extensions",
+            "type": {
+              "array": "bytes"
+            }
+          },
+          {
+            "name": "signatures",
+            "type": {
+              "array": "signature"
+            }
+          }
+        ]
+      },
+      "DynamicGlobalPropertyObject": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "head_block_number",
+            "type": "uint32"
+          },
+          {
+            "name": "head_block_id",
+            "type": "bytes"
+          },
+          {
+            "name": "time",
+            "type": "time_point_sec"
+          }
+        ]
+      },
+      "SynchronousBroadcastResult": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "block_num",
+            "type": "uint32"
+          },
+          {
+            "name": "trx_num",
+            "type": "uint32"
+          }
+        ]
+      }
+    }
+  },
+  "operations": {
+    "Operation": [
+      {
+        "id": 0,
+        "name": "transfer",
+        "type": "TransferOperation"
+      }
+    ]
+  },
+  "transaction": {
+    "type": "SignedTransaction",
+    "operationVariant": "Operation",
+    "digest": {
+      "algorithm": "sha256",
+      "preimage": [
+        "chain_id",
+        "serialized_transaction"
+      ]
+    },
+    "signature": {
+      "curve": "secp256k1",
+      "format": "graphene_compact_recoverable",
+      "canonical": true
+    }
+  },
+  "callbacks": {
+    "set_subscribe_callback": {
+      "api": "database",
+      "requestParams": [
+        "bool"
+      ],
+      "directResult": "void",
+      "callbackParam": {
+        "position": 0,
+        "allocatedBy": "client"
+      },
+      "callbackPayload": "DynamicGlobalPropertyObject",
+      "callbackLifetime": "persistent"
+    }
+  }
+}

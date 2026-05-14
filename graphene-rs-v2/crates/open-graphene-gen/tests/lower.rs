@@ -7,23 +7,39 @@ use open_graphene_gen::model::OpenGrapheneDocument;
 use open_graphene_gen::openrpc::OpenRpcDocument;
 use serde_json::json;
 
-fn fixture_path() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("fixtures/swaplock.opengraphene.json")
+fn fixture_path(name: &str) -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!("fixtures/{name}.opengraphene.json"))
 }
 
-fn openrpc_fixture_path() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("fixtures/swaplock.openrpc.json")
+fn openrpc_fixture_path(name: &str) -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!("fixtures/{name}.openrpc.json"))
 }
 
-fn load_swaplock_fixture() -> OpenGrapheneDocument {
-    let fixture = fs::read_to_string(fixture_path()).expect("fixture should load from disk");
+fn load_fixture(name: &str) -> OpenGrapheneDocument {
+    let fixture = fs::read_to_string(fixture_path(name)).expect("fixture should load from disk");
     serde_json::from_str(&fixture).expect("fixture should deserialize")
 }
 
-fn load_swaplock_openrpc_fixture() -> OpenRpcDocument {
-    let fixture =
-        fs::read_to_string(openrpc_fixture_path()).expect("OpenRPC fixture should load from disk");
+fn load_openrpc_fixture(name: &str) -> OpenRpcDocument {
+    let fixture = fs::read_to_string(openrpc_fixture_path(name))
+        .expect("OpenRPC fixture should load from disk");
     OpenRpcDocument::parse_json(&fixture).expect("OpenRPC fixture should deserialize")
+}
+
+fn load_swaplock_fixture() -> OpenGrapheneDocument {
+    load_fixture("swaplock")
+}
+
+fn load_acta_fixture() -> OpenGrapheneDocument {
+    load_fixture("acta")
+}
+
+fn load_swaplock_openrpc_fixture() -> OpenRpcDocument {
+    load_openrpc_fixture("swaplock")
+}
+
+fn load_acta_openrpc_fixture() -> OpenRpcDocument {
+    load_openrpc_fixture("acta")
 }
 
 #[test]
@@ -102,6 +118,77 @@ fn lower_openrpc_binds_method_params_and_results_into_ir() {
             .callback
             .as_deref(),
         Some("broadcast_transaction_with_callback")
+    );
+}
+
+#[test]
+fn lower_acta_document_to_ir_resolves_fixture() {
+    let document = load_acta_fixture();
+    let ir = lower_document_to_ir(&document).expect("Acta fixture should lower");
+
+    assert_eq!(ir.contract_version, "0.1");
+    assert_eq!(ir.openrpc_source.as_deref(), Some("./acta.openrpc.json"));
+    assert_eq!(ir.chain.name, "acta");
+    assert_eq!(
+        ir.chain.chain_id.as_deref(),
+        Some("2267f694d96b7ffdcba1a98c63c09e720a18a85ad34954e299c66d5a42234098")
+    );
+    assert_eq!(
+        ir.methods.keys().cloned().collect::<Vec<_>>(),
+        vec![
+            "broadcast_transaction",
+            "broadcast_transaction_synchronous",
+            "get_dynamic_global_properties",
+            "set_subscribe_callback"
+        ]
+    );
+    assert_eq!(ir.operation_variants["Operation"][0].name, "transfer");
+    assert_eq!(
+        ir.transaction.as_ref().unwrap().operation_variant,
+        "Operation"
+    );
+    assert_eq!(
+        ir.callbacks["set_subscribe_callback"].callback_lifetime,
+        IrCallbackLifetime::Persistent
+    );
+    assert_eq!(
+        ir.callbacks["set_subscribe_callback"].callback_payload,
+        IrTypeRef::named("DynamicGlobalPropertyObject")
+    );
+    assert!(ir.diagnostics.is_empty());
+}
+
+#[test]
+fn lower_acta_openrpc_binds_generated_method_metadata() {
+    let document = load_acta_fixture();
+    let openrpc = load_acta_openrpc_fixture();
+    let ir = lower_document_with_openrpc_to_ir(&document, &openrpc)
+        .expect("Acta OpenGraphene and OpenRPC fixtures should lower together");
+
+    assert_eq!(ir.chain.name, "acta");
+    assert_eq!(
+        ir.methods["get_dynamic_global_properties"].result,
+        Some(IrTypeRef::named("DynamicGlobalPropertyObject"))
+    );
+    assert_eq!(
+        ir.methods["broadcast_transaction"].params,
+        vec![IrTypeRef::named("SignedTransaction")]
+    );
+    assert_eq!(
+        ir.methods["broadcast_transaction"].result,
+        Some(IrTypeRef::named("void"))
+    );
+    assert_eq!(
+        ir.methods["broadcast_transaction_synchronous"].params,
+        vec![IrTypeRef::named("SignedTransaction")]
+    );
+    assert_eq!(
+        ir.methods["broadcast_transaction_synchronous"].result,
+        Some(IrTypeRef::named("SynchronousBroadcastResult"))
+    );
+    assert_eq!(
+        ir.methods["set_subscribe_callback"].callback.as_deref(),
+        Some("set_subscribe_callback")
     );
 }
 

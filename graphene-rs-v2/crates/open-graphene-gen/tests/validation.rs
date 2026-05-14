@@ -5,19 +5,46 @@ use open_graphene_gen::model::OpenGrapheneDocument;
 use open_graphene_gen::validation::{validate_document, validate_document_report};
 use serde_json::json;
 
-fn fixture_path() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("fixtures/swaplock.opengraphene.json")
+fn fixture_path(name: &str) -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!("fixtures/{name}.opengraphene.json"))
 }
 
-fn load_swaplock_fixture() -> OpenGrapheneDocument {
-    let fixture = fs::read_to_string(fixture_path()).expect("fixture should load from disk");
+fn load_fixture(name: &str) -> OpenGrapheneDocument {
+    let fixture = fs::read_to_string(fixture_path(name)).expect("fixture should load from disk");
     serde_json::from_str(&fixture).expect("fixture should deserialize")
 }
 
+fn load_swaplock_fixture() -> OpenGrapheneDocument {
+    load_fixture("swaplock")
+}
+
+fn load_acta_fixture() -> OpenGrapheneDocument {
+    load_fixture("acta")
+}
+
 #[test]
-fn accepts_minimal_valid_contract() {
-    let document = load_swaplock_fixture();
-    validate_document(&document).expect("valid contract should pass");
+fn accepts_mandatory_chain_contract_fixtures() {
+    for (name, expected_chain) in [("swaplock", "swaplock"), ("acta", "acta")] {
+        let document = load_fixture(name);
+        validate_document(&document).expect("valid contract should pass");
+        assert_eq!(document.chain.name, expected_chain);
+    }
+}
+
+#[test]
+fn acta_fixture_uses_acta_generated_method_and_chain_metadata() {
+    let document = load_acta_fixture();
+    validate_document(&document).expect("Acta contract should pass");
+
+    assert_eq!(document.chain.name, "acta");
+    assert_eq!(
+        document.chain.chain_id.as_deref(),
+        Some("2267f694d96b7ffdcba1a98c63c09e720a18a85ad34954e299c66d5a42234098")
+    );
+    assert!(document
+        .method_bindings
+        .contains_key("broadcast_transaction_synchronous"));
+    assert!(document.callbacks.contains_key("set_subscribe_callback"));
 }
 
 #[test]
