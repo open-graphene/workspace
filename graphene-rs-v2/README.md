@@ -165,12 +165,15 @@ Run the executable examples:
 ```sh
 cargo run -p graphene-chain-swaplock --example swaplock_broadcast_transfer
 cargo run -p graphene-chain-swaplock --example swaplock_block_applied_callback
+cargo run -p graphene-chain-swaplock --example swaplock_dynamic_global_properties_subscription
 ```
 
 `swaplock_block_applied_callback` is a non-mutating WebSocket subscription
 example: it uses the typed handwritten `set_block_applied_callback` helper,
 prints the next block id received through the dispatcher, unsubscribes locally,
-and exits.
+and exits. `swaplock_dynamic_global_properties_subscription` uses
+`set_subscribe_callback` plus `get_objects(["2.1.0"], true)` to print the
+initial dynamic global properties object and the next typed update notice.
 
 The broadcast example and live broadcast tests send a tiny Swaplock testnet transfer from the shared test account to
 `committee-account` and print only the transaction id, block number, and
@@ -192,7 +195,8 @@ The reusable pieces are re-exported by the crate root:
 ```rust
 use graphene_chain_swaplock::{
     broadcast_signed_transaction_synchronous_typed, lookup_exact_account_id,
-    prepare_transfer_transaction, set_block_applied_callback, TransferDraft,
+    prepare_transfer_transaction, set_block_applied_callback,
+    subscribe_dynamic_global_properties, TransferDraft,
 };
 ```
 
@@ -235,7 +239,7 @@ chain-local generated types preserved at the boundary:
 ```rust
 use graphene_chain_acta::{
     lookup_exact_account_id, prepare_transfer_transaction, set_block_applied_callback,
-    TransferDraft,
+    subscribe_dynamic_global_properties, TransferDraft,
 };
 ```
 
@@ -267,15 +271,19 @@ Swaplock and Acta. The non-mutating Acta `set_block_applied_callback` proof has
 also been verified live: it registered a database callback and received a real
 block id through the shared dispatcher-backed callback path.
 
-Run the executable example:
+Run the executable examples:
 
 ```sh
 cargo run -p graphene-chain-acta --example acta_broadcast_transfer
+cargo run -p graphene-chain-acta --example acta_dynamic_global_properties_subscription
 ```
 
-Both send a tiny Acta testnet transfer from the shared test account to
+Both broadcast examples send a tiny Acta testnet transfer from the shared test account to
 `committee-account` and print only the transaction id, block number, and
-transaction index. The testnet constants are exported by the crate as:
+transaction index. The dynamic global properties example is non-mutating: it
+subscribes over WebSocket, prints the initial `2.1.0` object, waits for one
+update notice, unsubscribes locally, and exits. The testnet constants are
+exported by the crate as:
 
 ```rust
 use graphene_chain_acta::{

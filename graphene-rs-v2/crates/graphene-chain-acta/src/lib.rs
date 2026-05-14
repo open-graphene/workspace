@@ -25,11 +25,15 @@ pub mod broadcast {
 
 mod account;
 mod codec;
+mod dynamic_global_properties;
 mod testnet;
 mod transaction;
 mod transfer;
 
 pub use account::{lookup_exact_account_id, LookupAccountError};
+pub use dynamic_global_properties::{
+    subscribe_dynamic_global_properties, SetSubscribeCallbackParams,
+};
 pub use generated::*;
 pub use graphene_rpc::database_callbacks::{
     set_block_applied_callback, BlockAppliedNotice, BlockAppliedNoticeError,

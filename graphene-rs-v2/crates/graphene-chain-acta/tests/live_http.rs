@@ -1,16 +1,17 @@
 use graphene_chain_acta::{
     broadcast_signed_transaction_synchronous_typed,
     broadcast_signed_transaction_with_callback_typed, lookup_exact_account_id,
-    prepare_transfer_transaction, set_block_applied_callback, GetChainIdParams, TransferDraft,
-    ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL, ACTA_TESTNET_TO_ACCOUNT,
-    ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
-    PUBLIC_ACTA_TESTNET_WIF,
+    prepare_transfer_transaction, set_block_applied_callback, subscribe_dynamic_global_properties,
+    GetChainIdParams, TransferDraft, ACTA_TESTNET_FROM_ACCOUNT, ACTA_TESTNET_HTTP_URL,
+    ACTA_TESTNET_TO_ACCOUNT, ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET,
+    ACTA_TESTNET_WS_URL, PUBLIC_ACTA_TESTNET_WIF,
 };
 use graphene_rpc::{
     GrapheneWebSocketApiTransport, GrapheneWebSocketSession, HttpTransport, RpcClient,
 };
 use graphene_signing::{ChainId, WifSigner};
 use std::sync::{mpsc, Arc};
+use std::time::Duration;
 
 fn live_client() -> RpcClient<HttpTransport> {
     RpcClient::new(HttpTransport::new(ACTA_TESTNET_HTTP_URL))
@@ -115,6 +116,48 @@ fn live_receives_block_applied_callback_notice() {
     subscription
         .unsubscribe()
         .expect("callback subscription should unsubscribe locally");
+}
+
+#[test]
+#[ignore = "requires network access and waits for an Acta dynamic global properties notice"]
+fn live_receives_dynamic_global_properties_subscription_notice() {
+    let session = GrapheneWebSocketSession::connect(ACTA_TESTNET_WS_URL)
+        .expect("Acta WebSocket session should connect");
+    let database_api = session
+        .login_api("database")
+        .expect("database API should log in");
+
+    let (dynamic_tx, dynamic_rx) = mpsc::sync_channel(1);
+    let (subscription, initial) =
+        subscribe_dynamic_global_properties(&session, &database_api, move |dynamic| {
+            let _ = dynamic_tx.send(dynamic);
+        })
+        .expect("dynamic global properties subscription should register");
+
+    println!(
+        "subscribe_dynamic_global_properties initial => callback_id={}, head_block_number={}, witness={}",
+        subscription.id(),
+        initial.head_block_number,
+        initial.current_witness.as_str()
+    );
+    assert!(initial.head_block_number > 0);
+    assert!(initial.current_witness.as_str().starts_with("1.6."));
+
+    let notice = dynamic_rx
+        .recv_timeout(Duration::from_secs(20))
+        .expect("registered subscription should receive a dynamic global properties notice");
+    println!(
+        "subscribe_dynamic_global_properties notice => callback_id={}, head_block_number={}, witness={}",
+        subscription.id(),
+        notice.head_block_number,
+        notice.current_witness.as_str()
+    );
+    assert!(notice.head_block_number >= initial.head_block_number);
+    assert!(notice.current_witness.as_str().starts_with("1.6."));
+
+    subscription
+        .unsubscribe()
+        .expect("dynamic global properties subscription should unsubscribe locally");
 }
 
 #[test]
