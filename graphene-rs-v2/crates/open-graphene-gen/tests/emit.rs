@@ -106,7 +106,7 @@ fn emit_dart_snapshot_from_swaplock_ir() {
     let files = emit_dart(&ir).expect("fixture should emit Dart");
 
     assert_eq!(files.len(), 1);
-    assert_eq!(files[0].path(), Path::new("dart/index.dart"));
+    assert_eq!(files[0].path(), Path::new("dart/lib/open_graphene.dart"));
     assert_eq!(
         files[0].contents(),
         include_str!("snapshots/dart/index.dart")

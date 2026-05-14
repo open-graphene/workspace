@@ -194,7 +194,7 @@ pub fn emit_dart(ir: &IrDocument) -> Result<Vec<GeneratedFile>, EmitError> {
     }
 
     Ok(vec![GeneratedFile::new(
-        PathBuf::from("dart/index.dart"),
+        PathBuf::from("dart/lib/open_graphene.dart"),
         output,
     )?])
 }

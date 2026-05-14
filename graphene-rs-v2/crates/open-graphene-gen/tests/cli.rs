@@ -1,10 +1,111 @@
 use std::fs;
+use std::path::PathBuf;
 use std::process::Command;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::Value;
 
 fn fixture_path(name: &str) -> String {
     format!("{}/fixtures/{name}", env!("CARGO_MANIFEST_DIR"))
+}
+
+fn unique_output_dir(test_name: &str) -> PathBuf {
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("clock should be after epoch")
+        .as_nanos();
+    std::env::temp_dir().join(format!(
+        "open-graphene-gen-cli-{test_name}-{}-{nanos}",
+        std::process::id()
+    ))
+}
+
+#[test]
+fn generate_all_writes_expected_files_deterministically() {
+    let output_dir = unique_output_dir("generate-all");
+    let output_dir_arg = output_dir.to_str().expect("temp path should be UTF-8");
+
+    let run_generate = || {
+        Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+            .args([
+                "generate",
+                &fixture_path("swaplock.opengraphene.json"),
+                "--openrpc",
+                &fixture_path("swaplock.openrpc.json"),
+                "--target",
+                "all",
+                "--out",
+                output_dir_arg,
+            ])
+            .output()
+            .expect("generate should run")
+    };
+
+    let first = run_generate();
+    assert!(
+        first.status.success(),
+        "generate failed: {}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+
+    let typescript_path = output_dir.join("typescript/index.ts");
+    let dart_path = output_dir.join("dart/lib/open_graphene.dart");
+    assert!(typescript_path.is_file(), "missing TypeScript output");
+    assert!(dart_path.is_file(), "missing Dart output");
+
+    let first_stdout = String::from_utf8(first.stdout).expect("stdout should be UTF-8");
+    assert!(first_stdout.contains("generated target 'all'"));
+    assert!(first_stdout.contains("wrote typescript/index.ts"));
+    assert!(first_stdout.contains("wrote dart/lib/open_graphene.dart"));
+
+    let first_typescript = fs::read_to_string(&typescript_path).expect("TypeScript should read");
+    let first_dart = fs::read_to_string(&dart_path).expect("Dart should read");
+
+    let second = run_generate();
+    assert!(
+        second.status.success(),
+        "second generate failed: {}",
+        String::from_utf8_lossy(&second.stderr)
+    );
+
+    assert_eq!(
+        first_stdout,
+        String::from_utf8(second.stdout).expect("second stdout should be UTF-8")
+    );
+    assert_eq!(
+        first_typescript,
+        fs::read_to_string(&typescript_path).expect("TypeScript should read after rerun")
+    );
+    assert_eq!(
+        first_dart,
+        fs::read_to_string(&dart_path).expect("Dart should read after rerun")
+    );
+
+    fs::remove_dir_all(output_dir).ok();
+}
+
+#[test]
+fn generate_rejects_unknown_target() {
+    let output = Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+        .args([
+            "generate",
+            &fixture_path("swaplock.opengraphene.json"),
+            "--target",
+            "python",
+            "--out",
+            unique_output_dir("bad-target")
+                .to_str()
+                .expect("temp path should be UTF-8"),
+        ])
+        .output()
+        .expect("generate should run");
+
+    assert!(!output.status.success(), "unknown target should fail");
+    assert!(
+        String::from_utf8_lossy(&output.stderr).contains("unsupported generate target 'python'"),
+        "unexpected stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
 }
 
 #[test]
