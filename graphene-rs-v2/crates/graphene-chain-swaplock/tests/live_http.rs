@@ -2,25 +2,23 @@ use std::collections::BTreeSet;
 
 use graphene_chain_swaplock::{
     broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
-    fetch_required_fee_for_transfer, prepare_transaction, GetAccountCountParams,
-    GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams, GetBlockHeaderParams,
-    GetBlockParams, GetChainIdParams, GetChainPropertiesParams, GetCommitteeCountParams,
-    GetCommitteeMembersParams, GetConfigParams, GetDynamicGlobalPropertiesParams,
-    GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams, GetRequiredFeesParams,
-    GetTransactionHexWithoutSigParams, GetWitnessCountParams, GetWitnessesParams,
-    GetWorkerCountParams, LookupAccountsParams, LookupAssetSymbolsParams,
+    fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
+    GetAccountCountParams, GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams,
+    GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
+    GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
+    GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams,
+    GetRequiredFeesParams, GetTransactionHexWithoutSigParams, GetWitnessCountParams,
+    GetWitnessesParams, GetWorkerCountParams, LookupAccountsParams, LookupAssetSymbolsParams,
     LookupCommitteeMemberAccountsParams, LookupVoteIdObject, LookupVoteIdsParams,
     LookupWitnessAccountsParams, Operation, RequiredFee, Transaction, TransferDraft,
-    OPENRPC_METHODS,
+    OPENRPC_METHODS, PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT,
+    SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
 };
 use graphene_codec::to_graphene_bytes;
 use graphene_rpc::{
     GrapheneTimePointSec, GrapheneUInt64, GrapheneWebSocketTransport, HttpTransport, RpcClient,
 };
 use graphene_signing::{ChainId, WifSigner};
-
-const DEFAULT_SWAPLOCK_RPC_URL: &str = "https://node01.swaplock.chainpool.online:8090";
-const DEFAULT_SWAPLOCK_WS_URL: &str = "wss://node01.swaplock.chainpool.online:8090";
 
 /// Methods currently exercised end-to-end against the public Swaplock database RPC node.
 ///
@@ -143,22 +141,14 @@ const SKIPPED_LIVE_METHODS: &[&str] = &[
 ];
 
 fn live_client() -> RpcClient<HttpTransport> {
-    let endpoint =
-        std::env::var("SWAPLOCK_RPC_URL").unwrap_or_else(|_| DEFAULT_SWAPLOCK_RPC_URL.to_owned());
-    RpcClient::new(HttpTransport::new(endpoint))
+    RpcClient::new(HttpTransport::new(SWAPLOCK_TESTNET_HTTP_URL))
 }
 
 fn live_broadcast_client() -> RpcClient<GrapheneWebSocketTransport> {
-    let endpoint =
-        std::env::var("SWAPLOCK_WS_URL").unwrap_or_else(|_| DEFAULT_SWAPLOCK_WS_URL.to_owned());
-    let api_id = std::env::var("SWAPLOCK_BROADCAST_API_ID")
-        .ok()
-        .and_then(|value| value.parse::<u64>().ok());
-    let transport = match api_id {
-        Some(api_id) => GrapheneWebSocketTransport::new(endpoint, api_id),
-        None => GrapheneWebSocketTransport::login_api(endpoint, "network_broadcast"),
-    };
-    RpcClient::new(transport)
+    RpcClient::new(GrapheneWebSocketTransport::login_api(
+        SWAPLOCK_TESTNET_WS_URL,
+        "network_broadcast",
+    ))
 }
 
 fn assert_positive(value: GrapheneUInt64, method: &str) {
@@ -201,22 +191,6 @@ fn bytes_to_hex(bytes: &[u8]) -> String {
         out.push(HEX[(byte & 0x0f) as usize] as char);
     }
     out
-}
-
-fn exact_account_id(client: &RpcClient<HttpTransport>, account_name: &str) -> String {
-    let accounts = client
-        .call(LookupAccountsParams {
-            lower_bound_name: account_name.to_owned(),
-            limit: 1,
-            subscribe: Some(false),
-        })
-        .expect("account lookup should succeed");
-    let (name, id) = accounts
-        .iter()
-        .next()
-        .expect("account lookup should return at least one account");
-    assert_eq!(name, account_name, "live account fixture should exist");
-    id.clone()
 }
 
 #[test]
@@ -268,16 +242,14 @@ fn live_node_transaction_hex_without_sig_matches_local_binary_codec() {
 #[test]
 #[ignore = "requires network access and broadcasts a tiny Swaplock testnet transfer"]
 fn live_signs_and_broadcasts_tiny_transfer_with_wif() {
-    let wif = "5K71C3PVyynjDdzxNdgd5YJ6y8Z86eEc5RNPvAN983UdhCF4HPw".to_string();
-    let signer = WifSigner::from_wif(&wif).expect("SWAPLOCK_WIF should be a compressed WIF key");
-    drop(wif);
+    let signer = WifSigner::from_wif(PUBLIC_SWAPLOCK_TESTNET_WIF)
+        .expect("public Swaplock testnet WIF should parse");
 
     let client = live_client();
-    let from_account = std::env::var("SWAPLOCK_FROM_ACCOUNT").unwrap_or_else(|_| "swaplock".into());
-    let to_account =
-        std::env::var("SWAPLOCK_TO_ACCOUNT").unwrap_or_else(|_| "committee-account".into());
-    let from = exact_account_id(&client, &from_account);
-    let to = exact_account_id(&client, &to_account);
+    let from = lookup_exact_account_id(&client, SWAPLOCK_TESTNET_FROM_ACCOUNT)
+        .expect("from account fixture should exist");
+    let to = lookup_exact_account_id(&client, SWAPLOCK_TESTNET_TO_ACCOUNT)
+        .expect("to account fixture should exist");
     assert_ne!(from, to, "live transfer requires distinct accounts");
 
     let dynamic = client

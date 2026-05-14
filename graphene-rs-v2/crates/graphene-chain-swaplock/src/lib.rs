@@ -24,14 +24,25 @@ pub mod broadcast {
     include!("generated/broadcast_rpc.rs");
 }
 
+mod account;
 mod codec;
+mod testnet;
 mod transaction;
+mod transfer;
 
+pub use account::{lookup_exact_account_id, LookupAccountError};
 pub use generated::*;
+pub use testnet::{
+    PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
+    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
+};
 pub use transaction::{
-    apply_required_fee, broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
-    broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
-    fetch_required_fee_for_transfer, prepare_transaction, sign_transaction,
-    validate_signed_transaction, BroadcastResultError, BuildTransactionError, PreparedTransaction,
-    SignTransactionError, SignedTransactionEnvelope, SynchronousBroadcastResult, TransferDraft,
+    broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
+    broadcast_signed_transaction_synchronous_typed, sign_transaction, validate_signed_transaction,
+    BroadcastResultError, PreparedTransaction, SignTransactionError, SignedTransactionEnvelope,
+    SynchronousBroadcastResult,
+};
+pub use transfer::{
+    apply_required_fee, build_transfer_operation, fetch_required_fee_for_transfer,
+    prepare_transaction, BuildTransactionError, TransferDraft,
 };

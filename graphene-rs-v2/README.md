@@ -100,16 +100,30 @@ Both send a tiny Swaplock testnet transfer from the shared test account to
 `committee-account` and print only the transaction id, block number, and
 transaction index. The example intentionally uses direct constants for the
 shared testnet endpoint, accounts, and WIF so the happy path stays readable.
-
-The reusable pieces live in `graphene-chain-swaplock::transaction` and are
-re-exported by the crate root:
+Those constants are exported by the crate as:
 
 ```rust
 use graphene_chain_swaplock::{
-    build_transfer_operation, fetch_required_fee_for_transfer, prepare_transaction,
-    broadcast_signed_transaction_synchronous_typed, TransferDraft,
+    PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT,
+    SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT,
+    SWAPLOCK_TESTNET_WS_URL,
 };
 ```
+
+The reusable pieces are re-exported by the crate root:
+
+```rust
+use graphene_chain_swaplock::{
+    broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
+    fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
+    TransferDraft,
+};
+```
+
+Internally these are split into small handwritten modules: `account.rs` for
+account lookup helpers, `transfer.rs` for transfer/fee/transaction preparation,
+`transaction.rs` for prepared/signed transaction and broadcast helpers, and
+`testnet.rs` for the shared Swaplock testnet constants.
 
 ## Generate all configured chains
 
