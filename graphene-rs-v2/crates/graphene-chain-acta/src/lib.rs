@@ -50,5 +50,5 @@ pub use transaction::{
 };
 pub use transfer::{
     apply_required_fee, build_transfer_operation, fetch_required_fee_for_transfer,
-    prepare_transaction, BuildTransactionError, TransferDraft,
+    prepare_transaction, prepare_transfer_transaction, BuildTransactionError, TransferDraft,
 };

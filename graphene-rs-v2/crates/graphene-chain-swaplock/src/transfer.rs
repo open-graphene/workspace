@@ -3,9 +3,9 @@ use graphene_transaction::transaction::compute_transaction_header_fields;
 pub use graphene_transaction::transfer::{parse_object_id, BuildTransactionError, TransferDraft};
 
 use crate::generated::{
-    Asset, AssetAssetId, DynamicGlobalPropertyObject, ExtensionsType, GetRequiredFeesParams,
-    Operation, RequiredFee, Transaction, TransferOperation, TransferOperationFrom,
-    TransferOperationTo,
+    Asset, AssetAssetId, DynamicGlobalPropertyObject, ExtensionsType,
+    GetDynamicGlobalPropertiesParams, GetRequiredFeesParams, Operation, RequiredFee, Transaction,
+    TransferOperation, TransferOperationFrom, TransferOperationTo,
 };
 use crate::transaction::PreparedTransaction;
 
@@ -63,6 +63,22 @@ fn required_fee_asset(fee: RequiredFee) -> Result<Asset, BuildTransactionError> 
             "{other:#?}"
         ))),
     }
+}
+
+pub fn prepare_transfer_transaction<T>(
+    client: &RpcClient<T>,
+    draft: TransferDraft,
+    fee_asset_symbol_or_id: impl Into<String>,
+    expiration_lifetime: chrono::Duration,
+) -> Result<PreparedTransaction, BuildTransactionError>
+where
+    T: RpcTransport,
+{
+    let mut transfer = build_transfer_operation(draft)?;
+    transfer.fee = fetch_required_fee_for_transfer(client, &transfer, fee_asset_symbol_or_id)?;
+    let dynamic = client.call(GetDynamicGlobalPropertiesParams)?;
+    let expiration = GrapheneTimePointSec::new(dynamic.time.naive_utc() + expiration_lifetime);
+    prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)
 }
 
 pub fn prepare_transaction(
@@ -200,5 +216,62 @@ mod tests {
             .expect_err("bad head block id should fail");
 
         assert!(matches!(error, BuildTransactionError::InvalidBlockId(_)));
+    }
+
+    struct TransferFlowTransport;
+
+    impl RpcTransport for TransferFlowTransport {
+        fn call_raw(
+            &self,
+            method: &str,
+            params: Vec<serde_json::Value>,
+        ) -> Result<serde_json::Value, graphene_rpc::RpcError> {
+            match method {
+                "get_required_fees" => {
+                    assert_eq!(params.len(), 2);
+                    assert_eq!(params[1], serde_json::json!("1.3.0"));
+                    serde_json::to_value(vec![RequiredFee::Asset(Asset {
+                        amount: GrapheneInt64::new(7),
+                        asset_id: AssetAssetId::try_from("1.3.0").expect("valid asset id"),
+                    })])
+                    .map_err(|source| graphene_rpc::RpcError::decode("get_required_fees", source))
+                }
+                "get_dynamic_global_properties" => {
+                    serde_json::to_value(dynamic_with_head_block_id(
+                        "00012345a1b2c3d4ffffffffffffffffffffffffffffffffffffffffffffffff",
+                    ))
+                    .map_err(|source| {
+                        graphene_rpc::RpcError::decode("get_dynamic_global_properties", source)
+                    })
+                }
+                other => panic!("unexpected RPC method: {other}"),
+            }
+        }
+    }
+
+    #[test]
+    fn prepare_transfer_transaction_builds_fee_and_header_from_rpc_flow() {
+        let client = RpcClient::new(TransferFlowTransport);
+
+        let prepared = prepare_transfer_transaction(
+            &client,
+            transfer_draft(),
+            "1.3.0",
+            chrono::Duration::minutes(5),
+        )
+        .expect("transfer flow should prepare transaction");
+        let transaction = prepared.into_transaction();
+
+        assert_eq!(transaction.ref_block_num, 0x2345);
+        assert_eq!(transaction.ref_block_prefix, 0xd4c3b2a1);
+        assert_eq!(
+            transaction.expiration,
+            "2026-05-13T20:05:00".parse().expect("valid timestamp")
+        );
+        let Operation::Transfer(transfer) = &transaction.operations[0] else {
+            panic!("expected transfer operation");
+        };
+        assert_eq!(transfer.fee.amount.as_i64(), 7);
+        assert_eq!(transfer.fee.asset_id.as_str(), "1.3.0");
     }
 }

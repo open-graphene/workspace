@@ -1,12 +1,10 @@
 use graphene_chain_swaplock::{
-    broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
-    fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
-    GetChainIdParams, GetDynamicGlobalPropertiesParams, Operation, TransferDraft,
-    PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
-    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,
-    SWAPLOCK_TESTNET_WS_URL,
+    broadcast_signed_transaction_synchronous_typed, lookup_exact_account_id,
+    prepare_transfer_transaction, GetChainIdParams, TransferDraft, PUBLIC_SWAPLOCK_TESTNET_WIF,
+    SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT,
+    SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET, SWAPLOCK_TESTNET_WS_URL,
 };
-use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketSession, HttpTransport, RpcClient};
+use graphene_rpc::{GrapheneWebSocketSession, HttpTransport, RpcClient};
 use graphene_signing::{ChainId, WifSigner};
 use std::sync::Arc;
 
@@ -23,25 +21,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Err("from and to accounts must be distinct".into());
     }
 
-    let dynamic = database_client.call(GetDynamicGlobalPropertiesParams)?;
     let chain_id = database_client.call(GetChainIdParams)?;
     let chain_id = ChainId::try_from(chain_id.as_str())?;
-    let expiration =
-        GrapheneTimePointSec::new(dynamic.time.naive_utc() + chrono::Duration::minutes(5));
 
-    let mut transfer = build_transfer_operation(TransferDraft {
-        from,
-        to,
-        amount: SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
-        asset_id: SWAPLOCK_TESTNET_TRANSFER_ASSET.to_owned(),
-    })?;
-    transfer.fee = fetch_required_fee_for_transfer(
+    let prepared = prepare_transfer_transaction(
         &database_client,
-        &transfer,
+        TransferDraft {
+            from,
+            to,
+            amount: SWAPLOCK_TESTNET_TRANSFER_AMOUNT,
+            asset_id: SWAPLOCK_TESTNET_TRANSFER_ASSET.to_owned(),
+        },
         SWAPLOCK_TESTNET_TRANSFER_ASSET,
+        chrono::Duration::minutes(5),
     )?;
-
-    let prepared = prepare_transaction(&dynamic, vec![Operation::Transfer(transfer)], expiration)?;
     let signed = prepared.sign(&chain_id, &signer)?;
     let response = broadcast_signed_transaction_synchronous_typed(&broadcast_client, signed)?;
 

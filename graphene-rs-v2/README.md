@@ -191,16 +191,16 @@ The reusable pieces are re-exported by the crate root:
 
 ```rust
 use graphene_chain_swaplock::{
-    broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
-    fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
-    set_block_applied_callback, TransferDraft,
+    broadcast_signed_transaction_synchronous_typed, lookup_exact_account_id,
+    prepare_transfer_transaction, set_block_applied_callback, TransferDraft,
 };
 ```
 
 Internally these are split into small handwritten modules: `account.rs` for
-account lookup helpers, `transfer.rs` for transfer/fee/transaction preparation,
-`transaction.rs` for prepared/signed transaction and broadcast helpers, and
-`testnet.rs` for the shared Swaplock testnet constants.
+account lookup helpers, `transfer.rs` for transfer/fee/transaction preparation
+including the `prepare_transfer_transaction` builder, `transaction.rs` for
+prepared/signed transaction and broadcast helpers, and `testnet.rs` for the
+shared Swaplock testnet constants.
 
 ## Acta transfer/broadcast adapter
 
@@ -209,13 +209,13 @@ chain-local generated types preserved at the boundary:
 
 ```rust
 use graphene_chain_acta::{
-    build_transfer_operation, lookup_exact_account_id, prepare_transaction,
-    set_block_applied_callback, TransferDraft,
+    lookup_exact_account_id, prepare_transfer_transaction, set_block_applied_callback,
+    TransferDraft,
 };
 ```
 
-The Acta crate includes `account.rs`, `callbacks.rs`, `transfer.rs`,
-`transaction.rs`, and a transfer-only binary `codec.rs`. The chain config contains a separate
+The Acta crate includes `account.rs`, `transfer.rs`, `transaction.rs`, and a
+transfer-only binary `codec.rs`. The chain config contains a separate
 `network_broadcast_api` surface that generates `graphene_chain_acta::broadcast`,
 mirroring Swaplock's split between public `database_api` reads and broadcast
 RPC while preserving one config file per chain.
