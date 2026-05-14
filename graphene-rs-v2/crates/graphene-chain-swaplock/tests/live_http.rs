@@ -21,7 +21,7 @@ use graphene_rpc::{
     HttpTransport, RpcClient,
 };
 use graphene_signing::{ChainId, WifSigner};
-use std::sync::Arc;
+use std::sync::{mpsc, Arc};
 
 /// Methods currently exercised end-to-end against the public Swaplock database RPC node.
 ///
@@ -348,6 +348,62 @@ fn live_broadcasts_tiny_transfer_with_callback() {
         response.id, response.block_num, response.trx_num
     );
     assert!(!response.id.is_empty());
+}
+
+#[test]
+#[ignore = "requires network access and waits for a Swaplock testnet block notice"]
+fn live_receives_block_applied_callback_notice() {
+    let session = GrapheneWebSocketSession::connect(SWAPLOCK_TESTNET_WS_URL)
+        .expect("Swaplock WebSocket session should connect");
+    let database_api = session
+        .login_api("database")
+        .expect("database API should log in");
+
+    let (payload_tx, payload_rx) = mpsc::sync_channel(1);
+    let (subscription, response) = session
+        .call_with_callback_raw(
+            &database_api,
+            "set_block_applied_callback",
+            Vec::new(),
+            move |payload| {
+                let _ = payload_tx.send(payload);
+            },
+        )
+        .expect("set_block_applied_callback should register callback");
+    assert!(
+        response.is_null(),
+        "set_block_applied_callback should acknowledge with null, got {response:?}"
+    );
+
+    let payload = payload_rx
+        .recv()
+        .expect("registered callback should receive the notice payload");
+
+    let block_id = payload
+        .as_array()
+        .and_then(|values| values.first())
+        .and_then(serde_json::Value::as_str)
+        .or_else(|| payload.as_str())
+        .expect("block applied callback payload should contain a block id string");
+    println!(
+        "set_block_applied_callback => callback_id={}, block_id={block_id}",
+        subscription.id()
+    );
+    assert_eq!(
+        block_id.len(),
+        40,
+        "Graphene block ids should be 20-byte hex strings"
+    );
+    assert!(
+        block_id
+            .chars()
+            .all(|character| character.is_ascii_hexdigit()),
+        "Graphene block id should be hex"
+    );
+
+    subscription
+        .unsubscribe()
+        .expect("callback subscription should unsubscribe locally");
 }
 
 #[test]

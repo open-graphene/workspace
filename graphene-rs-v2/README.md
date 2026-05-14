@@ -102,13 +102,15 @@ let broadcast_api = session.login_api("network_broadcast")?;
 let broadcast_client = RpcClient::new(session.api_transport(&broadcast_api));
 ```
 
-The session keeps Graphene API ids scoped to their owning socket and includes the
-low-level callback/notice routing primitive used by Graphene subscriptions and
-`broadcast_transaction_with_callback`: callback methods prepend a local callback
-id to the params, and server pushes arrive as `method: "notice"` with
-`params[0]` equal to that callback id. Higher-level typed subscription wrappers
-are intentionally not added yet. The chain crates expose a first callback proof
-helper for signed transactions:
+The session keeps Graphene API ids scoped to their owning socket. A background
+WebSocket dispatcher owns all socket reads and writes: generated RPC responses
+are routed by JSON-RPC request id, and Graphene server pushes are routed by
+callback id. Callback methods prepend a local callback id to the params, and
+server pushes arrive as `method: "notice"` with `params[0]` equal to that
+callback id. The dispatcher fails pending requests and clears callback routing on
+disconnect; reconnect/resubscribe policy is intentionally out of scope for this
+step. The chain crates expose a first callback proof helper for signed
+transactions:
 
 ```rust
 use graphene_chain_swaplock::broadcast_signed_transaction_with_callback_typed;
@@ -130,20 +132,34 @@ cargo test -p graphene-chain-swaplock \
 cargo test -p graphene-chain-swaplock \
   live_broadcasts_tiny_transfer_with_callback \
   -- --ignored --nocapture
+
+cargo test -p graphene-chain-swaplock \
+  live_receives_block_applied_callback_notice \
+  -- --ignored --nocapture
 ```
 
 The callback proof has been verified against the Swaplock testnet; the real
 callback notice payload arrives as a single-argument array containing the
 `transaction_confirmation` object, while `broadcast_transaction_synchronous`
-returns that object directly.
+returns that object directly. `broadcast_transaction_with_callback` is kept as a
+handwritten helper for now, not a generated `OpenRpcParams` method, because the
+first wire parameter is a local callback id allocated by the WebSocket session
+rather than user-supplied RPC input. `set_block_applied_callback` has also been
+verified live as the first persistent callback proof: it registers a callback on
+the database API and receives a later block id through `method: "notice"`.
 
-Run the executable example:
+Run the executable examples:
 
 ```sh
 cargo run -p graphene-chain-swaplock --example swaplock_broadcast_transfer
+cargo run -p graphene-chain-swaplock --example swaplock_block_applied_callback
 ```
 
-Both send a tiny Swaplock testnet transfer from the shared test account to
+`swaplock_block_applied_callback` is a non-mutating WebSocket subscription
+example: it registers `set_block_applied_callback`, prints the next block id
+received through the dispatcher, unsubscribes locally, and exits.
+
+The broadcast example and live broadcast tests send a tiny Swaplock testnet transfer from the shared test account to
 `committee-account` and print only the transaction id, block number, and
 transaction index. The example intentionally uses direct constants for the
 shared testnet endpoint, accounts, and WIF so the happy path stays readable.
@@ -196,7 +212,14 @@ Run the checked live broadcast fixture:
 cargo test -p graphene-chain-acta \
   live_signs_and_broadcasts_tiny_transfer_with_wif \
   -- --ignored --nocapture
+
+cargo test -p graphene-chain-acta \
+  live_broadcasts_tiny_transfer_with_callback \
+  -- --ignored --nocapture
 ```
+
+The Acta callback proof has also been verified against its testnet, giving the
+WebSocket callback ABI two live-proven chains: Swaplock and Acta.
 
 Run the executable example:
 
