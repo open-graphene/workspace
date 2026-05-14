@@ -39,8 +39,10 @@ pub use testnet::{
 };
 pub use transaction::{
     broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
-    broadcast_signed_transaction_synchronous_typed, sign_transaction, validate_signed_transaction,
-    PreparedTransaction, SignTransactionError, SignedTransactionEnvelope,
+    broadcast_signed_transaction_synchronous_typed, broadcast_signed_transaction_with_callback,
+    broadcast_signed_transaction_with_callback_typed, sign_transaction,
+    validate_signed_transaction, PreparedTransaction, SignTransactionError,
+    SignedTransactionEnvelope,
 };
 pub use transfer::{
     apply_required_fee, build_transfer_operation, fetch_required_fee_for_transfer,

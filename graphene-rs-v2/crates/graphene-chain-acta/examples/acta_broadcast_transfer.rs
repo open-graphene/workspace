@@ -6,15 +6,15 @@ use graphene_chain_acta::{
     ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
     PUBLIC_ACTA_TESTNET_WIF,
 };
-use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketTransport, HttpTransport, RpcClient};
+use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketSession, HttpTransport, RpcClient};
 use graphene_signing::{ChainId, WifSigner};
+use std::sync::Arc;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database_client = RpcClient::new(HttpTransport::new(ACTA_TESTNET_HTTP_URL));
-    let broadcast_client = RpcClient::new(GrapheneWebSocketTransport::login_api(
-        ACTA_TESTNET_WS_URL,
-        "network_broadcast",
-    ));
+    let broadcast_session = Arc::new(GrapheneWebSocketSession::connect(ACTA_TESTNET_WS_URL)?);
+    let broadcast_api = broadcast_session.login_api("network_broadcast")?;
+    let broadcast_client = RpcClient::new(broadcast_session.api_transport(&broadcast_api));
     let signer = WifSigner::from_wif(PUBLIC_ACTA_TESTNET_WIF)?;
 
     let from = lookup_exact_account_id(&database_client, ACTA_TESTNET_FROM_ACCOUNT)?;

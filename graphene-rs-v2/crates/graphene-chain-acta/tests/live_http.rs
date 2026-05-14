@@ -6,18 +6,26 @@ use graphene_chain_acta::{
     ACTA_TESTNET_TRANSFER_AMOUNT, ACTA_TESTNET_TRANSFER_ASSET, ACTA_TESTNET_WS_URL,
     PUBLIC_ACTA_TESTNET_WIF,
 };
-use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketTransport, HttpTransport, RpcClient};
+use graphene_rpc::{
+    GrapheneTimePointSec, GrapheneWebSocketApiTransport, GrapheneWebSocketSession, HttpTransport,
+    RpcClient,
+};
 use graphene_signing::{ChainId, WifSigner};
+use std::sync::Arc;
 
 fn live_client() -> RpcClient<HttpTransport> {
     RpcClient::new(HttpTransport::new(ACTA_TESTNET_HTTP_URL))
 }
 
-fn live_broadcast_client() -> RpcClient<GrapheneWebSocketTransport> {
-    RpcClient::new(GrapheneWebSocketTransport::login_api(
-        ACTA_TESTNET_WS_URL,
-        "network_broadcast",
-    ))
+fn live_broadcast_client() -> RpcClient<GrapheneWebSocketApiTransport> {
+    let session = Arc::new(
+        GrapheneWebSocketSession::connect(ACTA_TESTNET_WS_URL)
+            .expect("Acta WebSocket session should connect"),
+    );
+    let api = session
+        .login_api("network_broadcast")
+        .expect("network_broadcast API should log in");
+    RpcClient::new(session.api_transport(&api))
 }
 
 #[test]

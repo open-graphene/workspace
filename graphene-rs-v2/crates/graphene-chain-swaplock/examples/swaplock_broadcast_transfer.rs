@@ -5,15 +5,15 @@ use graphene_chain_swaplock::{
     PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
     SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_WS_URL,
 };
-use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketTransport, HttpTransport, RpcClient};
+use graphene_rpc::{GrapheneTimePointSec, GrapheneWebSocketSession, HttpTransport, RpcClient};
 use graphene_signing::{ChainId, WifSigner};
+use std::sync::Arc;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database_client = RpcClient::new(HttpTransport::new(SWAPLOCK_TESTNET_HTTP_URL));
-    let broadcast_client = RpcClient::new(GrapheneWebSocketTransport::login_api(
-        SWAPLOCK_TESTNET_WS_URL,
-        "network_broadcast",
-    ));
+    let broadcast_session = Arc::new(GrapheneWebSocketSession::connect(SWAPLOCK_TESTNET_WS_URL)?);
+    let broadcast_api = broadcast_session.login_api("network_broadcast")?;
+    let broadcast_client = RpcClient::new(broadcast_session.api_transport(&broadcast_api));
     let signer = WifSigner::from_wif(PUBLIC_SWAPLOCK_TESTNET_WIF)?;
 
     let from = lookup_exact_account_id(&database_client, SWAPLOCK_TESTNET_FROM_ACCOUNT)?;

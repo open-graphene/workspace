@@ -91,13 +91,51 @@ Graphene WebSocket `call(api_id, method, params)` protocol and discovers the
 wss://node01.swaplock.chainpool.online:8090
 ```
 
-Run the checked live broadcast fixture:
+`graphene-rpc` now exposes a session-oriented WebSocket runtime for that model:
+
+```rust
+use graphene_rpc::{GrapheneWebSocketSession, RpcClient};
+use std::sync::Arc;
+
+let session = Arc::new(GrapheneWebSocketSession::connect(SWAPLOCK_TESTNET_WS_URL)?);
+let broadcast_api = session.login_api("network_broadcast")?;
+let broadcast_client = RpcClient::new(session.api_transport(&broadcast_api));
+```
+
+The session keeps Graphene API ids scoped to their owning socket and includes the
+low-level callback/notice routing primitive used by Graphene subscriptions and
+`broadcast_transaction_with_callback`: callback methods prepend a local callback
+id to the params, and server pushes arrive as `method: "notice"` with
+`params[0]` equal to that callback id. Higher-level typed subscription wrappers
+are intentionally not added yet. The chain crates expose a first callback proof
+helper for signed transactions:
+
+```rust
+use graphene_chain_swaplock::broadcast_signed_transaction_with_callback_typed;
+
+let result = broadcast_signed_transaction_with_callback_typed(
+    &session,
+    &broadcast_api,
+    signed,
+)?;
+```
+
+Run the checked live broadcast fixtures:
 
 ```sh
 cargo test -p graphene-chain-swaplock \
   live_signs_and_broadcasts_tiny_transfer_with_wif \
   -- --ignored --nocapture
+
+cargo test -p graphene-chain-swaplock \
+  live_broadcasts_tiny_transfer_with_callback \
+  -- --ignored --nocapture
 ```
+
+The callback proof has been verified against the Swaplock testnet; the real
+callback notice payload arrives as a single-argument array containing the
+`transaction_confirmation` object, while `broadcast_transaction_synchronous`
+returns that object directly.
 
 Run the executable example:
 

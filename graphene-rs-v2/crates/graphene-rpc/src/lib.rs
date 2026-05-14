@@ -1,8 +1,10 @@
+use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
 use std::net::TcpStream;
 use std::str::FromStr;
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{Arc, Mutex};
 
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -384,6 +386,316 @@ impl RpcTransport for HttpTransport {
     }
 }
 
+/// Long-lived blocking Graphene WebSocket session.
+///
+/// Graphene API ids and callback ids are scoped to a single WebSocket
+/// connection. This session keeps that scope explicit: API handles returned by
+/// `login_api` are valid only for this session, and callback notices are routed
+/// by the same local id space used for requests.
+pub struct GrapheneWebSocketSession {
+    endpoint: String,
+    socket: Mutex<WebSocket<MaybeTlsStream<TcpStream>>>,
+    next_id: AtomicU64,
+    callbacks: Mutex<HashMap<u64, NoticeCallback>>,
+}
+
+type NoticeCallback = Box<dyn FnMut(Value) + Send + 'static>;
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ApiHandle {
+    api_id: u64,
+}
+
+impl ApiHandle {
+    pub fn id(&self) -> u64 {
+        self.api_id
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct CallbackHandle {
+    callback_id: u64,
+}
+
+impl CallbackHandle {
+    pub fn id(&self) -> u64 {
+        self.callback_id
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct GrapheneNotice {
+    pub callback_id: u64,
+    pub payload: Value,
+}
+
+pub struct GrapheneWebSocketApiTransport {
+    session: Arc<GrapheneWebSocketSession>,
+    api: ApiHandle,
+}
+
+impl RpcTransport for GrapheneWebSocketApiTransport {
+    fn call_raw(&self, method: &str, params: Vec<Value>) -> Result<Value, RpcError> {
+        self.session.call_api_raw(self.api.api_id, method, params)
+    }
+}
+
+impl GrapheneWebSocketSession {
+    pub fn connect(endpoint: impl Into<String>) -> Result<Self, RpcError> {
+        let endpoint = endpoint.into();
+        let (socket, _) =
+            connect(endpoint.as_str()).map_err(|source| RpcError::transport(source.to_string()))?;
+        Ok(Self {
+            endpoint,
+            socket: Mutex::new(socket),
+            next_id: AtomicU64::new(1),
+            callbacks: Mutex::new(HashMap::new()),
+        })
+    }
+
+    pub fn endpoint(&self) -> &str {
+        &self.endpoint
+    }
+
+    pub fn api_transport(self: &Arc<Self>, api: &ApiHandle) -> GrapheneWebSocketApiTransport {
+        GrapheneWebSocketApiTransport {
+            session: Arc::clone(self),
+            api: api.clone(),
+        }
+    }
+
+    pub fn login(&self, user: &str, password: &str) -> Result<Value, RpcError> {
+        self.call_api_raw(1, "login", vec![json!(user), json!(password)])
+    }
+
+    pub fn login_api(&self, api_name: &str) -> Result<ApiHandle, RpcError> {
+        let raw = self.call_api_raw(1, api_name, Vec::new())?;
+        let api_id = raw.as_u64().ok_or_else(|| {
+            RpcError::protocol(api_name, "login API response should be an API id")
+        })?;
+        Ok(ApiHandle { api_id })
+    }
+
+    pub fn call<P>(&self, api: &ApiHandle, params: P) -> Result<P::Response, RpcError>
+    where
+        P: OpenRpcParams,
+        P::Response: serde::de::DeserializeOwned,
+    {
+        let raw = self.call_api_raw(api.api_id, P::METHOD, params.into_positional_params())?;
+        serde_json::from_value(raw).map_err(|source| RpcError::decode(P::METHOD, source))
+    }
+
+    pub fn call_api_raw(
+        &self,
+        api_id: u64,
+        method: &str,
+        params: Vec<Value>,
+    ) -> Result<Value, RpcError> {
+        let request_id = self.next_request_id();
+        let request = build_graphene_ws_call_request(request_id, api_id, method, params);
+        self.send_request_and_wait_for_response(method, request_id, request)
+    }
+
+    pub fn call_with_callback_raw<F>(
+        &self,
+        api: &ApiHandle,
+        method: &str,
+        params_after_callback: Vec<Value>,
+        callback: F,
+    ) -> Result<(CallbackHandle, Value), RpcError>
+    where
+        F: FnMut(Value) + Send + 'static,
+    {
+        let callback_id = self.next_request_id();
+        self.callbacks
+            .lock()
+            .map_err(|_| RpcError::transport("callback registry mutex poisoned"))?
+            .insert(callback_id, Box::new(callback));
+
+        let request = build_graphene_ws_call_request(
+            callback_id,
+            api.api_id,
+            method,
+            callback_params(callback_id, params_after_callback),
+        );
+
+        match self.send_request_and_wait_for_response(method, callback_id, request) {
+            Ok(response) => Ok((CallbackHandle { callback_id }, response)),
+            Err(error) => {
+                let _ = self
+                    .callbacks
+                    .lock()
+                    .map(|mut callbacks| callbacks.remove(&callback_id));
+                Err(error)
+            }
+        }
+    }
+
+    pub fn call_with_callback_raw_wait(
+        &self,
+        api: &ApiHandle,
+        method: &str,
+        params_after_callback: Vec<Value>,
+    ) -> Result<Value, RpcError> {
+        let callback_id = self.next_request_id();
+        let request = build_graphene_ws_call_request(
+            callback_id,
+            api.api_id,
+            method,
+            callback_params(callback_id, params_after_callback),
+        );
+
+        let mut socket = self
+            .socket
+            .lock()
+            .map_err(|_| RpcError::transport("WebSocket session mutex poisoned"))?;
+        socket
+            .send(Message::Text(request.to_string()))
+            .map_err(|source| RpcError::transport(source.to_string()))?;
+
+        loop {
+            let response = read_websocket_json(&mut socket, method)?;
+            if let Some(notice) = parse_graphene_notice(&response)? {
+                if notice.callback_id == callback_id {
+                    return Ok(notice.payload);
+                }
+                drop(socket);
+                self.dispatch_notice(notice)?;
+                socket = self
+                    .socket
+                    .lock()
+                    .map_err(|_| RpcError::transport("WebSocket session mutex poisoned"))?;
+                continue;
+            }
+
+            let response_id = response.get("id").and_then(Value::as_u64).ok_or_else(|| {
+                RpcError::protocol(method, "WebSocket response is missing numeric id")
+            })?;
+            if response_id != callback_id {
+                return Err(RpcError::protocol(
+                    method,
+                    format!("expected WebSocket response id {callback_id}, got {response_id}"),
+                ));
+            }
+            parse_json_rpc_response(method, response)?;
+        }
+    }
+
+    pub fn remove_callback(&self, handle: &CallbackHandle) {
+        if let Ok(mut callbacks) = self.callbacks.lock() {
+            callbacks.remove(&handle.callback_id);
+        }
+    }
+
+    fn next_request_id(&self) -> u64 {
+        self.next_id.fetch_add(1, Ordering::Relaxed)
+    }
+
+    fn send_request_and_wait_for_response(
+        &self,
+        method: &str,
+        request_id: u64,
+        request: Value,
+    ) -> Result<Value, RpcError> {
+        let mut socket = self
+            .socket
+            .lock()
+            .map_err(|_| RpcError::transport("WebSocket session mutex poisoned"))?;
+        socket
+            .send(Message::Text(request.to_string()))
+            .map_err(|source| RpcError::transport(source.to_string()))?;
+
+        loop {
+            let response = read_websocket_json(&mut socket, method)?;
+            if let Some(notice) = parse_graphene_notice(&response)? {
+                self.dispatch_notice(notice)?;
+                continue;
+            }
+
+            let response_id = response.get("id").and_then(Value::as_u64).ok_or_else(|| {
+                RpcError::protocol(method, "WebSocket response is missing numeric id")
+            })?;
+            if response_id != request_id {
+                return Err(RpcError::protocol(
+                    method,
+                    format!("expected WebSocket response id {request_id}, got {response_id}"),
+                ));
+            }
+            return parse_json_rpc_response(method, response);
+        }
+    }
+
+    fn dispatch_notice(&self, notice: GrapheneNotice) -> Result<(), RpcError> {
+        let mut callbacks = self
+            .callbacks
+            .lock()
+            .map_err(|_| RpcError::transport("callback registry mutex poisoned"))?;
+        if let Some(callback) = callbacks.get_mut(&notice.callback_id) {
+            callback(notice.payload);
+            Ok(())
+        } else {
+            Err(RpcError::protocol(
+                "notice",
+                format!("unknown callback id {}", notice.callback_id),
+            ))
+        }
+    }
+}
+
+fn build_graphene_ws_call_request(id: u64, api_id: u64, method: &str, params: Vec<Value>) -> Value {
+    json!({
+        "id": id,
+        "method": "call",
+        "params": [api_id, method, params],
+    })
+}
+
+fn callback_params(callback_id: u64, params_after_callback: Vec<Value>) -> Vec<Value> {
+    let mut params = Vec::with_capacity(params_after_callback.len() + 1);
+    params.push(json!(callback_id));
+    params.extend(params_after_callback);
+    params
+}
+
+fn read_websocket_json(
+    socket: &mut WebSocket<MaybeTlsStream<TcpStream>>,
+    method: &str,
+) -> Result<Value, RpcError> {
+    let response = socket
+        .read()
+        .map_err(|source| RpcError::transport(source.to_string()))?;
+    match response {
+        Message::Text(text) => serde_json::from_str::<Value>(&text)
+            .map_err(|source| RpcError::http(method, source.to_string())),
+        other => Err(RpcError::protocol(
+            method,
+            format!("expected WebSocket text response, got {other:?}"),
+        )),
+    }
+}
+
+fn parse_graphene_notice(response: &Value) -> Result<Option<GrapheneNotice>, RpcError> {
+    if response.get("method").and_then(Value::as_str) != Some("notice") {
+        return Ok(None);
+    }
+    let params = response
+        .get("params")
+        .and_then(Value::as_array)
+        .ok_or_else(|| RpcError::protocol("notice", "Graphene notice params must be an array"))?;
+    let callback_id = params
+        .first()
+        .and_then(Value::as_u64)
+        .ok_or_else(|| RpcError::protocol("notice", "Graphene notice is missing callback id"))?;
+    let payload = params
+        .get(1)
+        .cloned()
+        .ok_or_else(|| RpcError::protocol("notice", "Graphene notice is missing payload"))?;
+    Ok(Some(GrapheneNotice {
+        callback_id,
+        payload,
+    }))
+}
+
 /// Blocking Graphene WebSocket API transport.
 ///
 /// Unlike direct HTTP database endpoints, Graphene WebSocket APIs are normally
@@ -464,19 +776,7 @@ fn websocket_json_rpc_call(
     socket
         .send(Message::Text(request.to_string()))
         .map_err(|source| RpcError::transport(source.to_string()))?;
-    let response = socket
-        .read()
-        .map_err(|source| RpcError::transport(source.to_string()))?;
-    let response = match response {
-        Message::Text(text) => serde_json::from_str::<Value>(&text)
-            .map_err(|source| RpcError::http(method, source.to_string()))?,
-        other => {
-            return Err(RpcError::protocol(
-                method,
-                format!("expected WebSocket text response, got {other:?}"),
-            ));
-        }
-    };
+    let response = read_websocket_json(socket, method)?;
     parse_json_rpc_response(method, response)
 }
 
@@ -654,8 +954,10 @@ impl Error for RpcError {
 #[cfg(test)]
 mod tests {
     use super::{
-        build_json_rpc_request, parse_json_rpc_response, GrapheneInt64, GrapheneTimePointSec,
-        GrapheneUInt64, HttpTransport, OpenRpcParams, RpcClient, RpcError, RpcTransport,
+        build_graphene_ws_call_request, build_json_rpc_request, callback_params,
+        parse_graphene_notice, parse_json_rpc_response, GrapheneInt64, GrapheneNotice,
+        GrapheneTimePointSec, GrapheneUInt64, HttpTransport, OpenRpcParams, RpcClient, RpcError,
+        RpcTransport,
     };
     use chrono::NaiveDate;
     use serde::Deserialize;
@@ -760,6 +1062,73 @@ mod tests {
         let client = RpcClient::new(MockTransport);
         let response = client.call(PingParams).unwrap();
         assert_eq!(response, Pong { ok: true });
+    }
+
+    #[test]
+    fn builds_graphene_websocket_call_envelope() {
+        assert_eq!(
+            build_graphene_ws_call_request(9, 2, "get_objects", vec![json!(["2.1.0"])]),
+            json!({
+                "id": 9,
+                "method": "call",
+                "params": [2, "get_objects", [["2.1.0"]]],
+            })
+        );
+    }
+
+    #[test]
+    fn callback_params_prepend_local_callback_id() {
+        assert_eq!(
+            callback_params(77, vec![json!({ "trx": true })]),
+            vec![json!(77), json!({ "trx": true })]
+        );
+    }
+
+    #[test]
+    fn parses_graphene_notice_shape() {
+        let notice = parse_graphene_notice(&json!({
+            "method": "notice",
+            "params": [42, [{"id": "2.1.0"}]],
+        }))
+        .unwrap()
+        .expect("notice should parse");
+
+        assert_eq!(
+            notice,
+            GrapheneNotice {
+                callback_id: 42,
+                payload: json!([{ "id": "2.1.0" }]),
+            }
+        );
+    }
+
+    #[test]
+    fn ignores_non_notice_messages_when_parsing_graphene_notice() {
+        let notice = parse_graphene_notice(&json!({
+            "id": 1,
+            "method": "call",
+            "result": true,
+        }))
+        .unwrap();
+
+        assert!(notice.is_none());
+    }
+
+    #[test]
+    fn rejects_malformed_graphene_notice() {
+        let error = parse_graphene_notice(&json!({
+            "method": "notice",
+            "params": [],
+        }))
+        .unwrap_err();
+
+        match error {
+            RpcError::Protocol { method, message } => {
+                assert_eq!(method, "notice");
+                assert!(message.contains("callback id"));
+            }
+            other => panic!("unexpected error: {other:?}"),
+        }
     }
 
     #[test]

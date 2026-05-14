@@ -162,19 +162,22 @@ pub mod broadcast {
         type Error = BroadcastResultError;
 
         fn try_from(raw: serde_json::Value) -> Result<Self, Self::Error> {
-            let id = raw
+            let result = broadcast_result_object(&raw)?;
+            let id = result
                 .get("id")
                 .and_then(serde_json::Value::as_str)
                 .ok_or(BroadcastResultError::MissingField("id"))?
                 .to_owned();
             let block_num = u64_to_u32_field(
-                raw.get("block_num")
+                result
+                    .get("block_num")
                     .and_then(serde_json::Value::as_u64)
                     .ok_or(BroadcastResultError::MissingField("block_num"))?,
                 "block_num",
             )?;
             let trx_num = u64_to_u32_field(
-                raw.get("trx_num")
+                result
+                    .get("trx_num")
                     .and_then(serde_json::Value::as_u64)
                     .ok_or(BroadcastResultError::MissingField("trx_num"))?,
                 "trx_num",
@@ -189,6 +192,27 @@ pub mod broadcast {
         }
     }
 
+    fn broadcast_result_object(
+        raw: &serde_json::Value,
+    ) -> Result<&serde_json::Map<String, serde_json::Value>, BroadcastResultError> {
+        if let Some(object) = raw.as_object() {
+            return Ok(object);
+        }
+        if let Some(values) = raw.as_array() {
+            if values.len() == 1 {
+                if let Some(object) = values[0].as_object() {
+                    return Ok(object);
+                }
+            }
+            return Err(BroadcastResultError::UnexpectedShape(
+                "expected object or single callback-result object".to_owned(),
+            ));
+        }
+        Err(BroadcastResultError::UnexpectedShape(
+            "expected object broadcast result".to_owned(),
+        ))
+    }
+
     fn u64_to_u32_field(value: u64, field: &'static str) -> Result<u32, BroadcastResultError> {
         u32::try_from(value).map_err(|_| BroadcastResultError::FieldOutOfRange { field, value })
     }
@@ -197,6 +221,7 @@ pub mod broadcast {
     pub enum BroadcastResultError {
         Rpc(RpcError),
         MissingField(&'static str),
+        UnexpectedShape(String),
         FieldOutOfRange { field: &'static str, value: u64 },
     }
 
@@ -213,6 +238,9 @@ pub mod broadcast {
                         "synchronous broadcast result is missing field {field}"
                     )
                 }
+                Self::UnexpectedShape(message) => {
+                    write!(formatter, "unexpected broadcast result shape: {message}")
+                }
                 Self::FieldOutOfRange { field, value } => write!(
                     formatter,
                     "synchronous broadcast result field {field} is out of u32 range: {value}"
@@ -225,7 +253,9 @@ pub mod broadcast {
         fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
             match self {
                 Self::Rpc(error) => Some(error),
-                Self::MissingField(_) | Self::FieldOutOfRange { .. } => None,
+                Self::MissingField(_) | Self::UnexpectedShape(_) | Self::FieldOutOfRange { .. } => {
+                    None
+                }
             }
         }
     }
@@ -372,6 +402,23 @@ mod tests {
             "trx_num": 7,
             "trx": { "signatures": [] }
         });
+
+        let result = SynchronousBroadcastResult::try_from(raw.clone()).unwrap();
+
+        assert_eq!(result.id, "abc123");
+        assert_eq!(result.block_num, 99);
+        assert_eq!(result.trx_num, 7);
+        assert_eq!(result.raw, raw);
+    }
+
+    #[test]
+    fn synchronous_broadcast_result_parses_callback_argument_shape() {
+        let raw = serde_json::json!([{
+            "id": "abc123",
+            "block_num": 99,
+            "trx_num": 7,
+            "trx": { "signatures": [] }
+        }]);
 
         let result = SynchronousBroadcastResult::try_from(raw.clone()).unwrap();
 
