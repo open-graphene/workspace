@@ -42,8 +42,10 @@ is intentionally only a small project-local convenience wrapper.
 `RpcError`, blocking `HttpTransport`, and the session-oriented WebSocket runtime.
 The runtime code is split into focused modules (`error`, `params`, `scalar`,
 `http`, `jsonrpc`, and `ws`) while `lib.rs` keeps the public re-export surface
-stable. Generated chain crates implement the shared traits instead of defining
-their own copies.
+stable. The `ws` module is further split between session-facing APIs, dispatcher
+internals, shared protocol helpers, public handle types, and the legacy
+one-call-per-socket transport. Generated chain crates implement the shared
+traits instead of defining their own copies.
 
 `graphene-transaction` contains chain-independent transaction primitives that
 were proven across Swaplock and Acta first: exact account lookup result
