@@ -6,7 +6,6 @@ members = [
     "crates/graphene-chain-swaplock",
     "crates/graphene-codegen",
     "crates/graphene-codec",
-    "crates/open-graphene-gen",
     "crates/graphene-rpc",
     "crates/graphene-signing",
     "crates/graphene-transaction",

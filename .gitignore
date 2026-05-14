@@ -50,3 +50,10 @@ graphene-rs-v2/.env
 graphene-rs-v2/.env.*
 graphene-rs-v2/target/
 graphene-rs-v2/target/**
+
+!open-graphene
+!open-graphene/**
+open-graphene/.env
+open-graphene/.env.*
+open-graphene/target/
+open-graphene/target/**

@@ -1,6 +1,5 @@
 [workspace]
 members = [
-    "crates/open-graphene-gen",
     "crates/graphene-chain-swaplock",
     "crates/graphene-codec",
     "crates/graphene-rpc",

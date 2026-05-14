@@ -254,7 +254,7 @@ Validation requires both `path` and `reason` to be non-empty. These diagnostics 
 
 ## Quickstart
 
-Run these commands from the repository root.
+Run these commands from the `open-graphene/` workspace root.
 
 ```sh
 # 1. Validate the canonical OpenGraphene contracts.
