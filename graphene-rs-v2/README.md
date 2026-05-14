@@ -237,8 +237,9 @@ cargo test -p graphene-chain-acta \
 
 The Acta broadcast callback proof has also been verified against its testnet,
 giving the WebSocket callback ABI two live-proven broadcast-callback chains:
-Swaplock and Acta. Acta now also exposes the same typed non-mutating
-`set_block_applied_callback` helper and ignored live fixture shape as Swaplock.
+Swaplock and Acta. The non-mutating Acta `set_block_applied_callback` proof has
+also been verified live: it registered a database callback and received a real
+block id through the shared dispatcher-backed callback path.
 
 Run the executable example:
 
