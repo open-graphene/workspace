@@ -19,7 +19,11 @@ pub struct IrDocument {
     pub methods: BTreeMap<String, IrMethod>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub codec_types: BTreeMap<String, IrCodecType>,
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    #[serde(
+        default,
+        rename = "operations",
+        skip_serializing_if = "BTreeMap::is_empty"
+    )]
     pub operation_variants: BTreeMap<String, Vec<IrOperationVariant>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub transaction: Option<IrTransaction>,

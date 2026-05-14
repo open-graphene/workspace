@@ -15,4 +15,4 @@ path = "src/lib.rs"
 
 [[bin]]
 name = "open-graphene-gen"
-path = "src/main.rs"
+path = "src/bin/open-graphene-gen.rs"
