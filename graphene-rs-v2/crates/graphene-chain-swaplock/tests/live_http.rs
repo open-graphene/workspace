@@ -4,9 +4,9 @@ use graphene_chain_swaplock::{
     broadcast_signed_transaction_synchronous_typed,
     broadcast_signed_transaction_with_callback_typed, build_transfer_operation,
     fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
-    GetAccountCountParams, GetAssetCountParams, GetAssetsParams, GetBlockHeaderBatchParams,
-    GetBlockHeaderParams, GetBlockParams, GetChainIdParams, GetChainPropertiesParams,
-    GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
+    set_block_applied_callback, GetAccountCountParams, GetAssetCountParams, GetAssetsParams,
+    GetBlockHeaderBatchParams, GetBlockHeaderParams, GetBlockParams, GetChainIdParams,
+    GetChainPropertiesParams, GetCommitteeCountParams, GetCommitteeMembersParams, GetConfigParams,
     GetDynamicGlobalPropertiesParams, GetGlobalPropertiesParams, GetObjectResult, GetObjectsParams,
     GetRequiredFeesParams, GetTransactionHexWithoutSigParams, GetWitnessCountParams,
     GetWitnessesParams, GetWorkerCountParams, LookupAccountsParams, LookupAssetSymbolsParams,
@@ -359,32 +359,17 @@ fn live_receives_block_applied_callback_notice() {
         .login_api("database")
         .expect("database API should log in");
 
-    let (payload_tx, payload_rx) = mpsc::sync_channel(1);
-    let (subscription, response) = session
-        .call_with_callback_raw(
-            &database_api,
-            "set_block_applied_callback",
-            Vec::new(),
-            move |payload| {
-                let _ = payload_tx.send(payload);
-            },
-        )
-        .expect("set_block_applied_callback should register callback");
-    assert!(
-        response.is_null(),
-        "set_block_applied_callback should acknowledge with null, got {response:?}"
-    );
+    let (notice_tx, notice_rx) = mpsc::sync_channel(1);
+    let subscription = set_block_applied_callback(&session, &database_api, move |notice| {
+        let _ = notice_tx.send(notice);
+    })
+    .expect("set_block_applied_callback should register callback");
 
-    let payload = payload_rx
+    let notice = notice_rx
         .recv()
         .expect("registered callback should receive the notice payload");
 
-    let block_id = payload
-        .as_array()
-        .and_then(|values| values.first())
-        .and_then(serde_json::Value::as_str)
-        .or_else(|| payload.as_str())
-        .expect("block applied callback payload should contain a block id string");
+    let block_id = notice.block_id;
     println!(
         "set_block_applied_callback => callback_id={}, block_id={block_id}",
         subscription.id()

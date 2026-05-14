@@ -156,8 +156,9 @@ cargo run -p graphene-chain-swaplock --example swaplock_block_applied_callback
 ```
 
 `swaplock_block_applied_callback` is a non-mutating WebSocket subscription
-example: it registers `set_block_applied_callback`, prints the next block id
-received through the dispatcher, unsubscribes locally, and exits.
+example: it uses the typed handwritten `set_block_applied_callback` helper,
+prints the next block id received through the dispatcher, unsubscribes locally,
+and exits.
 
 The broadcast example and live broadcast tests send a tiny Swaplock testnet transfer from the shared test account to
 `committee-account` and print only the transaction id, block number, and
@@ -179,7 +180,7 @@ The reusable pieces are re-exported by the crate root:
 use graphene_chain_swaplock::{
     broadcast_signed_transaction_synchronous_typed, build_transfer_operation,
     fetch_required_fee_for_transfer, lookup_exact_account_id, prepare_transaction,
-    TransferDraft,
+    set_block_applied_callback, TransferDraft,
 };
 ```
 
