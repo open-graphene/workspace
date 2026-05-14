@@ -1,7 +1,9 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use crate::model::{is_builtin_codec_type, CodecTypeRef, OpenGrapheneDocument};
+use crate::model::{
+    is_builtin_codec_type, CodecTypeRef, OpenGrapheneDocument, ShapeClassification,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ValidationError {
@@ -26,7 +28,51 @@ impl fmt::Display for ValidationError {
 
 impl std::error::Error for ValidationError {}
 
-pub fn validate_document(document: &OpenGrapheneDocument) -> Result<(), Vec<ValidationError>> {
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ValidationWarning {
+    pub path: String,
+    pub classification: String,
+    pub message: String,
+}
+
+impl ValidationWarning {
+    pub fn new(
+        path: impl Into<String>,
+        classification: impl Into<String>,
+        message: impl Into<String>,
+    ) -> Self {
+        Self {
+            path: path.into(),
+            classification: classification.into(),
+            message: message.into(),
+        }
+    }
+}
+
+impl fmt::Display for ValidationWarning {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}: {} ({})",
+            self.path, self.message, self.classification
+        )
+    }
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ValidationReport {
+    pub warnings: Vec<ValidationWarning>,
+    pub errors: Vec<ValidationError>,
+}
+
+impl ValidationReport {
+    pub fn is_valid(&self) -> bool {
+        self.errors.is_empty()
+    }
+}
+
+pub fn validate_document_report(document: &OpenGrapheneDocument) -> ValidationReport {
+    let mut warnings = Vec::new();
     let mut errors = Vec::new();
 
     require_non_empty(&mut errors, "openGraphene", &document.open_graphene);
@@ -153,10 +199,54 @@ pub fn validate_document(document: &OpenGrapheneDocument) -> Result<(), Vec<Vali
         );
     }
 
-    if errors.is_empty() {
+    for (idx, classification) in document.shape_classifications.iter().enumerate() {
+        let base = format!("shapeClassifications[{idx}]");
+        require_non_empty(&mut errors, format!("{base}.path"), &classification.path);
+        require_non_empty(
+            &mut errors,
+            format!("{base}.reason"),
+            &classification.reason,
+        );
+        match classification.classification {
+            ShapeClassification::ApprovedRawFallback => {
+                if !classification.path.trim().is_empty()
+                    && !classification.reason.trim().is_empty()
+                {
+                    warnings.push(ValidationWarning::new(
+                        classification.path.clone(),
+                        "approved_raw_fallback",
+                        format!("approved raw fallback: {}", classification.reason),
+                    ));
+                }
+            }
+            ShapeClassification::UnsupportedShape => {
+                let path = if classification.path.trim().is_empty() {
+                    format!("{base}.path")
+                } else {
+                    classification.path.clone()
+                };
+                let reason = if classification.reason.trim().is_empty() {
+                    "unsupported Graphene shape".to_owned()
+                } else {
+                    classification.reason.clone()
+                };
+                errors.push(ValidationError::new(
+                    path,
+                    format!("unsupported_shape classification: {reason}"),
+                ));
+            }
+        }
+    }
+
+    ValidationReport { warnings, errors }
+}
+
+pub fn validate_document(document: &OpenGrapheneDocument) -> Result<(), Vec<ValidationError>> {
+    let report = validate_document_report(document);
+    if report.is_valid() {
         Ok(())
     } else {
-        Err(errors)
+        Err(report.errors)
     }
 }
 

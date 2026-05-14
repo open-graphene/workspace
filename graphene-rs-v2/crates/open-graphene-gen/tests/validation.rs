@@ -2,7 +2,7 @@ use std::fs;
 use std::path::PathBuf;
 
 use open_graphene_gen::model::OpenGrapheneDocument;
-use open_graphene_gen::validation::validate_document;
+use open_graphene_gen::validation::{validate_document, validate_document_report};
 use serde_json::json;
 
 fn fixture_path() -> PathBuf {
@@ -150,6 +150,78 @@ fn rejects_empty_transaction_digest_preimage() {
     assert!(errors.iter().any(|error| {
         error.path == "transaction.digest.preimage"
             && error.message.contains("at least one preimage part")
+    }));
+}
+
+#[test]
+fn approved_raw_fallback_round_trips_and_warns_without_failing_validation() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["shapeClassifications"] = json!([
+        {
+            "path": "codec.types.TransferOperation.fields[4].type",
+            "classification": "approved_raw_fallback",
+            "reason": "memo bytes are intentionally retained as raw encrypted payload bytes"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    validate_document(&document).expect("approved raw fallback should not fail validation");
+
+    let serialized = serde_json::to_value(&document).expect("classification should serialize");
+    assert_eq!(
+        serialized["shapeClassifications"][0]["classification"],
+        "approved_raw_fallback"
+    );
+
+    let report = validate_document_report(&document);
+    assert!(report.is_valid());
+    assert_eq!(report.warnings.len(), 1);
+    assert_eq!(
+        report.warnings[0].path,
+        "codec.types.TransferOperation.fields[4].type"
+    );
+    assert_eq!(report.warnings[0].classification, "approved_raw_fallback");
+    assert!(report.warnings[0].message.contains("memo bytes"));
+}
+
+#[test]
+fn unsupported_shape_classification_fails_with_path_and_classification() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["shapeClassifications"] = json!([
+        {
+            "path": "codec.types.FutureExtension",
+            "classification": "unsupported_shape",
+            "reason": "static_variant extension payload is not modeled in v0.1"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("unsupported shape should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "codec.types.FutureExtension"
+            && error.message.contains("unsupported_shape")
+            && error.message.contains("static_variant extension")
+    }));
+}
+
+#[test]
+fn rejects_empty_shape_classification_reason() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["shapeClassifications"] = json!([
+        {
+            "path": "codec.types.TransferOperation.fields[4].type",
+            "classification": "approved_raw_fallback",
+            "reason": ""
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("empty reason should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "shapeClassifications[0].reason"
+            && error.message.contains("must not be empty")
     }));
 }
 

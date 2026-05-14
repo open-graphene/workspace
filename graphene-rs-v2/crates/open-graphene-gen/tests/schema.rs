@@ -32,6 +32,7 @@ fn schema_includes_required_contract_sections_and_enums() {
         "operations",
         "transaction",
         "callbacks",
+        "shapeClassifications",
     ] {
         assert!(
             properties.contains_key(property),
@@ -57,6 +58,8 @@ fn schema_includes_required_contract_sections_and_enums() {
         "serialized_transaction",
         "graphene_compact_recoverable",
         "persistent",
+        "approved_raw_fallback",
+        "unsupported_shape",
     ] {
         assert!(
             contains_string(&value, enum_value),

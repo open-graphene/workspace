@@ -73,6 +73,7 @@ A v0.1 OpenGraphene document contains these root sections:
 - `operations`: static-variant operation sets with Graphene operation ids and payload types.
 - `transaction`: signed transaction type, operation variant set, digest rules, and signature rules.
 - `callbacks`: callback-taking RPC contracts where the SDK allocates session-local callback ids.
+- `shapeClassifications`: optional validation evidence for intentionally raw or unsupported contract shapes.
 
 ### `apis`
 
@@ -224,6 +225,29 @@ Validation requires `type` to resolve to a known codec type, `operationVariant` 
 
 `callbackLifetime` is `once` for one-shot notices and `persistent` for subscriptions. Validation checks callback API references, request parameter types, direct result types, and callback payload types.
 
+### `shapeClassifications`
+
+`shapeClassifications` is optional validation evidence for Graphene shapes that need explicit triage instead of being silently hidden in generator behavior. Each entry names a contract `path`, a `classification`, and a human-readable `reason`.
+
+```json
+{
+  "shapeClassifications": [
+    {
+      "path": "codec.types.TransferOperation.fields[4].type",
+      "classification": "approved_raw_fallback",
+      "reason": "memo bytes are intentionally retained as raw encrypted payload bytes"
+    }
+  ]
+}
+```
+
+Supported classifications are:
+
+- `approved_raw_fallback`: accepted by validation, surfaced as a deterministic warning in the validation report/IR diagnostics, and printed by `open-graphene-gen validate` without making the command fail. Use this when raw bytes or another already-modeled fallback is intentional and reviewed.
+- `unsupported_shape`: rejected by validation. The error reports the classified contract path and includes `unsupported_shape` in the message so future agents can distinguish an intentionally blocked Graphene shape from ordinary reference drift.
+
+Validation requires both `path` and `reason` to be non-empty. These diagnostics are path-only authoring metadata; they must not include secrets, live endpoint output, or runtime logs.
+
 ## Quickstart
 
 Run these commands from the repository root.
@@ -346,7 +370,7 @@ Consumer tests should compare each expected field independently in this order: o
 
 Use the CLI command that maps to the failing layer:
 
-- Contract authoring failures: run `validate` and inspect the reported contract path.
+- Contract authoring failures: run `validate` and inspect the reported contract path. Approved raw fallbacks are printed as warnings; unsupported-shape classifications fail validation with the classified path and `unsupported_shape` marker.
 - Schema/tooling drift: run `schema` and compare the `OpenGrapheneDocument` schema.
 - OpenRPC enrichment or emitter input drift: run `inspect-ir` with the same `--openrpc` file used by generation.
 - TypeScript/Dart sample drift: run `generate --target all` into a scratch directory and compare against `fixtures/generated-samples`.
@@ -357,7 +381,7 @@ Conformance fixture generation failures name the failed component as `operation_
 
 ## Validation and test coverage
 
-The test suite validates the Swaplock fixture and broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, and empty transaction digest preimages. It also covers CLI behavior, lowering, OpenRPC enrichment, emitter output, generated sample stability, and conformance fixture contents.
+The test suite validates the Swaplock fixture and broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, emitter output, generated sample stability, and conformance fixture contents.
 
 ```sh
 cargo test -p open-graphene-gen

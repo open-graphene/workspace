@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::model;
 use crate::openrpc::OpenRpcDocument;
-use crate::validation::ValidationError;
+use crate::validation::{ValidationError, ValidationWarning};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct IrDocument {
@@ -109,6 +109,12 @@ impl IrDocument {
     pub fn with_validation_errors(mut self, errors: &[ValidationError]) -> Self {
         self.diagnostics
             .extend(errors.iter().map(IrDiagnostic::from_validation_error));
+        self
+    }
+
+    pub fn with_validation_warnings(mut self, warnings: &[ValidationWarning]) -> Self {
+        self.diagnostics
+            .extend(warnings.iter().map(IrDiagnostic::from_validation_warning));
         self
     }
 
@@ -504,6 +510,14 @@ impl IrDiagnostic {
             severity: IrDiagnosticSeverity::Error,
             path: error.path.clone(),
             message: error.message.clone(),
+        }
+    }
+
+    pub fn from_validation_warning(warning: &ValidationWarning) -> Self {
+        Self {
+            severity: IrDiagnosticSeverity::Warning,
+            path: warning.path.clone(),
+            message: format!("{}: {}", warning.classification, warning.message),
         }
     }
 }

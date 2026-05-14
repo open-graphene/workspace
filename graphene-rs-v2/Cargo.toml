@@ -20,6 +20,7 @@ publish = false
 
 [workspace.dependencies]
 chrono = { version = "0.4", default-features = false, features = ["serde", "alloc"] }
+graphene-chain-swaplock = { path = "crates/graphene-chain-swaplock" }
 graphene-codec = { path = "crates/graphene-codec" }
 graphene-rpc = { path = "crates/graphene-rpc" }
 graphene-signing = { path = "crates/graphene-signing" }

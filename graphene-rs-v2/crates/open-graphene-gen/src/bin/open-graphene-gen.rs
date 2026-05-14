@@ -10,7 +10,7 @@ use open_graphene_gen::ir::IrDocument;
 use open_graphene_gen::lower::{lower_document_to_ir, lower_document_with_openrpc_to_ir};
 use open_graphene_gen::model::OpenGrapheneDocument;
 use open_graphene_gen::openrpc::OpenRpcDocument;
-use open_graphene_gen::validation::validate_document;
+use open_graphene_gen::validation::validate_document_report;
 use schemars::schema_for;
 
 fn main() {
@@ -234,17 +234,18 @@ fn describe_conformance_error(error: ConformanceFixtureError) -> String {
 fn validate_path(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     let contents = fs::read_to_string(path)?;
     let document: OpenGrapheneDocument = serde_json::from_str(&contents)?;
-    match validate_document(&document) {
-        Ok(()) => {
-            println!("{}: valid OpenGraphene contract", path.display());
-            Ok(())
+    let report = validate_document_report(&document);
+    if report.is_valid() {
+        for warning in &report.warnings {
+            eprintln!("{}: warning: {warning}", path.display());
         }
-        Err(errors) => {
-            for error in &errors {
-                eprintln!("{}: {error}", path.display());
-            }
-            Err(format!("{} validation error(s)", errors.len()).into())
+        println!("{}: valid OpenGraphene contract", path.display());
+        Ok(())
+    } else {
+        for error in &report.errors {
+            eprintln!("{}: {error}", path.display());
         }
+        Err(format!("{} validation error(s)", report.errors.len()).into())
     }
 }
 

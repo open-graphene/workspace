@@ -282,6 +282,56 @@ fn validate_command_still_accepts_existing_fixture() {
 }
 
 #[test]
+fn validate_command_prints_approved_raw_fallback_warning_without_failing() {
+    let contract_path = std::env::temp_dir().join(format!(
+        "open-graphene-gen-approved-fallback-{}.json",
+        std::process::id()
+    ));
+    let fixture = fs::read_to_string(fixture_path("swaplock.opengraphene.json"))
+        .expect("fixture should read");
+    let mut value: Value = serde_json::from_str(&fixture).expect("fixture should parse");
+    value["shapeClassifications"] = serde_json::json!([
+        {
+            "path": "codec.types.TransferOperation.fields[4].type",
+            "classification": "approved_raw_fallback",
+            "reason": "memo bytes are intentionally retained as raw encrypted payload bytes"
+        }
+    ]);
+    fs::write(
+        &contract_path,
+        serde_json::to_string_pretty(&value).expect("fixture should serialize"),
+    )
+    .expect("temp contract should write");
+
+    let output = Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+        .args([
+            "validate",
+            contract_path.to_str().expect("temp path should be UTF-8"),
+        ])
+        .output()
+        .expect("validate should run");
+
+    let _ = fs::remove_file(contract_path);
+
+    assert!(
+        output.status.success(),
+        "approved fallback should not fail: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(String::from_utf8_lossy(&output.stdout).contains("valid OpenGraphene contract"));
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(stderr.contains("warning"), "unexpected stderr: {stderr}");
+    assert!(
+        stderr.contains("approved_raw_fallback"),
+        "unexpected stderr: {stderr}"
+    );
+    assert!(
+        stderr.contains("codec.types.TransferOperation.fields[4].type"),
+        "unexpected stderr: {stderr}"
+    );
+}
+
+#[test]
 fn inspect_ir_reports_openrpc_binding_errors() {
     let openrpc_path = std::env::temp_dir().join(format!(
         "open-graphene-gen-openrpc-missing-{}.json",

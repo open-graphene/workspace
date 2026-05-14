@@ -26,6 +26,26 @@ pub struct OpenGrapheneDocument {
     pub transaction: Option<TransactionContract>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub callbacks: BTreeMap<String, CallbackContract>,
+    #[serde(
+        default,
+        rename = "shapeClassifications",
+        skip_serializing_if = "Vec::is_empty"
+    )]
+    pub shape_classifications: Vec<ShapeClassificationEvidence>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub struct ShapeClassificationEvidence {
+    pub path: String,
+    pub classification: ShapeClassification,
+    pub reason: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ShapeClassification {
+    ApprovedRawFallback,
+    UnsupportedShape,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]

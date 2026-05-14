@@ -3,7 +3,7 @@ use std::fmt;
 use crate::ir::IrDocument;
 use crate::model::OpenGrapheneDocument;
 use crate::openrpc::OpenRpcDocument;
-use crate::validation::{validate_document, ValidationError};
+use crate::validation::{validate_document_report, ValidationError};
 
 /// Errors produced while lowering an OpenGraphene contract into generator IR.
 ///
@@ -46,8 +46,11 @@ impl std::error::Error for LowerError {}
 /// resolved deterministic IR document, or path-specific validation errors that
 /// explain which contract reference or field must be fixed.
 pub fn lower_document_to_ir(document: &OpenGrapheneDocument) -> Result<IrDocument, LowerError> {
-    validate_document(document).map_err(LowerError::new)?;
-    Ok(IrDocument::from_open_graphene(document))
+    let report = validate_document_report(document);
+    if !report.errors.is_empty() {
+        return Err(LowerError::new(report.errors));
+    }
+    Ok(IrDocument::from_open_graphene(document).with_validation_warnings(&report.warnings))
 }
 
 /// Validate and lower an OpenGraphene document, binding method metadata from a
@@ -64,9 +67,8 @@ pub fn lower_document_with_openrpc_to_ir(
 ) -> Result<IrDocument, LowerError> {
     let mut errors = Vec::new();
 
-    if let Err(validation_errors) = validate_document(document) {
-        errors.extend(validation_errors);
-    }
+    let report = validate_document_report(document);
+    errors.extend(report.errors);
 
     if let Err(openrpc_errors) = openrpc.validate_refs() {
         errors.extend(openrpc_errors);
@@ -85,5 +87,7 @@ pub fn lower_document_with_openrpc_to_ir(
         return Err(LowerError::new(errors));
     }
 
-    Ok(IrDocument::from_open_graphene(document).bind_openrpc_methods(openrpc))
+    Ok(IrDocument::from_open_graphene(document)
+        .bind_openrpc_methods(openrpc)
+        .with_validation_warnings(&report.warnings))
 }
