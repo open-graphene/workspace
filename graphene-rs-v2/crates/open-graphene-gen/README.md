@@ -9,6 +9,7 @@ Run from the repository root workspace:
 ```sh
 cargo run -p open-graphene-gen -- validate crates/open-graphene-gen/fixtures/swaplock.opengraphene.json
 cargo run -p open-graphene-gen -- schema
+cargo run -p open-graphene-gen -- conformance-fixtures --out crates/open-graphene-gen/fixtures/conformance
 ```
 
 The installed/debug binary has the same subcommands:
@@ -16,9 +17,12 @@ The installed/debug binary has the same subcommands:
 ```sh
 open-graphene-gen validate <path>
 open-graphene-gen schema
+open-graphene-gen conformance-fixtures --out <dir>
 ```
 
 `validate` prints `<path>: valid OpenGraphene contract` for valid input. Invalid documents are rejected with path-specific diagnostics such as `methodBindings.broadcast_transaction.api: references unknown API ...`.
+
+`conformance-fixtures` writes byte-level Rust reference fixtures such as `transfer.json` into the output directory. Generation failures identify the failed component as `operation_encoding`, `transaction_encoding`, `digest`, `key_signature`, or `json_envelope`, which lets downstream agents diagnose whether drift came from operation encoding, transaction encoding, digest construction, key/signature handling, or JSON broadcast envelope assembly.
 
 ## OpenGraphene v0.1
 
@@ -162,6 +166,41 @@ Variant ids and names must be unique inside their variant set. Variant payload t
 ```
 
 Validation requires `type` to resolve to a known codec type, `operationVariant` to reference a declared operation variant set, and `digest.preimage` to contain at least one preimage part.
+
+### Conformance fixtures
+
+Conformance fixtures are stable JSON files generated from the Rust reference codec and signer. They are intended for non-Rust native implementations, currently TypeScript and Dart, to prove byte-for-byte compatibility before those SDKs own their own transaction codec and signing code.
+
+Generate the checked-in reference fixtures with:
+
+```sh
+cargo run -p open-graphene-gen -- conformance-fixtures --out crates/open-graphene-gen/fixtures/conformance
+```
+
+The current canonical fixture is:
+
+```text
+crates/open-graphene-gen/fixtures/conformance/transfer.json
+```
+
+Each fixture has this contract:
+
+- `schemaVersion`: fixture schema version. Consumers should reject unknown major versions instead of silently accepting changed semantics.
+- `name`: stable test case name, for example `swaplock-transfer`.
+- `chainId`: chain id used in the signing digest preimage.
+- `input.operationName`: operation variant under test.
+- `input.operationJson`: JSON-ish operation payload that a generated SDK should accept before binary encoding.
+- `input.transactionJson`: unsigned transaction JSON that wraps the operation and supplies header fields such as ref block and expiration.
+- `input.privateKeyWif`: deterministic fixture key used only for conformance tests.
+- `expected.operationHex`: expected Graphene operation bytes, including the static-variant operation id and encoded payload. A mismatch here isolates drift to operation variant or field encoding.
+- `expected.transactionHex`: expected unsigned transaction hex. This proves transaction header, operation vector, extensions, and nested operation bytes are encoded in the Rust reference order.
+- `expected.digestHex`: expected signing digest over `chainId || transaction bytes`. This distinguishes serialization drift from digest-preimage drift.
+- `expected.publicKey`: public key derived from `input.privateKeyWif`, proving the consumer is interpreting fixture key material consistently.
+- `expected.signatureHex`: expected compact recoverable Graphene signature bytes for the digest.
+- `expected.signatureMetadata`: digest algorithm, curve, signature format, and canonical-signature requirement that TypeScript and Dart signers must enforce.
+- `expected.broadcastPayload`: JSON-RPC broadcast method, API name, and signed transaction JSON envelope expected after the signature is attached.
+
+TypeScript and Dart conformance tests should load the fixture, build the operation and unsigned transaction from `input`, and compare each output field independently in the same order: operation hex, transaction hex, digest hex, public key, signature hex, then broadcast payload. Keeping these assertions separate makes byte-level drift actionable: an operation mismatch points at the operation codec, a transaction mismatch points at transaction framing, a digest mismatch points at preimage construction, a signature mismatch points at key/signing behavior, and a broadcast-payload mismatch points at JSON envelope assembly.
 
 ### `callbacks`
 
