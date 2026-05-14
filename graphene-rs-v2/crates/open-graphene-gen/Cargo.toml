@@ -5,6 +5,11 @@ version.workspace = true
 publish.workspace = true
 
 [dependencies]
+graphene-chain-swaplock.workspace = true
+graphene-codec.workspace = true
+graphene-rpc.workspace = true
+graphene-signing.workspace = true
+graphene-transaction.workspace = true
 schemars.workspace = true
 serde.workspace = true
 serde_json.workspace = true
