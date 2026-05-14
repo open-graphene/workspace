@@ -6,5 +6,6 @@
 //! later generator work consumes the document.
 
 pub mod ir;
+pub mod lower;
 pub mod model;
 pub mod validation;

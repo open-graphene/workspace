@@ -40,14 +40,17 @@ impl IrDocument {
             .method_bindings
             .iter()
             .map(|(name, binding)| {
+                let callback = callbacks.get(name);
                 (
                     name.clone(),
                     IrMethod {
                         name: name.clone(),
                         api: binding.api.clone(),
-                        params: Vec::new(),
-                        result: None,
-                        callback: callbacks.contains_key(name).then(|| name.clone()),
+                        params: callback
+                            .map(|callback| callback.request_params.clone())
+                            .unwrap_or_default(),
+                        result: callback.and_then(|callback| callback.direct_result.clone()),
+                        callback: callback.map(|_| name.clone()),
                     },
                 )
             })
