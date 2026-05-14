@@ -1,3 +1,10 @@
+//! Internal blocking dispatcher for a single Graphene WebSocket session.
+//!
+//! This module owns socket IO for `GrapheneWebSocketSession`: requests are routed
+//! by JSON-RPC id and Graphene notices are routed by callback id. It intentionally
+//! does not reconnect; disconnect cleanup is visible to callers as transport
+//! errors on pending and future requests.
+
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::net::TcpStream;

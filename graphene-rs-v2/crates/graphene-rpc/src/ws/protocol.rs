@@ -1,3 +1,9 @@
+//! Shared Graphene WebSocket wire-protocol helpers.
+//!
+//! These helpers build the Graphene `call(api_id, method, params)` envelope,
+//! prepend local callback ids for callback-aware methods, parse pushed notices,
+//! and decode WebSocket text frames into JSON values.
+
 use std::net::TcpStream;
 
 use serde_json::{json, Value};

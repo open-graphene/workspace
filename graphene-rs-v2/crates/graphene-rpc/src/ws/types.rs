@@ -7,28 +7,46 @@ use crate::RpcError;
 
 use super::dispatcher::DispatcherCommand;
 
+/// Session-local Graphene API handle.
+///
+/// Graphene API ids are scoped to the WebSocket connection that returned them.
+/// Do not reuse an `ApiHandle` with another `GrapheneWebSocketSession`.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ApiHandle {
-    pub(super) api_id: u64,
+    api_id: u64,
 }
 
 impl ApiHandle {
+    pub(super) fn new(api_id: u64) -> Self {
+        Self { api_id }
+    }
+
     pub fn id(&self) -> u64 {
         self.api_id
     }
 }
 
+/// Local callback route handle allocated by a `GrapheneWebSocketSession`.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct CallbackHandle {
-    pub(super) callback_id: u64,
+    callback_id: u64,
 }
 
 impl CallbackHandle {
+    pub(super) fn new(callback_id: u64) -> Self {
+        Self { callback_id }
+    }
+
     pub fn id(&self) -> u64 {
         self.callback_id
     }
 }
 
+/// RAII subscription for a callback route registered with the dispatcher.
+///
+/// Dropping the subscription removes only the local callback route. It does not
+/// send a chain-specific unsubscribe RPC because Graphene APIs expose different
+/// unsubscribe semantics per callback method.
 pub struct CallbackSubscription {
     callback_id: u64,
     commands: SyncSender<DispatcherCommand>,
@@ -49,9 +67,7 @@ impl CallbackSubscription {
     }
 
     pub fn handle(&self) -> CallbackHandle {
-        CallbackHandle {
-            callback_id: self.callback_id,
-        }
+        CallbackHandle::new(self.callback_id)
     }
 
     pub fn unsubscribe(&self) -> Result<(), RpcError> {
@@ -87,6 +103,7 @@ impl Drop for CallbackSubscription {
     }
 }
 
+/// Graphene server-pushed `notice` message routed by callback id.
 #[derive(Clone, Debug, PartialEq)]
 pub struct GrapheneNotice {
     pub callback_id: u64,

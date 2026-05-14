@@ -10,7 +10,12 @@ use crate::{RpcError, RpcTransport};
 
 use super::protocol::read_websocket_json;
 
-/// Blocking Graphene WebSocket API transport.
+/// Compatibility transport that opens a fresh socket for each RPC call.
+///
+/// Prefer `GrapheneWebSocketSession` for new code: Graphene API ids and callback
+/// ids are socket-local, and subscriptions require one dispatcher-owned socket.
+/// This transport remains useful for simple one-shot database or broadcast calls
+/// that do not need callback routing.
 ///
 /// Unlike direct HTTP database endpoints, Graphene WebSocket APIs are normally
 /// invoked as `call(api_id, method, params)`. Use API id `0` for database API

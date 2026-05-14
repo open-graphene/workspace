@@ -33,6 +33,8 @@ pub struct GrapheneWebSocketSession {
     next_id: AtomicU64,
 }
 
+/// Transport adapter that lets generated `OpenRpcParams` calls use one API on
+/// an existing `GrapheneWebSocketSession`.
 pub struct GrapheneWebSocketApiTransport {
     session: Arc<GrapheneWebSocketSession>,
     api: ApiHandle,
@@ -40,7 +42,7 @@ pub struct GrapheneWebSocketApiTransport {
 
 impl RpcTransport for GrapheneWebSocketApiTransport {
     fn call_raw(&self, method: &str, params: Vec<Value>) -> Result<Value, RpcError> {
-        self.session.call_api_raw(self.api.api_id, method, params)
+        self.session.call_api_raw(self.api.id(), method, params)
     }
 }
 
@@ -83,7 +85,7 @@ impl GrapheneWebSocketSession {
         let api_id = raw.as_u64().ok_or_else(|| {
             RpcError::protocol(api_name, "login API response should be an API id")
         })?;
-        Ok(ApiHandle { api_id })
+        Ok(ApiHandle::new(api_id))
     }
 
     pub fn call<P>(&self, api: &ApiHandle, params: P) -> Result<P::Response, RpcError>
@@ -91,7 +93,7 @@ impl GrapheneWebSocketSession {
         P: OpenRpcParams,
         P::Response: serde::de::DeserializeOwned,
     {
-        let raw = self.call_api_raw(api.api_id, P::METHOD, params.into_positional_params())?;
+        let raw = self.call_api_raw(api.id(), P::METHOD, params.into_positional_params())?;
         serde_json::from_value(raw).map_err(|source| RpcError::decode(P::METHOD, source))
     }
 
@@ -130,7 +132,7 @@ impl GrapheneWebSocketSession {
         let callback_id = self.next_request_id();
         let request = build_graphene_ws_call_request(
             callback_id,
-            api.api_id,
+            api.id(),
             method,
             callback_params(callback_id, params_after_callback),
         );
@@ -240,7 +242,7 @@ impl GrapheneWebSocketSession {
     #[deprecated(note = "use CallbackSubscription::unsubscribe for callback lifecycle cleanup")]
     pub fn remove_callback(&self, handle: &CallbackHandle) {
         let _ = self.commands.send(DispatcherCommand::Unsubscribe {
-            callback_id: handle.callback_id,
+            callback_id: handle.id(),
             response_tx: None,
         });
     }
