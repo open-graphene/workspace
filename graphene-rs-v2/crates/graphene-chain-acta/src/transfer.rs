@@ -1,8 +1,6 @@
-use std::fmt;
-
-use graphene_rpc::{GrapheneInt64, GrapheneTimePointSec, RpcClient, RpcError, RpcTransport};
-use graphene_transaction::block_id::BlockIdError;
+use graphene_rpc::{GrapheneInt64, GrapheneTimePointSec, RpcClient, RpcTransport};
 use graphene_transaction::transaction::compute_transaction_header_fields;
+pub use graphene_transaction::transfer::{parse_object_id, BuildTransactionError, TransferDraft};
 
 use crate::generated::{
     Asset, AssetAssetId, DynamicGlobalPropertyObject, ExtensionsType, GetRequiredFeesParams,
@@ -11,38 +9,18 @@ use crate::generated::{
 };
 use crate::transaction::PreparedTransaction;
 
-#[derive(Clone, Debug)]
-pub struct TransferDraft {
-    pub from: String,
-    pub to: String,
-    pub amount: i64,
-    pub asset_id: String,
-}
-
 pub fn build_transfer_operation(
     draft: TransferDraft,
 ) -> Result<TransferOperation, BuildTransactionError> {
-    let asset_id = parse_asset_id(&draft.asset_id)?;
+    let asset_id: AssetAssetId = parse_object_id("asset_id", &draft.asset_id)?;
 
     Ok(TransferOperation {
         fee: Asset {
             amount: GrapheneInt64::new(0),
             asset_id: asset_id.clone(),
         },
-        from: TransferOperationFrom::try_from(draft.from.as_str()).map_err(|source| {
-            BuildTransactionError::InvalidObjectId {
-                field: "from",
-                value: draft.from.clone(),
-                source: source.to_string(),
-            }
-        })?,
-        to: TransferOperationTo::try_from(draft.to.as_str()).map_err(|source| {
-            BuildTransactionError::InvalidObjectId {
-                field: "to",
-                value: draft.to.clone(),
-                source: source.to_string(),
-            }
-        })?,
+        from: parse_object_id("from", &draft.from)?,
+        to: parse_object_id("to", &draft.to)?,
         amount: Asset {
             amount: GrapheneInt64::new(draft.amount),
             asset_id,
@@ -105,79 +83,6 @@ pub fn prepare_transaction(
         operations,
         extensions: ExtensionsType(vec![]),
     }))
-}
-
-fn parse_asset_id(value: &str) -> Result<AssetAssetId, BuildTransactionError> {
-    AssetAssetId::try_from(value).map_err(|source| BuildTransactionError::InvalidObjectId {
-        field: "asset_id",
-        value: value.to_owned(),
-        source: source.to_string(),
-    })
-}
-
-#[derive(Debug)]
-pub enum BuildTransactionError {
-    InvalidObjectId {
-        field: &'static str,
-        value: String,
-        source: String,
-    },
-    InvalidBlockId {
-        value: String,
-        reason: String,
-    },
-    MissingRequiredFee,
-    UnsupportedFeeShape(String),
-    Rpc(RpcError),
-}
-
-impl fmt::Display for BuildTransactionError {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::InvalidObjectId {
-                field,
-                value,
-                source,
-            } => {
-                write!(formatter, "invalid {field} object id {value:?}: {source}")
-            }
-            Self::InvalidBlockId { value, reason } => {
-                write!(formatter, "invalid block id {value:?}: {reason}")
-            }
-            Self::MissingRequiredFee => write!(formatter, "required fee response was empty"),
-            Self::UnsupportedFeeShape(shape) => {
-                write!(formatter, "unsupported required fee shape: {shape}")
-            }
-            Self::Rpc(error) => write!(formatter, "RPC error while building transaction: {error}"),
-        }
-    }
-}
-
-impl std::error::Error for BuildTransactionError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        match self {
-            Self::Rpc(error) => Some(error),
-            Self::InvalidObjectId { .. }
-            | Self::InvalidBlockId { .. }
-            | Self::MissingRequiredFee
-            | Self::UnsupportedFeeShape(_) => None,
-        }
-    }
-}
-
-impl From<BlockIdError> for BuildTransactionError {
-    fn from(error: BlockIdError) -> Self {
-        Self::InvalidBlockId {
-            value: error.value,
-            reason: error.reason,
-        }
-    }
-}
-
-impl From<RpcError> for BuildTransactionError {
-    fn from(error: RpcError) -> Self {
-        Self::Rpc(error)
-    }
 }
 
 #[cfg(test)]
