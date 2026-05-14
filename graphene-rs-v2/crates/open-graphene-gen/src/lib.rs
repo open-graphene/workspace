@@ -8,4 +8,5 @@
 pub mod ir;
 pub mod lower;
 pub mod model;
+pub mod openrpc;
 pub mod validation;

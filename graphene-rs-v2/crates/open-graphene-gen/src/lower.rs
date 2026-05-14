@@ -2,6 +2,7 @@ use std::fmt;
 
 use crate::ir::IrDocument;
 use crate::model::OpenGrapheneDocument;
+use crate::openrpc::OpenRpcDocument;
 use crate::validation::{validate_document, ValidationError};
 
 /// Errors produced while lowering an OpenGraphene contract into generator IR.
@@ -47,4 +48,42 @@ impl std::error::Error for LowerError {}
 pub fn lower_document_to_ir(document: &OpenGrapheneDocument) -> Result<IrDocument, LowerError> {
     validate_document(document).map_err(LowerError::new)?;
     Ok(IrDocument::from_open_graphene(document))
+}
+
+/// Validate and lower an OpenGraphene document, binding method metadata from a
+/// parsed OpenRPC document.
+///
+/// OpenRPC is intentionally treated as a narrow companion contract here: it
+/// contributes method parameter/result schema names after OpenGraphene domain
+/// validation succeeds. Callback-specific OpenGraphene metadata remains
+/// authoritative so generated SDK surfaces do not expose client-allocated
+/// Graphene callback identifiers as user parameters.
+pub fn lower_document_with_openrpc_to_ir(
+    document: &OpenGrapheneDocument,
+    openrpc: &OpenRpcDocument,
+) -> Result<IrDocument, LowerError> {
+    let mut errors = Vec::new();
+
+    if let Err(validation_errors) = validate_document(document) {
+        errors.extend(validation_errors);
+    }
+
+    if let Err(openrpc_errors) = openrpc.validate_refs() {
+        errors.extend(openrpc_errors);
+    }
+
+    for method_name in document.method_bindings.keys() {
+        if !openrpc.methods.contains_key(method_name) {
+            errors.push(ValidationError::new(
+                format!("methodBindings.{method_name}"),
+                format!("references unknown OpenRPC method {method_name}"),
+            ));
+        }
+    }
+
+    if !errors.is_empty() {
+        return Err(LowerError::new(errors));
+    }
+
+    Ok(IrDocument::from_open_graphene(document).bind_openrpc_methods(openrpc))
 }

@@ -4,6 +4,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use crate::model;
+use crate::openrpc::OpenRpcDocument;
 use crate::validation::ValidationError;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
@@ -104,6 +105,20 @@ impl IrDocument {
     pub fn with_validation_errors(mut self, errors: &[ValidationError]) -> Self {
         self.diagnostics
             .extend(errors.iter().map(IrDiagnostic::from_validation_error));
+        self
+    }
+
+    pub fn bind_openrpc_methods(mut self, openrpc: &OpenRpcDocument) -> Self {
+        for (name, method) in &openrpc.methods {
+            if let Some(ir_method) = self.methods.get_mut(name) {
+                if ir_method.params.is_empty() {
+                    ir_method.params = method.params.iter().map(IrTypeRef::from).collect();
+                }
+                if ir_method.result.is_none() {
+                    ir_method.result = method.result.as_ref().map(IrTypeRef::from);
+                }
+            }
+        }
         self
     }
 }

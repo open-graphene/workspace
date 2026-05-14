@@ -1,0 +1,82 @@
+{
+  "openrpc": "1.2.6",
+  "info": {
+    "title": "Swaplock Graphene RPC",
+    "version": "0.1.0"
+  },
+  "methods": [
+    {
+      "name": "get_dynamic_global_properties",
+      "params": [],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/DynamicGlobalProperties"
+        }
+      }
+    },
+    {
+      "name": "broadcast_transaction",
+      "params": [
+        {
+          "name": "trx",
+          "schema": {
+            "$ref": "#/components/schemas/SignedTransaction"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/void"
+        }
+      }
+    },
+    {
+      "name": "broadcast_transaction_with_callback",
+      "params": [
+        {
+          "name": "trx",
+          "schema": {
+            "$ref": "#/components/schemas/SignedTransaction"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/void"
+        }
+      }
+    },
+    {
+      "name": "set_block_applied_callback",
+      "params": [],
+      "result": {
+        "name": "result",
+        "schema": {
+          "$ref": "#/components/schemas/void"
+        }
+      }
+    }
+  ],
+  "components": {
+    "schemas": {
+      "void": {
+        "description": "No Graphene result value."
+      },
+      "SignedTransaction": {
+        "type": "object"
+      },
+      "DynamicGlobalProperties": {
+        "type": "object"
+      },
+      "BroadcastResult": {
+        "type": "object"
+      },
+      "BlockAppliedNotice": {
+        "type": "object"
+      }
+    }
+  }
+}
