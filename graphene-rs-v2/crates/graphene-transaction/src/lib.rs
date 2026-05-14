@@ -305,6 +305,54 @@ pub mod signing {
     use graphene_codec::{to_graphene_bytes, EncodeError, GrapheneEncode};
     use graphene_signing::{signing_digest, ChainId, SignError, Signature, Signer};
 
+    #[derive(Clone, Debug)]
+    pub struct PreparedTransaction<TTransaction> {
+        pub transaction: TTransaction,
+    }
+
+    impl<TTransaction> PreparedTransaction<TTransaction> {
+        pub fn new(transaction: TTransaction) -> Self {
+            Self { transaction }
+        }
+
+        pub fn into_transaction(self) -> TTransaction {
+            self.transaction
+        }
+
+        pub fn sign<S: Signer>(
+            self,
+            chain_id: &ChainId,
+            signer: &S,
+        ) -> Result<SignedTransactionEnvelope<TTransaction>, SignTransactionError>
+        where
+            TTransaction: GrapheneEncode,
+        {
+            sign_transaction(chain_id, self.transaction, signer)
+        }
+    }
+
+    #[derive(Clone, Debug)]
+    pub struct SignedTransactionEnvelope<TTransaction> {
+        pub transaction: TTransaction,
+        pub signatures: Vec<Signature>,
+    }
+
+    pub fn sign_transaction<T, S>(
+        chain_id: &ChainId,
+        transaction: T,
+        signer: &S,
+    ) -> Result<SignedTransactionEnvelope<T>, SignTransactionError>
+    where
+        T: GrapheneEncode,
+        S: Signer,
+    {
+        let signatures = sign_transaction_bytes(chain_id, &transaction, signer)?;
+        Ok(SignedTransactionEnvelope {
+            transaction,
+            signatures,
+        })
+    }
+
     pub fn sign_transaction_bytes<T, S>(
         chain_id: &ChainId,
         transaction: &T,

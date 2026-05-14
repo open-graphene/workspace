@@ -4,8 +4,8 @@ use std::str::FromStr;
 use graphene_chain_acta::{
     broadcast, broadcast_signed_transaction, broadcast_signed_transaction_synchronous_typed,
     sign_transaction, validate_signed_transaction, Asset, AssetAssetId, ExtensionsType, Operation,
-    ProcessedTransaction, SynchronousBroadcastResult, Transaction, TransferOperation,
-    TransferOperationFrom, TransferOperationTo,
+    ProcessedTransaction, SignedTransaction, SynchronousBroadcastResult, Transaction,
+    TransferOperation, TransferOperationFrom, TransferOperationTo,
 };
 use graphene_codec::{to_graphene_bytes, GrapheneEncode};
 use graphene_rpc::{
@@ -231,7 +231,7 @@ fn signed_transaction_envelope_maps_to_generated_json_rpc_shape() {
     )
     .expect("fixed signer should sign transaction");
 
-    let generated = signed.into_generated();
+    let generated = SignedTransaction::from(signed);
 
     assert_eq!(generated.ref_block_num, 0x1234);
     assert_eq!(generated.ref_block_prefix, 0x89ab_cdef);
@@ -291,7 +291,7 @@ fn broadcast_transaction_params_use_network_broadcast_api_method() {
         &RecordingSigner::new(fixed_signature()),
     )
     .expect("fixed signer should sign transaction")
-    .into_generated();
+    .into();
 
     let params = broadcast::BroadcastTransactionParams { trx: generated };
     let positional = params.into_positional_params();

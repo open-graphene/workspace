@@ -1,53 +1,24 @@
 use graphene_rpc::{ApiHandle, GrapheneWebSocketSession, RpcClient, RpcError, RpcTransport};
-use graphene_signing::{ChainId, Signature, Signer};
+use graphene_signing::Signature;
 use graphene_transaction::broadcast::{
     BroadcastResultError,
     BroadcastTransactionWithCallbackParams as SharedBroadcastTransactionWithCallbackParams,
     SynchronousBroadcastResult,
 };
+use graphene_transaction::signing::{
+    PreparedTransaction as SharedPreparedTransaction,
+    SignedTransactionEnvelope as SharedSignedTransactionEnvelope,
+};
 
-pub use graphene_transaction::signing::SignTransactionError;
+pub use graphene_transaction::signing::{sign_transaction, SignTransactionError};
 
 use crate::broadcast::{BroadcastTransactionParams, BroadcastTransactionSynchronousParams};
 use crate::generated::{
     ProcessedTransaction, SignedTransaction, Transaction, ValidateTransactionParams,
 };
 
-#[derive(Clone, Debug)]
-pub struct PreparedTransaction {
-    pub transaction: Transaction,
-}
-
-impl PreparedTransaction {
-    pub fn new(transaction: Transaction) -> Self {
-        Self { transaction }
-    }
-
-    pub fn into_transaction(self) -> Transaction {
-        self.transaction
-    }
-
-    pub fn sign<S: Signer>(
-        self,
-        chain_id: &ChainId,
-        signer: &S,
-    ) -> Result<SignedTransactionEnvelope, SignTransactionError> {
-        sign_transaction(chain_id, self.transaction, signer)
-    }
-}
-
-#[derive(Clone, Debug)]
-pub struct SignedTransactionEnvelope {
-    pub transaction: Transaction,
-    pub signatures: Vec<Signature>,
-}
-
-impl SignedTransactionEnvelope {
-    pub fn into_generated(self) -> SignedTransaction {
-        self.into()
-    }
-}
-
+pub type PreparedTransaction = SharedPreparedTransaction<Transaction>;
+pub type SignedTransactionEnvelope = SharedSignedTransactionEnvelope<Transaction>;
 pub type BroadcastTransactionWithCallbackParams =
     SharedBroadcastTransactionWithCallbackParams<SignedTransaction>;
 
@@ -76,19 +47,6 @@ impl From<SignedTransactionEnvelope> for SignedTransaction {
     }
 }
 
-pub fn sign_transaction<S: Signer>(
-    chain_id: &ChainId,
-    transaction: Transaction,
-    signer: &S,
-) -> Result<SignedTransactionEnvelope, SignTransactionError> {
-    let signatures =
-        graphene_transaction::signing::sign_transaction_bytes(chain_id, &transaction, signer)?;
-    Ok(SignedTransactionEnvelope {
-        transaction,
-        signatures,
-    })
-}
-
 pub fn validate_signed_transaction<T>(
     client: &RpcClient<T>,
     signed: SignedTransactionEnvelope,
@@ -96,9 +54,7 @@ pub fn validate_signed_transaction<T>(
 where
     T: RpcTransport,
 {
-    client.call(ValidateTransactionParams {
-        trx: signed.into_generated(),
-    })
+    client.call(ValidateTransactionParams { trx: signed.into() })
 }
 
 pub fn broadcast_signed_transaction<T>(
@@ -108,9 +64,7 @@ pub fn broadcast_signed_transaction<T>(
 where
     T: RpcTransport,
 {
-    client.call(BroadcastTransactionParams {
-        trx: signed.into_generated(),
-    })
+    client.call(BroadcastTransactionParams { trx: signed.into() })
 }
 
 pub fn broadcast_signed_transaction_synchronous<T>(
@@ -120,9 +74,7 @@ pub fn broadcast_signed_transaction_synchronous<T>(
 where
     T: RpcTransport,
 {
-    client.call(BroadcastTransactionSynchronousParams {
-        trx: signed.into_generated(),
-    })
+    client.call(BroadcastTransactionSynchronousParams { trx: signed.into() })
 }
 
 pub fn broadcast_signed_transaction_synchronous_typed<T>(
@@ -143,9 +95,7 @@ pub fn broadcast_signed_transaction_with_callback(
 ) -> Result<serde_json::Value, RpcError> {
     session.call_with_callback_once(
         broadcast_api,
-        BroadcastTransactionWithCallbackParams {
-            trx: signed.into_generated(),
-        },
+        BroadcastTransactionWithCallbackParams { trx: signed.into() },
     )
 }
 
