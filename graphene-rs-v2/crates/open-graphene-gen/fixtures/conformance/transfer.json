@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1",
+  "name": "swaplock-transfer",
+  "chainId": "2267f694d96b7ffdcba1a98c63c09e720a18a85ad34954e299c66d5a42234098",
+  "input": {
+    "operationName": "transfer",
+    "operationJson": {
+      "amount": {
+        "amount": 12345,
+        "asset_id": "1.3.0"
+      },
+      "extensions": [],
+      "fee": {
+        "amount": 200000,
+        "asset_id": "1.3.0"
+      },
+      "from": "1.2.100",
+      "memo": null,
+      "to": "1.2.101"
+    },
+    "transactionJson": {
+      "expiration": "2023-11-14T22:13:20",
+      "extensions": [],
+      "operations": [
+        [
+          0,
+          {
+            "amount": {
+              "amount": 12345,
+              "asset_id": "1.3.0"
+            },
+            "extensions": [],
+            "fee": {
+              "amount": 200000,
+              "asset_id": "1.3.0"
+            },
+            "from": "1.2.100",
+            "memo": null,
+            "to": "1.2.101"
+          }
+        ]
+      ],
+      "ref_block_num": 4660,
+      "ref_block_prefix": 2309737967
+    },
+    "privateKeyWif": "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn"
+  },
+  "expected": {
+    "operationHex": "00400d0300000000000064653930000000000000000000",
+    "transactionHex": "3412efcdab8900f153650100400d030000000000006465393000000000000000000000",
+    "digestHex": "6c664c46da08b6dcbd0cdf9e4f24dc051afaa6096a23db23b15377377c60805e",
+    "publicKey": "0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+    "signatureHex": "1f6c647fe4cca5fc50b9903c1338eb012c24f243001c37742b25a7b8769cc027354b57dc8fb90708628099a08710c882686195116bd4211746880001329666d0ed",
+    "signatureMetadata": {
+      "digest": {
+        "algorithm": "sha256"
+      },
+      "curve": "secp256k1",
+      "format": "graphene_compact_recoverable",
+      "canonical": true
+    },
+    "broadcastPayload": {
+      "method": "broadcast_transaction",
+      "params": {
+        "apiName": "network_broadcast",
+        "transactionJson": {
+          "expiration": "2023-11-14T22:13:20",
+          "extensions": [],
+          "operations": [
+            [
+              0,
+              {
+                "amount": {
+                  "amount": 12345,
+                  "asset_id": "1.3.0"
+                },
+                "extensions": [],
+                "fee": {
+                  "amount": 200000,
+                  "asset_id": "1.3.0"
+                },
+                "from": "1.2.100",
+                "memo": null,
+                "to": "1.2.101"
+              }
+            ]
+          ],
+          "ref_block_num": 4660,
+          "ref_block_prefix": 2309737967,
+          "signatures": [
+            "1f6c647fe4cca5fc50b9903c1338eb012c24f243001c37742b25a7b8769cc027354b57dc8fb90708628099a08710c882686195116bd4211746880001329666d0ed"
+          ]
+        }
+      }
+    }
+  }
+}

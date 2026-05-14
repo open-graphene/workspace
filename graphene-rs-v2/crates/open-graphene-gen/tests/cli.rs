@@ -85,6 +85,74 @@ fn generate_all_writes_expected_files_deterministically() {
 }
 
 #[test]
+fn conformance_fixtures_writes_transfer_json_deterministically() {
+    let output_dir = unique_output_dir("conformance-fixtures");
+    let output_dir_arg = output_dir.to_str().expect("temp path should be UTF-8");
+
+    let run_fixtures = || {
+        Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+            .args(["conformance-fixtures", "--out", output_dir_arg])
+            .output()
+            .expect("conformance-fixtures should run")
+    };
+
+    let first = run_fixtures();
+    assert!(
+        first.status.success(),
+        "conformance-fixtures failed: {}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+
+    let fixture_path = output_dir.join("transfer.json");
+    assert!(fixture_path.is_file(), "missing transfer fixture");
+    let first_json = fs::read_to_string(&fixture_path).expect("fixture should read");
+    assert!(!first_json.is_empty(), "fixture should be non-empty");
+    let parsed: Value = serde_json::from_str(&first_json).expect("fixture should be JSON");
+    assert_eq!(parsed["name"], "swaplock-transfer");
+    assert_eq!(
+        parsed["expected"]["operationHex"],
+        "00400d0300000000000064653930000000000000000000"
+    );
+
+    let first_stdout = String::from_utf8(first.stdout).expect("stdout should be UTF-8");
+    assert!(first_stdout.contains("generated conformance fixtures into"));
+    assert!(first_stdout.contains("wrote transfer.json"));
+
+    let second = run_fixtures();
+    assert!(
+        second.status.success(),
+        "second conformance-fixtures failed: {}",
+        String::from_utf8_lossy(&second.stderr)
+    );
+    assert_eq!(
+        first_stdout,
+        String::from_utf8(second.stdout).expect("second stdout should be UTF-8")
+    );
+    assert_eq!(
+        first_json,
+        fs::read_to_string(&fixture_path).expect("fixture should read after rerun")
+    );
+
+    fs::remove_dir_all(output_dir).ok();
+}
+
+#[test]
+fn conformance_fixtures_requires_out_directory() {
+    let output = Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+        .args(["conformance-fixtures"])
+        .output()
+        .expect("conformance-fixtures should run");
+
+    assert!(!output.status.success(), "missing --out should fail");
+    assert!(
+        String::from_utf8_lossy(&output.stderr)
+            .contains("conformance-fixtures requires --out <dir>"),
+        "unexpected stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
 fn generate_rejects_unknown_target() {
     let output = Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
         .args([

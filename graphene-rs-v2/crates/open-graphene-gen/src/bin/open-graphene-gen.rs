@@ -2,6 +2,7 @@ use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use open_graphene_gen::conformance::{build_swaplock_transfer_fixture, ConformanceFixtureError};
 use open_graphene_gen::emit::dart::emit_dart;
 use open_graphene_gen::emit::typescript::emit_typescript;
 use open_graphene_gen::emit::{write_generated_files, GeneratedFile};
@@ -49,7 +50,14 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             let options = parse_generate_args(args)?;
             generate_path(Path::new(&path), &options)
         }
-        _ => Err("usage: open-graphene-gen <validate|schema|inspect-ir|generate> [args]".into()),
+        Some("conformance-fixtures") => {
+            let output_dir = parse_conformance_fixtures_args(args)?;
+            write_conformance_fixtures(&output_dir)
+        }
+        _ => Err(
+            "usage: open-graphene-gen <validate|schema|inspect-ir|generate|conformance-fixtures> [args]"
+                .into(),
+        ),
     }
 }
 
@@ -171,6 +179,56 @@ fn parse_generate_args(
         target: target.ok_or("generate requires --target <typescript|dart|all>")?,
         output_dir: output_dir.ok_or("generate requires --out <dir>")?,
     })
+}
+
+fn parse_conformance_fixtures_args(
+    mut args: impl Iterator<Item = String>,
+) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    let mut output_dir = None;
+
+    while let Some(arg) = args.next() {
+        match arg.as_str() {
+            "--out" => {
+                if output_dir.is_some() {
+                    return Err("--out may only be provided once".into());
+                }
+                output_dir = Some(PathBuf::from(
+                    args.next().ok_or("--out requires a directory")?,
+                ));
+            }
+            _ => return Err(format!("unexpected conformance-fixtures argument: {arg}").into()),
+        }
+    }
+
+    output_dir.ok_or("conformance-fixtures requires --out <dir>".into())
+}
+
+fn write_conformance_fixtures(output_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    let fixture = build_swaplock_transfer_fixture().map_err(describe_conformance_error)?;
+    let fixture_json = serde_json::to_string_pretty(&fixture)
+        .map_err(|error| format!("conformance fixture json_envelope failed: {error}"))?;
+    let files = vec![GeneratedFile::new(
+        "transfer.json",
+        format!("{fixture_json}\n"),
+    )?];
+    let written = write_generated_files(output_dir, &files)?;
+
+    println!(
+        "generated conformance fixtures into {}",
+        output_dir.display()
+    );
+    for file in written {
+        println!("  wrote {} ({} bytes)", file.path.display(), file.bytes);
+    }
+
+    Ok(())
+}
+
+fn describe_conformance_error(error: ConformanceFixtureError) -> String {
+    format!(
+        "conformance fixture {:?} failed: {}",
+        error.phase, error.message
+    )
 }
 
 fn validate_path(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
