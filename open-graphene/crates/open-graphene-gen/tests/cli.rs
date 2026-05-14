@@ -137,6 +137,83 @@ fn conformance_fixtures_writes_transfer_json_deterministically() {
 }
 
 #[test]
+fn opengraphene_specs_writes_acta_and_swaplock_deterministically() {
+    let output_dir = unique_output_dir("opengraphene-specs");
+    let output_dir_arg = output_dir.to_str().expect("temp path should be UTF-8");
+
+    let run_specs = || {
+        Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+            .args(["opengraphene-specs", "--out", output_dir_arg])
+            .output()
+            .expect("opengraphene-specs should run")
+    };
+
+    let first = run_specs();
+    assert!(
+        first.status.success(),
+        "opengraphene-specs failed: {}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+
+    let swaplock_path = output_dir.join("swaplock.opengraphene.json");
+    let acta_path = output_dir.join("acta.opengraphene.json");
+    assert!(
+        swaplock_path.is_file(),
+        "missing Swaplock OpenGraphene spec"
+    );
+    assert!(acta_path.is_file(), "missing Acta OpenGraphene spec");
+
+    let first_swaplock = fs::read_to_string(&swaplock_path).expect("Swaplock spec should read");
+    let first_acta = fs::read_to_string(&acta_path).expect("Acta spec should read");
+    let swaplock: Value =
+        serde_json::from_str(&first_swaplock).expect("Swaplock spec should parse");
+    let acta: Value = serde_json::from_str(&first_acta).expect("Acta spec should parse");
+    assert_eq!(swaplock["chain"]["name"], "swaplock");
+    assert_eq!(acta["chain"]["name"], "acta");
+
+    let first_stdout = String::from_utf8(first.stdout).expect("stdout should be UTF-8");
+    assert!(first_stdout.contains("generated OpenGraphene specs into"));
+    assert!(first_stdout.contains("wrote swaplock.opengraphene.json"));
+    assert!(first_stdout.contains("wrote acta.opengraphene.json"));
+
+    let second = run_specs();
+    assert!(
+        second.status.success(),
+        "second opengraphene-specs failed: {}",
+        String::from_utf8_lossy(&second.stderr)
+    );
+    assert_eq!(
+        first_stdout,
+        String::from_utf8(second.stdout).expect("second stdout should be UTF-8")
+    );
+    assert_eq!(
+        first_swaplock,
+        fs::read_to_string(&swaplock_path).expect("Swaplock spec should read after rerun")
+    );
+    assert_eq!(
+        first_acta,
+        fs::read_to_string(&acta_path).expect("Acta spec should read after rerun")
+    );
+
+    fs::remove_dir_all(output_dir).ok();
+}
+
+#[test]
+fn opengraphene_specs_requires_out_directory() {
+    let output = Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
+        .args(["opengraphene-specs"])
+        .output()
+        .expect("opengraphene-specs should run");
+
+    assert!(!output.status.success(), "missing --out should fail");
+    assert!(
+        String::from_utf8_lossy(&output.stderr).contains("opengraphene-specs requires --out <dir>"),
+        "unexpected stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
 fn conformance_fixtures_requires_out_directory() {
     let output = Command::new(env!("CARGO_BIN_EXE_open-graphene-gen"))
         .args(["conformance-fixtures"])

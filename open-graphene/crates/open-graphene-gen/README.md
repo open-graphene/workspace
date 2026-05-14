@@ -257,14 +257,17 @@ Validation requires both `path` and `reason` to be non-empty. These diagnostics 
 Run these commands from the `open-graphene/` workspace root.
 
 ```sh
-# 1. Validate the canonical OpenGraphene contracts.
-cargo run -p open-graphene-gen -- validate crates/open-graphene-gen/fixtures/swaplock.opengraphene.json
-cargo run -p open-graphene-gen -- validate crates/open-graphene-gen/fixtures/acta.opengraphene.json
+# 1. Regenerate published OpenGraphene specs for mandatory chains.
+bin/gen.sh
 
-# 2. Print the JSON Schema for the contract model.
+# 2. Validate the canonical OpenGraphene contracts.
+cargo run -p open-graphene-gen -- validate specs/swaplock.opengraphene.json
+cargo run -p open-graphene-gen -- validate specs/acta.opengraphene.json
+
+# 3. Print the JSON Schema for the contract model.
 cargo run -p open-graphene-gen -- schema
 
-# 3. Inspect lowered IR enriched by OpenRPC metadata.
+# 4. Inspect lowered IR enriched by OpenRPC metadata.
 cargo run -p open-graphene-gen -- inspect-ir \
   crates/open-graphene-gen/fixtures/swaplock.opengraphene.json \
   --openrpc crates/open-graphene-gen/fixtures/swaplock.openrpc.json
@@ -272,26 +275,27 @@ cargo run -p open-graphene-gen -- inspect-ir \
   crates/open-graphene-gen/fixtures/acta.opengraphene.json \
   --openrpc crates/open-graphene-gen/fixtures/acta.openrpc.json
 
-# 4. Generate prototype TypeScript and Dart metadata samples into a scratch directory.
+# 5. Generate prototype TypeScript and Dart metadata samples into a scratch directory.
 #    These outputs are review/drift evidence, not production SDK packages.
 rm -rf /tmp/open-graphene-gen-samples
 cargo run -p open-graphene-gen -- generate \
-  crates/open-graphene-gen/fixtures/swaplock.opengraphene.json \
+  specs/swaplock.opengraphene.json \
   --openrpc crates/open-graphene-gen/fixtures/swaplock.openrpc.json \
   --target all \
   --out /tmp/open-graphene-gen-samples
 
-# 5. Emit conformance fixtures into a scratch directory.
+# 6. Emit conformance fixtures into a scratch directory.
 rm -rf /tmp/open-graphene-gen-conformance
 cargo run -p open-graphene-gen -- conformance-fixtures \
   --out /tmp/open-graphene-gen-conformance
 
-# 6. Run the crate test suite.
+# 7. Run the crate test suite.
 cargo test -p open-graphene-gen
 ```
 
 Expected success signals:
 
+- `opengraphene-specs` prints `generated OpenGraphene specs into <dir>` and writes `acta.opengraphene.json` plus `swaplock.opengraphene.json`.
 - `validate` prints `<path>: valid OpenGraphene contract` for both Swaplock and Acta fixtures.
 - `schema` prints JSON with title `OpenGrapheneDocument`.
 - `inspect-ir` prints JSON containing `methods`, `operations`, `callbacks`, and `transaction` metadata.
@@ -306,6 +310,22 @@ open-graphene-gen schema
 open-graphene-gen inspect-ir <opengraphene-path> [--openrpc <openrpc-path>]
 open-graphene-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|all> --out <dir>
 open-graphene-gen conformance-fixtures --out <dir>
+open-graphene-gen opengraphene-specs --out <dir>
+```
+
+## Published OpenGraphene specs
+
+`bin/gen.sh` regenerates the checked-in mandatory chain specs under `specs/`:
+
+```text
+specs/acta.opengraphene.json
+specs/swaplock.opengraphene.json
+```
+
+The script runs `cargo run -p open-graphene-gen -- opengraphene-specs --out <tmp-dir>`, then atomically replaces `specs/`. The CLI validates its built-in Acta and Swaplock OpenGraphene documents before writing them, so a broken embedded contract fails generation instead of publishing stale specs.
+
+```sh
+bin/gen.sh
 ```
 
 ## Emitted targets

@@ -13,6 +13,17 @@ use open_graphene_gen::openrpc::OpenRpcDocument;
 use open_graphene_gen::validation::validate_document_report;
 use schemars::schema_for;
 
+const BUILTIN_OPENGRAPHENE_SPECS: &[(&str, &str)] = &[
+    (
+        "swaplock.opengraphene.json",
+        include_str!("../../fixtures/swaplock.opengraphene.json"),
+    ),
+    (
+        "acta.opengraphene.json",
+        include_str!("../../fixtures/acta.opengraphene.json"),
+    ),
+];
+
 fn main() {
     if let Err(error) = run() {
         eprintln!("Error: {error}");
@@ -54,8 +65,12 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             let output_dir = parse_conformance_fixtures_args(args)?;
             write_conformance_fixtures(&output_dir)
         }
+        Some("opengraphene-specs") => {
+            let output_dir = parse_opengraphene_specs_args(args)?;
+            write_opengraphene_specs(&output_dir)
+        }
         _ => Err(
-            "usage: open-graphene-gen <validate|schema|inspect-ir|generate|conformance-fixtures> [args]"
+            "usage: open-graphene-gen <validate|schema|inspect-ir|generate|conformance-fixtures|opengraphene-specs> [args]"
                 .into(),
         ),
     }
@@ -184,6 +199,19 @@ fn parse_generate_args(
 fn parse_conformance_fixtures_args(
     mut args: impl Iterator<Item = String>,
 ) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    parse_out_dir_args(&mut args, "conformance-fixtures")
+}
+
+fn parse_opengraphene_specs_args(
+    mut args: impl Iterator<Item = String>,
+) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    parse_out_dir_args(&mut args, "opengraphene-specs")
+}
+
+fn parse_out_dir_args(
+    args: &mut impl Iterator<Item = String>,
+    command: &str,
+) -> Result<PathBuf, Box<dyn std::error::Error>> {
     let mut output_dir = None;
 
     while let Some(arg) = args.next() {
@@ -196,11 +224,38 @@ fn parse_conformance_fixtures_args(
                     args.next().ok_or("--out requires a directory")?,
                 ));
             }
-            _ => return Err(format!("unexpected conformance-fixtures argument: {arg}").into()),
+            _ => return Err(format!("unexpected {command} argument: {arg}").into()),
         }
     }
 
-    output_dir.ok_or("conformance-fixtures requires --out <dir>".into())
+    output_dir.ok_or(format!("{command} requires --out <dir>").into())
+}
+
+fn write_opengraphene_specs(output_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    let mut files = Vec::new();
+
+    for (name, contents) in BUILTIN_OPENGRAPHENE_SPECS {
+        let document: OpenGrapheneDocument = serde_json::from_str(contents)?;
+        let report = validate_document_report(&document);
+        if !report.is_valid() {
+            return Err(format!(
+                "built-in {name} OpenGraphene spec is invalid: {} validation error(s)",
+                report.errors.len()
+            )
+            .into());
+        }
+        let json = serde_json::to_string_pretty(&document)?;
+        files.push(GeneratedFile::new(*name, format!("{json}\n"))?);
+    }
+
+    let written = write_generated_files(output_dir, &files)?;
+
+    println!("generated OpenGraphene specs into {}", output_dir.display());
+    for file in written {
+        println!("  wrote {} ({} bytes)", file.path.display(), file.bytes);
+    }
+
+    Ok(())
 }
 
 fn write_conformance_fixtures(output_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {

@@ -1,0 +1,215 @@
+{
+  "openGraphene": "0.1",
+  "openrpc": "./swaplock.openrpc.json",
+  "chain": {
+    "name": "swaplock",
+    "chainId": "0000000000000000000000000000000000000000000000000000000000000000",
+    "wsEndpoints": [
+      "wss://node.swaplock.test/ws"
+    ],
+    "httpEndpoints": [
+      "https://node.swaplock.test/rpc"
+    ]
+  },
+  "apis": {
+    "database": {
+      "grapheneName": "database",
+      "access": "default"
+    },
+    "network_broadcast": {
+      "grapheneName": "network_broadcast",
+      "access": "login_api"
+    }
+  },
+  "methodBindings": {
+    "broadcast_transaction": {
+      "api": "network_broadcast"
+    },
+    "broadcast_transaction_with_callback": {
+      "api": "network_broadcast"
+    },
+    "get_dynamic_global_properties": {
+      "api": "database"
+    },
+    "set_block_applied_callback": {
+      "api": "database"
+    }
+  },
+  "codec": {
+    "types": {
+      "Asset": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "int64"
+          },
+          {
+            "name": "asset_id",
+            "type": "object_id"
+          }
+        ]
+      },
+      "BlockAppliedNotice": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "block_id",
+            "type": "bytes"
+          }
+        ]
+      },
+      "BroadcastResult": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "object_id"
+          },
+          {
+            "name": "block_num",
+            "type": "uint32"
+          },
+          {
+            "name": "trx_num",
+            "type": "uint32"
+          }
+        ]
+      },
+      "DynamicGlobalProperties": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "head_block_number",
+            "type": "uint32"
+          },
+          {
+            "name": "head_block_id",
+            "type": "bytes"
+          },
+          {
+            "name": "time",
+            "type": "time_point_sec"
+          }
+        ]
+      },
+      "SignedTransaction": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ref_block_num",
+            "type": "uint16"
+          },
+          {
+            "name": "ref_block_prefix",
+            "type": "uint32"
+          },
+          {
+            "name": "expiration",
+            "type": "time_point_sec"
+          },
+          {
+            "name": "operations",
+            "type": {
+              "array": "Operation"
+            }
+          },
+          {
+            "name": "extensions",
+            "type": {
+              "array": "bytes"
+            }
+          },
+          {
+            "name": "signatures",
+            "type": {
+              "array": "signature"
+            }
+          }
+        ]
+      },
+      "TransferOperation": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "fee",
+            "type": "Asset"
+          },
+          {
+            "name": "from",
+            "type": "object_id"
+          },
+          {
+            "name": "to",
+            "type": "object_id"
+          },
+          {
+            "name": "amount",
+            "type": "Asset"
+          },
+          {
+            "name": "memo",
+            "type": {
+              "optional": "bytes"
+            }
+          },
+          {
+            "name": "extensions",
+            "type": {
+              "array": "bytes"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "operations": {
+    "Operation": [
+      {
+        "id": 0,
+        "name": "transfer",
+        "type": "TransferOperation"
+      }
+    ]
+  },
+  "transaction": {
+    "type": "SignedTransaction",
+    "operationVariant": "Operation",
+    "digest": {
+      "algorithm": "sha256",
+      "preimage": [
+        "chain_id",
+        "serialized_transaction"
+      ]
+    },
+    "signature": {
+      "curve": "secp256k1",
+      "format": "graphene_compact_recoverable",
+      "canonical": true
+    }
+  },
+  "callbacks": {
+    "broadcast_transaction_with_callback": {
+      "api": "network_broadcast",
+      "requestParams": [
+        "SignedTransaction"
+      ],
+      "directResult": "void",
+      "callbackParam": {
+        "position": 0,
+        "allocatedBy": "client"
+      },
+      "callbackPayload": "BroadcastResult",
+      "callbackLifetime": "once"
+    },
+    "set_block_applied_callback": {
+      "api": "database",
+      "callbackParam": {
+        "position": 0,
+        "allocatedBy": "client"
+      },
+      "callbackPayload": "BlockAppliedNotice",
+      "callbackLifetime": "persistent"
+    }
+  }
+}
