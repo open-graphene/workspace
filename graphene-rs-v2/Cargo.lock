@@ -372,6 +372,7 @@ dependencies = [
  "graphene-codec",
  "graphene-rpc",
  "graphene-signing",
+ "serde",
  "serde_json",
 ]
 

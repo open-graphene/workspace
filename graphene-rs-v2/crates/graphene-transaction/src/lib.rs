@@ -148,7 +148,40 @@ pub mod transaction {
 
 pub mod broadcast {
     use super::fmt;
-    use graphene_rpc::RpcError;
+    use graphene_rpc::{OpenRpcCallbackParams, RpcError};
+
+    #[derive(Clone, Debug)]
+    pub struct BroadcastTransactionWithCallbackParams<TSigned> {
+        pub trx: TSigned,
+    }
+
+    impl<TSigned> OpenRpcCallbackParams for BroadcastTransactionWithCallbackParams<TSigned>
+    where
+        TSigned: serde::Serialize,
+    {
+        const METHOD: &'static str = "broadcast_transaction_with_callback";
+        type Response = ();
+        type Callback = serde_json::Value;
+
+        fn into_positional_params_after_callback(self) -> Vec<serde_json::Value> {
+            vec![serde_json::json!(self.trx)]
+        }
+
+        fn decode_response(value: serde_json::Value) -> Result<Self::Response, RpcError> {
+            if value.is_null() {
+                Ok(())
+            } else {
+                Err(RpcError::protocol(
+                    Self::METHOD,
+                    format!("expected null acknowledgement, got {value}"),
+                ))
+            }
+        }
+
+        fn decode_callback(value: serde_json::Value) -> Result<Self::Callback, RpcError> {
+            Ok(value)
+        }
+    }
 
     #[derive(Clone, Debug, PartialEq)]
     pub struct SynchronousBroadcastResult {
@@ -330,8 +363,11 @@ pub mod signing {
 mod tests {
     use super::account::{exact_account_id_from_lookup, LookupAccountError};
     use super::block_id::ref_block_prefix;
-    use super::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
+    use super::broadcast::{
+        BroadcastResultError, BroadcastTransactionWithCallbackParams, SynchronousBroadcastResult,
+    };
     use super::transaction::compute_transaction_header_fields;
+    use graphene_rpc::OpenRpcCallbackParams;
 
     #[test]
     fn ref_block_prefix_reads_bytes_four_through_seven_as_little_endian_u32() {
@@ -392,6 +428,38 @@ mod tests {
         assert_eq!(fields.ref_block_num, 0x2345);
         assert_eq!(fields.ref_block_prefix, 0xd4c3b2a1);
         assert_eq!(fields.expiration, expiration);
+    }
+
+    #[test]
+    fn broadcast_transaction_with_callback_params_accept_null_ack() {
+        let response =
+            BroadcastTransactionWithCallbackParams::<serde_json::Value>::decode_response(
+                serde_json::Value::Null,
+            )
+            .unwrap();
+
+        assert_eq!(response, ());
+    }
+
+    #[test]
+    fn broadcast_transaction_with_callback_params_reject_non_null_ack() {
+        let error = BroadcastTransactionWithCallbackParams::<serde_json::Value>::decode_response(
+            serde_json::json!(true),
+        )
+        .unwrap_err();
+
+        assert!(error.to_string().contains("expected null acknowledgement"));
+    }
+
+    #[test]
+    fn broadcast_transaction_with_callback_params_pass_callback_payload_through() {
+        let raw = serde_json::json!([{ "id": "abc123" }]);
+        let decoded = BroadcastTransactionWithCallbackParams::<serde_json::Value>::decode_callback(
+            raw.clone(),
+        )
+        .unwrap();
+
+        assert_eq!(decoded, raw);
     }
 
     #[test]

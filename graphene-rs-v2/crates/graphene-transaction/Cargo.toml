@@ -8,4 +8,5 @@ publish.workspace = true
 graphene-codec.workspace = true
 graphene-rpc.workspace = true
 graphene-signing.workspace = true
+serde.workspace = true
 serde_json.workspace = true
