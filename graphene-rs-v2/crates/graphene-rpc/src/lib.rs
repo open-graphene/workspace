@@ -9,9 +9,11 @@ pub use error::RpcError;
 pub use http::HttpTransport;
 pub use params::{OpenRpcCallbackParams, OpenRpcParams, RpcClient, RpcTransport};
 pub use scalar::{GrapheneInt64, GrapheneTimePointSec, GrapheneUInt64};
+#[allow(deprecated)]
+pub use ws::GrapheneWebSocketTransport;
 pub use ws::{
     ApiHandle, CallbackHandle, CallbackSubscription, GrapheneNotice, GrapheneWebSocketApiTransport,
-    GrapheneWebSocketSession, GrapheneWebSocketTransport,
+    GrapheneWebSocketOneShotTransport, GrapheneWebSocketSession,
 };
 
 #[cfg(test)]

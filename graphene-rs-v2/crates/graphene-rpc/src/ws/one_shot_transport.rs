@@ -10,18 +10,18 @@ use crate::{RpcError, RpcTransport};
 
 use super::protocol::read_websocket_json;
 
-/// Compatibility transport that opens a fresh socket for each RPC call.
+/// One-shot transport that opens a fresh socket for each RPC call.
 ///
-/// Prefer `GrapheneWebSocketSession` for new code: Graphene API ids and callback
-/// ids are socket-local, and subscriptions require one dispatcher-owned socket.
-/// This transport remains useful for simple one-shot database or broadcast calls
-/// that do not need callback routing.
+/// Prefer `GrapheneWebSocketSession` for callback-aware or multi-call flows:
+/// Graphene API ids and callback ids are socket-local, and subscriptions require
+/// one dispatcher-owned socket. This transport remains useful for simple single
+/// database or broadcast calls that do not need callback routing.
 ///
 /// Unlike direct HTTP database endpoints, Graphene WebSocket APIs are normally
 /// invoked as `call(api_id, method, params)`. Use API id `0` for database API
 /// and the id returned by login API's `network_broadcast` method for broadcast.
 #[derive(Debug)]
-pub struct GrapheneWebSocketTransport {
+pub struct GrapheneWebSocketOneShotTransport {
     endpoint: String,
     api: GrapheneWebSocketApi,
     next_id: AtomicU64,
@@ -33,7 +33,7 @@ enum GrapheneWebSocketApi {
     LoginMethod(String),
 }
 
-impl GrapheneWebSocketTransport {
+impl GrapheneWebSocketOneShotTransport {
     pub fn new(endpoint: impl Into<String>, api_id: u64) -> Self {
         Self {
             endpoint: endpoint.into(),
@@ -59,7 +59,7 @@ impl GrapheneWebSocketTransport {
     }
 }
 
-impl RpcTransport for GrapheneWebSocketTransport {
+impl RpcTransport for GrapheneWebSocketOneShotTransport {
     fn call_raw(&self, method: &str, params: Vec<Value>) -> Result<Value, RpcError> {
         let (mut socket, _) = connect(self.endpoint.as_str())
             .map_err(|source| RpcError::transport(source.to_string()))?;
@@ -86,6 +86,9 @@ impl RpcTransport for GrapheneWebSocketTransport {
         websocket_json_rpc_call(&mut socket, method, request)
     }
 }
+
+#[deprecated(note = "use GrapheneWebSocketOneShotTransport or GrapheneWebSocketSession")]
+pub type GrapheneWebSocketTransport = GrapheneWebSocketOneShotTransport;
 
 fn websocket_json_rpc_call(
     socket: &mut WebSocket<MaybeTlsStream<TcpStream>>,

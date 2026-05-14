@@ -3,16 +3,18 @@
 //! The public surface is the session-oriented API in [`GrapheneWebSocketSession`]
 //! plus handle types used to keep Graphene API ids and callback ids scoped to a
 //! single socket. Dispatcher and protocol modules are internal implementation
-//! details; `GrapheneWebSocketTransport` is kept as the legacy one-call-per-socket
-//! transport for compatibility.
+//! details; `GrapheneWebSocketOneShotTransport` is available for simple
+//! one-call-per-socket flows.
 
 mod dispatcher;
-mod legacy_transport;
+mod one_shot_transport;
 mod protocol;
 mod session;
 mod types;
 
-pub use legacy_transport::GrapheneWebSocketTransport;
+pub use one_shot_transport::GrapheneWebSocketOneShotTransport;
+#[allow(deprecated)]
+pub use one_shot_transport::GrapheneWebSocketTransport;
 pub use session::{GrapheneWebSocketApiTransport, GrapheneWebSocketSession};
 pub use types::{ApiHandle, CallbackHandle, CallbackSubscription, GrapheneNotice};
 
