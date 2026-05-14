@@ -43,9 +43,12 @@ is intentionally only a small project-local convenience wrapper.
 defining their own copy.
 
 `graphene-transaction` contains chain-independent transaction primitives that
-were proven across Swaplock and Acta first: reference-block prefix parsing from
-Graphene block ids and typed synchronous broadcast result parsing. Chain crates
-still keep generated transaction/operation types chain-local.
+were proven across Swaplock and Acta first: exact account lookup result
+validation, reference-block prefix parsing from Graphene block ids, transaction
+header field derivation from dynamic global property values, typed synchronous
+broadcast result parsing, and shared signing over Graphene-encoded transaction
+bytes. Chain crates still keep generated RPC params and generated
+transaction/operation/signed-transaction types chain-local.
 
 ## Typed RPC usage shape
 

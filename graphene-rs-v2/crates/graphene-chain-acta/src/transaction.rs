@@ -1,9 +1,9 @@
-use std::fmt;
-
-use graphene_codec::{to_graphene_bytes, EncodeError};
 use graphene_rpc::{RpcClient, RpcError, RpcTransport};
-use graphene_signing::{signing_digest, ChainId, SignError, Signature, Signer};
+use graphene_signing::{ChainId, Signature, Signer};
 use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
+use graphene_transaction::signing::sign_transaction_bytes;
+
+pub use graphene_transaction::signing::SignTransactionError;
 
 use crate::broadcast::{BroadcastTransactionParams, BroadcastTransactionSynchronousParams};
 use crate::generated::{
@@ -75,13 +75,10 @@ pub fn sign_transaction<S: Signer>(
     transaction: Transaction,
     signer: &S,
 ) -> Result<SignedTransactionEnvelope, SignTransactionError> {
-    let transaction_bytes = to_graphene_bytes(&transaction)?;
-    let digest = signing_digest(chain_id, &transaction_bytes);
-    let signature = signer.sign_digest(&digest)?;
-
+    let signatures = sign_transaction_bytes(chain_id, &transaction, signer)?;
     Ok(SignedTransactionEnvelope {
         transaction,
-        signatures: vec![signature],
+        signatures,
     })
 }
 
@@ -130,40 +127,4 @@ where
 {
     let raw = broadcast_signed_transaction_synchronous(client, signed)?;
     SynchronousBroadcastResult::try_from(raw)
-}
-
-#[derive(Debug)]
-pub enum SignTransactionError {
-    Encode(EncodeError),
-    Sign(SignError),
-}
-
-impl fmt::Display for SignTransactionError {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Encode(error) => write!(formatter, "failed to encode transaction: {error}"),
-            Self::Sign(error) => write!(formatter, "failed to sign transaction digest: {error}"),
-        }
-    }
-}
-
-impl std::error::Error for SignTransactionError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        match self {
-            Self::Encode(error) => Some(error),
-            Self::Sign(error) => Some(error),
-        }
-    }
-}
-
-impl From<EncodeError> for SignTransactionError {
-    fn from(error: EncodeError) -> Self {
-        Self::Encode(error)
-    }
-}
-
-impl From<SignError> for SignTransactionError {
-    fn from(error: SignError) -> Self {
-        Self::Sign(error)
-    }
 }

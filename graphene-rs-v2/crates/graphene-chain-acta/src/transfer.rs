@@ -1,7 +1,8 @@
 use std::fmt;
 
 use graphene_rpc::{GrapheneInt64, GrapheneTimePointSec, RpcClient, RpcError, RpcTransport};
-use graphene_transaction::block_id::{ref_block_prefix, BlockIdError};
+use graphene_transaction::block_id::BlockIdError;
+use graphene_transaction::transaction::compute_transaction_header_fields;
 
 use crate::generated::{
     Asset, AssetAssetId, DynamicGlobalPropertyObject, ExtensionsType, GetRequiredFeesParams,
@@ -90,11 +91,16 @@ pub fn prepare_transaction(
     operations: Vec<Operation>,
     expiration: GrapheneTimePointSec,
 ) -> Result<PreparedTransaction, BuildTransactionError> {
-    Ok(PreparedTransaction::new(Transaction {
-        ref_block_num: (dynamic.head_block_number & 0xffff) as u16,
-        ref_block_prefix: ref_block_prefix(&dynamic.head_block_id)
-            .map_err(BuildTransactionError::from)?,
+    let header = compute_transaction_header_fields(
+        &dynamic.head_block_id,
+        dynamic.head_block_number,
         expiration,
+    )?;
+
+    Ok(PreparedTransaction::new(Transaction {
+        ref_block_num: header.ref_block_num,
+        ref_block_prefix: header.ref_block_prefix,
+        expiration: header.expiration,
         operations,
         extensions: ExtensionsType(vec![]),
     }))

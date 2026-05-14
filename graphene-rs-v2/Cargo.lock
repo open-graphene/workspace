@@ -369,7 +369,9 @@ dependencies = [
 name = "graphene-transaction"
 version = "0.1.0"
 dependencies = [
+ "graphene-codec",
  "graphene-rpc",
+ "graphene-signing",
  "serde_json",
 ]
 
