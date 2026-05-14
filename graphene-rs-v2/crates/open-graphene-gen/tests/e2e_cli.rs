@@ -51,10 +51,64 @@ fn assert_file_contains(stage: &str, path: &Path, expected: &str) {
     );
 }
 
+fn assert_cli_fixture_contract(
+    chain_name: &str,
+    opengraphene: &str,
+    openrpc: &str,
+    expected_method: &str,
+    expected_result: Option<&str>,
+    expected_callback: &str,
+) {
+    let validate = run_cli_stage(
+        &format!("{chain_name} fixture validation"),
+        &["validate", opengraphene],
+    );
+    let validate_stdout = String::from_utf8_lossy(&validate.stdout);
+    assert!(
+        validate_stdout.contains("valid OpenGraphene contract"),
+        "stage '{chain_name} fixture validation' did not confirm the fixture was valid"
+    );
+
+    let inspect_ir = run_cli_stage(
+        &format!("{chain_name} IR inspection"),
+        &["inspect-ir", opengraphene, "--openrpc", openrpc],
+    );
+    let ir_stdout = String::from_utf8(inspect_ir.stdout)
+        .unwrap_or_else(|error| panic!("{chain_name} IR stdout should be UTF-8 JSON: {error}"));
+    let ir_json: Value = serde_json::from_str(&ir_stdout).unwrap_or_else(|error| {
+        panic!("stage '{chain_name} IR inspection' should print JSON IR: {error}")
+    });
+
+    assert_eq!(
+        ir_json["chain"]["name"], chain_name,
+        "stage '{chain_name} IR inspection' should preserve chain metadata"
+    );
+    assert_eq!(
+        ir_json["methods"][expected_method]["api"], "network_broadcast",
+        "stage '{chain_name} IR inspection' should include OpenRPC-bound broadcast metadata"
+    );
+    if let Some(result) = expected_result {
+        assert_eq!(
+            ir_json["methods"][expected_method]["result"]["name"], result,
+            "stage '{chain_name} IR inspection' should include expected method result metadata"
+        );
+    }
+    assert_eq!(
+        ir_json["operations"]["Operation"][0]["name"], "transfer",
+        "stage '{chain_name} IR inspection' should include the transfer operation"
+    );
+    assert!(
+        ir_json["callbacks"].get(expected_callback).is_some(),
+        "stage '{chain_name} IR inspection' should include expected callback metadata"
+    );
+}
+
 #[test]
 fn e2e_cli_workflow_verifies_developer_contract() {
-    let opengraphene = fixture_path("swaplock.opengraphene.json");
-    let openrpc = fixture_path("swaplock.openrpc.json");
+    let swaplock_opengraphene = fixture_path("swaplock.opengraphene.json");
+    let swaplock_openrpc = fixture_path("swaplock.openrpc.json");
+    let acta_opengraphene = fixture_path("acta.opengraphene.json");
+    let acta_openrpc = fixture_path("acta.openrpc.json");
     let output_dir = unique_output_dir("generated");
     let fixture_output_dir = unique_output_dir("conformance");
     let output_dir_arg = output_dir.to_str().expect("temp path should be UTF-8");
@@ -76,35 +130,30 @@ fn e2e_cli_workflow_verifies_developer_contract() {
         "stage 'schema generation' schema should include the chain property"
     );
 
-    let validate = run_cli_stage("fixture validation", &["validate", &opengraphene]);
-    assert!(
-        String::from_utf8_lossy(&validate.stdout).contains("valid OpenGraphene contract"),
-        "stage 'fixture validation' did not confirm the fixture was valid"
+    assert_cli_fixture_contract(
+        "swaplock",
+        &swaplock_opengraphene,
+        &swaplock_openrpc,
+        "broadcast_transaction",
+        Some("void"),
+        "set_block_applied_callback",
     );
-
-    let inspect_ir = run_cli_stage(
-        "IR inspection",
-        &["inspect-ir", &opengraphene, "--openrpc", &openrpc],
-    );
-    let ir_stdout = String::from_utf8(inspect_ir.stdout).expect("IR stdout should be UTF-8 JSON");
-    let ir_json: Value =
-        serde_json::from_str(&ir_stdout).expect("stage 'IR inspection' should print JSON IR");
-    assert_eq!(
-        ir_json["methods"]["broadcast_transaction"]["api"], "network_broadcast",
-        "stage 'IR inspection' should include OpenRPC-bound broadcast metadata"
-    );
-    assert_eq!(
-        ir_json["operations"]["Operation"][0]["name"], "transfer",
-        "stage 'IR inspection' should include the transfer operation"
+    assert_cli_fixture_contract(
+        "acta",
+        &acta_opengraphene,
+        &acta_openrpc,
+        "broadcast_transaction_synchronous",
+        Some("SynchronousBroadcastResult"),
+        "set_subscribe_callback",
     );
 
     let generate = run_cli_stage(
-        "TS/Dart generation",
+        "prototype TS/Dart metadata generation",
         &[
             "generate",
-            &opengraphene,
+            &swaplock_opengraphene,
             "--openrpc",
-            &openrpc,
+            &swaplock_openrpc,
             "--target",
             "all",
             "--out",
@@ -115,28 +164,28 @@ fn e2e_cli_workflow_verifies_developer_contract() {
         String::from_utf8(generate.stdout).expect("generate stdout should be UTF-8");
     assert!(
         generate_stdout.contains("generated target 'all'"),
-        "stage 'TS/Dart generation' should report the all target"
+        "stage 'prototype TS/Dart metadata generation' should report the all target"
     );
 
     let typescript_path = output_dir.join("typescript/index.ts");
     let dart_path = output_dir.join("dart/lib/open_graphene.dart");
     assert!(
         typescript_path.is_file(),
-        "stage 'TS/Dart generation' missing {}",
+        "stage 'prototype TS/Dart metadata generation' missing {}",
         typescript_path.display()
     );
     assert!(
         dart_path.is_file(),
-        "stage 'TS/Dart generation' missing {}",
+        "stage 'prototype TS/Dart metadata generation' missing {}",
         dart_path.display()
     );
     assert_file_contains(
-        "TS/Dart generation",
+        "prototype TS/Dart metadata generation",
         &typescript_path,
         "export const rpcMethods",
     );
     assert_file_contains(
-        "TS/Dart generation",
+        "prototype TS/Dart metadata generation",
         &dart_path,
         "const Map<String, RpcMethodDescriptor> rpcMethods",
     );

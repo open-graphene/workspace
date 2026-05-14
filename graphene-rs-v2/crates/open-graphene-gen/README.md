@@ -8,14 +8,16 @@ The crate is intentionally small and diagnostic-first. When a command fails, the
 
 OpenGraphene is a chain contract document that describes enough Graphene RPC, codec, transaction, operation, and callback semantics for downstream SDK/code-generator work without requiring contributors to reverse-engineer Rust structs or handwritten chain helpers.
 
-The current milestone supports this developer loop:
+The current milestone supports this contract-first developer loop:
 
-1. Validate a contract JSON document.
+1. Validate the mandatory Swaplock and Acta contract JSON documents.
 2. Emit the JSON Schema for authoring and review tooling.
-3. Lower the contract, optionally enriched by matching OpenRPC metadata, into JSON IR.
-4. Generate TypeScript and Dart descriptor samples from the IR.
+3. Lower each contract, enriched by its matching OpenRPC metadata, into JSON IR.
+4. Generate TypeScript and Dart descriptor samples from the IR as prototype metadata drift checks.
 5. Emit conformance fixtures from the Rust reference codec and signer.
 6. Run the workspace tests that lock those contracts in place.
+
+This milestone deliberately stops at contract JSON, IR, generated metadata samples, conformance fixtures, and tests. Production TypeScript or Dart SDK packaging is an active non-goal until a later milestone adds runtime codecs, signing helpers, transports, and release criteria.
 
 ## Architecture
 
@@ -270,7 +272,8 @@ cargo run -p open-graphene-gen -- inspect-ir \
   crates/open-graphene-gen/fixtures/acta.opengraphene.json \
   --openrpc crates/open-graphene-gen/fixtures/acta.openrpc.json
 
-# 4. Generate TypeScript and Dart samples into a scratch directory.
+# 4. Generate prototype TypeScript and Dart metadata samples into a scratch directory.
+#    These outputs are review/drift evidence, not production SDK packages.
 rm -rf /tmp/open-graphene-gen-samples
 cargo run -p open-graphene-gen -- generate \
   crates/open-graphene-gen/fixtures/swaplock.opengraphene.json \
@@ -312,6 +315,8 @@ open-graphene-gen conformance-fixtures --out <dir>
 - `--target typescript`
 - `--target dart`
 - `--target all`
+
+These targets are prototype metadata samples only. They are useful for checking that validated OpenGraphene/OpenRPC contracts lower into stable language-facing descriptors, but they are not production SDK packages and do not include transaction encoders, signers, transports, packaging, release automation, or runtime compatibility promises.
 
 For `--target all`, the generated file layout is:
 
@@ -379,7 +384,7 @@ Use the CLI command that maps to the failing layer:
 - Contract authoring failures: run `validate` and inspect the reported contract path. Approved raw fallbacks are printed as warnings; unsupported-shape classifications fail validation with the classified path and `unsupported_shape` marker.
 - Schema/tooling drift: run `schema` and compare the `OpenGrapheneDocument` schema.
 - OpenRPC enrichment or emitter input drift: run `inspect-ir` with the same `--openrpc` file used by generation.
-- TypeScript/Dart sample drift: run `generate --target all` into a scratch directory and compare against `fixtures/generated-samples`.
+- TypeScript/Dart prototype sample drift: run `generate --target all` into a scratch directory and compare against `fixtures/generated-samples`; do not treat these samples as production SDK packaging evidence.
 - Byte-level codec/signing drift: run `conformance-fixtures` and compare against `fixtures/conformance/transfer.json`.
 - Whole-crate regression: run `cargo test -p open-graphene-gen`.
 
@@ -387,7 +392,7 @@ Conformance fixture generation failures name the failed component as `operation_
 
 ## Validation and test coverage
 
-The test suite validates the Swaplock and Acta fixtures plus broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, emitter output, generated sample stability, and conformance fixture contents.
+The test suite validates the Swaplock and Acta fixtures plus broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, prototype emitter output, generated sample stability, and conformance fixture contents. The end-to-end CLI workflow intentionally validates and inspects both mandatory chain fixtures, then keeps prototype sample generation and conformance fixture emission in the same CI-safe loop without requiring live endpoints or language SDK packaging.
 
 ```sh
 cargo test -p open-graphene-gen
