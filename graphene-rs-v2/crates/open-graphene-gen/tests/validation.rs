@@ -69,9 +69,9 @@ fn rejects_invalid_chain_id() {
     let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
     let errors = validate_document(&document).expect_err("invalid chain id should fail");
 
-    assert!(errors.iter().any(|error| {
-        error.path == "chain.chainId" && error.message.contains("32-byte")
-    }));
+    assert!(errors
+        .iter()
+        .any(|error| { error.path == "chain.chainId" && error.message.contains("32-byte") }));
 }
 
 #[test]
@@ -174,7 +174,8 @@ fn rejects_duplicate_operation_names() {
 
     assert!(errors.iter().any(|error| {
         error.path == "operations.Operation[1].name"
-            && error.message.contains("duplicate operation variant name transfer")
+            && error
+                .message
+                .contains("duplicate operation variant name transfer")
     }));
 }
-
