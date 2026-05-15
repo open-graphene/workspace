@@ -854,7 +854,15 @@ def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
         if outer_stripped in ("vector", "deque", "list") and len(inner) == 1:
             return {"type": "array", "items": map_type(inner[0], reg, pending, owner=owner)}
         if outer_stripped in ("set", "flat_set", "unordered_set") and len(inner) == 1:
-            return {"type": "array", "items": map_type(inner[0], reg, pending, owner=owner), "uniqueItems": True}
+            return {
+                "type": "array",
+                "items": map_type(inner[0], reg, pending, owner=owner),
+                "uniqueItems": True,
+                "x-graphene-container": {
+                    "kind": outer_stripped,
+                    "encoding": "array",
+                },
+            }
         if outer_stripped == "optional" and len(inner) == 1:
             inner_schema = map_type(inner[0], reg, pending, owner=owner)
             if "$ref" in inner_schema:
@@ -885,7 +893,10 @@ def map_type(cpp_type: str, reg: Registry, pending: dict[str, str],
                     "minItems": 2,
                     "maxItems": 2,
                 },
-                "x-fc-container": outer_stripped,
+                "x-graphene-container": {
+                    "kind": outer_stripped,
+                    "encoding": "array-of-pairs",
+                },
             }
         if outer_stripped == "pair" and len(inner) == 2:
             return {

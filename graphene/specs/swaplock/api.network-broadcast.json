@@ -237,7 +237,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<vote_id_type>"
+            "x-cpp-type": "flat_set<vote_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "voting_account": {
             "pattern": "^\\d+\\.\\d+\\.\\d+$",
@@ -550,7 +554,11 @@
               "null"
             ],
             "uniqueItems": true,
-            "x-cpp-type": "fc::optional<flat_set<account_id_type>>"
+            "x-cpp-type": "fc::optional<flat_set<account_id_type>>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -608,7 +616,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -1020,7 +1032,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "blacklist_markets": {
             "items": {
@@ -1029,7 +1045,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<asset_id_type>"
+            "x-cpp-type": "flat_set<asset_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "core_exchange_rate": {
             "$ref": "#/components/schemas/price",
@@ -1076,7 +1096,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "whitelist_markets": {
             "items": {
@@ -1085,7 +1109,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<asset_id_type>"
+            "x-cpp-type": "flat_set<asset_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -1384,7 +1412,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -1570,7 +1602,10 @@
             },
             "type": "array",
             "x-cpp-type": "flat_map<account_id_type,weight_type>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "address_auths": {
             "items": {
@@ -1590,7 +1625,10 @@
             },
             "type": "array",
             "x-cpp-type": "flat_map<address,weight_type>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "key_auths": {
             "items": {
@@ -1610,7 +1648,10 @@
             },
             "type": "array",
             "x-cpp-type": "flat_map<public_key_type,weight_type>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "weight_threshold": {
             "format": "uint32",
@@ -1979,7 +2020,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<asset_id_type>"
+            "x-cpp-type": "flat_set<asset_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -2734,7 +2779,10 @@
             },
             "type": "array",
             "x-cpp-type": "flat_map<account_id_type, share_type>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "acceptable_collateral": {
             "items": {
@@ -2753,7 +2801,10 @@
             },
             "type": "array",
             "x-cpp-type": "flat_map<asset_id_type, price>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "asset_type": {
             "pattern": "^\\d+\\.\\d+\\.\\d+$",
@@ -2904,7 +2955,10 @@
               "null"
             ],
             "x-cpp-type": "optional<flat_map<account_id_type, share_type>>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "acceptable_collateral": {
             "items": {
@@ -2926,7 +2980,10 @@
               "null"
             ],
             "x-cpp-type": "optional<flat_map<asset_id_type, price>>",
-            "x-fc-container": "flat_map"
+            "x-graphene-container": {
+              "encoding": "array-of-pairs",
+              "kind": "flat_map"
+            }
           },
           "auto_disable_time": {
             "oneOf": [
@@ -3275,7 +3332,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<uint16_t>"
+            "x-cpp-type": "flat_set<uint16_t>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -3346,7 +3407,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -3440,7 +3505,11 @@
               "null"
             ],
             "uniqueItems": true,
-            "x-cpp-type": "optional<flat_set<account_id_type>>"
+            "x-cpp-type": "optional<flat_set<account_id_type>>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "new_objects": {
             "items": {
@@ -3452,7 +3521,11 @@
               "null"
             ],
             "uniqueItems": true,
-            "x-cpp-type": "optional<flat_set<object_id_type>>"
+            "x-cpp-type": "optional<flat_set<object_id_type>>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "paid": {
             "items": {
@@ -3484,7 +3557,11 @@
               "null"
             ],
             "uniqueItems": true,
-            "x-cpp-type": "optional<flat_set<object_id_type>>"
+            "x-cpp-type": "optional<flat_set<object_id_type>>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "updated_objects": {
             "items": {
@@ -3496,7 +3573,11 @@
               "null"
             ],
             "uniqueItems": true,
-            "x-cpp-type": "optional<flat_set<object_id_type>>"
+            "x-cpp-type": "optional<flat_set<object_id_type>>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -5193,7 +5274,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<object_id_type>"
+            "x-cpp-type": "flat_set<object_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "removed_objects": {
             "items": {
@@ -5202,7 +5287,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<object_id_type>"
+            "x-cpp-type": "flat_set<object_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "updated_objects": {
             "items": {
@@ -5211,7 +5300,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<object_id_type>"
+            "x-cpp-type": "flat_set<object_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           }
         },
         "required": [
@@ -8375,7 +8468,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "active_approvals_to_remove": {
             "items": {
@@ -8384,7 +8481,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "extensions": {
             "$ref": "#/components/schemas/extensions_type",
@@ -8405,7 +8506,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<public_key_type>"
+            "x-cpp-type": "flat_set<public_key_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "key_approvals_to_remove": {
             "items": {
@@ -8413,7 +8518,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<public_key_type>"
+            "x-cpp-type": "flat_set<public_key_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "owner_approvals_to_add": {
             "items": {
@@ -8422,7 +8531,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "owner_approvals_to_remove": {
             "items": {
@@ -8431,7 +8544,11 @@
             },
             "type": "array",
             "uniqueItems": true,
-            "x-cpp-type": "flat_set<account_id_type>"
+            "x-cpp-type": "flat_set<account_id_type>",
+            "x-graphene-container": {
+              "encoding": "array",
+              "kind": "flat_set"
+            }
           },
           "proposal": {
             "pattern": "^\\d+\\.\\d+\\.\\d+$",
@@ -8820,7 +8937,11 @@
                   "type": "boolean"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8838,7 +8959,11 @@
                   "$ref": "#/components/schemas/GrapheneInt64"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8856,7 +8981,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8874,7 +9003,11 @@
                   "$ref": "#/components/schemas/GrapheneTimePointSec"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8892,7 +9025,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8910,7 +9047,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8929,7 +9070,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8948,7 +9093,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8967,7 +9116,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -8986,7 +9139,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9005,7 +9162,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9024,7 +9185,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9043,7 +9208,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9062,7 +9231,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9081,7 +9254,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9100,7 +9277,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9119,7 +9300,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9138,7 +9323,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9157,7 +9346,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             ],
             "type": "array"
@@ -9372,7 +9565,11 @@
                   "type": "boolean"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9383,7 +9580,11 @@
                   "$ref": "#/components/schemas/GrapheneInt64"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9394,7 +9595,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9405,7 +9610,11 @@
                   "$ref": "#/components/schemas/GrapheneTimePointSec"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9416,7 +9625,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9427,7 +9640,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9439,7 +9656,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9451,7 +9672,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9463,7 +9688,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9475,7 +9704,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9487,7 +9720,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9499,7 +9736,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9511,7 +9752,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9523,7 +9768,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9535,7 +9784,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9547,7 +9800,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9559,7 +9816,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9571,7 +9832,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {
@@ -9583,7 +9848,11 @@
                   "type": "string"
                 },
                 "type": "array",
-                "uniqueItems": true
+                "uniqueItems": true,
+                "x-graphene-container": {
+                  "encoding": "array",
+                  "kind": "flat_set"
+                }
               }
             },
             {

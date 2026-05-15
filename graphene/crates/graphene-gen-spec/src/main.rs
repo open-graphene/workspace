@@ -280,6 +280,13 @@ fn audit_surface_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> {
             "spec contains {rust_extensions} legacy x-rust-type extension(s); use x-graphene-scalar instead"
         ));
     }
+    let fc_container_extensions = count_key(&spec, "x-fc-container");
+    if fc_container_extensions > 0 {
+        failures.push(format!(
+            "spec contains {fc_container_extensions} legacy x-fc-container extension(s); use x-graphene-container instead"
+        ));
+    }
+    failures.extend(validate_graphene_containers(&spec));
     for scalar_name in ["GrapheneTimePointSec", "GrapheneInt64", "GrapheneUInt64"] {
         if !schemas
             .get(scalar_name)
@@ -1068,6 +1075,44 @@ fn is_static_variant_schema(schema: &JsonValue) -> bool {
                     .and_then(JsonValue::as_array)
                     .is_some_and(|items| items.len() == 2 && items[0].get("const").is_some())
         })
+}
+
+fn validate_graphene_containers(spec: &JsonValue) -> Vec<String> {
+    let mut failures = Vec::new();
+    validate_graphene_containers_at(spec, "$", &mut failures);
+    failures
+}
+
+fn validate_graphene_containers_at(value: &JsonValue, path: &str, failures: &mut Vec<String>) {
+    match value {
+        JsonValue::Object(object) => {
+            if let Some(container) = object.get("x-graphene-container") {
+                let Some(container) = container.as_object() else {
+                    failures.push(format!("{path}.x-graphene-container must be an object"));
+                    return;
+                };
+                if container.get("kind").and_then(JsonValue::as_str).is_none() {
+                    failures.push(format!("{path}.x-graphene-container is missing kind"));
+                }
+                if container
+                    .get("encoding")
+                    .and_then(JsonValue::as_str)
+                    .is_none()
+                {
+                    failures.push(format!("{path}.x-graphene-container is missing encoding"));
+                }
+            }
+            for (key, value) in object {
+                validate_graphene_containers_at(value, &format!("{path}.{key}"), failures);
+            }
+        }
+        JsonValue::Array(values) => {
+            for (index, value) in values.iter().enumerate() {
+                validate_graphene_containers_at(value, &format!("{path}[{index}]"), failures);
+            }
+        }
+        _ => {}
+    }
 }
 
 fn validate_static_variant_metadata(schema_name: &str, schema: &JsonValue) -> Vec<String> {

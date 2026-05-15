@@ -80,6 +80,7 @@ Rust binding generation is deliberately excluded from this crate.
 - local `#/components/schemas/*` references
 - absence of `TODO` placeholder descriptions
 - Graphene static variants encoded as `[index, payload]` with matching `x-graphene-static-variant` metadata
+- Graphene containers encoded with neutral `x-graphene-container` metadata
 - neutral `x-graphene-scalar` metadata on `GrapheneTimePointSec`, `GrapheneInt64`, and `GrapheneUInt64`
 
-Legacy `x-rust-type` scalar metadata is rejected; language-specific bindings must map neutral Graphene scalar metadata in their own backend.
+Legacy `x-rust-type` and `x-fc-container` metadata is rejected; language-specific bindings must map neutral Graphene metadata in their own backend.
