@@ -271,9 +271,20 @@ fn audit_surface_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> {
         .count();
     let rust_extensions = count_key(&spec, "x-rust-type");
     if rust_extensions > 0 {
-        warnings.push(format!(
-            "spec contains {rust_extensions} legacy x-rust-type extension(s); keep for compatibility until scalar metadata is migrated"
+        failures.push(format!(
+            "spec contains {rust_extensions} legacy x-rust-type extension(s); use x-graphene-scalar instead"
         ));
+    }
+    for scalar_name in ["GrapheneTimePointSec", "GrapheneInt64", "GrapheneUInt64"] {
+        if !schemas
+            .get(scalar_name)
+            .and_then(|schema| schema.get("x-graphene-scalar"))
+            .is_some()
+        {
+            failures.push(format!(
+                "schema {scalar_name} is missing x-graphene-scalar metadata"
+            ));
+        }
     }
 
     println!("audit surface {}", config.surface_name);

@@ -1080,10 +1080,9 @@ def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
         "type": "string",
         "pattern": r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$",
         "description": "Graphene fc::time_point_sec serialized as UTC without a timezone suffix.",
-        "x-rust-type": {
-            "crate": "graphene-rpc",
-            "version": "0.1.0",
-            "path": "graphene_rpc::GrapheneTimePointSec",
+        "x-graphene-scalar": {
+            "kind": "time_point_sec",
+            "encoding": "utc-string-without-timezone",
         },
     })
     schemas.setdefault("GrapheneInt64", {
@@ -1092,10 +1091,9 @@ def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
             {"type": "string", "pattern": r"^-?\d+$"},
         ],
         "description": "Graphene int64_t/share_type serialized as either a JSON number or a decimal string.",
-        "x-rust-type": {
-            "crate": "graphene-rpc",
-            "version": "0.1.0",
-            "path": "graphene_rpc::GrapheneInt64",
+        "x-graphene-scalar": {
+            "kind": "int64",
+            "encoding": ["json-integer", "decimal-string"],
         },
     })
     schemas.setdefault("GrapheneUInt64", {
@@ -1104,10 +1102,9 @@ def fill_schemas(spec: dict, reg: Registry) -> tuple[int, list[str]]:
             {"type": "string", "pattern": r"^\d+$"},
         ],
         "description": "Graphene uint64_t serialized as either a JSON number or a decimal string.",
-        "x-rust-type": {
-            "crate": "graphene-rpc",
-            "version": "0.1.0",
-            "path": "graphene_rpc::GrapheneUInt64",
+        "x-graphene-scalar": {
+            "kind": "uint64",
+            "encoding": ["json-integer", "decimal-string"],
         },
     })
 

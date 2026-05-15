@@ -13,20 +13,21 @@
             "type": "string"
           }
         ],
-        "x-rust-type": {
-          "crate": "graphene-rpc",
-          "path": "graphene_rpc::GrapheneInt64",
-          "version": "0.1.0"
+        "x-graphene-scalar": {
+          "encoding": [
+            "json-integer",
+            "decimal-string"
+          ],
+          "kind": "int64"
         }
       },
       "GrapheneTimePointSec": {
         "description": "Graphene fc::time_point_sec serialized as UTC without a timezone suffix.",
         "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$",
         "type": "string",
-        "x-rust-type": {
-          "crate": "graphene-rpc",
-          "path": "graphene_rpc::GrapheneTimePointSec",
-          "version": "0.1.0"
+        "x-graphene-scalar": {
+          "encoding": "utc-string-without-timezone",
+          "kind": "time_point_sec"
         }
       },
       "GrapheneUInt64": {
@@ -42,10 +43,12 @@
             "type": "string"
           }
         ],
-        "x-rust-type": {
-          "crate": "graphene-rpc",
-          "path": "graphene_rpc::GrapheneUInt64",
-          "version": "0.1.0"
+        "x-graphene-scalar": {
+          "encoding": [
+            "json-integer",
+            "decimal-string"
+          ],
+          "kind": "uint64"
         }
       },
       "account_create_operation": {
