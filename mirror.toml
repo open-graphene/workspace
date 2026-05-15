@@ -3,20 +3,10 @@ git = "git@github.com:mirrorboards/mirror.git"
 path = "./mirror"
 
 [[repositories]]
-git = "git@github.com:bitshares/bitshares-core.git"
-path = "chains/bitshares/bitshares-core"
-
-[[repositories]]
-git = "git@github.com:bitshares/open-explorer.git"
-path = "chains/bitshares/bitshares-open-explorer"
-
-[[repositories]]
-git = "git@github.com:scanboards-forks/bitshares-explorer-api.git"
-path = "chains/bitshares/bitshares-explorer-api"
-
-[[repositories]]
-git = "git@github.com:bitshares/bitshares-ui.git"
-path = "chains/bitshares/bitshares-ui"
+git = "git@github.com:open-graphene/workspace.git"
+branch = "v3-graphene"
+path = "."
+flat = true
 
 [[repositories]]
 git = "git@github.com:bitshares/python-bitshares.git"
@@ -31,28 +21,8 @@ git = "git@github.com:bitshares/bitsharesjs-ws.git"
 path = "chains/bitshares/bitsharesjs-ws"
 
 [[repositories]]
-git = "git@github.com:technologiespro/xbts-faucet.git"
-path = "chains/bitshares/bitshares-faucet"
-
-[[repositories]]
-git = "git@github.com:bitshares/bsips.git"
-path = "chains/bitshares/bsips"
-
-[[repositories]]
-git = "git@github.com:R-Squared-Project/R-Squared-portal.git"
-path = "chains/rsquared/R-Squared-portal"
-
-[[repositories]]
-git = "git@github.com:R-Squared-Project/EES.git"
-path = "chains/rsquared/EES"
-
-[[repositories]]
 git = "git@github.com:R-Squared-Project/R-Squared-core.git"
 path = "chains/rsquared/R-Squared-core"
-
-[[repositories]]
-git = "git@github.com:R-Squared-Project/R-Squared-report.git"
-path = "chains/rsquared/R-Squared-report"
 
 [[repositories]]
 git = "git@github.com:R-Squared-Project/R-Squared-js.git"
@@ -63,39 +33,18 @@ git = "git@github.com:R-Squared-Project/R-Squaredjs-ws.git"
 path = "chains/rsquared/R-Squaredjs-ws"
 
 [[repositories]]
-git = "git@github.com:R-Squared-Project/fast-compiling.git"
-path = "chains/rsquared/fast-compiling"
-
-[[repositories]]
-git = "git@github.com:R-Squared-Project/secp256k1-zkp.git"
-path = "chains/rsquared/secp256k1-zkp"
-
-[[repositories]]
-git = "git@github.com:R-Squared-Project/SmartContract.git"
-path = "chains/rsquared/SmartContract"
-
-[[repositories]]
-git = "git@github.com:R-Squared-Project/ws-pp-library.git"
-path = "chains/rsquared/ws-pp-library"
-
-[[repositories]]
-git = "git@github.com:swaplock/swaplock-core.git"
-path = "chains/swaplock/swaplock-core"
-
-[[repositories]]
 git = "git@github.com:acta-network/acta-network-core.git"
 path = "chains/acta-network/acta-network-core"
 
 [[repositories]]
-git = "git@github.com:acta-network/acta-network-rs.git"
-path = "chains/acta-network/acta-network-rs"
-
-[[repositories]]
 git = "git@github.com:open-graphene/workspace.git"
-branch = "main"
-path = "."
-flat = true
+branch = "stable-websocket-cleanup"
+path = "graphene-v2"
 
 [[repositories]]
-git = "git@github.com:alloy-rs/alloy.git"
-path = "examples/alloy"
+git = "git@github.com:bitshares/bitshares-core.git"
+path = "chains/bitshares/bitshares-core"
+
+[[repositories]]
+git = "git@github.com:swaplock/swaplock-core.git"
+path = "chains/swaplock/swaplock-core"
