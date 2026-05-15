@@ -32,12 +32,12 @@ pub fn default_options(workspace_root: impl Into<PathBuf>) -> GenerateOptions {
             ChainBindingJob {
                 chain: "acta".to_owned(),
                 manifest: workspace_root.join("graphene/specs/acta/open-graphene.json"),
-                crate_dir: workspace_root.join("graphene-rs/crates/graphene-rs-bindings-acta"),
+                crate_dir: workspace_root.join("graphene-rs/crates/graphene-bindings-acta"),
             },
             ChainBindingJob {
                 chain: "swaplock".to_owned(),
                 manifest: workspace_root.join("graphene/specs/swaplock/open-graphene.json"),
-                crate_dir: workspace_root.join("graphene-rs/crates/graphene-rs-bindings-swaplock"),
+                crate_dir: workspace_root.join("graphene-rs/crates/graphene-bindings-swaplock"),
             },
         ],
         workspace_root,

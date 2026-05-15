@@ -1,5 +1,5 @@
 [package]
-name = "graphene-rs-bindings-acta"
+name = "graphene-bindings-acta"
 edition.workspace = true
 version.workspace = true
 publish.workspace = true

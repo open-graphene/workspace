@@ -1,7 +1,11 @@
 [workspace]
 members = [
-    "crates/graphene-rs-bindings-acta",
-    "crates/graphene-rs-bindings-swaplock",
+    "crates/graphene-codec",
+    "crates/graphene-rpc",
+    "crates/graphene-signing",
+    "crates/graphene-transaction",
+    "crates/graphene-bindings-acta",
+    "crates/graphene-bindings-swaplock",
 ]
 resolver = "2"
 
@@ -10,3 +14,18 @@ edition = "2021"
 version = "0.1.0"
 publish = false
 license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+bs58 = "0.5"
+chrono = { version = "0.4", default-features = false, features = ["serde", "alloc"] }
+graphene-codec = { path = "crates/graphene-codec" }
+graphene-rpc = { path = "crates/graphene-rpc" }
+graphene-signing = { path = "crates/graphene-signing" }
+graphene-transaction = { path = "crates/graphene-transaction" }
+regress = "0.10"
+secp256k1 = { version = "0.29", features = ["recovery"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tungstenite = { version = "0.24", features = ["native-tls"] }
+ureq = { version = "2", features = ["json"] }

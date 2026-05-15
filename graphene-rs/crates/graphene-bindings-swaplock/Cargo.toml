@@ -1,5 +1,5 @@
 [package]
-name = "graphene-rs-bindings-swaplock"
+name = "graphene-bindings-swaplock"
 edition.workspace = true
 version.workspace = true
 publish.workspace = true

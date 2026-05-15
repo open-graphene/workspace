@@ -37,13 +37,13 @@ emitting one Rust binding crate per chain.
 Generated files are written into the `graphene-rs` workspace:
 
 ```text
-graphene-rs/crates/graphene-rs-bindings-acta/src/generated/types.rs
-graphene-rs/crates/graphene-rs-bindings-acta/src/generated/variants.rs
-graphene-rs/crates/graphene-rs-bindings-acta/src/generated/metadata.rs
+graphene-rs/crates/graphene-bindings-acta/src/generated/types.rs
+graphene-rs/crates/graphene-bindings-acta/src/generated/variants.rs
+graphene-rs/crates/graphene-bindings-acta/src/generated/metadata.rs
 
-graphene-rs/crates/graphene-rs-bindings-swaplock/src/generated/types.rs
-graphene-rs/crates/graphene-rs-bindings-swaplock/src/generated/variants.rs
-graphene-rs/crates/graphene-rs-bindings-swaplock/src/generated/metadata.rs
+graphene-rs/crates/graphene-bindings-swaplock/src/generated/types.rs
+graphene-rs/crates/graphene-bindings-swaplock/src/generated/variants.rs
+graphene-rs/crates/graphene-bindings-swaplock/src/generated/metadata.rs
 ```
 
 The binding crate root re-exports generated symbols:
@@ -74,7 +74,7 @@ Generate from a custom manifest into a custom crate directory:
 ```sh
 cargo run -p graphene-gen-bindings-rs --bin graphene-gen-bindings-rs -- \
   --manifest graphene/specs/acta/open-graphene.json \
-  graphene-rs/crates/graphene-rs-bindings-acta
+  graphene-rs/crates/graphene-bindings-acta
 ```
 
 Verify the generated crates:
@@ -156,4 +156,4 @@ This crate borrows the proven Rust generation shape from
 - generated metadata for downstream SDK layers
 
 The v3 version targets the new open-graphene bundle layout and writes into the
-new `graphene-rs/crates/graphene-rs-bindings-*` crates.
+new `graphene-rs/crates/graphene-bindings-*` crates.

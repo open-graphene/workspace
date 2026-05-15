@@ -1,4 +1,4 @@
-use graphene_rs_bindings_swaplock::{Operation, TransferOperation, OPERATIONS};
+use graphene_bindings_swaplock::{Operation, TransferOperation, OPERATIONS};
 use serde_json::json;
 
 fn transfer_payload() -> serde_json::Value {
