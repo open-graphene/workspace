@@ -291,6 +291,7 @@ fn audit_surface_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> {
         ));
     }
     failures.extend(validate_graphene_containers(&spec));
+    failures.extend(validate_graphene_field_order(&spec));
     for scalar_name in ["GrapheneTimePointSec", "GrapheneInt64", "GrapheneUInt64"] {
         if !schemas
             .get(scalar_name)
@@ -1205,6 +1206,73 @@ fn validate_graphene_containers_at(value: &JsonValue, path: &str, failures: &mut
         }
         _ => {}
     }
+}
+
+fn validate_graphene_field_order(spec: &JsonValue) -> Vec<String> {
+    let mut failures = Vec::new();
+    let Some(schemas) = spec
+        .pointer("/components/schemas")
+        .and_then(JsonValue::as_object)
+    else {
+        return failures;
+    };
+
+    for (schema_name, schema) in schemas {
+        let Some(schema_object) = schema.as_object() else {
+            continue;
+        };
+        if schema_object.get("type").and_then(JsonValue::as_str) != Some("object") {
+            continue;
+        }
+        let Some(properties) = schema_object
+            .get("properties")
+            .and_then(JsonValue::as_object)
+        else {
+            continue;
+        };
+        if properties.is_empty() {
+            continue;
+        }
+        let Some(field_order) = schema_object
+            .get("x-graphene-field-order")
+            .and_then(JsonValue::as_array)
+        else {
+            failures.push(format!(
+                "object schema {schema_name} is missing x-graphene-field-order"
+            ));
+            continue;
+        };
+
+        let mut seen = std::collections::BTreeSet::new();
+        for value in field_order {
+            let Some(field_name) = value.as_str() else {
+                failures.push(format!(
+                    "object schema {schema_name} x-graphene-field-order must contain only strings"
+                ));
+                continue;
+            };
+            if !properties.contains_key(field_name) {
+                failures.push(format!(
+                    "object schema {schema_name} x-graphene-field-order references missing property {field_name}"
+                ));
+            }
+            if !seen.insert(field_name.to_owned()) {
+                failures.push(format!(
+                    "object schema {schema_name} x-graphene-field-order contains duplicate field {field_name}"
+                ));
+            }
+        }
+
+        for property_name in properties.keys() {
+            if !seen.contains(property_name) {
+                failures.push(format!(
+                    "object schema {schema_name} property {property_name} is missing from x-graphene-field-order"
+                ));
+            }
+        }
+    }
+
+    failures
 }
 
 fn validate_static_variant_metadata(schema_name: &str, schema: &JsonValue) -> Vec<String> {

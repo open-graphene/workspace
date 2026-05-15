@@ -106,7 +106,18 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_create_operation"
+        "x-cpp-type": "graphene::protocol::account_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "registrar",
+          "referrer",
+          "referrer_percent",
+          "name",
+          "owner",
+          "active",
+          "options",
+          "extensions"
+        ]
       },
       "account_create_operation__ext": {
         "properties": {
@@ -162,7 +173,13 @@
           "buyback_options"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_create_operation::ext"
+        "x-cpp-type": "graphene::protocol::account_create_operation::ext",
+        "x-graphene-field-order": [
+          "null_ext",
+          "owner_special_authority",
+          "active_special_authority",
+          "buyback_options"
+        ]
       },
       "account_create_operation__fee_params_t": {
         "properties": {
@@ -187,7 +204,12 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::account_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "basic_fee",
+          "premium_fee",
+          "price_per_kbyte"
+        ]
       },
       "account_name_eq_lit_predicate": {
         "properties": {
@@ -206,7 +228,11 @@
           "name"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_name_eq_lit_predicate"
+        "x-cpp-type": "graphene::protocol::account_name_eq_lit_predicate",
+        "x-graphene-field-order": [
+          "account_id",
+          "name"
+        ]
       },
       "account_options": {
         "properties": {
@@ -258,7 +284,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_options"
+        "x-cpp-type": "graphene::protocol::account_options",
+        "x-graphene-field-order": [
+          "memo_key",
+          "voting_account",
+          "num_witness",
+          "num_committee",
+          "votes",
+          "extensions"
+        ]
       },
       "account_transfer_operation": {
         "properties": {
@@ -288,7 +322,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_transfer_operation"
+        "x-cpp-type": "graphene::protocol::account_transfer_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account_id",
+          "new_owner",
+          "extensions"
+        ]
       },
       "account_transfer_operation__fee_params_t": {
         "properties": {
@@ -301,7 +341,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_transfer_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::account_transfer_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "account_update_operation": {
         "properties": {
@@ -361,7 +404,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_update_operation"
+        "x-cpp-type": "graphene::protocol::account_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "owner",
+          "active",
+          "new_options",
+          "extensions"
+        ]
       },
       "account_update_operation__ext": {
         "properties": {
@@ -405,7 +456,12 @@
           "active_special_authority"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_update_operation::ext"
+        "x-cpp-type": "graphene::protocol::account_update_operation::ext",
+        "x-graphene-field-order": [
+          "null_ext",
+          "owner_special_authority",
+          "active_special_authority"
+        ]
       },
       "account_update_operation__fee_params_t": {
         "properties": {
@@ -425,7 +481,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::account_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "account_upgrade_operation": {
         "properties": {
@@ -454,7 +514,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_upgrade_operation"
+        "x-cpp-type": "graphene::protocol::account_upgrade_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account_to_upgrade",
+          "upgrade_to_lifetime_member",
+          "extensions"
+        ]
       },
       "account_upgrade_operation__fee_params_t": {
         "properties": {
@@ -472,7 +538,11 @@
           "membership_lifetime_fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_upgrade_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::account_upgrade_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "membership_annual_fee",
+          "membership_lifetime_fee"
+        ]
       },
       "account_whitelist_operation": {
         "properties": {
@@ -509,7 +579,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_whitelist_operation"
+        "x-cpp-type": "graphene::protocol::account_whitelist_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "authorizing_account",
+          "account_to_list",
+          "new_listing",
+          "extensions"
+        ]
       },
       "account_whitelist_operation__fee_params_t": {
         "properties": {
@@ -522,7 +599,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::account_whitelist_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::account_whitelist_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "additional_asset_options": {
         "properties": {
@@ -567,7 +647,12 @@
           "taker_fee_percent"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::additional_asset_options"
+        "x-cpp-type": "graphene::protocol::additional_asset_options",
+        "x-graphene-field-order": [
+          "reward_percent",
+          "whitelist_market_fee_sharing",
+          "taker_fee_percent"
+        ]
       },
       "additional_asset_options_t": {
         "$ref": "#/components/schemas/additional_asset_options",
@@ -585,7 +670,10 @@
           "addr"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::address"
+        "x-cpp-type": "graphene::protocol::address",
+        "x-graphene-field-order": [
+          "addr"
+        ]
       },
       "assert_operation": {
         "properties": {
@@ -631,7 +719,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::assert_operation"
+        "x-cpp-type": "graphene::protocol::assert_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_paying_account",
+          "predicates",
+          "required_auths",
+          "extensions"
+        ]
       },
       "assert_operation__fee_params_t": {
         "properties": {
@@ -644,7 +739,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::assert_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::assert_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset": {
         "properties": {
@@ -663,7 +761,11 @@
           "asset_id"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset"
+        "x-cpp-type": "graphene::protocol::asset",
+        "x-graphene-field-order": [
+          "amount",
+          "asset_id"
+        ]
       },
       "asset_claim_fees_operation": {
         "properties": {
@@ -692,7 +794,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_claim_fees_operation"
+        "x-cpp-type": "graphene::protocol::asset_claim_fees_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "amount_to_claim",
+          "extensions"
+        ]
       },
       "asset_claim_fees_operation__additional_options_type": {
         "properties": {
@@ -709,7 +817,10 @@
           "claim_from_asset_id"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_claim_fees_operation::additional_options_type"
+        "x-cpp-type": "graphene::protocol::asset_claim_fees_operation::additional_options_type",
+        "x-graphene-field-order": [
+          "claim_from_asset_id"
+        ]
       },
       "asset_claim_fees_operation__fee_params_t": {
         "properties": {
@@ -722,7 +833,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_claim_fees_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_claim_fees_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_claim_pool_operation": {
         "properties": {
@@ -757,7 +871,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_claim_pool_operation"
+        "x-cpp-type": "graphene::protocol::asset_claim_pool_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_id",
+          "amount_to_claim",
+          "extensions"
+        ]
       },
       "asset_claim_pool_operation__fee_params_t": {
         "properties": {
@@ -770,7 +891,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_claim_pool_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_claim_pool_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_create_operation": {
         "properties": {
@@ -828,7 +952,17 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_create_operation"
+        "x-cpp-type": "graphene::protocol::asset_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "symbol",
+          "precision",
+          "common_options",
+          "bitasset_opts",
+          "is_prediction_market",
+          "extensions"
+        ]
       },
       "asset_create_operation__fee_params_t": {
         "properties": {
@@ -858,7 +992,13 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "symbol3",
+          "symbol4",
+          "long_symbol",
+          "price_per_kbyte"
+        ]
       },
       "asset_fund_fee_pool_operation": {
         "properties": {
@@ -893,7 +1033,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_fund_fee_pool_operation"
+        "x-cpp-type": "graphene::protocol::asset_fund_fee_pool_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "from_account",
+          "asset_id",
+          "amount",
+          "extensions"
+        ]
       },
       "asset_fund_fee_pool_operation__fee_params_t": {
         "properties": {
@@ -906,7 +1053,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_fund_fee_pool_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_fund_fee_pool_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_global_settle_operation": {
         "properties": {
@@ -941,7 +1091,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_global_settle_operation"
+        "x-cpp-type": "graphene::protocol::asset_global_settle_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_to_settle",
+          "settle_price",
+          "extensions"
+        ]
       },
       "asset_global_settle_operation__fee_params_t": {
         "properties": {
@@ -954,7 +1111,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_global_settle_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_global_settle_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_issue_operation": {
         "properties": {
@@ -1001,7 +1161,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_issue_operation"
+        "x-cpp-type": "graphene::protocol::asset_issue_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_to_issue",
+          "issue_to_account",
+          "memo",
+          "extensions"
+        ]
       },
       "asset_issue_operation__fee_params_t": {
         "properties": {
@@ -1021,7 +1189,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_issue_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_issue_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "asset_options": {
         "properties": {
@@ -1131,7 +1303,21 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_options"
+        "x-cpp-type": "graphene::protocol::asset_options",
+        "x-graphene-field-order": [
+          "max_supply",
+          "market_fee_percent",
+          "max_market_fee",
+          "issuer_permissions",
+          "flags",
+          "core_exchange_rate",
+          "whitelist_authorities",
+          "blacklist_authorities",
+          "whitelist_markets",
+          "blacklist_markets",
+          "description",
+          "extensions"
+        ]
       },
       "asset_publish_feed_operation": {
         "properties": {
@@ -1166,7 +1352,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_publish_feed_operation"
+        "x-cpp-type": "graphene::protocol::asset_publish_feed_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "publisher",
+          "asset_id",
+          "feed",
+          "extensions"
+        ]
       },
       "asset_publish_feed_operation__ext": {
         "properties": {
@@ -1184,7 +1377,10 @@
           "initial_collateral_ratio"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_publish_feed_operation::ext"
+        "x-cpp-type": "graphene::protocol::asset_publish_feed_operation::ext",
+        "x-graphene-field-order": [
+          "initial_collateral_ratio"
+        ]
       },
       "asset_publish_feed_operation__fee_params_t": {
         "properties": {
@@ -1197,7 +1393,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_publish_feed_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_publish_feed_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_reserve_operation": {
         "properties": {
@@ -1226,7 +1425,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_reserve_operation"
+        "x-cpp-type": "graphene::protocol::asset_reserve_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "payer",
+          "amount_to_reserve",
+          "extensions"
+        ]
       },
       "asset_reserve_operation__fee_params_t": {
         "properties": {
@@ -1239,7 +1444,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_reserve_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_reserve_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_settle_cancel_operation": {
         "properties": {
@@ -1269,12 +1477,19 @@
           "amount"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_settle_cancel_operation"
+        "x-cpp-type": "graphene::protocol::asset_settle_cancel_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "settlement",
+          "account",
+          "amount"
+        ]
       },
       "asset_settle_cancel_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_settle_cancel_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_settle_cancel_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "asset_settle_operation": {
         "properties": {
@@ -1303,7 +1518,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_settle_operation"
+        "x-cpp-type": "graphene::protocol::asset_settle_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "amount",
+          "extensions"
+        ]
       },
       "asset_settle_operation__fee_params_t": {
         "properties": {
@@ -1316,7 +1537,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_settle_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_settle_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_symbol_eq_lit_predicate": {
         "properties": {
@@ -1335,7 +1559,11 @@
           "symbol"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_symbol_eq_lit_predicate"
+        "x-cpp-type": "graphene::protocol::asset_symbol_eq_lit_predicate",
+        "x-graphene-field-order": [
+          "asset_id",
+          "symbol"
+        ]
       },
       "asset_update_bitasset_operation": {
         "properties": {
@@ -1370,7 +1598,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_bitasset_operation"
+        "x-cpp-type": "graphene::protocol::asset_update_bitasset_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_to_update",
+          "new_options",
+          "extensions"
+        ]
       },
       "asset_update_bitasset_operation__fee_params_t": {
         "properties": {
@@ -1383,7 +1618,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_bitasset_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_update_bitasset_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_update_feed_producers_operation": {
         "properties": {
@@ -1427,7 +1665,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_feed_producers_operation"
+        "x-cpp-type": "graphene::protocol::asset_update_feed_producers_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_to_update",
+          "new_feed_producers",
+          "extensions"
+        ]
       },
       "asset_update_feed_producers_operation__fee_params_t": {
         "properties": {
@@ -1440,7 +1685,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_feed_producers_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_update_feed_producers_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_update_issuer_operation": {
         "properties": {
@@ -1476,7 +1724,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_issuer_operation"
+        "x-cpp-type": "graphene::protocol::asset_update_issuer_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_to_update",
+          "new_issuer",
+          "extensions"
+        ]
       },
       "asset_update_issuer_operation__fee_params_t": {
         "properties": {
@@ -1489,7 +1744,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_issuer_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_update_issuer_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "asset_update_operation": {
         "properties": {
@@ -1533,7 +1791,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_operation"
+        "x-cpp-type": "graphene::protocol::asset_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "asset_to_update",
+          "new_issuer",
+          "new_options",
+          "extensions"
+        ]
       },
       "asset_update_operation__ext": {
         "properties": {
@@ -1559,7 +1825,11 @@
           "skip_core_exchange_rate"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_operation::ext"
+        "x-cpp-type": "graphene::protocol::asset_update_operation::ext",
+        "x-graphene-field-order": [
+          "new_precision",
+          "skip_core_exchange_rate"
+        ]
       },
       "asset_update_operation__fee_params_t": {
         "properties": {
@@ -1579,7 +1849,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::asset_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::asset_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "authority": {
         "properties": {
@@ -1667,7 +1941,13 @@
           "address_auths"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::authority"
+        "x-cpp-type": "graphene::protocol::authority",
+        "x-graphene-field-order": [
+          "weight_threshold",
+          "account_auths",
+          "key_auths",
+          "address_auths"
+        ]
       },
       "balance_claim_operation": {
         "properties": {
@@ -1702,12 +1982,20 @@
           "total_claimed"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::balance_claim_operation"
+        "x-cpp-type": "graphene::protocol::balance_claim_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "deposit_to_account",
+          "balance_to_claim",
+          "balance_owner_key",
+          "total_claimed"
+        ]
       },
       "balance_claim_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::balance_claim_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::balance_claim_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "bid_collateral_operation": {
         "properties": {
@@ -1741,7 +2029,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::bid_collateral_operation"
+        "x-cpp-type": "graphene::protocol::bid_collateral_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "bidder",
+          "additional_collateral",
+          "debt_covered",
+          "extensions"
+        ]
       },
       "bid_collateral_operation__fee_params_t": {
         "properties": {
@@ -1754,7 +2049,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::bid_collateral_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::bid_collateral_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "bitasset_options": {
         "properties": {
@@ -1808,7 +2106,16 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::bitasset_options"
+        "x-cpp-type": "graphene::protocol::bitasset_options",
+        "x-graphene-field-order": [
+          "feed_lifetime_sec",
+          "minimum_feeds",
+          "force_settlement_delay_sec",
+          "force_settlement_offset_percent",
+          "maximum_force_settlement_volume",
+          "short_backing_asset",
+          "extensions"
+        ]
       },
       "bitasset_options__ext": {
         "properties": {
@@ -1876,7 +2183,15 @@
           "black_swan_response_method"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::bitasset_options::ext"
+        "x-cpp-type": "graphene::protocol::bitasset_options::ext",
+        "x-graphene-field-order": [
+          "initial_collateral_ratio",
+          "maintenance_collateral_ratio",
+          "maximum_short_squeeze_ratio",
+          "margin_call_fee_ratio",
+          "force_settle_fee_percent",
+          "black_swan_response_method"
+        ]
       },
       "blind_input": {
         "properties": {
@@ -1895,7 +2210,11 @@
           "owner"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::blind_input"
+        "x-cpp-type": "graphene::protocol::blind_input",
+        "x-graphene-field-order": [
+          "commitment",
+          "owner"
+        ]
       },
       "blind_output": {
         "properties": {
@@ -1932,7 +2251,13 @@
           "stealth_memo"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::blind_output"
+        "x-cpp-type": "graphene::protocol::blind_output",
+        "x-graphene-field-order": [
+          "commitment",
+          "range_proof",
+          "owner",
+          "stealth_memo"
+        ]
       },
       "blind_transfer_operation": {
         "properties": {
@@ -1961,7 +2286,12 @@
           "outputs"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::blind_transfer_operation"
+        "x-cpp-type": "graphene::protocol::blind_transfer_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "inputs",
+          "outputs"
+        ]
       },
       "blind_transfer_operation__fee_params_t": {
         "properties": {
@@ -1981,7 +2311,11 @@
           "price_per_output"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::blind_transfer_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::blind_transfer_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_output"
+        ]
       },
       "block_id_predicate": {
         "properties": {
@@ -1994,12 +2328,16 @@
           "id"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::block_id_predicate"
+        "x-cpp-type": "graphene::protocol::block_id_predicate",
+        "x-graphene-field-order": [
+          "id"
+        ]
       },
       "burn_worker_initializer": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::burn_worker_initializer"
+        "x-cpp-type": "graphene::protocol::burn_worker_initializer",
+        "x-graphene-field-order": []
       },
       "buyback_account_options": {
         "properties": {
@@ -2033,7 +2371,12 @@
           "markets"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::buyback_account_options"
+        "x-cpp-type": "graphene::protocol::buyback_account_options",
+        "x-graphene-field-order": [
+          "asset_to_buy",
+          "asset_to_buy_issuer",
+          "markets"
+        ]
       },
       "call_order_update_operation": {
         "properties": {
@@ -2067,7 +2410,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::call_order_update_operation"
+        "x-cpp-type": "graphene::protocol::call_order_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "funding_account",
+          "delta_collateral",
+          "delta_debt",
+          "extensions"
+        ]
       },
       "call_order_update_operation__extensions_type": {
         "$ref": "#/components/schemas/limit_order_create_operation__options_type",
@@ -2085,7 +2435,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::call_order_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::call_order_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "cdd_vesting_policy_initializer": {
         "properties": {
@@ -2105,7 +2458,11 @@
           "vesting_seconds"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::cdd_vesting_policy_initializer"
+        "x-cpp-type": "graphene::protocol::cdd_vesting_policy_initializer",
+        "x-graphene-field-order": [
+          "start_claim",
+          "vesting_seconds"
+        ]
       },
       "chain_parameters": {
         "properties": {
@@ -2300,7 +2657,38 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::chain_parameters"
+        "x-cpp-type": "graphene::protocol::chain_parameters",
+        "x-graphene-field-order": [
+          "current_fees",
+          "block_interval",
+          "maintenance_interval",
+          "maintenance_skip_slots",
+          "committee_proposal_review_period",
+          "maximum_transaction_size",
+          "maximum_block_size",
+          "maximum_time_until_expiration",
+          "maximum_proposal_lifetime",
+          "maximum_asset_whitelist_authorities",
+          "maximum_asset_feed_publishers",
+          "maximum_witness_count",
+          "maximum_committee_count",
+          "maximum_authority_membership",
+          "reserve_percent_of_fee",
+          "network_percent_of_fee",
+          "lifetime_referrer_percent_of_fee",
+          "cashback_vesting_period_seconds",
+          "cashback_vesting_threshold",
+          "count_non_member_votes",
+          "allow_non_member_whitelists",
+          "witness_pay_per_block",
+          "worker_budget_per_day",
+          "max_predicate_opcode",
+          "fee_liquidation_threshold",
+          "accounts_per_fee_scale",
+          "account_fee_scale_bitshifts",
+          "max_authority_depth",
+          "extensions"
+        ]
       },
       "chain_parameters__ext": {
         "properties": {
@@ -2352,7 +2740,13 @@
           "maker_fee_discount_percent"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::chain_parameters::ext"
+        "x-cpp-type": "graphene::protocol::chain_parameters::ext",
+        "x-graphene-field-order": [
+          "updatable_htlc_options",
+          "custom_authority_options",
+          "market_fee_network_percent",
+          "maker_fee_discount_percent"
+        ]
       },
       "committee_member_create_operation": {
         "properties": {
@@ -2376,7 +2770,12 @@
           "url"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::committee_member_create_operation"
+        "x-cpp-type": "graphene::protocol::committee_member_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "committee_member_account",
+          "url"
+        ]
       },
       "committee_member_create_operation__fee_params_t": {
         "properties": {
@@ -2389,7 +2788,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::committee_member_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::committee_member_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "committee_member_update_global_parameters_operation": {
         "properties": {
@@ -2407,7 +2809,11 @@
           "new_parameters"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::committee_member_update_global_parameters_operation"
+        "x-cpp-type": "graphene::protocol::committee_member_update_global_parameters_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "new_parameters"
+        ]
       },
       "committee_member_update_global_parameters_operation__fee_params_t": {
         "properties": {
@@ -2420,7 +2826,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::committee_member_update_global_parameters_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::committee_member_update_global_parameters_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "committee_member_update_operation": {
         "properties": {
@@ -2453,7 +2862,13 @@
           "new_url"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::committee_member_update_operation"
+        "x-cpp-type": "graphene::protocol::committee_member_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "committee_member",
+          "committee_member_account",
+          "new_url"
+        ]
       },
       "committee_member_update_operation__fee_params_t": {
         "properties": {
@@ -2466,7 +2881,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::committee_member_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::committee_member_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "create_take_profit_order_action": {
         "properties": {
@@ -2511,7 +2929,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::create_take_profit_order_action"
+        "x-cpp-type": "graphene::protocol::create_take_profit_order_action",
+        "x-graphene-field-order": [
+          "fee_asset_id",
+          "spread_percent",
+          "size_percent",
+          "expiration_seconds",
+          "repeat",
+          "extensions"
+        ]
       },
       "credit_deal_expired_operation": {
         "properties": {
@@ -2565,12 +2991,23 @@
           "fee_rate"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_deal_expired_operation"
+        "x-cpp-type": "graphene::protocol::credit_deal_expired_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "deal_id",
+          "offer_id",
+          "offer_owner",
+          "borrower",
+          "unpaid_amount",
+          "collateral",
+          "fee_rate"
+        ]
       },
       "credit_deal_expired_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_deal_expired_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_deal_expired_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "credit_deal_repay_operation": {
         "properties": {
@@ -2610,7 +3047,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_deal_repay_operation"
+        "x-cpp-type": "graphene::protocol::credit_deal_repay_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "deal_id",
+          "repay_amount",
+          "credit_fee",
+          "extensions"
+        ]
       },
       "credit_deal_repay_operation__fee_params_t": {
         "properties": {
@@ -2623,7 +3068,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_deal_repay_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_deal_repay_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "credit_deal_update_operation": {
         "properties": {
@@ -2660,7 +3108,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_deal_update_operation"
+        "x-cpp-type": "graphene::protocol::credit_deal_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "deal_id",
+          "auto_repay",
+          "extensions"
+        ]
       },
       "credit_deal_update_operation__fee_params_t": {
         "properties": {
@@ -2673,7 +3128,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_deal_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_deal_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "credit_offer_accept_operation": {
         "properties": {
@@ -2727,7 +3185,17 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_accept_operation"
+        "x-cpp-type": "graphene::protocol::credit_offer_accept_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "borrower",
+          "offer_id",
+          "borrow_amount",
+          "collateral",
+          "max_fee_rate",
+          "min_duration_seconds",
+          "extensions"
+        ]
       },
       "credit_offer_accept_operation__ext": {
         "properties": {
@@ -2745,7 +3213,10 @@
           "auto_repay"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_accept_operation::ext"
+        "x-cpp-type": "graphene::protocol::credit_offer_accept_operation::ext",
+        "x-graphene-field-order": [
+          "auto_repay"
+        ]
       },
       "credit_offer_accept_operation__fee_params_t": {
         "properties": {
@@ -2758,7 +3229,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_accept_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_offer_accept_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "credit_offer_create_operation": {
         "properties": {
@@ -2868,7 +3342,21 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_create_operation"
+        "x-cpp-type": "graphene::protocol::credit_offer_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner_account",
+          "asset_type",
+          "balance",
+          "fee_rate",
+          "max_duration_seconds",
+          "min_deal_amount",
+          "enabled",
+          "auto_disable_time",
+          "acceptable_collateral",
+          "acceptable_borrowers",
+          "extensions"
+        ]
       },
       "credit_offer_create_operation__fee_params_t": {
         "properties": {
@@ -2888,7 +3376,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_offer_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "credit_offer_delete_operation": {
         "properties": {
@@ -2918,7 +3410,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_delete_operation"
+        "x-cpp-type": "graphene::protocol::credit_offer_delete_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner_account",
+          "offer_id",
+          "extensions"
+        ]
       },
       "credit_offer_delete_operation__fee_params_t": {
         "properties": {
@@ -2931,7 +3429,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_delete_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_offer_delete_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "credit_offer_update_operation": {
         "properties": {
@@ -3077,7 +3578,21 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_update_operation"
+        "x-cpp-type": "graphene::protocol::credit_offer_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner_account",
+          "offer_id",
+          "delta_amount",
+          "fee_rate",
+          "max_duration_seconds",
+          "min_deal_amount",
+          "enabled",
+          "auto_disable_time",
+          "acceptable_collateral",
+          "acceptable_borrowers",
+          "extensions"
+        ]
       },
       "credit_offer_update_operation__fee_params_t": {
         "properties": {
@@ -3097,7 +3612,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::credit_offer_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::credit_offer_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "custom_authority_create_operation": {
         "properties": {
@@ -3156,7 +3675,18 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_create_operation"
+        "x-cpp-type": "graphene::protocol::custom_authority_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "enabled",
+          "valid_from",
+          "valid_to",
+          "operation_type",
+          "auth",
+          "restrictions",
+          "extensions"
+        ]
       },
       "custom_authority_create_operation__fee_params_t": {
         "properties": {
@@ -3176,7 +3706,11 @@
           "price_per_byte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::custom_authority_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "basic_fee",
+          "price_per_byte"
+        ]
       },
       "custom_authority_delete_operation": {
         "properties": {
@@ -3206,7 +3740,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_delete_operation"
+        "x-cpp-type": "graphene::protocol::custom_authority_delete_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "authority_to_delete",
+          "extensions"
+        ]
       },
       "custom_authority_delete_operation__fee_params_t": {
         "properties": {
@@ -3219,7 +3759,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_delete_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::custom_authority_delete_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "custom_authority_options_type": {
         "properties": {
@@ -3255,7 +3798,13 @@
           "max_custom_authority_restrictions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_options_type"
+        "x-cpp-type": "graphene::protocol::custom_authority_options_type",
+        "x-graphene-field-order": [
+          "max_custom_authority_lifetime_seconds",
+          "max_custom_authorities_per_account",
+          "max_custom_authorities_per_account_op",
+          "max_custom_authority_restrictions"
+        ]
       },
       "custom_authority_update_operation": {
         "properties": {
@@ -3352,7 +3901,19 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_update_operation"
+        "x-cpp-type": "graphene::protocol::custom_authority_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "authority_to_update",
+          "new_enabled",
+          "new_valid_from",
+          "new_valid_to",
+          "new_auth",
+          "restrictions_to_remove",
+          "restrictions_to_add",
+          "extensions"
+        ]
       },
       "custom_authority_update_operation__fee_params_t": {
         "properties": {
@@ -3372,7 +3933,11 @@
           "price_per_byte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_authority_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::custom_authority_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "basic_fee",
+          "price_per_byte"
+        ]
       },
       "custom_operation": {
         "properties": {
@@ -3422,7 +3987,14 @@
           "data"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_operation"
+        "x-cpp-type": "graphene::protocol::custom_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "payer",
+          "required_auths",
+          "id",
+          "data"
+        ]
       },
       "custom_operation__fee_params_t": {
         "properties": {
@@ -3442,7 +4014,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::custom_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::custom_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "execute_bid_operation": {
         "properties": {
@@ -3471,12 +4047,19 @@
           "collateral"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::execute_bid_operation"
+        "x-cpp-type": "graphene::protocol::execute_bid_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "bidder",
+          "debt",
+          "collateral"
+        ]
       },
       "execute_bid_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::execute_bid_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::execute_bid_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "extendable_operation_result": {
         "$ref": "#/components/schemas/extendable_operation_result_dtl",
@@ -3590,7 +4173,16 @@
           "fees"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::extendable_operation_result_dtl"
+        "x-cpp-type": "graphene::protocol::extendable_operation_result_dtl",
+        "x-graphene-field-order": [
+          "impacted_accounts",
+          "new_objects",
+          "updated_objects",
+          "removed_objects",
+          "paid",
+          "received",
+          "fees"
+        ]
       },
       "extensions_type": {
         "description": "Alias for future_extensions::flat_set_type",
@@ -3629,12 +4221,19 @@
           "amount"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::fba_distribute_operation"
+        "x-cpp-type": "graphene::protocol::fba_distribute_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account_id",
+          "fba_id",
+          "amount"
+        ]
       },
       "fba_distribute_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::fba_distribute_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::fba_distribute_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "fee_parameters": {
         "description": "Discriminated union — JSON form is [index, value]. 78 alternatives.",
@@ -5151,7 +5750,11 @@
           "scale"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::fee_schedule"
+        "x-cpp-type": "graphene::protocol::fee_schedule",
+        "x-graphene-field-order": [
+          "parameters",
+          "scale"
+        ]
       },
       "fill_order_operation": {
         "properties": {
@@ -5196,12 +5799,22 @@
           "is_maker"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::fill_order_operation"
+        "x-cpp-type": "graphene::protocol::fill_order_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "order_id",
+          "account_id",
+          "pays",
+          "receives",
+          "fill_price",
+          "is_maker"
+        ]
       },
       "fill_order_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::fill_order_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::fill_order_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "future_extensions": {
         "description": "Discriminated union — JSON form is [index, value]. 1 alternatives.",
@@ -5263,7 +5876,12 @@
           "fees"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::generic_exchange_operation_result"
+        "x-cpp-type": "graphene::protocol::generic_exchange_operation_result",
+        "x-graphene-field-order": [
+          "paid",
+          "received",
+          "fees"
+        ]
       },
       "generic_operation_result": {
         "properties": {
@@ -5313,7 +5931,12 @@
           "removed_objects"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::generic_operation_result"
+        "x-cpp-type": "graphene::protocol::generic_operation_result",
+        "x-graphene-field-order": [
+          "new_objects",
+          "updated_objects",
+          "removed_objects"
+        ]
       },
       "htlc_algo_hash160": {
         "description": "Hex-encoded HASH160 digest.",
@@ -5387,7 +6010,17 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_create_operation"
+        "x-cpp-type": "graphene::protocol::htlc_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "from",
+          "to",
+          "amount",
+          "preimage_hash",
+          "preimage_size",
+          "claim_period_seconds",
+          "extensions"
+        ]
       },
       "htlc_create_operation__additional_options_type": {
         "properties": {
@@ -5407,7 +6040,10 @@
           "memo"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_create_operation::additional_options_type"
+        "x-cpp-type": "graphene::protocol::htlc_create_operation::additional_options_type",
+        "x-graphene-field-order": [
+          "memo"
+        ]
       },
       "htlc_create_operation__fee_params_t": {
         "properties": {
@@ -5425,7 +6061,11 @@
           "fee_per_day"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::htlc_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_per_day"
+        ]
       },
       "htlc_extend_operation": {
         "properties": {
@@ -5462,7 +6102,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_extend_operation"
+        "x-cpp-type": "graphene::protocol::htlc_extend_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "htlc_id",
+          "update_issuer",
+          "seconds_to_add",
+          "extensions"
+        ]
       },
       "htlc_extend_operation__fee_params_t": {
         "properties": {
@@ -5480,7 +6127,11 @@
           "fee_per_day"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_extend_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::htlc_extend_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_per_day"
+        ]
       },
       "htlc_hash": {
         "description": "Discriminated union — JSON form is [index, value]. 4 alternatives.",
@@ -5589,7 +6240,11 @@
           "max_preimage_size"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_options"
+        "x-cpp-type": "graphene::protocol::htlc_options",
+        "x-graphene-field-order": [
+          "max_timeout_secs",
+          "max_preimage_size"
+        ]
       },
       "htlc_redeem_operation": {
         "properties": {
@@ -5629,7 +6284,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_redeem_operation"
+        "x-cpp-type": "graphene::protocol::htlc_redeem_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "htlc_id",
+          "redeemer",
+          "preimage",
+          "extensions"
+        ]
       },
       "htlc_redeem_operation__fee_params_t": {
         "properties": {
@@ -5647,7 +6309,11 @@
           "fee_per_kb"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_redeem_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::htlc_redeem_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_per_kb"
+        ]
       },
       "htlc_redeemed_operation": {
         "properties": {
@@ -5711,12 +6377,24 @@
           "preimage"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_redeemed_operation"
+        "x-cpp-type": "graphene::protocol::htlc_redeemed_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "htlc_id",
+          "from",
+          "to",
+          "redeemer",
+          "amount",
+          "htlc_preimage_hash",
+          "htlc_preimage_size",
+          "preimage"
+        ]
       },
       "htlc_redeemed_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_redeemed_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::htlc_redeemed_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "htlc_refund_operation": {
         "properties": {
@@ -5764,17 +6442,28 @@
           "htlc_preimage_size"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_refund_operation"
+        "x-cpp-type": "graphene::protocol::htlc_refund_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "htlc_id",
+          "to",
+          "original_htlc_recipient",
+          "htlc_amount",
+          "htlc_preimage_hash",
+          "htlc_preimage_size"
+        ]
       },
       "htlc_refund_operation__fee_params_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::htlc_refund_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::htlc_refund_operation::fee_params_t",
+        "x-graphene-field-order": []
       },
       "instant_vesting_policy_initializer": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::instant_vesting_policy_initializer"
+        "x-cpp-type": "graphene::protocol::instant_vesting_policy_initializer",
+        "x-graphene-field-order": []
       },
       "limit_order_auto_action": {
         "description": "Discriminated union — JSON form is [index, value]. 1 alternatives.",
@@ -5834,7 +6523,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_cancel_operation"
+        "x-cpp-type": "graphene::protocol::limit_order_cancel_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_paying_account",
+          "order",
+          "extensions"
+        ]
       },
       "limit_order_cancel_operation__fee_params_t": {
         "properties": {
@@ -5847,7 +6542,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_cancel_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::limit_order_cancel_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "limit_order_create_operation": {
         "properties": {
@@ -5891,7 +6589,16 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_create_operation"
+        "x-cpp-type": "graphene::protocol::limit_order_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "seller",
+          "amount_to_sell",
+          "min_to_receive",
+          "expiration",
+          "fill_or_kill",
+          "extensions"
+        ]
       },
       "limit_order_create_operation__extensions_type": {
         "$ref": "#/components/schemas/limit_order_create_operation__options_type",
@@ -5909,7 +6616,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::limit_order_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "limit_order_create_operation__options_type": {
         "properties": {
@@ -5928,7 +6638,10 @@
           "on_fill"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_create_operation::options_type"
+        "x-cpp-type": "graphene::protocol::limit_order_create_operation::options_type",
+        "x-graphene-field-order": [
+          "on_fill"
+        ]
       },
       "limit_order_update_operation": {
         "properties": {
@@ -6005,7 +6718,17 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_update_operation"
+        "x-cpp-type": "graphene::protocol::limit_order_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "seller",
+          "order",
+          "new_price",
+          "delta_amount_to_sell",
+          "new_expiration",
+          "on_fill",
+          "extensions"
+        ]
       },
       "limit_order_update_operation__fee_params_t": {
         "properties": {
@@ -6018,7 +6741,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::limit_order_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::limit_order_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "linear_vesting_policy_initializer": {
         "properties": {
@@ -6045,7 +6771,12 @@
           "vesting_duration_seconds"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::linear_vesting_policy_initializer"
+        "x-cpp-type": "graphene::protocol::linear_vesting_policy_initializer",
+        "x-graphene-field-order": [
+          "begin_timestamp",
+          "vesting_cliff_seconds",
+          "vesting_duration_seconds"
+        ]
       },
       "liquidity_pool_create_operation": {
         "properties": {
@@ -6101,7 +6832,17 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_create_operation"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "asset_a",
+          "asset_b",
+          "share_asset",
+          "taker_fee_percent",
+          "withdrawal_fee_percent",
+          "extensions"
+        ]
       },
       "liquidity_pool_create_operation__fee_params_t": {
         "properties": {
@@ -6114,7 +6855,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "liquidity_pool_delete_operation": {
         "properties": {
@@ -6144,7 +6888,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_delete_operation"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_delete_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "pool",
+          "extensions"
+        ]
       },
       "liquidity_pool_delete_operation__fee_params_t": {
         "properties": {
@@ -6157,7 +6907,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_delete_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_delete_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "liquidity_pool_deposit_operation": {
         "properties": {
@@ -6197,7 +6950,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_deposit_operation"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_deposit_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "pool",
+          "amount_a",
+          "amount_b",
+          "extensions"
+        ]
       },
       "liquidity_pool_deposit_operation__fee_params_t": {
         "properties": {
@@ -6210,7 +6971,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_deposit_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_deposit_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "liquidity_pool_exchange_operation": {
         "properties": {
@@ -6250,7 +7014,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_exchange_operation"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_exchange_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "pool",
+          "amount_to_sell",
+          "min_to_receive",
+          "extensions"
+        ]
       },
       "liquidity_pool_exchange_operation__fee_params_t": {
         "properties": {
@@ -6263,7 +7035,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_exchange_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_exchange_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "liquidity_pool_update_operation": {
         "properties": {
@@ -6313,7 +7088,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_update_operation"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "pool",
+          "taker_fee_percent",
+          "withdrawal_fee_percent",
+          "extensions"
+        ]
       },
       "liquidity_pool_update_operation__fee_params_t": {
         "properties": {
@@ -6326,7 +7109,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "liquidity_pool_withdraw_operation": {
         "properties": {
@@ -6361,7 +7147,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_withdraw_operation"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_withdraw_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "pool",
+          "share_amount",
+          "extensions"
+        ]
       },
       "liquidity_pool_withdraw_operation__fee_params_t": {
         "properties": {
@@ -6374,7 +7167,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::liquidity_pool_withdraw_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::liquidity_pool_withdraw_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "memo_data": {
         "properties": {
@@ -6407,12 +7203,19 @@
           "message"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::memo_data"
+        "x-cpp-type": "graphene::protocol::memo_data",
+        "x-graphene-field-order": [
+          "from",
+          "to",
+          "nonce",
+          "message"
+        ]
       },
       "no_special_authority": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::no_special_authority"
+        "x-cpp-type": "graphene::protocol::no_special_authority",
+        "x-graphene-field-order": []
       },
       "op_wrapper": {
         "properties": {
@@ -6425,7 +7228,10 @@
           "op"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::op_wrapper"
+        "x-cpp-type": "graphene::protocol::op_wrapper",
+        "x-graphene-field-order": [
+          "op"
+        ]
       },
       "operation": {
         "description": "Discriminated union — JSON form is [index, value]. 78 alternatives.",
@@ -8100,7 +8906,16 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::override_transfer_operation"
+        "x-cpp-type": "graphene::protocol::override_transfer_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "issuer",
+          "from",
+          "to",
+          "amount",
+          "memo",
+          "extensions"
+        ]
       },
       "override_transfer_operation__fee_params_t": {
         "properties": {
@@ -8120,7 +8935,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::override_transfer_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::override_transfer_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "precomputable_transaction": {
         "properties": {
@@ -8168,7 +8987,15 @@
           "signatures"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::precomputable_transaction"
+        "x-cpp-type": "graphene::protocol::precomputable_transaction",
+        "x-graphene-field-order": [
+          "ref_block_num",
+          "ref_block_prefix",
+          "expiration",
+          "operations",
+          "extensions",
+          "signatures"
+        ]
       },
       "predicate": {
         "description": "Discriminated union — JSON form is [index, value]. 3 alternatives.",
@@ -8254,7 +9081,11 @@
           "quote"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::price"
+        "x-cpp-type": "graphene::protocol::price",
+        "x-graphene-field-order": [
+          "base",
+          "quote"
+        ]
       },
       "price_feed": {
         "properties": {
@@ -8286,7 +9117,13 @@
           "core_exchange_rate"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::price_feed"
+        "x-cpp-type": "graphene::protocol::price_feed",
+        "x-graphene-field-order": [
+          "settlement_price",
+          "maintenance_collateral_ratio",
+          "maximum_short_squeeze_ratio",
+          "core_exchange_rate"
+        ]
       },
       "processed_transaction": {
         "properties": {
@@ -8342,7 +9179,16 @@
           "operation_results"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::processed_transaction"
+        "x-cpp-type": "graphene::protocol::processed_transaction",
+        "x-graphene-field-order": [
+          "ref_block_num",
+          "ref_block_prefix",
+          "expiration",
+          "operations",
+          "extensions",
+          "signatures",
+          "operation_results"
+        ]
       },
       "proposal_create_operation": {
         "properties": {
@@ -8389,7 +9235,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::proposal_create_operation"
+        "x-cpp-type": "graphene::protocol::proposal_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_paying_account",
+          "expiration_time",
+          "proposed_ops",
+          "review_period_seconds",
+          "extensions"
+        ]
       },
       "proposal_create_operation__fee_params_t": {
         "properties": {
@@ -8409,7 +9263,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::proposal_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::proposal_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "proposal_delete_operation": {
         "properties": {
@@ -8444,7 +9302,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::proposal_delete_operation"
+        "x-cpp-type": "graphene::protocol::proposal_delete_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_paying_account",
+          "using_owner_authority",
+          "proposal",
+          "extensions"
+        ]
       },
       "proposal_delete_operation__fee_params_t": {
         "properties": {
@@ -8457,7 +9322,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::proposal_delete_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::proposal_delete_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "proposal_update_operation": {
         "properties": {
@@ -8569,7 +9437,19 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::proposal_update_operation"
+        "x-cpp-type": "graphene::protocol::proposal_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "fee_paying_account",
+          "proposal",
+          "active_approvals_to_add",
+          "active_approvals_to_remove",
+          "owner_approvals_to_add",
+          "owner_approvals_to_remove",
+          "key_approvals_to_add",
+          "key_approvals_to_remove",
+          "extensions"
+        ]
       },
       "proposal_update_operation__fee_params_t": {
         "properties": {
@@ -8589,12 +9469,17 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::proposal_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::proposal_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "refund_worker_initializer": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::refund_worker_initializer"
+        "x-cpp-type": "graphene::protocol::refund_worker_initializer",
+        "x-graphene-field-order": []
       },
       "restriction": {
         "properties": {
@@ -8626,7 +9511,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::restriction"
+        "x-cpp-type": "graphene::protocol::restriction",
+        "x-graphene-field-order": [
+          "member_index",
+          "restriction_type",
+          "argument",
+          "extensions"
+        ]
       },
       "restriction__argument_type": {
         "description": "Discriminated union — JSON form is [index, value]. 42 alternatives.",
@@ -9938,7 +10829,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_borrow_operation"
+        "x-cpp-type": "graphene::protocol::samet_fund_borrow_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "borrower",
+          "fund_id",
+          "borrow_amount",
+          "extensions"
+        ]
       },
       "samet_fund_borrow_operation__fee_params_t": {
         "properties": {
@@ -9951,7 +10849,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_borrow_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::samet_fund_borrow_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "samet_fund_create_operation": {
         "properties": {
@@ -9993,7 +10894,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_create_operation"
+        "x-cpp-type": "graphene::protocol::samet_fund_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner_account",
+          "asset_type",
+          "balance",
+          "fee_rate",
+          "extensions"
+        ]
       },
       "samet_fund_create_operation__fee_params_t": {
         "properties": {
@@ -10006,7 +10915,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::samet_fund_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "samet_fund_delete_operation": {
         "properties": {
@@ -10036,7 +10948,13 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_delete_operation"
+        "x-cpp-type": "graphene::protocol::samet_fund_delete_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner_account",
+          "fund_id",
+          "extensions"
+        ]
       },
       "samet_fund_delete_operation__fee_params_t": {
         "properties": {
@@ -10049,7 +10967,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_delete_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::samet_fund_delete_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "samet_fund_repay_operation": {
         "properties": {
@@ -10089,7 +11010,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_repay_operation"
+        "x-cpp-type": "graphene::protocol::samet_fund_repay_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "fund_id",
+          "repay_amount",
+          "fund_fee",
+          "extensions"
+        ]
       },
       "samet_fund_repay_operation__fee_params_t": {
         "properties": {
@@ -10102,7 +11031,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_repay_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::samet_fund_repay_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "samet_fund_update_operation": {
         "properties": {
@@ -10154,7 +11086,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_update_operation"
+        "x-cpp-type": "graphene::protocol::samet_fund_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner_account",
+          "fund_id",
+          "delta_amount",
+          "new_fee_rate",
+          "extensions"
+        ]
       },
       "samet_fund_update_operation__fee_params_t": {
         "properties": {
@@ -10167,7 +11107,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::samet_fund_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::samet_fund_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "signed_block": {
         "properties": {
@@ -10214,7 +11157,16 @@
           "transactions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::signed_block"
+        "x-cpp-type": "graphene::protocol::signed_block",
+        "x-graphene-field-order": [
+          "previous",
+          "timestamp",
+          "witness",
+          "transaction_merkle_root",
+          "extensions",
+          "witness_signature",
+          "transactions"
+        ]
       },
       "special_authority": {
         "description": "Discriminated union — JSON form is [index, value]. 2 alternatives.",
@@ -10294,7 +11246,12 @@
           "encrypted_memo"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::stealth_confirmation"
+        "x-cpp-type": "graphene::protocol::stealth_confirmation",
+        "x-graphene-field-order": [
+          "one_time_key",
+          "to",
+          "encrypted_memo"
+        ]
       },
       "ticket_create_operation": {
         "properties": {
@@ -10330,7 +11287,14 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::ticket_create_operation"
+        "x-cpp-type": "graphene::protocol::ticket_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "account",
+          "target_type",
+          "amount",
+          "extensions"
+        ]
       },
       "ticket_create_operation__fee_params_t": {
         "properties": {
@@ -10343,7 +11307,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::ticket_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::ticket_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "ticket_update_operation": {
         "properties": {
@@ -10392,7 +11359,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::ticket_update_operation"
+        "x-cpp-type": "graphene::protocol::ticket_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "ticket",
+          "account",
+          "target_type",
+          "amount_for_new_target",
+          "extensions"
+        ]
       },
       "ticket_update_operation__fee_params_t": {
         "properties": {
@@ -10405,7 +11380,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::ticket_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::ticket_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "top_holders_special_authority": {
         "properties": {
@@ -10426,7 +11404,11 @@
           "num_top_holders"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::top_holders_special_authority"
+        "x-cpp-type": "graphene::protocol::top_holders_special_authority",
+        "x-graphene-field-order": [
+          "asset",
+          "num_top_holders"
+        ]
       },
       "transfer_from_blind_operation": {
         "properties": {
@@ -10463,7 +11445,14 @@
           "inputs"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::transfer_from_blind_operation"
+        "x-cpp-type": "graphene::protocol::transfer_from_blind_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "amount",
+          "to",
+          "blinding_factor",
+          "inputs"
+        ]
       },
       "transfer_from_blind_operation__fee_params_t": {
         "properties": {
@@ -10476,7 +11465,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::transfer_from_blind_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::transfer_from_blind_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "transfer_operation": {
         "properties": {
@@ -10523,7 +11515,15 @@
           "extensions"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::transfer_operation"
+        "x-cpp-type": "graphene::protocol::transfer_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "from",
+          "to",
+          "amount",
+          "memo",
+          "extensions"
+        ]
       },
       "transfer_operation__fee_params_t": {
         "properties": {
@@ -10543,7 +11543,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::transfer_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::transfer_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "transfer_to_blind_operation": {
         "properties": {
@@ -10580,7 +11584,14 @@
           "outputs"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::transfer_to_blind_operation"
+        "x-cpp-type": "graphene::protocol::transfer_to_blind_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "amount",
+          "from",
+          "blinding_factor",
+          "outputs"
+        ]
       },
       "transfer_to_blind_operation__fee_params_t": {
         "properties": {
@@ -10600,7 +11611,11 @@
           "price_per_output"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::transfer_to_blind_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::transfer_to_blind_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_output"
+        ]
       },
       "vesting_balance_create_operation": {
         "properties": {
@@ -10635,7 +11650,14 @@
           "policy"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::vesting_balance_create_operation"
+        "x-cpp-type": "graphene::protocol::vesting_balance_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "creator",
+          "owner",
+          "amount",
+          "policy"
+        ]
       },
       "vesting_balance_create_operation__fee_params_t": {
         "properties": {
@@ -10648,7 +11670,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::vesting_balance_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::vesting_balance_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "vesting_balance_withdraw_operation": {
         "properties": {
@@ -10678,7 +11703,13 @@
           "amount"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::vesting_balance_withdraw_operation"
+        "x-cpp-type": "graphene::protocol::vesting_balance_withdraw_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "vesting_balance",
+          "owner",
+          "amount"
+        ]
       },
       "vesting_balance_withdraw_operation__fee_params_t": {
         "properties": {
@@ -10691,7 +11722,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::vesting_balance_withdraw_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::vesting_balance_withdraw_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "vesting_balance_worker_initializer": {
         "properties": {
@@ -10706,7 +11740,10 @@
           "pay_vesting_period_days"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::vesting_balance_worker_initializer"
+        "x-cpp-type": "graphene::protocol::vesting_balance_worker_initializer",
+        "x-graphene-field-order": [
+          "pay_vesting_period_days"
+        ]
       },
       "vesting_policy_initializer": {
         "description": "Discriminated union — JSON form is [index, value]. 3 alternatives.",
@@ -10779,12 +11816,14 @@
       "void_result": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::void_result"
+        "x-cpp-type": "graphene::protocol::void_result",
+        "x-graphene-field-order": []
       },
       "void_t": {
         "properties": {},
         "type": "object",
-        "x-cpp-type": "graphene::protocol::void_t"
+        "x-cpp-type": "graphene::protocol::void_t",
+        "x-graphene-field-order": []
       },
       "withdraw_permission_claim_operation": {
         "properties": {
@@ -10832,7 +11871,15 @@
           "memo"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_claim_operation"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_claim_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "withdraw_permission",
+          "withdraw_from_account",
+          "withdraw_to_account",
+          "amount_to_withdraw",
+          "memo"
+        ]
       },
       "withdraw_permission_claim_operation__fee_params_t": {
         "properties": {
@@ -10852,7 +11899,11 @@
           "price_per_kbyte"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_claim_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_claim_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee",
+          "price_per_kbyte"
+        ]
       },
       "withdraw_permission_create_operation": {
         "properties": {
@@ -10901,7 +11952,16 @@
           "period_start_time"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_create_operation"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "withdraw_from_account",
+          "authorized_account",
+          "withdrawal_limit",
+          "withdrawal_period_sec",
+          "periods_until_expiration",
+          "period_start_time"
+        ]
       },
       "withdraw_permission_create_operation__fee_params_t": {
         "properties": {
@@ -10914,7 +11974,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "withdraw_permission_delete_operation": {
         "properties": {
@@ -10945,7 +12008,13 @@
           "withdrawal_permission"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_delete_operation"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_delete_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "withdraw_from_account",
+          "authorized_account",
+          "withdrawal_permission"
+        ]
       },
       "withdraw_permission_delete_operation__fee_params_t": {
         "properties": {
@@ -10958,7 +12027,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_delete_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_delete_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "withdraw_permission_update_operation": {
         "properties": {
@@ -11013,7 +12085,17 @@
           "periods_until_expiration"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_update_operation"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "withdraw_from_account",
+          "authorized_account",
+          "permission_to_update",
+          "withdrawal_limit",
+          "withdrawal_period_sec",
+          "period_start_time",
+          "periods_until_expiration"
+        ]
       },
       "withdraw_permission_update_operation__fee_params_t": {
         "properties": {
@@ -11026,7 +12108,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::withdraw_permission_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::withdraw_permission_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "witness_create_operation": {
         "properties": {
@@ -11055,7 +12140,13 @@
           "block_signing_key"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::witness_create_operation"
+        "x-cpp-type": "graphene::protocol::witness_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "witness_account",
+          "url",
+          "block_signing_key"
+        ]
       },
       "witness_create_operation__fee_params_t": {
         "properties": {
@@ -11068,7 +12159,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::witness_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::witness_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "witness_update_operation": {
         "properties": {
@@ -11109,7 +12203,14 @@
           "new_signing_key"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::witness_update_operation"
+        "x-cpp-type": "graphene::protocol::witness_update_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "witness",
+          "witness_account",
+          "new_url",
+          "new_signing_key"
+        ]
       },
       "witness_update_operation__fee_params_t": {
         "properties": {
@@ -11122,7 +12223,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::witness_update_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::witness_update_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "worker_create_operation": {
         "properties": {
@@ -11171,7 +12275,17 @@
           "initializer"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::worker_create_operation"
+        "x-cpp-type": "graphene::protocol::worker_create_operation",
+        "x-graphene-field-order": [
+          "fee",
+          "owner",
+          "work_begin_date",
+          "work_end_date",
+          "daily_pay",
+          "name",
+          "url",
+          "initializer"
+        ]
       },
       "worker_create_operation__fee_params_t": {
         "properties": {
@@ -11184,7 +12298,10 @@
           "fee"
         ],
         "type": "object",
-        "x-cpp-type": "graphene::protocol::worker_create_operation::fee_params_t"
+        "x-cpp-type": "graphene::protocol::worker_create_operation::fee_params_t",
+        "x-graphene-field-order": [
+          "fee"
+        ]
       },
       "worker_initializer": {
         "description": "Discriminated union — JSON form is [index, value]. 3 alternatives.",

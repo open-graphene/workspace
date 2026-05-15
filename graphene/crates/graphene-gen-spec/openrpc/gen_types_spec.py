@@ -980,9 +980,11 @@ def schema_for_struct(reflected: ReflectedStruct, reg: Registry,
         properties[fname] = fschema_out
         required.append(fname)
 
+    field_order = [fname for fname, _owner in _all_field_names(reflected, reg)]
     schema: dict = {
         "type": "object",
         "x-cpp-type": reflected.qualified_name,
+        "x-graphene-field-order": field_order,
         "properties": properties,
     }
     if required:
