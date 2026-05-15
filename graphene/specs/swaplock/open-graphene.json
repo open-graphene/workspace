@@ -2,6 +2,31 @@
   "x-open-graphene": {
     "chain": "swaplock",
     "kind": "chain-bundle",
+    "networks": [
+      {
+        "default": true,
+        "endpoints": [
+          {
+            "label": "Chainpool node 01",
+            "priority": 100,
+            "transport": "websocket",
+            "url": "wss://node01.swaplock.chainpool.online:8090"
+          },
+          {
+            "label": "Chainpool node 02",
+            "priority": 90,
+            "transport": "websocket",
+            "url": "wss://node02.swaplock.chainpool.online:8090"
+          }
+        ],
+        "label": "Swaplock Mainnet",
+        "name": "mainnet"
+      },
+      {
+        "label": "Swaplock Testnet",
+        "name": "testnet"
+      }
+    ],
     "surfaces": [
       {
         "apiQualifiedName": "graphene::app::database_api",

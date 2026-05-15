@@ -11,6 +11,27 @@ header_roots = [
   "libraries/plugins",
 ]
 
+[[networks]]
+name = "mainnet"
+label = "Swaplock Mainnet"
+default = true
+
+[[networks.endpoints]]
+url = "wss://node01.swaplock.chainpool.online:8090"
+transport = "websocket"
+label = "Chainpool node 01"
+priority = 100
+
+[[networks.endpoints]]
+url = "wss://node02.swaplock.chainpool.online:8090"
+transport = "websocket"
+label = "Chainpool node 02"
+priority = 90
+
+[[networks]]
+name = "testnet"
+label = "Swaplock Testnet"
+
 [[surfaces]]
 name = "swaplock-database"
 kind = "database"

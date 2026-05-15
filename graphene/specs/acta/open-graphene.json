@@ -2,6 +2,31 @@
   "x-open-graphene": {
     "chain": "acta",
     "kind": "chain-bundle",
+    "networks": [
+      {
+        "default": true,
+        "endpoints": [
+          {
+            "label": "Chainpool node 01",
+            "priority": 100,
+            "transport": "websocket",
+            "url": "wss://node01.acta.chainpool.online:8090"
+          },
+          {
+            "label": "Chainpool node 02",
+            "priority": 90,
+            "transport": "websocket",
+            "url": "wss://node02.acta.chainpool.online:8090"
+          }
+        ],
+        "label": "Acta Mainnet",
+        "name": "mainnet"
+      },
+      {
+        "label": "Acta Testnet",
+        "name": "testnet"
+      }
+    ],
     "surfaces": [
       {
         "apiQualifiedName": "graphene::app::database_api",

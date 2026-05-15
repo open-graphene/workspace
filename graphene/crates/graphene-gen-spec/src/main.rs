@@ -36,10 +36,43 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 #[derive(Debug)]
+struct LoadedConfig {
+    surfaces: Vec<SpecConfig>,
+    networks: Vec<NetworkConfig>,
+}
+
+#[derive(Debug)]
 struct BundleConfig {
     chain_name: String,
     manifest_output: PathBuf,
     surfaces: Vec<SpecConfig>,
+    networks: Vec<NetworkConfig>,
+}
+
+#[derive(Debug)]
+struct NetworkConfig {
+    name: String,
+    label: Option<String>,
+    is_default: bool,
+    chain_id: Option<String>,
+    address_prefix: Option<String>,
+    core_asset: Option<CoreAssetConfig>,
+    endpoints: Vec<EndpointConfig>,
+}
+
+#[derive(Debug)]
+struct CoreAssetConfig {
+    asset_id: Option<String>,
+    symbol: Option<String>,
+    precision: Option<u64>,
+}
+
+#[derive(Debug)]
+struct EndpointConfig {
+    url: String,
+    transport: String,
+    label: Option<String>,
+    priority: Option<i64>,
 }
 
 #[derive(Debug)]
@@ -121,7 +154,8 @@ fn audit(config_path: &Path) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn build_bundle(configs: Vec<SpecConfig>) -> Result<BundleConfig, Box<dyn Error>> {
+fn build_bundle(loaded: LoadedConfig) -> Result<BundleConfig, Box<dyn Error>> {
+    let configs = loaded.surfaces;
     let first = configs.first().ok_or("no surface configs loaded")?;
     let chain_name = first.chain_name.clone();
     let manifest_dir = first
@@ -156,6 +190,7 @@ fn build_bundle(configs: Vec<SpecConfig>) -> Result<BundleConfig, Box<dyn Error>
         chain_name,
         manifest_output: manifest_dir.join("open-graphene.json"),
         surfaces: configs,
+        networks: loaded.networks,
     })
 }
 
@@ -279,6 +314,7 @@ fn audit_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
     })?;
 
     let mut failures = Vec::new();
+    let mut warnings = Vec::new();
     let profile = manifest
         .get("x-open-graphene")
         .and_then(JsonValue::as_object);
@@ -322,6 +358,8 @@ fn audit_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
             bundle.manifest_output.display()
         )
     })?;
+
+    audit_networks(profile, bundle, &mut failures, &mut warnings)?;
 
     for config in &bundle.surfaces {
         let entry = surfaces.iter().find(|surface| {
@@ -388,6 +426,10 @@ fn audit_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
     println!("audit manifest {}", bundle.chain_name);
     println!("  output: {}", bundle.manifest_output.display());
     println!("  surfaces: {}", surfaces.len());
+    println!("  networks: {}", bundle.networks.len());
+    for warning in &warnings {
+        println!("  warning: {warning}");
+    }
 
     if failures.is_empty() {
         println!("  status: pass");
@@ -399,6 +441,94 @@ fn audit_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
         }
         Err(format!("{} manifest failed audit", bundle.chain_name).into())
     }
+}
+
+fn audit_networks(
+    profile: &serde_json::Map<String, JsonValue>,
+    bundle: &BundleConfig,
+    failures: &mut Vec<String>,
+    warnings: &mut Vec<String>,
+) -> Result<(), Box<dyn Error>> {
+    let networks = profile
+        .get("networks")
+        .and_then(JsonValue::as_array)
+        .ok_or("manifest is missing x-open-graphene.networks array")?;
+
+    if networks.len() != bundle.networks.len() {
+        failures.push(format!(
+            "manifest lists {} networks, config has {}",
+            networks.len(),
+            bundle.networks.len()
+        ));
+    }
+    if networks.is_empty() {
+        warnings.push("manifest has no named networks".to_owned());
+    }
+
+    let mut names = std::collections::BTreeSet::new();
+    let mut default_count = 0usize;
+    for network in networks {
+        let Some(name) = network.get("name").and_then(JsonValue::as_str) else {
+            failures.push("network entry is missing name".to_owned());
+            continue;
+        };
+        if !is_stable_network_name(name) {
+            failures.push(format!(
+                "network name {name} must use lowercase letters, digits, hyphen, or underscore"
+            ));
+        }
+        if !names.insert(name.to_owned()) {
+            failures.push(format!("duplicate network name {name}"));
+        }
+        if network.get("default").and_then(JsonValue::as_bool) == Some(true) {
+            default_count += 1;
+        }
+        if network.get("chainId").and_then(JsonValue::as_str).is_none() {
+            warnings.push(format!("network {name} is missing chainId"));
+        }
+        if network
+            .get("addressPrefix")
+            .and_then(JsonValue::as_str)
+            .is_none()
+        {
+            warnings.push(format!("network {name} is missing addressPrefix"));
+        }
+        if network
+            .get("coreAsset")
+            .and_then(JsonValue::as_object)
+            .is_none()
+        {
+            warnings.push(format!("network {name} is missing coreAsset"));
+        }
+        if let Some(endpoints) = network.get("endpoints").and_then(JsonValue::as_array) {
+            for endpoint in endpoints {
+                if endpoint.get("url").and_then(JsonValue::as_str).is_none() {
+                    failures.push(format!("network {name} has endpoint without url"));
+                }
+                if endpoint
+                    .get("transport")
+                    .and_then(JsonValue::as_str)
+                    .is_none()
+                {
+                    failures.push(format!("network {name} has endpoint without transport"));
+                }
+            }
+        }
+    }
+    if default_count > 1 {
+        failures.push(format!(
+            "manifest has {default_count} default networks; expected at most one"
+        ));
+    }
+
+    Ok(())
+}
+
+fn is_stable_network_name(name: &str) -> bool {
+    !name.is_empty()
+        && name
+            .chars()
+            .all(|ch| ch.is_ascii_lowercase() || ch.is_ascii_digit() || ch == '-' || ch == '_')
 }
 
 fn validate_relative_spec_path(spec_path: &str) -> Result<(), String> {
@@ -416,6 +546,56 @@ fn validate_relative_spec_path(spec_path: &str) -> Result<(), String> {
         return Err("path must not contain ..".to_owned());
     }
     Ok(())
+}
+
+fn network_json(network: &NetworkConfig) -> JsonValue {
+    let mut object = serde_json::Map::new();
+    object.insert("name".to_owned(), json!(network.name));
+    if let Some(label) = &network.label {
+        object.insert("label".to_owned(), json!(label));
+    }
+    if network.is_default {
+        object.insert("default".to_owned(), json!(true));
+    }
+    if let Some(chain_id) = &network.chain_id {
+        object.insert("chainId".to_owned(), json!(chain_id));
+    }
+    if let Some(address_prefix) = &network.address_prefix {
+        object.insert("addressPrefix".to_owned(), json!(address_prefix));
+    }
+    if let Some(core_asset) = &network.core_asset {
+        let mut asset = serde_json::Map::new();
+        if let Some(asset_id) = &core_asset.asset_id {
+            asset.insert("assetId".to_owned(), json!(asset_id));
+        }
+        if let Some(symbol) = &core_asset.symbol {
+            asset.insert("symbol".to_owned(), json!(symbol));
+        }
+        if let Some(precision) = core_asset.precision {
+            asset.insert("precision".to_owned(), json!(precision));
+        }
+        object.insert("coreAsset".to_owned(), JsonValue::Object(asset));
+    }
+    if !network.endpoints.is_empty() {
+        object.insert(
+            "endpoints".to_owned(),
+            JsonValue::Array(network.endpoints.iter().map(endpoint_json).collect()),
+        );
+    }
+    JsonValue::Object(object)
+}
+
+fn endpoint_json(endpoint: &EndpointConfig) -> JsonValue {
+    let mut object = serde_json::Map::new();
+    object.insert("url".to_owned(), json!(endpoint.url));
+    object.insert("transport".to_owned(), json!(endpoint.transport));
+    if let Some(label) = &endpoint.label {
+        object.insert("label".to_owned(), json!(label));
+    }
+    if let Some(priority) = endpoint.priority {
+        object.insert("priority".to_owned(), json!(priority));
+    }
+    JsonValue::Object(object)
 }
 
 fn write_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
@@ -440,11 +620,14 @@ fn write_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
         })
         .collect::<Result<Vec<_>, Box<dyn Error>>>()?;
 
+    let networks = bundle.networks.iter().map(network_json).collect::<Vec<_>>();
+
     let manifest = json!({
         "x-open-graphene": {
             "version": "0.1.0",
             "kind": "chain-bundle",
             "chain": bundle.chain_name,
+            "networks": networks,
             "surfaces": surfaces,
         }
     });
@@ -504,10 +687,7 @@ fn enrich_open_graphene_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> 
     Ok(())
 }
 
-fn load_config(
-    workspace_root: &Path,
-    config_path: &Path,
-) -> Result<Vec<SpecConfig>, Box<dyn Error>> {
+fn load_config(workspace_root: &Path, config_path: &Path) -> Result<LoadedConfig, Box<dyn Error>> {
     let config_path = absolutize(workspace_root, config_path);
     let config_dir = config_path
         .parent()
@@ -537,7 +717,7 @@ fn load_config(
         return Err("[[surfaces]] must contain at least one surface".into());
     }
 
-    surfaces
+    let surfaces = surfaces
         .iter()
         .map(|surface| {
             let surface = surface
@@ -550,6 +730,71 @@ fn load_config(
                 config_dir,
                 &inherited_header_roots,
             )
+        })
+        .collect::<Result<Vec<_>, Box<dyn Error>>>()?;
+    let networks = load_networks(&config)?;
+
+    Ok(LoadedConfig { surfaces, networks })
+}
+
+fn load_networks(config: &TomlValue) -> Result<Vec<NetworkConfig>, Box<dyn Error>> {
+    let Some(networks) = config.get("networks").and_then(TomlValue::as_array) else {
+        return Ok(Vec::new());
+    };
+
+    networks
+        .iter()
+        .map(|network| {
+            let network = network
+                .as_table()
+                .ok_or("[[networks]] entries must be tables")?;
+            let endpoints = network
+                .get("endpoints")
+                .and_then(TomlValue::as_array)
+                .map(|endpoints| {
+                    endpoints
+                        .iter()
+                        .map(|endpoint| {
+                            let endpoint = endpoint
+                                .as_table()
+                                .ok_or("[[networks.endpoints]] entries must be tables")?;
+                            Ok(EndpointConfig {
+                                url: string(endpoint, "url")?.to_owned(),
+                                transport: endpoint
+                                    .get("transport")
+                                    .and_then(TomlValue::as_str)
+                                    .unwrap_or("websocket")
+                                    .to_owned(),
+                                label: optional_string(endpoint, "label"),
+                                priority: optional_i64(endpoint, "priority")?,
+                            })
+                        })
+                        .collect::<Result<Vec<_>, Box<dyn Error>>>()
+                })
+                .transpose()?
+                .unwrap_or_default();
+
+            let core_asset = network
+                .get("core_asset")
+                .and_then(TomlValue::as_table)
+                .map(|core_asset| -> Result<CoreAssetConfig, Box<dyn Error>> {
+                    Ok(CoreAssetConfig {
+                        asset_id: optional_string(core_asset, "asset_id"),
+                        symbol: optional_string(core_asset, "symbol"),
+                        precision: optional_u64(core_asset, "precision")?,
+                    })
+                })
+                .transpose()?;
+
+            Ok(NetworkConfig {
+                name: string(network, "name")?.to_owned(),
+                label: optional_string(network, "label"),
+                is_default: optional_bool(network, "default")?.unwrap_or(false),
+                chain_id: optional_string(network, "chain_id"),
+                address_prefix: optional_string(network, "address_prefix"),
+                core_asset,
+                endpoints,
+            })
         })
         .collect()
 }
@@ -622,6 +867,55 @@ fn string<'a>(
         .get(key)
         .and_then(TomlValue::as_str)
         .ok_or_else(|| format!("missing string field {key}").into())
+}
+
+fn optional_string(table: &toml::map::Map<String, TomlValue>, key: &str) -> Option<String> {
+    table
+        .get(key)
+        .and_then(TomlValue::as_str)
+        .map(ToOwned::to_owned)
+}
+
+fn optional_bool(
+    table: &toml::map::Map<String, TomlValue>,
+    key: &str,
+) -> Result<Option<bool>, Box<dyn Error>> {
+    table
+        .get(key)
+        .map(|value| {
+            value
+                .as_bool()
+                .ok_or_else(|| format!("{key} must be a boolean"))
+        })
+        .transpose()
+        .map_err(Into::into)
+}
+
+fn optional_i64(
+    table: &toml::map::Map<String, TomlValue>,
+    key: &str,
+) -> Result<Option<i64>, Box<dyn Error>> {
+    table
+        .get(key)
+        .map(|value| {
+            value
+                .as_integer()
+                .ok_or_else(|| format!("{key} must be an integer"))
+        })
+        .transpose()
+        .map_err(Into::into)
+}
+
+fn optional_u64(
+    table: &toml::map::Map<String, TomlValue>,
+    key: &str,
+) -> Result<Option<u64>, Box<dyn Error>> {
+    optional_i64(table, key)?
+        .map(|value| {
+            u64::try_from(value).map_err(|_| format!("{key} must be a non-negative integer"))
+        })
+        .transpose()
+        .map_err(Into::into)
 }
 
 fn string_array(

@@ -44,7 +44,9 @@ path = "graphene-v2"
 [[repositories]]
 git = "git@github.com:bitshares/bitshares-core.git"
 path = "chains/bitshares/bitshares-core"
+readonly = true
 
 [[repositories]]
 git = "git@github.com:swaplock/swaplock-core.git"
 path = "chains/swaplock/swaplock-core"
+readonly = true
