@@ -36,10 +36,10 @@ path = "chains/rsquared/R-Squaredjs-ws"
 git = "git@github.com:acta-network/acta-network-core.git"
 path = "chains/acta-network/acta-network-core"
 
-[[repositories]]
-git = "git@github.com:open-graphene/workspace.git"
-branch = "stable-websocket-cleanup"
-path = "graphene-v2"
+# [[repositories]]
+# git = "git@github.com:open-graphene/workspace.git"
+# branch = "stable-websocket-cleanup"
+# path = "graphene-v2"
 
 [[repositories]]
 git = "git@github.com:bitshares/bitshares-core.git"
