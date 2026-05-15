@@ -1040,11 +1040,40 @@ def _variant_schema_from_alternatives(alts: list[str], reg: Registry,
     }
 
 
+def _operation_name_for(cpp_type: str) -> str:
+    leaf = cpp_type.split("::")[-1]
+    if leaf.endswith("_operation"):
+        return leaf[:-len("_operation")]
+    return leaf
+
+
+def _is_operation_variant(qualified_name: str) -> bool:
+    return qualified_name == "operation" or qualified_name.endswith("::operation")
+
+
 def schema_for_variant(var: VariantInfo, reg: Registry, pending: dict[str, str]) -> dict:
     """static_variant — JSON form is [tag_index_or_name, value]. Bitshares uses
     [int_index, struct]. We model it as a heterogeneous tuple union."""
     schema = _variant_schema_from_alternatives(var.alternatives, reg, pending)
     schema["x-cpp-type"] = var.qualified_name
+    if _is_operation_variant(var.qualified_name):
+        operations: list[dict] = []
+        alternatives = schema["x-graphene-static-variant"]["alternatives"]
+        for alternative in alternatives:
+            cpp_type = alternative["cppType"]
+            operation = {
+                "operationId": alternative["index"],
+                "name": _operation_name_for(cpp_type),
+                "cppType": cpp_type,
+                "schema": alternative["schema"],
+            }
+            operations.append(operation)
+        schema["x-graphene-operation"] = {
+            "encoding": "static-variant",
+            "idSource": "static-variant-index",
+            "nameSource": "cpp-type-suffix",
+            "operations": operations,
+        }
     return schema
 
 

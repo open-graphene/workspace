@@ -6954,6 +6954,439 @@
           }
         ],
         "x-cpp-type": "graphene::protocol::operation",
+        "x-graphene-operation": {
+          "encoding": "static-variant",
+          "idSource": "static-variant-index",
+          "nameSource": "cpp-type-suffix",
+          "operations": [
+            {
+              "cppType": "transfer_operation",
+              "name": "transfer",
+              "operationId": 0,
+              "schema": "#/components/schemas/transfer_operation"
+            },
+            {
+              "cppType": "account_create_operation",
+              "name": "account_create",
+              "operationId": 1,
+              "schema": "#/components/schemas/account_create_operation"
+            },
+            {
+              "cppType": "account_update_operation",
+              "name": "account_update",
+              "operationId": 2,
+              "schema": "#/components/schemas/account_update_operation"
+            },
+            {
+              "cppType": "account_whitelist_operation",
+              "name": "account_whitelist",
+              "operationId": 3,
+              "schema": "#/components/schemas/account_whitelist_operation"
+            },
+            {
+              "cppType": "account_upgrade_operation",
+              "name": "account_upgrade",
+              "operationId": 4,
+              "schema": "#/components/schemas/account_upgrade_operation"
+            },
+            {
+              "cppType": "account_transfer_operation",
+              "name": "account_transfer",
+              "operationId": 5,
+              "schema": "#/components/schemas/account_transfer_operation"
+            },
+            {
+              "cppType": "asset_create_operation",
+              "name": "asset_create",
+              "operationId": 6,
+              "schema": "#/components/schemas/asset_create_operation"
+            },
+            {
+              "cppType": "asset_update_operation",
+              "name": "asset_update",
+              "operationId": 7,
+              "schema": "#/components/schemas/asset_update_operation"
+            },
+            {
+              "cppType": "asset_update_bitasset_operation",
+              "name": "asset_update_bitasset",
+              "operationId": 8,
+              "schema": "#/components/schemas/asset_update_bitasset_operation"
+            },
+            {
+              "cppType": "asset_update_feed_producers_operation",
+              "name": "asset_update_feed_producers",
+              "operationId": 9,
+              "schema": "#/components/schemas/asset_update_feed_producers_operation"
+            },
+            {
+              "cppType": "asset_issue_operation",
+              "name": "asset_issue",
+              "operationId": 10,
+              "schema": "#/components/schemas/asset_issue_operation"
+            },
+            {
+              "cppType": "asset_reserve_operation",
+              "name": "asset_reserve",
+              "operationId": 11,
+              "schema": "#/components/schemas/asset_reserve_operation"
+            },
+            {
+              "cppType": "asset_fund_fee_pool_operation",
+              "name": "asset_fund_fee_pool",
+              "operationId": 12,
+              "schema": "#/components/schemas/asset_fund_fee_pool_operation"
+            },
+            {
+              "cppType": "asset_settle_operation",
+              "name": "asset_settle",
+              "operationId": 13,
+              "schema": "#/components/schemas/asset_settle_operation"
+            },
+            {
+              "cppType": "asset_global_settle_operation",
+              "name": "asset_global_settle",
+              "operationId": 14,
+              "schema": "#/components/schemas/asset_global_settle_operation"
+            },
+            {
+              "cppType": "asset_publish_feed_operation",
+              "name": "asset_publish_feed",
+              "operationId": 15,
+              "schema": "#/components/schemas/asset_publish_feed_operation"
+            },
+            {
+              "cppType": "witness_create_operation",
+              "name": "witness_create",
+              "operationId": 16,
+              "schema": "#/components/schemas/witness_create_operation"
+            },
+            {
+              "cppType": "witness_update_operation",
+              "name": "witness_update",
+              "operationId": 17,
+              "schema": "#/components/schemas/witness_update_operation"
+            },
+            {
+              "cppType": "proposal_create_operation",
+              "name": "proposal_create",
+              "operationId": 18,
+              "schema": "#/components/schemas/proposal_create_operation"
+            },
+            {
+              "cppType": "proposal_update_operation",
+              "name": "proposal_update",
+              "operationId": 19,
+              "schema": "#/components/schemas/proposal_update_operation"
+            },
+            {
+              "cppType": "proposal_delete_operation",
+              "name": "proposal_delete",
+              "operationId": 20,
+              "schema": "#/components/schemas/proposal_delete_operation"
+            },
+            {
+              "cppType": "withdraw_permission_create_operation",
+              "name": "withdraw_permission_create",
+              "operationId": 21,
+              "schema": "#/components/schemas/withdraw_permission_create_operation"
+            },
+            {
+              "cppType": "withdraw_permission_update_operation",
+              "name": "withdraw_permission_update",
+              "operationId": 22,
+              "schema": "#/components/schemas/withdraw_permission_update_operation"
+            },
+            {
+              "cppType": "withdraw_permission_claim_operation",
+              "name": "withdraw_permission_claim",
+              "operationId": 23,
+              "schema": "#/components/schemas/withdraw_permission_claim_operation"
+            },
+            {
+              "cppType": "withdraw_permission_delete_operation",
+              "name": "withdraw_permission_delete",
+              "operationId": 24,
+              "schema": "#/components/schemas/withdraw_permission_delete_operation"
+            },
+            {
+              "cppType": "committee_member_create_operation",
+              "name": "committee_member_create",
+              "operationId": 25,
+              "schema": "#/components/schemas/committee_member_create_operation"
+            },
+            {
+              "cppType": "committee_member_update_operation",
+              "name": "committee_member_update",
+              "operationId": 26,
+              "schema": "#/components/schemas/committee_member_update_operation"
+            },
+            {
+              "cppType": "committee_member_update_global_parameters_operation",
+              "name": "committee_member_update_global_parameters",
+              "operationId": 27,
+              "schema": "#/components/schemas/committee_member_update_global_parameters_operation"
+            },
+            {
+              "cppType": "vesting_balance_create_operation",
+              "name": "vesting_balance_create",
+              "operationId": 28,
+              "schema": "#/components/schemas/vesting_balance_create_operation"
+            },
+            {
+              "cppType": "vesting_balance_withdraw_operation",
+              "name": "vesting_balance_withdraw",
+              "operationId": 29,
+              "schema": "#/components/schemas/vesting_balance_withdraw_operation"
+            },
+            {
+              "cppType": "custom_operation",
+              "name": "custom",
+              "operationId": 30,
+              "schema": "#/components/schemas/custom_operation"
+            },
+            {
+              "cppType": "assert_operation",
+              "name": "assert",
+              "operationId": 31,
+              "schema": "#/components/schemas/assert_operation"
+            },
+            {
+              "cppType": "balance_claim_operation",
+              "name": "balance_claim",
+              "operationId": 32,
+              "schema": "#/components/schemas/balance_claim_operation"
+            },
+            {
+              "cppType": "override_transfer_operation",
+              "name": "override_transfer",
+              "operationId": 33,
+              "schema": "#/components/schemas/override_transfer_operation"
+            },
+            {
+              "cppType": "asset_settle_cancel_operation",
+              "name": "asset_settle_cancel",
+              "operationId": 34,
+              "schema": "#/components/schemas/asset_settle_cancel_operation"
+            },
+            {
+              "cppType": "asset_claim_fees_operation",
+              "name": "asset_claim_fees",
+              "operationId": 35,
+              "schema": "#/components/schemas/asset_claim_fees_operation"
+            },
+            {
+              "cppType": "fba_distribute_operation",
+              "name": "fba_distribute",
+              "operationId": 36,
+              "schema": "#/components/schemas/fba_distribute_operation"
+            },
+            {
+              "cppType": "asset_claim_pool_operation",
+              "name": "asset_claim_pool",
+              "operationId": 37,
+              "schema": "#/components/schemas/asset_claim_pool_operation"
+            },
+            {
+              "cppType": "asset_update_issuer_operation",
+              "name": "asset_update_issuer",
+              "operationId": 38,
+              "schema": "#/components/schemas/asset_update_issuer_operation"
+            },
+            {
+              "cppType": "personal_data_create_operation",
+              "name": "personal_data_create",
+              "operationId": 39,
+              "schema": "#/components/schemas/personal_data_create_operation"
+            },
+            {
+              "cppType": "personal_data_remove_operation",
+              "name": "personal_data_remove",
+              "operationId": 40,
+              "schema": "#/components/schemas/personal_data_remove_operation"
+            },
+            {
+              "cppType": "content_card_create_operation",
+              "name": "content_card_create",
+              "operationId": 41,
+              "schema": "#/components/schemas/content_card_create_operation"
+            },
+            {
+              "cppType": "content_card_update_operation",
+              "name": "content_card_update",
+              "operationId": 42,
+              "schema": "#/components/schemas/content_card_update_operation"
+            },
+            {
+              "cppType": "content_card_remove_operation",
+              "name": "content_card_remove",
+              "operationId": 43,
+              "schema": "#/components/schemas/content_card_remove_operation"
+            },
+            {
+              "cppType": "permission_create_operation",
+              "name": "permission_create",
+              "operationId": 44,
+              "schema": "#/components/schemas/permission_create_operation"
+            },
+            {
+              "cppType": "permission_remove_operation",
+              "name": "permission_remove",
+              "operationId": 45,
+              "schema": "#/components/schemas/permission_remove_operation"
+            },
+            {
+              "cppType": "commit_create_operation",
+              "name": "commit_create",
+              "operationId": 46,
+              "schema": "#/components/schemas/commit_create_operation"
+            },
+            {
+              "cppType": "reveal_create_operation",
+              "name": "reveal_create",
+              "operationId": 47,
+              "schema": "#/components/schemas/reveal_create_operation"
+            },
+            {
+              "cppType": "worker_create_operation",
+              "name": "worker_create",
+              "operationId": 48,
+              "schema": "#/components/schemas/worker_create_operation"
+            },
+            {
+              "cppType": "htlc_create_operation",
+              "name": "htlc_create",
+              "operationId": 49,
+              "schema": "#/components/schemas/htlc_create_operation"
+            },
+            {
+              "cppType": "htlc_redeem_operation",
+              "name": "htlc_redeem",
+              "operationId": 50,
+              "schema": "#/components/schemas/htlc_redeem_operation"
+            },
+            {
+              "cppType": "htlc_redeemed_operation",
+              "name": "htlc_redeemed",
+              "operationId": 51,
+              "schema": "#/components/schemas/htlc_redeemed_operation"
+            },
+            {
+              "cppType": "htlc_extend_operation",
+              "name": "htlc_extend",
+              "operationId": 52,
+              "schema": "#/components/schemas/htlc_extend_operation"
+            },
+            {
+              "cppType": "htlc_refund_operation",
+              "name": "htlc_refund",
+              "operationId": 53,
+              "schema": "#/components/schemas/htlc_refund_operation"
+            },
+            {
+              "cppType": "limit_order_create_operation",
+              "name": "limit_order_create",
+              "operationId": 54,
+              "schema": "#/components/schemas/limit_order_create_operation"
+            },
+            {
+              "cppType": "limit_order_cancel_operation",
+              "name": "limit_order_cancel",
+              "operationId": 55,
+              "schema": "#/components/schemas/limit_order_cancel_operation"
+            },
+            {
+              "cppType": "call_order_update_operation",
+              "name": "call_order_update",
+              "operationId": 56,
+              "schema": "#/components/schemas/call_order_update_operation"
+            },
+            {
+              "cppType": "fill_order_operation",
+              "name": "fill_order",
+              "operationId": 57,
+              "schema": "#/components/schemas/fill_order_operation"
+            },
+            {
+              "cppType": "custom_authority_create_operation",
+              "name": "custom_authority_create",
+              "operationId": 58,
+              "schema": "#/components/schemas/custom_authority_create_operation"
+            },
+            {
+              "cppType": "custom_authority_update_operation",
+              "name": "custom_authority_update",
+              "operationId": 59,
+              "schema": "#/components/schemas/custom_authority_update_operation"
+            },
+            {
+              "cppType": "custom_authority_delete_operation",
+              "name": "custom_authority_delete",
+              "operationId": 60,
+              "schema": "#/components/schemas/custom_authority_delete_operation"
+            },
+            {
+              "cppType": "ticket_create_operation",
+              "name": "ticket_create",
+              "operationId": 61,
+              "schema": "#/components/schemas/ticket_create_operation"
+            },
+            {
+              "cppType": "ticket_update_operation",
+              "name": "ticket_update",
+              "operationId": 62,
+              "schema": "#/components/schemas/ticket_update_operation"
+            },
+            {
+              "cppType": "ico_balance_claim_operation",
+              "name": "ico_balance_claim",
+              "operationId": 63,
+              "schema": "#/components/schemas/ico_balance_claim_operation"
+            },
+            {
+              "cppType": "permission_create_many_operation",
+              "name": "permission_create_many",
+              "operationId": 64,
+              "schema": "#/components/schemas/permission_create_many_operation"
+            },
+            {
+              "cppType": "room_create_operation",
+              "name": "room_create",
+              "operationId": 65,
+              "schema": "#/components/schemas/room_create_operation"
+            },
+            {
+              "cppType": "room_update_operation",
+              "name": "room_update",
+              "operationId": 66,
+              "schema": "#/components/schemas/room_update_operation"
+            },
+            {
+              "cppType": "room_add_participant_operation",
+              "name": "room_add_participant",
+              "operationId": 67,
+              "schema": "#/components/schemas/room_add_participant_operation"
+            },
+            {
+              "cppType": "room_remove_participant_operation",
+              "name": "room_remove_participant",
+              "operationId": 68,
+              "schema": "#/components/schemas/room_remove_participant_operation"
+            },
+            {
+              "cppType": "room_rotate_key_operation",
+              "name": "room_rotate_key",
+              "operationId": 69,
+              "schema": "#/components/schemas/room_rotate_key_operation"
+            },
+            {
+              "cppType": "room_update_participant_operation",
+              "name": "room_update_participant",
+              "operationId": 70,
+              "schema": "#/components/schemas/room_update_participant_operation"
+            }
+          ]
+        },
         "x-graphene-static-variant": {
           "alternatives": [
             {

@@ -84,5 +84,6 @@ Rust binding generation is deliberately excluded from this crate.
 - Graphene containers encoded with neutral `x-graphene-container` metadata
 - neutral `x-graphene-scalar` metadata on `GrapheneTimePointSec`, `GrapheneInt64`, and `GrapheneUInt64`
 - reflected object schemas include `x-graphene-field-order`, preserving the FC_REFLECT serialization order required by transaction builders and binary codecs
+- the `operation` static variant includes `x-graphene-operation` metadata mapping operation IDs to operation names and schemas
 
 Legacy `x-rust-type` and `x-fc-container` metadata is rejected; language-specific bindings must map neutral Graphene metadata in their own backend.

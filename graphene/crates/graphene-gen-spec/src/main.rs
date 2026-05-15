@@ -292,6 +292,7 @@ fn audit_surface_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> {
     }
     failures.extend(validate_graphene_containers(&spec));
     failures.extend(validate_graphene_field_order(&spec));
+    failures.extend(validate_graphene_operations(&spec));
     for scalar_name in ["GrapheneTimePointSec", "GrapheneInt64", "GrapheneUInt64"] {
         if !schemas
             .get(scalar_name)
@@ -1267,6 +1268,136 @@ fn validate_graphene_field_order(spec: &JsonValue) -> Vec<String> {
             if !seen.contains(property_name) {
                 failures.push(format!(
                     "object schema {schema_name} property {property_name} is missing from x-graphene-field-order"
+                ));
+            }
+        }
+    }
+
+    failures
+}
+
+fn validate_graphene_operations(spec: &JsonValue) -> Vec<String> {
+    let mut failures = Vec::new();
+    let Some(schemas) = spec
+        .pointer("/components/schemas")
+        .and_then(JsonValue::as_object)
+    else {
+        return failures;
+    };
+
+    for (schema_name, schema) in schemas {
+        let Some(schema_object) = schema.as_object() else {
+            continue;
+        };
+        let is_operation_variant = schema_object
+            .get("x-cpp-type")
+            .and_then(JsonValue::as_str)
+            .is_some_and(|cpp_type| cpp_type == "operation" || cpp_type.ends_with("::operation"));
+        let operation_metadata = schema_object
+            .get("x-graphene-operation")
+            .and_then(JsonValue::as_object);
+
+        if is_operation_variant && operation_metadata.is_none() {
+            failures.push(format!(
+                "operation variant schema {schema_name} is missing x-graphene-operation"
+            ));
+            continue;
+        }
+        let Some(operation_metadata) = operation_metadata else {
+            continue;
+        };
+
+        if operation_metadata
+            .get("encoding")
+            .and_then(JsonValue::as_str)
+            != Some("static-variant")
+        {
+            failures.push(format!(
+                "operation schema {schema_name} x-graphene-operation.encoding must be static-variant"
+            ));
+        }
+        if operation_metadata
+            .get("idSource")
+            .and_then(JsonValue::as_str)
+            != Some("static-variant-index")
+        {
+            failures.push(format!(
+                "operation schema {schema_name} x-graphene-operation.idSource must be static-variant-index"
+            ));
+        }
+
+        let Some(static_variant) = schema_object
+            .get("x-graphene-static-variant")
+            .and_then(JsonValue::as_object)
+        else {
+            failures.push(format!(
+                "operation schema {schema_name} is missing x-graphene-static-variant metadata"
+            ));
+            continue;
+        };
+        let Some(alternatives) = static_variant
+            .get("alternatives")
+            .and_then(JsonValue::as_array)
+        else {
+            failures.push(format!(
+                "operation schema {schema_name} static variant metadata is missing alternatives"
+            ));
+            continue;
+        };
+        let Some(operations) = operation_metadata
+            .get("operations")
+            .and_then(JsonValue::as_array)
+        else {
+            failures.push(format!(
+                "operation schema {schema_name} x-graphene-operation is missing operations array"
+            ));
+            continue;
+        };
+        if operations.len() != alternatives.len() {
+            failures.push(format!(
+                "operation schema {schema_name} has {} operations, static variant has {} alternatives",
+                operations.len(),
+                alternatives.len()
+            ));
+        }
+
+        for (idx, operation) in operations.iter().enumerate() {
+            let Some(operation) = operation.as_object() else {
+                failures.push(format!(
+                    "operation schema {schema_name} operation {idx} must be an object"
+                ));
+                continue;
+            };
+            let Some(alternative) = alternatives.get(idx).and_then(JsonValue::as_object) else {
+                continue;
+            };
+            if operation.get("operationId").and_then(JsonValue::as_u64)
+                != alternative.get("index").and_then(JsonValue::as_u64)
+            {
+                failures.push(format!(
+                    "operation schema {schema_name} operation {idx} operationId does not match static variant index"
+                ));
+            }
+            if operation.get("cppType").and_then(JsonValue::as_str)
+                != alternative.get("cppType").and_then(JsonValue::as_str)
+            {
+                failures.push(format!(
+                    "operation schema {schema_name} operation {idx} cppType does not match static variant alternative"
+                ));
+            }
+            if operation.get("schema") != alternative.get("schema") {
+                failures.push(format!(
+                    "operation schema {schema_name} operation {idx} schema does not match static variant alternative"
+                ));
+            }
+            if operation
+                .get("name")
+                .and_then(JsonValue::as_str)
+                .filter(|name| !name.is_empty())
+                .is_none()
+            {
+                failures.push(format!(
+                    "operation schema {schema_name} operation {idx} is missing name"
                 ));
             }
         }
