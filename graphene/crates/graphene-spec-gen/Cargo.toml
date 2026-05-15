@@ -1,0 +1,23 @@
+[package]
+name = "graphene-spec-gen"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[dependencies]
+graphene-chain-swaplock.workspace = true
+graphene-codec.workspace = true
+graphene-rpc.workspace = true
+graphene-signing.workspace = true
+graphene-transaction.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[lib]
+name = "graphene_spec_gen"
+path = "src/lib.rs"
+
+[[bin]]
+name = "graphene-spec-gen"
+path = "src/bin/graphene-spec-gen.rs"

@@ -1,0 +1,280 @@
+use std::fs;
+use std::path::PathBuf;
+
+use graphene_spec_gen::model::OpenGrapheneDocument;
+use graphene_spec_gen::validation::{validate_document, validate_document_report};
+use serde_json::json;
+
+fn fixture_path(name: &str) -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!("fixtures/{name}.opengraphene.json"))
+}
+
+fn load_fixture(name: &str) -> OpenGrapheneDocument {
+    let fixture = fs::read_to_string(fixture_path(name)).expect("fixture should load from disk");
+    serde_json::from_str(&fixture).expect("fixture should deserialize")
+}
+
+fn load_swaplock_fixture() -> OpenGrapheneDocument {
+    load_fixture("swaplock")
+}
+
+fn load_acta_fixture() -> OpenGrapheneDocument {
+    load_fixture("acta")
+}
+
+#[test]
+fn accepts_mandatory_chain_contract_fixtures() {
+    for (name, expected_chain) in [("swaplock", "swaplock"), ("acta", "acta")] {
+        let document = load_fixture(name);
+        validate_document(&document).expect("valid contract should pass");
+        assert_eq!(document.chain.name, expected_chain);
+    }
+}
+
+#[test]
+fn acta_fixture_uses_acta_generated_method_and_chain_metadata() {
+    let document = load_acta_fixture();
+    validate_document(&document).expect("Acta contract should pass");
+
+    assert_eq!(document.chain.name, "acta");
+    assert_eq!(
+        document.chain.chain_id.as_deref(),
+        Some("2267f694d96b7ffdcba1a98c63c09e720a18a85ad34954e299c66d5a42234098")
+    );
+    assert!(document
+        .method_bindings
+        .contains_key("broadcast_transaction_synchronous"));
+    assert!(document.callbacks.contains_key("set_subscribe_callback"));
+}
+
+#[test]
+fn rejects_unknown_references() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["methodBindings"]["get_dynamic_global_properties"]["api"] = json!("missing");
+    value["transaction"]["operationVariant"] = json!("MissingOperation");
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("invalid contract should fail");
+
+    assert!(errors
+        .iter()
+        .any(|error| error.path == "methodBindings.get_dynamic_global_properties.api"));
+    assert!(errors
+        .iter()
+        .any(|error| error.path == "transaction.operationVariant"));
+}
+
+#[test]
+fn rejects_duplicate_operation_ids() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["operations"]["Operation"] = json!([
+        {
+            "id": 0,
+            "name": "transfer",
+            "type": "TransferOperation"
+        },
+        {
+            "id": 0,
+            "name": "transfer_to_blind",
+            "type": "TransferOperation"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("duplicate variant should fail");
+
+    assert!(errors
+        .iter()
+        .any(|error| error.path == "operations.Operation[1].id"));
+}
+
+#[test]
+fn rejects_invalid_chain_id() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["chain"]["chainId"] = json!("not-a-64-byte-hex-chain-id");
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("invalid chain id should fail");
+
+    assert!(errors
+        .iter()
+        .any(|error| { error.path == "chain.chainId" && error.message.contains("32-byte") }));
+}
+
+#[test]
+fn rejects_duplicate_codec_fields() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["codec"]["types"]["Asset"]["fields"] = json!([
+        {
+            "name": "amount",
+            "type": "int64"
+        },
+        {
+            "name": "amount",
+            "type": "object_id"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("duplicate codec fields should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "codec.types.Asset.fields[1].name"
+            && error.message.contains("duplicate field name amount")
+    }));
+}
+
+#[test]
+fn rejects_unknown_codec_type_refs() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["codec"]["types"]["Asset"]["fields"][0]["type"] = json!("MissingAmountType");
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("unknown codec type should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "codec.types.Asset.fields[0].type"
+            && error.message.contains("MissingAmountType")
+    }));
+}
+
+#[test]
+fn rejects_unknown_callback_api() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["callbacks"]["set_block_applied_callback"]["api"] = json!("missing_callback_api");
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("unknown callback api should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "callbacks.set_block_applied_callback.api"
+            && error.message.contains("missing_callback_api")
+    }));
+}
+
+#[test]
+fn rejects_unknown_callback_payload() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["callbacks"]["set_block_applied_callback"]["callbackPayload"] = json!("MissingNotice");
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("unknown callback payload should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "callbacks.set_block_applied_callback.callbackPayload"
+            && error.message.contains("MissingNotice")
+    }));
+}
+
+#[test]
+fn rejects_empty_transaction_digest_preimage() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["transaction"]["digest"]["preimage"] = json!([]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("empty digest preimage should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "transaction.digest.preimage"
+            && error.message.contains("at least one preimage part")
+    }));
+}
+
+#[test]
+fn approved_raw_fallback_round_trips_and_warns_without_failing_validation() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["shapeClassifications"] = json!([
+        {
+            "path": "codec.types.TransferOperation.fields[4].type",
+            "classification": "approved_raw_fallback",
+            "reason": "memo bytes are intentionally retained as raw encrypted payload bytes"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    validate_document(&document).expect("approved raw fallback should not fail validation");
+
+    let serialized = serde_json::to_value(&document).expect("classification should serialize");
+    assert_eq!(
+        serialized["shapeClassifications"][0]["classification"],
+        "approved_raw_fallback"
+    );
+
+    let report = validate_document_report(&document);
+    assert!(report.is_valid());
+    assert_eq!(report.warnings.len(), 1);
+    assert_eq!(
+        report.warnings[0].path,
+        "codec.types.TransferOperation.fields[4].type"
+    );
+    assert_eq!(report.warnings[0].classification, "approved_raw_fallback");
+    assert!(report.warnings[0].message.contains("memo bytes"));
+}
+
+#[test]
+fn unsupported_shape_classification_fails_with_path_and_classification() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["shapeClassifications"] = json!([
+        {
+            "path": "codec.types.FutureExtension",
+            "classification": "unsupported_shape",
+            "reason": "static_variant extension payload is not modeled in v0.1"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("unsupported shape should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "codec.types.FutureExtension"
+            && error.message.contains("unsupported_shape")
+            && error.message.contains("static_variant extension")
+    }));
+}
+
+#[test]
+fn rejects_empty_shape_classification_reason() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["shapeClassifications"] = json!([
+        {
+            "path": "codec.types.TransferOperation.fields[4].type",
+            "classification": "approved_raw_fallback",
+            "reason": ""
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("empty reason should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "shapeClassifications[0].reason"
+            && error.message.contains("must not be empty")
+    }));
+}
+
+#[test]
+fn rejects_duplicate_operation_names() {
+    let mut value = serde_json::to_value(load_swaplock_fixture()).unwrap();
+    value["operations"]["Operation"] = json!([
+        {
+            "id": 0,
+            "name": "transfer",
+            "type": "TransferOperation"
+        },
+        {
+            "id": 1,
+            "name": "transfer",
+            "type": "TransferOperation"
+        }
+    ]);
+
+    let document: OpenGrapheneDocument = serde_json::from_value(value).unwrap();
+    let errors = validate_document(&document).expect_err("duplicate operation names should fail");
+
+    assert!(errors.iter().any(|error| {
+        error.path == "operations.Operation[1].name"
+            && error
+                .message
+                .contains("duplicate operation variant name transfer")
+    }));
+}

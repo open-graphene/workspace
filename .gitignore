@@ -51,19 +51,21 @@ graphene-rs-v2/.env.*
 graphene-rs-v2/target/
 graphene-rs-v2/target/**
 
-!open-graphene
-!open-graphene/**
-open-graphene/.env
-open-graphene/.env.*
-open-graphene/target/
-open-graphene/target/**
+!graphene
+!graphene/**
+graphene/.env
+graphene/.env.*
+graphene/target/
+graphene/target/**
 
-!open-graphene-ts
-!open-graphene-ts/**
-!open-graphene-dart
-!open-graphene-dart/**
-!open-graphene-rs
-!open-graphene-rs/**
-open-graphene-rs/**/Cargo.lock
-open-graphene-rs/**/target/
-open-graphene-rs/**/target/**
+!graphene-ts
+!graphene-ts/**
+!graphene-dart
+!graphene-dart/**
+!graphene-rs
+!graphene-rs/**
+graphene-rs/**/Cargo.lock
+graphene-rs/**/target/
+graphene-rs/**/target/**
+
+!.legacy

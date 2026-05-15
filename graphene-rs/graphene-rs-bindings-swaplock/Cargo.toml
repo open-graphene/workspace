@@ -1,0 +1,10 @@
+[package]
+name = "graphene-rs-bindings-swaplock"
+edition = "2021"
+version = "0.1.0"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[workspace]
