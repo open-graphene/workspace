@@ -490,9 +490,19 @@ fn emit_metadata(variants: &[StaticVariant], chain: &str) -> String {
 
 fn write_crate_lib(crate_dir: &Path, chain: &str) -> Result<()> {
     let title = upper_camel(chain);
-    let source = format!(
-        "//! Generated Rust data models for {title}.\n//!\n//! This crate contains schema structs and Graphene static_variant enums generated\n//! from open-graphene specs. Transport and runtime SDK layers are intentionally\n//! not generated here.\n\n#![allow(clippy::all)]\n#![allow(dead_code)]\n#![allow(non_camel_case_types)]\n#![allow(non_snake_case)]\n#![allow(unused_imports)]\n#![allow(clippy::large_enum_variant)]\n#![allow(clippy::enum_variant_names)]\n\npub mod generated {{\n    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");\n}}\n\npub use generated::*;\n"
-    );
+    let has_runtime_helpers = crate_dir.join("src/transfer.rs").exists();
+    let has_rpc = crate_dir.join("src/generated/rpc.rs").exists();
+    let has_broadcast_rpc = crate_dir.join("src/generated/broadcast_rpc.rs").exists();
+
+    let source = if has_runtime_helpers && has_rpc && has_broadcast_rpc {
+        format!(
+            "//! Rust data models and minimal runtime helpers for {title}.\n//!\n//! The generated modules provide schema structs and Graphene `static_variant`\n//! enums. Hand-written modules may provide chain-local transaction, signing,\n//! and broadcast helpers on top of the shared runtime crates.\n\n#![allow(clippy::all)]\n#![allow(dead_code)]\n#![allow(non_camel_case_types)]\n#![allow(non_snake_case)]\n#![allow(unused_imports)]\n#![allow(clippy::large_enum_variant)]\n#![allow(clippy::enum_variant_names)]\n\npub mod generated {{\n    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");\n    include!(\"generated/rpc.rs\");\n}}\n\npub mod broadcast {{\n    use super::generated::*;\n    include!(\"generated/broadcast_rpc.rs\");\n}}\n\nmod account;\nmod codec;\nmod dynamic_global_properties;\nmod scalar;\nmod testnet;\nmod transaction;\nmod transfer;\n\npub use account::{{lookup_exact_account_id, LookupAccountError}};\npub use dynamic_global_properties::{{\n    subscribe_dynamic_global_properties, SetSubscribeCallbackParams,\n}};\npub use generated::*;\npub use graphene_rpc::database_callbacks::{{\n    set_block_applied_callback, BlockAppliedNotice, BlockAppliedNoticeError,\n    SetBlockAppliedCallbackParams,\n}};\npub use graphene_transaction::broadcast::{{BroadcastResultError, SynchronousBroadcastResult}};\npub use testnet::{{\n    PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,\n    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,\n    SWAPLOCK_TESTNET_WS_URL,\n}};\npub use transaction::{{\n    broadcast_signed_transaction, broadcast_signed_transaction_synchronous,\n    broadcast_signed_transaction_synchronous_typed, broadcast_signed_transaction_with_callback,\n    broadcast_signed_transaction_with_callback_typed, sign_transaction,\n    validate_signed_transaction, BroadcastTransactionWithCallbackParams, PreparedTransaction,\n    SignTransactionError, SignedTransactionEnvelope,\n}};\npub use transfer::{{\n    apply_required_fee, build_transfer_operation, fetch_required_fee_for_transfer,\n    prepare_transaction, prepare_transfer_transaction, BuildTransactionError, TransferDraft,\n}};\n"
+        )
+    } else {
+        format!(
+            "//! Generated Rust data models for {title}.\n//!\n//! This crate contains schema structs and Graphene static_variant enums generated\n//! from open-graphene specs. Transport and runtime SDK layers are intentionally\n//! not generated here.\n\n#![allow(clippy::all)]\n#![allow(dead_code)]\n#![allow(non_camel_case_types)]\n#![allow(non_snake_case)]\n#![allow(unused_imports)]\n#![allow(clippy::large_enum_variant)]\n#![allow(clippy::enum_variant_names)]\n\npub mod generated {{\n    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");\n}}\n\npub use generated::*;\n"
+        )
+    };
     fs::write(crate_dir.join("src/lib.rs"), source)?;
     Ok(())
 }
@@ -505,9 +515,13 @@ fn ensure_crate_dependencies(crate_dir: &Path) -> Result<()> {
         .next()
         .unwrap_or(source.as_str())
         .trim_end();
-    let updated = format!(
-        "{package}\n\n[dependencies]\nregress = \"0.10\"\nserde = {{ version = \"1\", features = [\"derive\"] }}\nserde_json = \"1\"\n"
-    );
+    let has_runtime_helpers = crate_dir.join("src/transfer.rs").exists();
+    let dependencies = if has_runtime_helpers {
+        "chrono.workspace = true\ngraphene-codec.workspace = true\ngraphene-rpc.workspace = true\ngraphene-signing.workspace = true\ngraphene-transaction.workspace = true\nregress.workspace = true\nserde.workspace = true\nserde_json.workspace = true\n"
+    } else {
+        "regress = \"0.10\"\nserde = { version = \"1\", features = [\"derive\"] }\nserde_json = \"1\"\n"
+    };
+    let updated = format!("{package}\n\n[dependencies]\n{dependencies}");
     fs::write(cargo_toml, updated)?;
     Ok(())
 }

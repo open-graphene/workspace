@@ -1,0 +1,47 @@
+use chrono::NaiveDateTime;
+
+use crate::generated::{GrapheneInt64, GrapheneTimePointSec};
+
+impl GrapheneInt64 {
+    pub fn new(value: i64) -> Self {
+        Self::from(value)
+    }
+
+    pub fn as_i64(&self) -> i64 {
+        match self {
+            Self::Variant0(value) => *value,
+            Self::Variant1(value) => value
+                .parse()
+                .expect("validated GrapheneInt64 decimal string should parse as i64"),
+        }
+    }
+}
+
+impl GrapheneTimePointSec {
+    pub const FORMAT: &'static str = "%Y-%m-%dT%H:%M:%S";
+
+    pub fn new(value: NaiveDateTime) -> Self {
+        value
+            .format(Self::FORMAT)
+            .to_string()
+            .parse()
+            .expect("formatted GrapheneTimePointSec should match generated validation pattern")
+    }
+
+    pub fn naive_utc(&self) -> NaiveDateTime {
+        NaiveDateTime::parse_from_str(self.as_str(), Self::FORMAT)
+            .expect("validated GrapheneTimePointSec should parse as NaiveDateTime")
+    }
+}
+
+impl From<GrapheneTimePointSec> for graphene_rpc::GrapheneTimePointSec {
+    fn from(value: GrapheneTimePointSec) -> Self {
+        graphene_rpc::GrapheneTimePointSec::new(value.naive_utc())
+    }
+}
+
+impl From<&GrapheneTimePointSec> for graphene_rpc::GrapheneTimePointSec {
+    fn from(value: &GrapheneTimePointSec) -> Self {
+        graphene_rpc::GrapheneTimePointSec::new(value.naive_utc())
+    }
+}

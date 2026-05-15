@@ -6,6 +6,7 @@ members = [
     "crates/graphene-transaction",
     "crates/graphene-bindings-acta",
     "crates/graphene-bindings-swaplock",
+    "examples/swaplock",
 ]
 resolver = "2"
 

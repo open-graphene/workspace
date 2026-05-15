@@ -1,0 +1,24 @@
+[package]
+name = "graphene-swaplock-examples"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "broadcast-transfer"
+path = "src/bin/broadcast_transfer.rs"
+
+[[bin]]
+name = "block-applied-callback"
+path = "src/bin/block_applied_callback.rs"
+
+[[bin]]
+name = "dynamic-global-properties-subscription"
+path = "src/bin/dynamic_global_properties_subscription.rs"
+
+[dependencies]
+chrono.workspace = true
+graphene-bindings-swaplock = { path = "../../crates/graphene-bindings-swaplock" }
+graphene-rpc.workspace = true
+graphene-signing.workspace = true

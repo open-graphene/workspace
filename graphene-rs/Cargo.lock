@@ -286,6 +286,11 @@ dependencies = [
 name = "graphene-bindings-swaplock"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "graphene-codec",
+ "graphene-rpc",
+ "graphene-signing",
+ "graphene-transaction",
  "regress",
  "serde",
  "serde_json",
@@ -313,6 +318,16 @@ dependencies = [
  "bs58",
  "secp256k1",
  "sha2",
+]
+
+[[package]]
+name = "graphene-swaplock-examples"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "graphene-bindings-swaplock",
+ "graphene-rpc",
+ "graphene-signing",
 ]
 
 [[package]]
