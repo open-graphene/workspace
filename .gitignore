@@ -8,6 +8,8 @@
 !mirror.toml
 !pnpm-lock.yaml
 !pnpm-workspace.yaml
+!graphene/
+!graphene/**
 !.vscode
 !.vscode/**
 

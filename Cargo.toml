@@ -1,0 +1,15 @@
+[workspace]
+members = [
+    "graphene/crates/graphene-gen-spec",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+publish = false
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+serde_json = "1"
+toml = "0.8"

@@ -1,0 +1,35 @@
+[chain]
+name = "swaplock"
+core_root = "../../chains/swaplock/swaplock-core"
+
+[open_graphene]
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[[surfaces]]
+name = "swaplock-database"
+kind = "database"
+api_header = "libraries/app/include/graphene/app/database_api.hpp"
+api_qualified_name = "graphene::app::database_api"
+excluded_methods = [
+  "set_subscribe_callback",
+  "set_pending_transaction_callback",
+  "set_block_applied_callback",
+  "subscribe_to_market",
+]
+output = "../specs/swaplock/api.database.json"
+
+[[surfaces]]
+name = "swaplock-broadcast"
+kind = "broadcast"
+api_header = "libraries/app/include/graphene/app/api.hpp"
+api_qualified_name = "graphene::app::network_broadcast_api"
+excluded_methods = [
+  "broadcast_transaction_with_callback",
+]
+output = "../specs/swaplock/api.network-broadcast.json"

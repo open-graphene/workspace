@@ -1,0 +1,21 @@
+{
+  "x-open-graphene": {
+    "chain": "acta",
+    "kind": "chain-bundle",
+    "surfaces": [
+      {
+        "apiQualifiedName": "graphene::app::database_api",
+        "kind": "database",
+        "name": "acta-database",
+        "spec": "api.database.json"
+      },
+      {
+        "apiQualifiedName": "graphene::app::network_broadcast_api",
+        "kind": "broadcast",
+        "name": "acta-broadcast",
+        "spec": "api.network-broadcast.json"
+      }
+    ],
+    "version": "0.1.0"
+  }
+}

@@ -1,0 +1,35 @@
+[chain]
+name = "acta"
+core_root = "../../chains/acta-network/acta-network-core"
+
+[open_graphene]
+header_roots = [
+  "libraries/protocol",
+  "libraries/chain",
+  "libraries/app",
+  "libraries/wallet",
+  "libraries/plugins",
+]
+
+[[surfaces]]
+name = "acta-database"
+kind = "database"
+api_header = "libraries/app/include/graphene/app/database_api.hpp"
+api_qualified_name = "graphene::app::database_api"
+excluded_methods = [
+  "set_subscribe_callback",
+  "set_pending_transaction_callback",
+  "set_block_applied_callback",
+  "subscribe_to_market",
+]
+output = "../specs/acta/api.database.json"
+
+[[surfaces]]
+name = "acta-broadcast"
+kind = "broadcast"
+api_header = "libraries/app/include/graphene/app/api.hpp"
+api_qualified_name = "graphene::app::network_broadcast_api"
+excluded_methods = [
+  "broadcast_transaction_with_callback",
+]
+output = "../specs/acta/api.network-broadcast.json"
