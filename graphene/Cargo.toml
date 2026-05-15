@@ -10,7 +10,7 @@ version = "0.1.0"
 publish = false
 
 [workspace.dependencies]
-graphene-bindings-swaplock = { path = "../graphene-rs/graphene-bindings-swaplock" }
+graphene-bindings-swaplock = { path = "../graphene-rs/crates/graphene-bindings-swaplock" }
 graphene-codec = { path = "../graphene-rs/crates/graphene-codec" }
 graphene-rpc = { path = "../graphene-rs/crates/graphene-rpc" }
 graphene-signing = { path = "../graphene-rs/crates/graphene-signing" }

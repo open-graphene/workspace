@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_DIR="$(cd "${WORKSPACE_DIR}/.." && pwd)"
-ROOT_OUT_DIR="${REPO_DIR}/graphene-rs"
+ROOT_OUT_DIR="${REPO_DIR}/graphene-rs/crates"
 TMP_DIR="${WORKSPACE_DIR}/.tmp-rs-sdk"
 
 mkdir -p "${ROOT_OUT_DIR}"
@@ -30,3 +30,5 @@ for CHAIN in swaplock acta; do
   rm -rf "${TMP_CHAIN_DIR}"
   echo "regenerated Rust Graphene spec metadata in ${OUT_DIR}/src/spec_metadata.rs"
 done
+
+cargo fmt --manifest-path "${REPO_DIR}/graphene-rs/Cargo.toml" --all

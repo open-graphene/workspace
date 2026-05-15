@@ -4,8 +4,8 @@ members = [
     "crates/graphene-rpc",
     "crates/graphene-signing",
     "crates/graphene-transaction",
-    "graphene-bindings-swaplock",
-    "graphene-bindings-acta",
+    "crates/graphene-bindings-swaplock",
+    "crates/graphene-bindings-acta",
 ]
 resolver = "2"
 
