@@ -12,7 +12,7 @@ mkdir -p "${ROOT_OUT_DIR}"
 
 for CHAIN in swaplock acta; do
   TMP_CHAIN_DIR="${TMP_DIR}-${CHAIN}"
-  OUT_DIR="${ROOT_OUT_DIR}/graphene-dart-bindings-${CHAIN}"
+  OUT_DIR="${ROOT_OUT_DIR}/graphene-bindings-${CHAIN}"
 
   rm -rf "${TMP_CHAIN_DIR}"
   mkdir -p "${TMP_CHAIN_DIR}"

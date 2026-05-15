@@ -1,5 +1,5 @@
 [package]
-name = "graphene-bindings-rs-swaplock"
+name = "graphene-bindings-acta"
 edition = "2021"
 version = "0.1.0"
 publish = false

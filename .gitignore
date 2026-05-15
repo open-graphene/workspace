@@ -42,8 +42,6 @@ coverage/
 .cache/
 tmp/
 
-!graphene-rs
-!graphene-rs/**
 !graphene-rs-v2
 !graphene-rs-v2/**
 graphene-rs-v2/.env
@@ -64,10 +62,8 @@ graphene/target/**
 !graphene-dart/**
 !graphene-rs
 !graphene-rs/**
-!graphene-bindings-rs
-!graphene-bindings-rs/**
-graphene-bindings-rs/**/Cargo.lock
-graphene-bindings-rs/**/target/
-graphene-bindings-rs/**/target/**
+graphene-rs/**/Cargo.lock
+graphene-rs/**/target/
+graphene-rs/**/target/**
 
 !.legacy

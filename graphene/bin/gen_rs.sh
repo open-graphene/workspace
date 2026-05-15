@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_DIR="$(cd "${WORKSPACE_DIR}/.." && pwd)"
-ROOT_OUT_DIR="${REPO_DIR}/graphene-bindings-rs"
+ROOT_OUT_DIR="${REPO_DIR}/graphene-rs"
 TMP_DIR="${WORKSPACE_DIR}/.tmp-rs-sdk"
 
 rm -rf "${ROOT_OUT_DIR}"
@@ -12,7 +12,7 @@ mkdir -p "${ROOT_OUT_DIR}"
 
 for CHAIN in swaplock acta; do
   TMP_CHAIN_DIR="${TMP_DIR}-${CHAIN}"
-  OUT_DIR="${ROOT_OUT_DIR}/graphene-bindings-rs-${CHAIN}"
+  OUT_DIR="${ROOT_OUT_DIR}/graphene-bindings-${CHAIN}"
 
   rm -rf "${TMP_CHAIN_DIR}"
   mkdir -p "${TMP_CHAIN_DIR}"
@@ -30,7 +30,7 @@ for CHAIN in swaplock acta; do
   cp "${TMP_CHAIN_DIR}/rust/src/lib.rs" "${OUT_DIR}/src/lib.rs"
   cat > "${OUT_DIR}/Cargo.toml" <<EOF
 [package]
-name = "graphene-bindings-rs-${CHAIN}"
+name = "graphene-bindings-${CHAIN}"
 edition = "2021"
 version = "0.1.0"
 publish = false

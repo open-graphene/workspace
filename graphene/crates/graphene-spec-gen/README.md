@@ -331,7 +331,7 @@ bin/gen_dart.sh
 bin/gen_rs.sh
 ```
 
-`bin/gen_ts.sh` regenerates the current TypeScript generated artifacts into `../graphene-ts/graphene-ts-bindings-swaplock/src/index.ts` and `../graphene-ts/graphene-ts-bindings-acta/src/index.ts`. `bin/gen_dart.sh` regenerates the current Dart generated artifacts into `../graphene-dart/graphene-dart-bindings-swaplock/lib/open_graphene.dart` and `../graphene-dart/graphene-dart-bindings-acta/lib/open_graphene.dart`. `bin/gen_rs.sh` regenerates the current Rust generated artifacts into `../graphene-bindings-rs/graphene-bindings-rs-swaplock/src/lib.rs` and `../graphene-bindings-rs/graphene-bindings-rs-acta/src/lib.rs`, with standalone `Cargo.toml` files for `cargo check`. These wrapper outputs use the existing prototype emitters and are not yet full production SDK runtimes; they are stable generated SDK artifacts for the mandatory Swaplock and Acta specs.
+`bin/gen_ts.sh` regenerates the current TypeScript generated artifacts into `../graphene-ts/graphene-bindings-swaplock/src/index.ts` and `../graphene-ts/graphene-bindings-acta/src/index.ts`. `bin/gen_dart.sh` regenerates the current Dart generated artifacts into `../graphene-dart/graphene-bindings-swaplock/lib/open_graphene.dart` and `../graphene-dart/graphene-bindings-acta/lib/open_graphene.dart`. `bin/gen_rs.sh` regenerates the current Rust generated artifacts into `../graphene-rs/graphene-bindings-swaplock/src/lib.rs` and `../graphene-rs/graphene-bindings-acta/src/lib.rs`, with standalone `Cargo.toml` files for `cargo check`. These wrapper outputs use the existing prototype emitters and are not yet full production SDK runtimes; they are stable generated SDK artifacts for the mandatory Swaplock and Acta specs.
 
 ## Emitted targets
 
