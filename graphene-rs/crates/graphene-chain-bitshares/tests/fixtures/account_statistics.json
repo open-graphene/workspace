@@ -1,0 +1,37 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "account_statistics",
+  "object": {
+    "core_in_balance": "13628907401",
+    "has_cashback_vb": false,
+    "id": "2.6.0",
+    "is_voting": false,
+    "last_vote_time": "1970-01-01T00:00:00",
+    "lifetime_fees_paid": "656704728176",
+    "most_recent_op": "2.9.1416055793",
+    "name": "committee-account",
+    "owner": "1.2.0",
+    "pending_fees": 0,
+    "pending_vested_fees": 0,
+    "removed_ops": 73843,
+    "total_core_in_orders": 0,
+    "total_core_inactive": 0,
+    "total_core_pob": 0,
+    "total_core_pol": 0,
+    "total_ops": 73943,
+    "total_pob_value": 0,
+    "total_pol_value": 0,
+    "vote_tally_time": "2020-09-28T15:00:00",
+    "vp_active": 0,
+    "vp_all": "44503352989",
+    "vp_committee": 0,
+    "vp_witness": 0,
+    "vp_worker": 0
+  },
+  "object_id": "2.6.0",
+  "object_id_prefix": "2.6",
+  "probe_range": [
+    0,
+    100
+  ]
+}

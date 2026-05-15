@@ -1,0 +1,237 @@
+marker_objects = ["base", "custom", "null", "reserved0"]
+
+[chain]
+name = "bitshares"
+core_path = "chains/bitshares/bitshares-core"
+
+[wallet_api]
+header_path = "libraries/wallet/include/graphene/wallet/wallet.hpp"
+output_path = "src/wallet_api.rs"
+
+[[objects]]
+family_name = "account"
+cpp_class = "account_object"
+header_path = "libraries/chain/include/graphene/chain/account_object.hpp"
+source_path = "libraries/chain/account_object.cpp"
+
+[[objects]]
+family_name = "account_balance"
+cpp_class = "account_balance_object"
+header_path = "libraries/chain/include/graphene/chain/account_object.hpp"
+source_path = "libraries/chain/account_object.cpp"
+
+[[objects]]
+family_name = "account_statistics"
+cpp_class = "account_statistics_object"
+header_path = "libraries/chain/include/graphene/chain/account_object.hpp"
+source_path = "libraries/chain/account_object.cpp"
+
+[[objects]]
+family_name = "account_history"
+cpp_class = "account_history_object"
+header_path = "libraries/chain/include/graphene/chain/operation_history_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "asset"
+cpp_class = "asset_object"
+header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+source_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+
+[[objects]]
+family_name = "asset_bitasset_data"
+cpp_class = "asset_bitasset_data_object"
+header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+source_path = "libraries/chain/asset_object.cpp"
+
+[[objects]]
+family_name = "asset_dynamic_data"
+cpp_class = "asset_dynamic_data_object"
+header_path = "libraries/chain/include/graphene/chain/asset_object.hpp"
+source_path = "libraries/chain/asset_object.cpp"
+
+[[objects]]
+family_name = "balance"
+cpp_class = "balance_object"
+header_path = "libraries/chain/include/graphene/chain/balance_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "blinded_balance"
+cpp_class = "blinded_balance_object"
+header_path = "libraries/chain/include/graphene/chain/confidential_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "budget_record"
+cpp_class = "budget_record_object"
+header_path = "libraries/chain/include/graphene/chain/budget_record_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "block_summary"
+cpp_class = "block_summary_object"
+header_path = "libraries/chain/include/graphene/chain/block_summary_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "buyback"
+cpp_class = "buyback_object"
+header_path = "libraries/chain/include/graphene/chain/buyback_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "call_order"
+cpp_class = "call_order_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
+family_name = "chain_property"
+cpp_class = "chain_property_object"
+header_path = "libraries/chain/include/graphene/chain/chain_property_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "committee_member"
+cpp_class = "committee_member_object"
+header_path = "libraries/chain/include/graphene/chain/committee_member_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "collateral_bid"
+cpp_class = "collateral_bid_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
+family_name = "custom_authority"
+cpp_class = "custom_authority_object"
+header_path = "libraries/chain/include/graphene/chain/custom_authority_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "credit_deal"
+cpp_class = "credit_deal_object"
+header_path = "libraries/chain/include/graphene/chain/credit_offer_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "credit_deal_summary"
+cpp_class = "credit_deal_summary_object"
+header_path = "libraries/chain/include/graphene/chain/credit_offer_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "credit_offer"
+cpp_class = "credit_offer_object"
+header_path = "libraries/chain/include/graphene/chain/credit_offer_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "dynamic_global_property"
+cpp_class = "dynamic_global_property_object"
+header_path = "libraries/chain/include/graphene/chain/global_property_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "fba_accumulator"
+cpp_class = "fba_accumulator_object"
+header_path = "libraries/chain/include/graphene/chain/fba_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "force_settlement"
+cpp_class = "force_settlement_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
+family_name = "global_property"
+cpp_class = "global_property_object"
+header_path = "libraries/chain/include/graphene/chain/global_property_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "htlc"
+cpp_class = "htlc_object"
+header_path = "libraries/chain/include/graphene/chain/htlc_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "operation_history"
+cpp_class = "operation_history_object"
+header_path = "libraries/chain/include/graphene/chain/operation_history_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "liquidity_pool"
+cpp_class = "liquidity_pool_object"
+header_path = "libraries/chain/include/graphene/chain/liquidity_pool_object.hpp"
+source_path = "libraries/chain/include/graphene/chain/liquidity_pool_object.hpp"
+
+[[objects]]
+family_name = "limit_order"
+cpp_class = "limit_order_object"
+header_path = "libraries/chain/include/graphene/chain/market_object.hpp"
+source_path = "libraries/chain/market_object.cpp"
+
+[[objects]]
+family_name = "proposal"
+cpp_class = "proposal_object"
+header_path = "libraries/chain/include/graphene/chain/proposal_object.hpp"
+source_path = "libraries/chain/proposal_object.cpp"
+
+[[objects]]
+family_name = "samet_fund"
+cpp_class = "samet_fund_object"
+header_path = "libraries/chain/include/graphene/chain/samet_fund_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "special_authority"
+cpp_class = "special_authority_object"
+header_path = "libraries/chain/include/graphene/chain/special_authority_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "ticket"
+cpp_class = "ticket_object"
+header_path = "libraries/chain/include/graphene/chain/ticket_object.hpp"
+source_path = "libraries/chain/ticket_object.cpp"
+
+[[objects]]
+family_name = "transaction_history"
+cpp_class = "transaction_history_object"
+header_path = "libraries/chain/include/graphene/chain/transaction_history_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "vesting_balance"
+cpp_class = "vesting_balance_object"
+header_path = "libraries/chain/include/graphene/chain/vesting_balance_object.hpp"
+source_path = "libraries/chain/include/graphene/chain/vesting_balance_object.hpp"
+
+[[objects]]
+family_name = "witness"
+cpp_class = "witness_object"
+header_path = "libraries/chain/include/graphene/chain/witness_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "witness_schedule"
+cpp_class = "witness_schedule_object"
+header_path = "libraries/chain/include/graphene/chain/witness_schedule_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "worker"
+cpp_class = "worker_object"
+header_path = "libraries/chain/include/graphene/chain/worker_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"
+
+[[objects]]
+family_name = "withdraw_permission"
+cpp_class = "withdraw_permission_object"
+header_path = "libraries/chain/include/graphene/chain/withdraw_permission_object.hpp"
+source_path = "libraries/chain/small_objects.cpp"

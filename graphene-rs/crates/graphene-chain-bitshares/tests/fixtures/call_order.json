@@ -1,0 +1,12 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "call_order",
+  "object": null,
+  "object_id": null,
+  "object_id_prefix": "1.8",
+  "probe_range": [
+    0,
+    100
+  ],
+  "skip_reason": "No call_order object returned for object ID prefix 1.8 within probe range 0..100."
+}

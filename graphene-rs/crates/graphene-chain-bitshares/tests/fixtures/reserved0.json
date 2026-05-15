@@ -1,0 +1,38 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "error": {
+    "code": 10,
+    "data": {
+      "code": 10,
+      "message": "Assert Exception",
+      "name": "assert_exception",
+      "stack": [
+        {
+          "context": {
+            "file": "object_database.cpp",
+            "hostname": "",
+            "level": "error",
+            "line": 61,
+            "method": "get_index",
+            "thread_name": "th_a",
+            "timestamp": "2026-05-11T13:20:43"
+          },
+          "data": {
+            "space_id": 2,
+            "type_id": 2
+          },
+          "format": "tmp != nullptr: Database index ${space_id}.${type_id} has not been initialized"
+        }
+      ]
+    },
+    "message": "Execution error: Assert Exception: tmp != nullptr: Database index 2.2 has not been initialized"
+  },
+  "family": "reserved0",
+  "object": null,
+  "object_id": null,
+  "object_id_prefix": "2.2",
+  "probe_range": [
+    0,
+    100
+  ]
+}

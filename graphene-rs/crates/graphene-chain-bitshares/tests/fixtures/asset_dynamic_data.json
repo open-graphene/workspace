@@ -1,0 +1,18 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "asset_dynamic_data",
+  "object": {
+    "accumulated_collateral_fees": 0,
+    "accumulated_fees": 0,
+    "confidential_supply": "36439829564",
+    "current_supply": "299656320759081",
+    "fee_pool": "9588769679",
+    "id": "2.3.0"
+  },
+  "object_id": "2.3.0",
+  "object_id_prefix": "2.3",
+  "probe_range": [
+    0,
+    100
+  ]
+}

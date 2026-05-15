@@ -1,0 +1,22 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "witness",
+  "object": {
+    "id": "1.6.1",
+    "last_aslot": 172345,
+    "last_confirmed_block_num": 167184,
+    "pay_vb": "1.13.8",
+    "signing_key": "BTS6eTWdfBXvgmfY1VLSRc6iiFk4qMbmsLcLCEEbbLYJBgAYw3C7L",
+    "total_missed": 848,
+    "total_votes": 0,
+    "url": "",
+    "vote_id": "1:0",
+    "witness_account": "1.2.90742"
+  },
+  "object_id": "1.6.1",
+  "object_id_prefix": "1.6",
+  "probe_range": [
+    0,
+    100
+  ]
+}

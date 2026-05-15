@@ -64,8 +64,10 @@ graphene/target/**
 !graphene-dart/**
 !graphene-rs
 !graphene-rs/**
-graphene-rs/**/Cargo.lock
-graphene-rs/**/target/
-graphene-rs/**/target/**
+!graphene-bindings-rs
+!graphene-bindings-rs/**
+graphene-bindings-rs/**/Cargo.lock
+graphene-bindings-rs/**/target/
+graphene-bindings-rs/**/target/**
 
 !.legacy

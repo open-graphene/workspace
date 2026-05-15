@@ -1,0 +1,12 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "transaction_history",
+  "object": null,
+  "object_id": null,
+  "object_id_prefix": "2.7",
+  "probe_range": [
+    0,
+    100
+  ],
+  "skip_reason": "No transaction_history object returned for object ID prefix 2.7 within probe range 0..100."
+}

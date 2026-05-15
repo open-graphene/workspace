@@ -1,0 +1,12 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "force_settlement",
+  "object": null,
+  "object_id": null,
+  "object_id_prefix": "1.4",
+  "probe_range": [
+    0,
+    100
+  ],
+  "skip_reason": "No force_settlement object returned for object ID prefix 1.4 within probe range 0..100."
+}

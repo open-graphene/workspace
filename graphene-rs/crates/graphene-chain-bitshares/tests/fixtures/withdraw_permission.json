@@ -1,0 +1,23 @@
+{
+  "endpoint": "https://cloud.xbts.io/ws",
+  "family": "withdraw_permission",
+  "object": {
+    "authorized_account": "1.2.1014581",
+    "claimed_this_period": 0,
+    "expiration": "2028-07-17T16:52:15",
+    "id": "1.12.35",
+    "period_start_time": "2018-07-20T16:52:15",
+    "withdraw_from_account": "1.2.21561",
+    "withdrawal_limit": {
+      "amount": 50000,
+      "asset_id": "1.3.119"
+    },
+    "withdrawal_period_sec": 86400
+  },
+  "object_id": "1.12.35",
+  "object_id_prefix": "1.12",
+  "probe_range": [
+    0,
+    100
+  ]
+}
