@@ -1,12 +1,16 @@
 use graphene_bindings_swaplock::{
     broadcast_signed_transaction_synchronous_typed, lookup_exact_account_id,
-    prepare_transfer_transaction, GetChainIdParams, TransferDraft, PUBLIC_SWAPLOCK_TESTNET_WIF,
-    SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL, SWAPLOCK_TESTNET_TO_ACCOUNT,
-    SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET, SWAPLOCK_TESTNET_WS_URL,
+    prepare_transfer_transaction, GetChainIdParams, TransferDraft,
 };
 use graphene_rpc::{GrapheneWebSocketSession, HttpTransport, RpcClient};
 use graphene_signing::{ChainId, WifSigner};
 use std::sync::Arc;
+
+use graphene_swaplock_examples::testnet::{
+    PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
+    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,
+    SWAPLOCK_TESTNET_WS_URL,
+};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database_client = RpcClient::new(HttpTransport::new(SWAPLOCK_TESTNET_HTTP_URL));

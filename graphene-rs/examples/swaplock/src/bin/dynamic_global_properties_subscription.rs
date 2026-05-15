@@ -1,5 +1,6 @@
-use graphene_bindings_swaplock::{subscribe_dynamic_global_properties, SWAPLOCK_TESTNET_WS_URL};
+use graphene_bindings_swaplock::subscribe_dynamic_global_properties;
 use graphene_rpc::GrapheneWebSocketSession;
+use graphene_swaplock_examples::testnet::SWAPLOCK_TESTNET_WS_URL;
 use std::sync::mpsc;
 use std::time::Duration;
 

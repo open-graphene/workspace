@@ -1,5 +1,6 @@
-use graphene_bindings_swaplock::{set_block_applied_callback, SWAPLOCK_TESTNET_WS_URL};
+use graphene_bindings_swaplock::set_block_applied_callback;
 use graphene_rpc::GrapheneWebSocketSession;
+use graphene_swaplock_examples::testnet::SWAPLOCK_TESTNET_WS_URL;
 use std::sync::mpsc;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

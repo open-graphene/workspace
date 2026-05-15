@@ -28,7 +28,6 @@ mod account;
 mod codec;
 mod dynamic_global_properties;
 mod scalar;
-mod testnet;
 mod transaction;
 mod transfer;
 
@@ -42,11 +41,6 @@ pub use graphene_rpc::database_callbacks::{
     SetBlockAppliedCallbackParams,
 };
 pub use graphene_transaction::broadcast::{BroadcastResultError, SynchronousBroadcastResult};
-pub use testnet::{
-    PUBLIC_SWAPLOCK_TESTNET_WIF, SWAPLOCK_TESTNET_FROM_ACCOUNT, SWAPLOCK_TESTNET_HTTP_URL,
-    SWAPLOCK_TESTNET_TO_ACCOUNT, SWAPLOCK_TESTNET_TRANSFER_AMOUNT, SWAPLOCK_TESTNET_TRANSFER_ASSET,
-    SWAPLOCK_TESTNET_WS_URL,
-};
 pub use transaction::{
     broadcast_signed_transaction, broadcast_signed_transaction_synchronous,
     broadcast_signed_transaction_synchronous_typed, broadcast_signed_transaction_with_callback,
