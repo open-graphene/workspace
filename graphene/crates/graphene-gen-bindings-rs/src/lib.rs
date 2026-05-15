@@ -5,6 +5,7 @@
 //! JSON wire shape. Transport/runtime SDK layers are intentionally out of scope.
 
 use std::collections::{BTreeMap, BTreeSet};
+use std::fmt::Write as _;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -63,6 +64,7 @@ pub fn generate_chain(job: &ChainBindingJob) -> Result<()> {
     let surface_paths = surface_spec_paths(&manifest, manifest_dir)?;
 
     let mut merged_schemas = Map::new();
+    let mut surface_specs = Vec::new();
     for surface_path in &surface_paths {
         let source = fs::read_to_string(surface_path)
             .map_err(|error| format!("failed to read {}: {error}", surface_path.display()))?;
@@ -85,6 +87,7 @@ pub fn generate_chain(job: &ChainBindingJob) -> Result<()> {
                 merged_schemas.insert(name.clone(), schema.clone());
             }
         }
+        surface_specs.push((surface_path.clone(), spec));
     }
 
     let generated_dir = job.crate_dir.join("src/generated");
@@ -107,6 +110,7 @@ pub fn generate_chain(job: &ChainBindingJob) -> Result<()> {
         generated_dir.join("metadata.rs"),
         emit_metadata(&variants, &job.chain),
     )?;
+    write_rpc_outputs(&generated_dir, &surface_specs, &job.chain)?;
 
     write_crate_lib(&job.crate_dir, &job.chain)?;
     ensure_crate_dependencies(&job.crate_dir)?;
@@ -374,6 +378,9 @@ fn schema_fragment_rust_type(fragment: &Value) -> String {
 
 fn ref_rust_type(reference: &str) -> String {
     let name = reference.rsplit('/').next().unwrap_or(reference);
+    if name == "precomputable_transaction" {
+        return "SignedTransaction".to_owned();
+    }
     snake_to_pascal(name)
 }
 
@@ -499,8 +506,18 @@ fn write_crate_lib(crate_dir: &Path, chain: &str) -> Result<()> {
             "//! Rust data models and minimal runtime helpers for {title}.\n//!\n//! The generated modules provide schema structs and Graphene `static_variant`\n//! enums. Hand-written modules may provide chain-local transaction, signing,\n//! and broadcast helpers on top of the shared runtime crates.\n\n#![allow(clippy::all)]\n#![allow(dead_code)]\n#![allow(non_camel_case_types)]\n#![allow(non_snake_case)]\n#![allow(unused_imports)]\n#![allow(clippy::large_enum_variant)]\n#![allow(clippy::enum_variant_names)]\n\npub mod generated {{\n    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");\n    include!(\"generated/rpc.rs\");\n}}\n\npub mod broadcast {{\n    use super::generated::*;\n    include!(\"generated/broadcast_rpc.rs\");\n}}\n\nmod account;\nmod codec;\nmod dynamic_global_properties;\nmod scalar;\nmod transaction;\nmod transfer;\n\npub use account::{{lookup_exact_account_id, LookupAccountError}};\npub use dynamic_global_properties::{{\n    subscribe_dynamic_global_properties, SetSubscribeCallbackParams,\n}};\npub use generated::*;\npub use graphene_rpc::database_callbacks::{{\n    set_block_applied_callback, BlockAppliedNotice, BlockAppliedNoticeError,\n    SetBlockAppliedCallbackParams,\n}};\npub use graphene_transaction::broadcast::{{BroadcastResultError, SynchronousBroadcastResult}};\npub use transaction::{{\n    broadcast_signed_transaction, broadcast_signed_transaction_synchronous,\n    broadcast_signed_transaction_synchronous_typed, broadcast_signed_transaction_with_callback,\n    broadcast_signed_transaction_with_callback_typed, sign_transaction,\n    validate_signed_transaction, BroadcastTransactionWithCallbackParams, PreparedTransaction,\n    SignTransactionError, SignedTransactionEnvelope,\n}};\npub use transfer::{{\n    apply_required_fee, build_transfer_operation, fetch_required_fee_for_transfer,\n    prepare_transaction, prepare_transfer_transaction, BuildTransactionError, TransferDraft,\n}};\n"
         )
     } else {
+        let generated_includes = if has_rpc && has_broadcast_rpc {
+            "    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");\n    include!(\"generated/rpc.rs\");"
+        } else {
+            "    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");"
+        };
+        let broadcast_module = if has_broadcast_rpc {
+            "\npub mod broadcast {\n    use super::generated::*;\n    include!(\"generated/broadcast_rpc.rs\");\n}\n"
+        } else {
+            ""
+        };
         format!(
-            "//! Generated Rust data models for {title}.\n//!\n//! This crate contains schema structs and Graphene static_variant enums generated\n//! from open-graphene specs. Transport and runtime SDK layers are intentionally\n//! not generated here.\n\n#![allow(clippy::all)]\n#![allow(dead_code)]\n#![allow(non_camel_case_types)]\n#![allow(non_snake_case)]\n#![allow(unused_imports)]\n#![allow(clippy::large_enum_variant)]\n#![allow(clippy::enum_variant_names)]\n\npub mod generated {{\n    include!(\"generated/types.rs\");\n    include!(\"generated/variants.rs\");\n    include!(\"generated/metadata.rs\");\n}}\n\npub use generated::*;\n"
+            "//! Generated Rust data models for {title}.\n//!\n//! This crate contains schema structs, Graphene static_variant enums, and typed\n//! OpenRPC parameter structs generated from open-graphene specs. Transport and\n//! runtime SDK layers are intentionally not generated here.\n\n#![allow(clippy::all)]\n#![allow(dead_code)]\n#![allow(non_camel_case_types)]\n#![allow(non_snake_case)]\n#![allow(unused_imports)]\n#![allow(clippy::large_enum_variant)]\n#![allow(clippy::enum_variant_names)]\n\npub mod generated {{\n{generated_includes}\n}}\n{broadcast_module}\npub use generated::*;\n"
         )
     };
     fs::write(crate_dir.join("src/lib.rs"), source)?;
@@ -516,14 +533,381 @@ fn ensure_crate_dependencies(crate_dir: &Path) -> Result<()> {
         .unwrap_or(source.as_str())
         .trim_end();
     let has_runtime_helpers = crate_dir.join("src/transfer.rs").exists();
+    let has_rpc = crate_dir.join("src/generated/rpc.rs").exists()
+        || crate_dir.join("src/generated/broadcast_rpc.rs").exists();
     let dependencies = if has_runtime_helpers {
         "chrono.workspace = true\ngraphene-codec.workspace = true\ngraphene-rpc.workspace = true\ngraphene-signing.workspace = true\ngraphene-transaction.workspace = true\nregress.workspace = true\nserde.workspace = true\nserde_json.workspace = true\n"
+    } else if has_rpc {
+        "graphene-rpc.workspace = true\nregress.workspace = true\nserde.workspace = true\nserde_json.workspace = true\n"
     } else {
         "regress = \"0.10\"\nserde = { version = \"1\", features = [\"derive\"] }\nserde_json = \"1\"\n"
     };
     let updated = format!("{package}\n\n[dependencies]\n{dependencies}");
     fs::write(cargo_toml, updated)?;
     Ok(())
+}
+
+fn write_rpc_outputs(
+    generated_dir: &Path,
+    surface_specs: &[(PathBuf, Value)],
+    chain: &str,
+) -> Result<()> {
+    let mut database_specs = Vec::new();
+    let mut broadcast_specs = Vec::new();
+    for (path, spec) in surface_specs {
+        let file_name = path
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or("");
+        if file_name.contains("network-broadcast") || file_name.contains("broadcast") {
+            broadcast_specs.push((path.clone(), spec.clone()));
+        } else {
+            database_specs.push((path.clone(), spec.clone()));
+        }
+    }
+
+    if !database_specs.is_empty() {
+        fs::write(
+            generated_dir.join("rpc.rs"),
+            emit_rpc_module(&database_specs, chain, "database"),
+        )?;
+    }
+    if !broadcast_specs.is_empty() {
+        fs::write(
+            generated_dir.join("broadcast_rpc.rs"),
+            emit_rpc_module(&broadcast_specs, chain, "network-broadcast"),
+        )?;
+    }
+    Ok(())
+}
+
+fn emit_rpc_module(specs: &[(PathBuf, Value)], chain: &str, surface: &str) -> String {
+    let mut methods = Vec::new();
+    let mut schemas = Map::new();
+    let mut source_labels = Vec::new();
+    for (path, spec) in specs {
+        source_labels.push(path.display().to_string());
+        if let Some(spec_methods) = spec.get("methods").and_then(Value::as_array) {
+            methods.extend(spec_methods.iter().cloned());
+        }
+        if let Some(spec_schemas) = spec
+            .pointer("/components/schemas")
+            .and_then(Value::as_object)
+        {
+            for (name, schema) in spec_schemas {
+                schemas
+                    .entry(name.clone())
+                    .or_insert_with(|| schema.clone());
+            }
+        }
+    }
+
+    let mut out = String::new();
+    writeln!(
+        out,
+        "// @generated by graphene-gen-bindings-rs. Do not edit."
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "// Chain: {chain}; surface: {surface}; OpenRPC method params."
+    )
+    .unwrap();
+    writeln!(out, "// Source: {}\n", source_labels.join(", ")).unwrap();
+    writeln!(out, "use graphene_rpc::OpenRpcParams;\n").unwrap();
+
+    let method_names = methods
+        .iter()
+        .filter_map(|method| method.get("name").and_then(Value::as_str))
+        .collect::<Vec<_>>();
+    writeln!(
+        out,
+        "/// OpenRPC method names generated for this chain surface."
+    )
+    .unwrap();
+    writeln!(out, "pub const OPENRPC_METHODS: &[&str] = &[").unwrap();
+    for name in &method_names {
+        writeln!(out, "    {name:?},").unwrap();
+    }
+    writeln!(out, "];\n").unwrap();
+
+    if method_names.contains(&"get_objects") {
+        emit_get_object_result(&mut out, &schemas);
+    }
+    if method_names.contains(&"get_required_fees") {
+        emit_required_fee(&mut out);
+    }
+    if method_names.contains(&"lookup_vote_ids") {
+        emit_lookup_vote_id_object(&mut out);
+    }
+
+    let mut used_structs = BTreeSet::new();
+    for method in methods {
+        let Some(name) = method.get("name").and_then(Value::as_str) else {
+            continue;
+        };
+        let struct_name = format!("{}Params", snake_to_pascal(name));
+        if !used_structs.insert(struct_name.clone()) {
+            continue;
+        }
+        let params = method
+            .get("params")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default();
+        let result_type = method_result_type(&method);
+
+        emit_doc(
+            &mut out,
+            method.get("description").and_then(Value::as_str),
+            "",
+        );
+        if params.is_empty() {
+            writeln!(out, "#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, serde::Serialize, serde::Deserialize)]").unwrap();
+            writeln!(out, "pub struct {struct_name};\n").unwrap();
+        } else {
+            writeln!(
+                out,
+                "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]"
+            )
+            .unwrap();
+            writeln!(out, "pub struct {struct_name} {{").unwrap();
+            for param in &params {
+                let param_name = param.get("name").and_then(Value::as_str).unwrap_or("param");
+                emit_doc(
+                    &mut out,
+                    param.get("description").and_then(Value::as_str),
+                    "    ",
+                );
+                writeln!(
+                    out,
+                    "    pub {}: {},",
+                    rust_field_name(param_name),
+                    schema_fragment_rust_type(param.get("schema").unwrap_or(&Value::Null))
+                )
+                .unwrap();
+            }
+            writeln!(out, "}}\n").unwrap();
+        }
+
+        writeln!(out, "impl OpenRpcParams for {struct_name} {{").unwrap();
+        writeln!(out, "    const METHOD: &'static str = {name:?};").unwrap();
+        writeln!(out, "    type Response = {result_type};\n").unwrap();
+        writeln!(
+            out,
+            "    fn into_positional_params(self) -> Vec<serde_json::Value> {{"
+        )
+        .unwrap();
+        if params.is_empty() {
+            writeln!(out, "        Vec::new()").unwrap();
+        } else {
+            writeln!(out, "        vec![").unwrap();
+            for param in &params {
+                let param_name = param.get("name").and_then(Value::as_str).unwrap_or("param");
+                writeln!(
+                    out,
+                    "            serde_json::json!(self.{}),",
+                    rust_field_name(param_name)
+                )
+                .unwrap();
+            }
+            writeln!(out, "        ]").unwrap();
+        }
+        writeln!(out, "    }}").unwrap();
+        writeln!(out, "}}\n").unwrap();
+    }
+
+    out
+}
+
+fn method_result_type(method: &Value) -> String {
+    match method.get("name").and_then(Value::as_str) {
+        Some("get_objects") => return "Vec<GetObjectResult>".to_owned(),
+        Some("get_required_fees") => return "Vec<RequiredFee>".to_owned(),
+        Some("lookup_vote_ids") => return "Vec<LookupVoteIdObject>".to_owned(),
+        _ => {}
+    }
+    let result = method.get("result").unwrap_or(&Value::Null);
+    if matches!(
+        result.get("x-cpp-type").and_then(Value::as_str),
+        Some("fc::variant" | "variant")
+    ) {
+        return "serde_json::Value".to_owned();
+    }
+    schema_fragment_rust_type(result.get("schema").unwrap_or(&Value::Null))
+}
+
+fn emit_get_object_result(out: &mut String, schemas: &Map<String, Value>) {
+    let mut object_schema_names = schemas
+        .iter()
+        .filter_map(|(name, schema)| {
+            schema
+                .get("x-cpp-type")
+                .and_then(Value::as_str)
+                .is_some_and(|cpp_type| cpp_type.ends_with("_object"))
+                .then_some(name.as_str())
+        })
+        .collect::<Vec<_>>();
+    object_schema_names.sort_unstable();
+
+    writeln!(out, "/// Typed object union returned by `get_objects`.").unwrap();
+    writeln!(out, "///").unwrap();
+    writeln!(
+        out,
+        "/// Graphene `get_objects` accepts arbitrary object IDs and returns the"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "/// corresponding concrete chain object. Missing objects may be returned as"
+    )
+    .unwrap();
+    writeln!(out, "/// JSON `null` by some nodes.").unwrap();
+    writeln!(
+        out,
+        "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]"
+    )
+    .unwrap();
+    writeln!(out, "#[serde(untagged)]").unwrap();
+    writeln!(out, "pub enum GetObjectResult {{").unwrap();
+    for schema_name in object_schema_names {
+        let rust_name = snake_to_pascal(schema_name);
+        writeln!(out, "    {rust_name}({rust_name}),").unwrap();
+    }
+    writeln!(out, "    Null(()),").unwrap();
+    writeln!(out, "}}\n").unwrap();
+}
+
+fn emit_required_fee(out: &mut String) {
+    writeln!(out, "/// Typed fee result returned by `get_required_fees`.").unwrap();
+    writeln!(out, "///").unwrap();
+    writeln!(
+        out,
+        "/// Normal operations return a single `asset` fee. Proposal-create operations"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "/// return an FC pair of the proposal fee and recursively nested proposed"
+    )
+    .unwrap();
+    writeln!(out, "/// operation fees: `[fee, [nested_fee, ...]]`.").unwrap();
+    writeln!(
+        out,
+        "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]"
+    )
+    .unwrap();
+    writeln!(out, "#[serde(untagged)]").unwrap();
+    writeln!(out, "pub enum RequiredFee {{").unwrap();
+    writeln!(out, "    Asset(Asset),").unwrap();
+    writeln!(out, "    ProposalCreate((Asset, Vec<RequiredFee>)),").unwrap();
+    writeln!(out, "}}\n").unwrap();
+}
+
+fn emit_lookup_vote_id_object(out: &mut String) {
+    writeln!(out, "/// Typed object union returned by `lookup_vote_ids`.").unwrap();
+    writeln!(out, "///").unwrap();
+    writeln!(
+        out,
+        "/// Graphene returns concrete vote target objects in one heterogeneous array."
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "/// The object `id` space identifies the concrete shape: committee members"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "/// use `1.5.x`, witnesses use `1.6.x`, and workers use the worker object space."
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]"
+    )
+    .unwrap();
+    writeln!(out, "#[serde(untagged)]").unwrap();
+    writeln!(out, "pub enum LookupVoteIdObject {{").unwrap();
+    writeln!(out, "    CommitteeMember(CommitteeMemberObject),").unwrap();
+    writeln!(out, "    Witness(WitnessObject),").unwrap();
+    writeln!(out, "    Worker(WorkerObject),").unwrap();
+    writeln!(out, "}}\n").unwrap();
+}
+
+fn emit_doc(out: &mut String, text: Option<&str>, indent: &str) {
+    let Some(text) = text else { return };
+    for line in text.trim().lines() {
+        let line = line.trim();
+        if line.is_empty() {
+            writeln!(out, "{indent}///").unwrap();
+        } else {
+            writeln!(out, "{indent}/// {line}").unwrap();
+        }
+    }
+}
+
+fn rust_field_name(name: &str) -> String {
+    let mut clean = name
+        .chars()
+        .map(|ch| {
+            if ch.is_ascii_alphanumeric() || ch == '_' {
+                ch
+            } else {
+                '_'
+            }
+        })
+        .collect::<String>();
+    if clean.is_empty() || clean.starts_with(|ch: char| ch.is_ascii_digit()) {
+        clean = format!("param_{clean}");
+    }
+    if is_rust_keyword(&clean) {
+        format!("r#{clean}")
+    } else {
+        clean
+    }
+}
+
+fn is_rust_keyword(value: &str) -> bool {
+    matches!(
+        value,
+        "as" | "break"
+            | "const"
+            | "continue"
+            | "crate"
+            | "else"
+            | "enum"
+            | "extern"
+            | "false"
+            | "fn"
+            | "for"
+            | "if"
+            | "impl"
+            | "in"
+            | "let"
+            | "loop"
+            | "match"
+            | "mod"
+            | "move"
+            | "mut"
+            | "pub"
+            | "ref"
+            | "return"
+            | "self"
+            | "Self"
+            | "static"
+            | "struct"
+            | "super"
+            | "trait"
+            | "true"
+            | "type"
+            | "unsafe"
+            | "where"
+            | "while"
+            | "async"
+            | "await"
+            | "dyn"
+    )
 }
 
 fn strip_named_items(source: &str, names: &BTreeSet<String>) -> String {

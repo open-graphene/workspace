@@ -1,8 +1,8 @@
 //! Generated Rust data models for Acta.
 //!
-//! This crate contains schema structs and Graphene static_variant enums generated
-//! from open-graphene specs. Transport and runtime SDK layers are intentionally
-//! not generated here.
+//! This crate contains schema structs, Graphene static_variant enums, and typed
+//! OpenRPC parameter structs generated from open-graphene specs. Transport and
+//! runtime SDK layers are intentionally not generated here.
 
 #![allow(clippy::all)]
 #![allow(dead_code)]
@@ -16,6 +16,12 @@ pub mod generated {
     include!("generated/types.rs");
     include!("generated/variants.rs");
     include!("generated/metadata.rs");
+    include!("generated/rpc.rs");
+}
+
+pub mod broadcast {
+    use super::generated::*;
+    include!("generated/broadcast_rpc.rs");
 }
 
 pub use generated::*;
