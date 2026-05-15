@@ -80,6 +80,7 @@ Rust binding generation is deliberately excluded from this crate.
 - local `#/components/schemas/*` references
 - absence of `TODO` placeholder descriptions
 - Graphene static variants encoded as `[index, payload]` with matching `x-graphene-static-variant` metadata
+- Graphene RPC methods with `x-graphene-rpc` metadata (`surface`, `apiName`, `paramsEncoding`, `transportMethod`, `methodKind`)
 - Graphene containers encoded with neutral `x-graphene-container` metadata
 - neutral `x-graphene-scalar` metadata on `GrapheneTimePointSec`, `GrapheneInt64`, and `GrapheneUInt64`
 

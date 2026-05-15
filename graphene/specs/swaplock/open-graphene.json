@@ -31,12 +31,14 @@
     ],
     "surfaces": [
       {
+        "apiName": "database",
         "apiQualifiedName": "graphene::app::database_api",
         "kind": "database",
         "name": "swaplock-database",
         "spec": "api.database.json"
       },
       {
+        "apiName": "network_broadcast",
         "apiQualifiedName": "graphene::app::network_broadcast_api",
         "kind": "broadcast",
         "name": "swaplock-broadcast",

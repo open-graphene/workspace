@@ -81,6 +81,7 @@ struct SpecConfig {
     core_root: PathBuf,
     surface_name: String,
     surface_kind: String,
+    api_name: String,
     api_header: String,
     api_qualified_name: String,
     excluded_methods: Vec<String>,
@@ -231,6 +232,9 @@ fn audit_surface_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> {
 
     if methods.is_empty() {
         warnings.push("methods array is empty".to_owned());
+    }
+    for method in methods {
+        failures.extend(validate_method_rpc_metadata(method, config));
     }
     if schemas.is_empty() {
         warnings.push("components.schemas is empty".to_owned());
@@ -402,6 +406,12 @@ fn audit_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
         if entry.get("kind").and_then(JsonValue::as_str) != Some(config.surface_kind.as_str()) {
             failures.push(format!(
                 "surface {} kind mismatch in manifest",
+                config.surface_name
+            ));
+        }
+        if entry.get("apiName").and_then(JsonValue::as_str) != Some(config.api_name.as_str()) {
+            failures.push(format!(
+                "surface {} apiName mismatch in manifest",
                 config.surface_name
             ));
         }
@@ -637,6 +647,7 @@ fn write_manifest(bundle: &BundleConfig) -> Result<(), Box<dyn Error>> {
             Ok(json!({
                 "name": surface.surface_name,
                 "kind": surface.surface_kind,
+                "apiName": surface.api_name,
                 "apiQualifiedName": surface.api_qualified_name,
                 "spec": spec,
             }))
@@ -692,6 +703,7 @@ fn enrich_open_graphene_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> 
             "surface": {
                 "name": config.surface_name,
                 "kind": config.surface_kind,
+                "apiName": config.api_name,
                 "apiQualifiedName": config.api_qualified_name,
             },
             "rpc": {
@@ -705,6 +717,26 @@ fn enrich_open_graphene_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> 
             }
         }),
     );
+
+    let methods = object
+        .get_mut("methods")
+        .and_then(JsonValue::as_array_mut)
+        .ok_or("generated OpenRPC document is missing methods array")?;
+    for method in methods {
+        let method = method
+            .as_object_mut()
+            .ok_or("OpenRPC method entry is not a JSON object")?;
+        method.insert(
+            "x-graphene-rpc".to_owned(),
+            json!({
+                "surface": config.surface_kind,
+                "apiName": config.api_name,
+                "paramsEncoding": "positional",
+                "transportMethod": "call",
+                "methodKind": "request",
+            }),
+        );
+    }
 
     fs::write(&config.output, serde_json::to_string_pretty(&spec)? + "\n")?;
     Ok(())
@@ -840,6 +872,11 @@ fn load_surface_config(
         .and_then(TomlValue::as_str)
         .unwrap_or("unspecified")
         .to_owned();
+    let api_name = surface
+        .get("api_name")
+        .and_then(TomlValue::as_str)
+        .map(ToOwned::to_owned)
+        .unwrap_or_else(|| default_api_name(&surface_kind));
     let api_header = string(surface, "api_header")?.to_owned();
     let api_qualified_name = string(surface, "api_qualified_name")?.to_owned();
     let excluded_methods =
@@ -855,12 +892,25 @@ fn load_surface_config(
         core_root: core_root.to_path_buf(),
         surface_name,
         surface_kind,
+        api_name,
         api_header,
         api_qualified_name,
         excluded_methods,
         header_roots,
         output: resolve(config_dir, string(surface, "output")?),
     })
+}
+
+fn default_api_name(surface_kind: &str) -> String {
+    match surface_kind {
+        "database" => "database",
+        "broadcast" => "network_broadcast",
+        "history" => "history",
+        "orders" => "orders",
+        "crypto" => "crypto",
+        other => other,
+    }
+    .to_owned()
 }
 
 fn run(command: &mut Command) -> Result<(), Box<dyn Error>> {
@@ -1075,6 +1125,48 @@ fn is_static_variant_schema(schema: &JsonValue) -> bool {
                     .and_then(JsonValue::as_array)
                     .is_some_and(|items| items.len() == 2 && items[0].get("const").is_some())
         })
+}
+
+fn validate_method_rpc_metadata(method: &JsonValue, config: &SpecConfig) -> Vec<String> {
+    let method_name = method
+        .get("name")
+        .and_then(JsonValue::as_str)
+        .unwrap_or("<unnamed>");
+    let Some(metadata) = method.get("x-graphene-rpc").and_then(JsonValue::as_object) else {
+        return vec![format!(
+            "method {method_name} is missing x-graphene-rpc metadata"
+        )];
+    };
+
+    let mut failures = Vec::new();
+    if metadata.get("surface").and_then(JsonValue::as_str) != Some(config.surface_kind.as_str()) {
+        failures.push(format!(
+            "method {method_name} x-graphene-rpc.surface must be {}",
+            config.surface_kind
+        ));
+    }
+    if metadata.get("apiName").and_then(JsonValue::as_str) != Some(config.api_name.as_str()) {
+        failures.push(format!(
+            "method {method_name} x-graphene-rpc.apiName must be {}",
+            config.api_name
+        ));
+    }
+    if metadata.get("paramsEncoding").and_then(JsonValue::as_str) != Some("positional") {
+        failures.push(format!(
+            "method {method_name} x-graphene-rpc.paramsEncoding must be positional"
+        ));
+    }
+    if metadata.get("transportMethod").and_then(JsonValue::as_str) != Some("call") {
+        failures.push(format!(
+            "method {method_name} x-graphene-rpc.transportMethod must be call"
+        ));
+    }
+    if metadata.get("methodKind").and_then(JsonValue::as_str) != Some("request") {
+        failures.push(format!(
+            "method {method_name} x-graphene-rpc.methodKind must be request"
+        ));
+    }
+    failures
 }
 
 fn validate_graphene_containers(spec: &JsonValue) -> Vec<String> {

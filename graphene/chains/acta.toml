@@ -37,6 +37,7 @@ label = "Acta Testnet"
 [[surfaces]]
 name = "acta-database"
 kind = "database"
+api_name = "database"
 api_header = "libraries/app/include/graphene/app/database_api.hpp"
 api_qualified_name = "graphene::app::database_api"
 excluded_methods = [
@@ -50,6 +51,7 @@ output = "../specs/acta/api.database.json"
 [[surfaces]]
 name = "acta-broadcast"
 kind = "broadcast"
+api_name = "network_broadcast"
 api_header = "libraries/app/include/graphene/app/api.hpp"
 api_qualified_name = "graphene::app::network_broadcast_api"
 excluded_methods = [

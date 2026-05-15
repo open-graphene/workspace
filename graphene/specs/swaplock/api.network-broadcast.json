@@ -11282,7 +11282,14 @@
         },
         "x-cpp-type": "void"
       },
-      "summary": "Broadcast a signed block to the network."
+      "summary": "Broadcast a signed block to the network.",
+      "x-graphene-rpc": {
+        "apiName": "network_broadcast",
+        "methodKind": "request",
+        "paramsEncoding": "positional",
+        "surface": "broadcast",
+        "transportMethod": "call"
+      }
     },
     {
       "description": "The transaction will be checked for validity in the local database prior to broadcasting. If it fails to apply locally, an error will be thrown and the transaction will not be broadcast.",
@@ -11305,7 +11312,14 @@
         },
         "x-cpp-type": "void"
       },
-      "summary": "Broadcast a transaction to the network."
+      "summary": "Broadcast a transaction to the network.",
+      "x-graphene-rpc": {
+        "apiName": "network_broadcast",
+        "methodKind": "request",
+        "paramsEncoding": "positional",
+        "surface": "broadcast",
+        "transportMethod": "call"
+      }
     },
     {
       "description": "This version of broadcast transaction waits until the transaction is included into a block, then the transaction id, block number, and transaction number in the block will be returned.",
@@ -11326,6 +11340,13 @@
         "name": "broadcast_transaction_synchronous_result",
         "schema": {},
         "x-cpp-type": "fc::variant"
+      },
+      "x-graphene-rpc": {
+        "apiName": "network_broadcast",
+        "methodKind": "request",
+        "paramsEncoding": "positional",
+        "surface": "broadcast",
+        "transportMethod": "call"
       }
     }
   ],
@@ -11351,6 +11372,7 @@
       ]
     },
     "surface": {
+      "apiName": "network_broadcast",
       "apiQualifiedName": "graphene::app::network_broadcast_api",
       "kind": "broadcast",
       "name": "swaplock-broadcast"
