@@ -15,6 +15,8 @@ header_roots = [
 name = "mainnet"
 label = "Swaplock Mainnet"
 default = true
+chain_id = "2267f694d96b7ffdcba1a98c63c09e720a18a85ad34954e299c66d5a42234098"
+address_prefix = "BTS"
 
 [[networks.endpoints]]
 url = "wss://node01.swaplock.chainpool.online:8090"

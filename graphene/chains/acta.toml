@@ -15,6 +15,8 @@ header_roots = [
 name = "mainnet"
 label = "Acta Mainnet"
 default = true
+chain_id = "eebc39f87af38798f23157a28ed1838e481a4ec71fefa19a033e623911af6e5d"
+address_prefix = "RQRX"
 
 [[networks.endpoints]]
 url = "wss://node01.acta.chainpool.online:8090"

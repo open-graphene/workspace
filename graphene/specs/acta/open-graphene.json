@@ -4,6 +4,8 @@
     "kind": "chain-bundle",
     "networks": [
       {
+        "addressPrefix": "RQRX",
+        "chainId": "eebc39f87af38798f23157a28ed1838e481a4ec71fefa19a033e623911af6e5d",
         "default": true,
         "endpoints": [
           {
