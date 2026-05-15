@@ -44,8 +44,11 @@ coverage/
 .cache/
 tmp/
 
-# !graphene-rs
-# !graphene-rs/**
+!graphene-rs
+!graphene-rs/**
+graphene-rs/target/
+graphene-rs/target/**
+
 # !graphene-rs-v2
 # !graphene-rs-v2/**
 # graphene-rs-v2/.env

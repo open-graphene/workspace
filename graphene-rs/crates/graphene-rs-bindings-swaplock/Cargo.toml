@@ -1,0 +1,8 @@
+[package]
+name = "graphene-rs-bindings-swaplock"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[dependencies]

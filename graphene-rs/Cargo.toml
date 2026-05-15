@@ -1,0 +1,12 @@
+[workspace]
+members = [
+    "crates/graphene-rs-bindings-acta",
+    "crates/graphene-rs-bindings-swaplock",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+publish = false
+license = "MIT OR Apache-2.0"
