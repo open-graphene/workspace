@@ -16,6 +16,7 @@ pub mod generated {
     include!("generated/types.rs");
     include!("generated/variants.rs");
     include!("generated/metadata.rs");
+    include!("generated/scalar.rs");
     include!("generated/rpc.rs");
 }
 
@@ -27,7 +28,6 @@ pub mod broadcast {
 mod account;
 mod codec;
 mod dynamic_global_properties;
-mod scalar;
 mod transaction;
 mod transfer;
 

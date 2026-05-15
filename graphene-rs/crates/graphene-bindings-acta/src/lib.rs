@@ -16,6 +16,7 @@ pub mod generated {
     include!("generated/types.rs");
     include!("generated/variants.rs");
     include!("generated/metadata.rs");
+    include!("generated/scalar.rs");
     include!("generated/rpc.rs");
 }
 
