@@ -1,0 +1,17 @@
+[package]
+name = "graphene-gen-ts"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[dependencies]
+graphene-spec-gen = { path = "../graphene-spec-gen" }
+serde_json.workspace = true
+
+[lib]
+name = "graphene_gen_ts"
+path = "src/lib.rs"
+
+[[bin]]
+name = "graphene-gen-ts"
+path = "src/bin/graphene-gen-ts.rs"

@@ -1,6 +1,6 @@
 # graphene-spec-gen
 
-`graphene-spec-gen` is the OpenGraphene contract compiler for the Graphene SDK workspace. It gives future SDK and emitter work one stable entrypoint for validating a chain contract, inspecting the lowered intermediate representation (IR), generating reviewable TypeScript and Dart metadata samples, and emitting byte-level conformance fixtures.
+`graphene-spec-gen` is the OpenGraphene contract compiler for the Graphene SDK workspace. It gives future SDK and emitter work one stable entrypoint for validating a chain contract, inspecting the lowered intermediate representation (IR), and emitting byte-level conformance fixtures.
 
 The crate is intentionally small and diagnostic-first. When a command fails, the CLI error text is the durable triage surface: validation errors include contract paths, generation errors name the unsupported target or argument, and conformance fixture errors identify the fixture phase that drifted.
 
@@ -13,11 +13,12 @@ The current milestone supports this contract-first developer loop:
 1. Validate the mandatory Swaplock and Acta contract JSON documents.
 2. Emit the JSON Schema for authoring and review tooling.
 3. Lower each contract, enriched by its matching OpenRPC metadata, into JSON IR.
-4. Generate TypeScript and Dart descriptor samples from the IR as prototype metadata drift checks.
-5. Emit conformance fixtures from the Rust reference codec and signer.
-6. Run the workspace tests that lock those contracts in place.
+4. Emit conformance fixtures from the Rust reference codec and signer.
+5. Run the workspace tests that lock those contracts in place.
 
-This milestone deliberately stops at contract JSON, IR, generated metadata samples, conformance fixtures, and tests. Production TypeScript or Dart SDK packaging is an active non-goal until a later milestone adds runtime codecs, signing helpers, transports, and release criteria.
+Target-specific code generation lives in sibling crates: `graphene-gen-ts`, `graphene-gen-dart`, and `graphene-gen-rust`.
+
+This milestone deliberately stops at contract JSON, IR, conformance fixtures, and tests. Production language SDK packaging is an active non-goal until target generator crates add runtime codecs, signing helpers, transports, and release criteria.
 
 ## Architecture
 
@@ -35,9 +36,9 @@ lowering (+ optional OpenRPC enrichment)
         v
 IR JSON  ----> inspect-ir for humans and future emitters
         |
-        +----> TypeScript metadata emitter
-        +----> Dart metadata emitter
-        +----> Rust reference conformance fixture emitter
+        +----> Rust reference conformance fixture builder
+
+Target-specific binding generation lives in `crates/graphene-gen-ts`, `crates/graphene-gen-dart`, and `crates/graphene-gen-rust`, which consume the same validated IR without making `graphene-spec-gen` own target code emission.
 ```
 
 Important source areas:
@@ -46,7 +47,6 @@ Important source areas:
 - `src/validation.rs` enforces semantic references such as API, type, operation, transaction, and callback links.
 - `src/openrpc.rs` parses the small OpenRPC subset used for method enrichment.
 - `src/lower.rs` and `src/ir.rs` produce the emitter-facing IR.
-- `src/emit/typescript.rs` and `src/emit/dart.rs` write generated metadata samples.
 - `src/conformance.rs` builds byte-level reference fixtures for operation encoding, transaction encoding, digest construction, signing, and broadcast JSON envelopes.
 - `src/bin/graphene-spec-gen.rs` is the CLI entrypoint and should remain the documented operator surface.
 
@@ -275,21 +275,12 @@ cargo run -p graphene-spec-gen -- inspect-ir \
   crates/graphene-spec-gen/fixtures/acta.opengraphene.json \
   --openrpc crates/graphene-spec-gen/fixtures/acta.openrpc.json
 
-# 5. Generate prototype TypeScript and Dart metadata samples into a scratch directory.
-#    These outputs are review/drift evidence, not production SDK packages.
-rm -rf /tmp/graphene-spec-gen-samples
-cargo run -p graphene-spec-gen -- generate \
-  specs/swaplock.opengraphene.json \
-  --openrpc crates/graphene-spec-gen/fixtures/swaplock.openrpc.json \
-  --target all \
-  --out /tmp/graphene-spec-gen-samples
-
-# 6. Emit conformance fixtures into a scratch directory.
+# 5. Emit conformance fixtures into a scratch directory.
 rm -rf /tmp/graphene-spec-gen-conformance
 cargo run -p graphene-spec-gen -- conformance-fixtures \
   --out /tmp/graphene-spec-gen-conformance
 
-# 7. Run the crate test suite.
+# 6. Run the crate test suite.
 cargo test -p graphene-spec-gen
 ```
 
@@ -299,7 +290,6 @@ Expected success signals:
 - `validate` prints `<path>: valid OpenGraphene contract` for both Swaplock and Acta fixtures.
 - `schema` prints JSON with title `OpenGrapheneDocument`.
 - `inspect-ir` prints JSON containing `methods`, `operations`, `callbacks`, and `transaction` metadata.
-- `generate --target all` prints `generated target 'all' into <dir>` and writes TypeScript, Dart, and Rust outputs.
 - `conformance-fixtures` prints `generated conformance fixtures into <dir>` and writes `transfer.json`.
 
 The installed or debug binary uses the same subcommands:
@@ -308,7 +298,6 @@ The installed or debug binary uses the same subcommands:
 graphene-spec-gen validate <path>
 graphene-spec-gen schema
 graphene-spec-gen inspect-ir <opengraphene-path> [--openrpc <openrpc-path>]
-graphene-spec-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|rust|all> --out <dir>
 graphene-spec-gen conformance-fixtures --out <dir>
 graphene-spec-gen opengraphene-specs --out <dir>
 ```
@@ -331,43 +320,36 @@ bin/gen_dart.sh
 bin/gen_rs.sh
 ```
 
-`bin/gen_ts.sh` regenerates the current TypeScript generated artifacts into `../graphene-ts/graphene-bindings-swaplock/src/index.ts` and `../graphene-ts/graphene-bindings-acta/src/index.ts`. `bin/gen_dart.sh` regenerates the current Dart generated artifacts into `../graphene-dart/graphene-bindings-swaplock/lib/open_graphene.dart` and `../graphene-dart/graphene-bindings-acta/lib/open_graphene.dart`. `bin/gen_rs.sh` regenerates Rust spec metadata into `../graphene-rs/crates/graphene-bindings-swaplock/src/spec_metadata.rs` and `../graphene-rs/crates/graphene-bindings-acta/src/spec_metadata.rs` without overwriting the migrated Rust SDK runtime crates. The TypeScript and Dart wrapper outputs are still prototype generated artifacts; the Rust workspace now carries the migrated typed RPC/codec/signing runtime from `graphene-rs-v2` plus generated spec metadata.
+`bin/gen_ts.sh` regenerates the current TypeScript generated artifacts into `../graphene-ts/graphene-bindings-swaplock/src/index.ts` and `../graphene-ts/graphene-bindings-acta/src/index.ts`. `bin/gen_dart.sh` regenerates the current Dart generated artifacts into `../graphene-dart/graphene-bindings-swaplock/lib/open_graphene.dart` and `../graphene-dart/graphene-bindings-acta/lib/open_graphene.dart`. `bin/gen_rs.sh` delegates Rust-specific binding generation to `crates/graphene-gen-rust` and writes into `../graphene-rs/crates/graphene-bindings-swaplock` plus `../graphene-rs/crates/graphene-bindings-acta` without making `graphene-spec-gen` own Rust target code emission.
 
-## Emitted targets
+## Target generators
 
-`generate` currently supports four target selectors:
+`graphene-spec-gen` no longer owns language target emission. Use the target-specific crates instead:
 
-- `--target typescript`
-- `--target dart`
-- `--target rust`
-- `--target all`
+```sh
+cargo run -p graphene-gen-ts -- generate \
+  specs/swaplock.opengraphene.json \
+  --openrpc crates/graphene-spec-gen/fixtures/swaplock.openrpc.json \
+  --out /tmp/graphene-ts
 
-These targets are prototype metadata samples only. They are useful for checking that validated OpenGraphene/OpenRPC contracts lower into stable language-facing descriptors, but they are not production SDK packages and do not include transaction encoders, signers, transports, packaging, release automation, or runtime compatibility promises.
+cargo run -p graphene-gen-dart -- generate \
+  specs/swaplock.opengraphene.json \
+  --openrpc crates/graphene-spec-gen/fixtures/swaplock.openrpc.json \
+  --out /tmp/graphene-dart
 
-For `--target all`, the generated file layout is:
-
-```text
-<out>/typescript/index.ts
-<out>/dart/lib/open_graphene.dart
-<out>/rust/src/lib.rs
+cargo run -p graphene-gen-rust --bin graphene-gen-rust-spec-metadata -- \
+  specs/swaplock.opengraphene.json \
+  --openrpc crates/graphene-spec-gen/fixtures/swaplock.openrpc.json \
+  --out /tmp/swaplock-spec_metadata.rs
 ```
 
-The checked-in generated samples live at:
+Repository-level wrappers are still available:
 
-```text
-crates/graphene-spec-gen/fixtures/generated-samples/typescript/index.ts
-crates/graphene-spec-gen/fixtures/generated-samples/dart/lib/open_graphene.dart
+```sh
+bin/gen_ts.sh
+bin/gen_dart.sh
+bin/gen_rs.sh
 ```
-
-The generated samples are metadata and type descriptors, not full runtime SDKs. They currently expose:
-
-- codec structs/classes for contract types such as `Asset`, `SignedTransaction`, and `TransferOperation`;
-- operation variant metadata, including the `transfer` operation id;
-- RPC method descriptors with API routing, params, result metadata, and callback links;
-- callback metadata with payload type, lifetime, and callback parameter position;
-- transaction digest/signature metadata.
-
-`tests/generated_samples.rs` regenerates both targets into a temporary directory and compares them byte-for-byte with the checked-in samples. If emitter behavior changes intentionally, regenerate the samples and review the diff as part of that change.
 
 ## Conformance fixtures
 
@@ -411,7 +393,7 @@ Use the CLI command that maps to the failing layer:
 - Contract authoring failures: run `validate` and inspect the reported contract path. Approved raw fallbacks are printed as warnings; unsupported-shape classifications fail validation with the classified path and `unsupported_shape` marker.
 - Schema/tooling drift: run `schema` and compare the `OpenGrapheneDocument` schema.
 - OpenRPC enrichment or emitter input drift: run `inspect-ir` with the same `--openrpc` file used by generation.
-- TypeScript/Dart/Rust prototype sample drift: run `generate --target all` into a scratch directory and compare against generated package outputs; do not treat these samples as production SDK packaging evidence.
+- Target generator drift: run the relevant `graphene-gen-*` crate command or `bin/gen_ts.sh`, `bin/gen_dart.sh`, and `bin/gen_rs.sh`; compare generated package outputs.
 - Byte-level codec/signing drift: run `conformance-fixtures` and compare against `fixtures/conformance/transfer.json`.
 - Whole-crate regression: run `cargo test -p graphene-spec-gen`.
 
@@ -419,7 +401,7 @@ Conformance fixture generation failures name the failed component as `operation_
 
 ## Validation and test coverage
 
-The test suite validates the Swaplock and Acta fixtures plus broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, prototype emitter output, generated sample stability, and conformance fixture contents. The end-to-end CLI workflow intentionally validates and inspects both mandatory chain fixtures, then keeps prototype sample generation and conformance fixture emission in the same CI-safe loop without requiring live endpoints or language SDK packaging.
+The test suite validates the Swaplock and Acta fixtures plus broken variants for unknown API/type references, duplicate operation ids/names, duplicate codec fields, invalid chain ids, invalid callback references, empty transaction digest preimages, and classified shape evidence for approved raw fallbacks versus unsupported Graphene shapes. It also covers CLI behavior, lowering, OpenRPC enrichment, and conformance fixture contents. Target-specific emitter output and generated sample stability are covered in the `graphene-gen-*` crates.
 
 ```sh
 cargo test -p graphene-spec-gen

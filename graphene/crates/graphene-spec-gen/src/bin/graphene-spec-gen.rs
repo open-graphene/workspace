@@ -3,11 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use graphene_spec_gen::conformance::{build_swaplock_transfer_fixture, ConformanceFixtureError};
-use graphene_spec_gen::emit::dart::emit_dart;
-use graphene_spec_gen::emit::rust::emit_rust;
-use graphene_spec_gen::emit::typescript::emit_typescript;
 use graphene_spec_gen::emit::{write_generated_files, GeneratedFile};
-use graphene_spec_gen::ir::IrDocument;
 use graphene_spec_gen::lower::{lower_document_to_ir, lower_document_with_openrpc_to_ir};
 use graphene_spec_gen::model::OpenGrapheneDocument;
 use graphene_spec_gen::openrpc::OpenRpcDocument;
@@ -55,13 +51,6 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             let openrpc_path = parse_inspect_ir_args(args)?;
             inspect_ir_path(Path::new(&path), openrpc_path.as_deref().map(Path::new))
         }
-        Some("generate") => {
-            let path = args.next().ok_or(
-                "usage: graphene-spec-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|rust|all> --out <dir>",
-            )?;
-            let options = parse_generate_args(args)?;
-            generate_path(Path::new(&path), &options)
-        }
         Some("conformance-fixtures") => {
             let output_dir = parse_conformance_fixtures_args(args)?;
             write_conformance_fixtures(&output_dir)
@@ -71,7 +60,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             write_opengraphene_specs(&output_dir)
         }
         _ => Err(
-            "usage: graphene-spec-gen <validate|schema|inspect-ir|generate|conformance-fixtures|opengraphene-specs> [args]"
+            "usage: graphene-spec-gen <validate|schema|inspect-ir|conformance-fixtures|opengraphene-specs> [args]"
                 .into(),
         ),
     }
@@ -105,102 +94,6 @@ fn parse_inspect_ir_args(
     }
 
     Ok(openrpc_path)
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum GenerateTarget {
-    TypeScript,
-    Dart,
-    Rust,
-    All,
-}
-
-impl GenerateTarget {
-    fn parse(value: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        match value {
-            "typescript" => Ok(Self::TypeScript),
-            "dart" => Ok(Self::Dart),
-            "rust" => Ok(Self::Rust),
-            "all" => Ok(Self::All),
-            _ => Err(format!(
-                "unsupported generate target '{value}'; expected typescript, dart, rust, or all"
-            )
-            .into()),
-        }
-    }
-
-    fn label(self) -> &'static str {
-        match self {
-            Self::TypeScript => "typescript",
-            Self::Dart => "dart",
-            Self::Rust => "rust",
-            Self::All => "all",
-        }
-    }
-
-    fn includes_typescript(self) -> bool {
-        matches!(self, Self::TypeScript | Self::All)
-    }
-
-    fn includes_dart(self) -> bool {
-        matches!(self, Self::Dart | Self::All)
-    }
-
-    fn includes_rust(self) -> bool {
-        matches!(self, Self::Rust | Self::All)
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-struct GenerateOptions {
-    openrpc_path: Option<PathBuf>,
-    target: GenerateTarget,
-    output_dir: PathBuf,
-}
-
-fn parse_generate_args(
-    mut args: impl Iterator<Item = String>,
-) -> Result<GenerateOptions, Box<dyn std::error::Error>> {
-    let mut openrpc_path = None;
-    let mut target = None;
-    let mut output_dir = None;
-
-    while let Some(arg) = args.next() {
-        match arg.as_str() {
-            "--openrpc" => {
-                if openrpc_path.is_some() {
-                    return Err("--openrpc may only be provided once".into());
-                }
-                openrpc_path = Some(PathBuf::from(
-                    args.next().ok_or("--openrpc requires a path")?,
-                ));
-            }
-            "--target" => {
-                if target.is_some() {
-                    return Err("--target may only be provided once".into());
-                }
-                target =
-                    Some(GenerateTarget::parse(&args.next().ok_or(
-                        "--target requires typescript, dart, rust, or all",
-                    )?)?);
-            }
-            "--out" => {
-                if output_dir.is_some() {
-                    return Err("--out may only be provided once".into());
-                }
-                output_dir = Some(PathBuf::from(
-                    args.next().ok_or("--out requires a directory")?,
-                ));
-            }
-            _ => return Err(format!("unexpected generate argument: {arg}").into()),
-        }
-    }
-
-    Ok(GenerateOptions {
-        openrpc_path,
-        target: target.ok_or("generate requires --target <typescript|dart|rust|all>")?,
-        output_dir: output_dir.ok_or("generate requires --out <dir>")?,
-    })
 }
 
 fn parse_conformance_fixtures_args(
@@ -321,27 +214,10 @@ fn inspect_ir_path(
     Ok(())
 }
 
-fn generate_path(path: &Path, options: &GenerateOptions) -> Result<(), Box<dyn std::error::Error>> {
-    let ir = lower_ir_path(path, options.openrpc_path.as_deref())?;
-    let files = emit_target(&ir, options.target)?;
-    let written = write_generated_files(&options.output_dir, &files)?;
-
-    println!(
-        "generated target '{}' into {}",
-        options.target.label(),
-        options.output_dir.display()
-    );
-    for file in written {
-        println!("  wrote {} ({} bytes)", file.path.display(), file.bytes);
-    }
-
-    Ok(())
-}
-
 fn lower_ir_path(
     path: &Path,
     openrpc_path: Option<&Path>,
-) -> Result<IrDocument, Box<dyn std::error::Error>> {
+) -> Result<graphene_spec_gen::ir::IrDocument, Box<dyn std::error::Error>> {
     let contents = fs::read_to_string(path)?;
     let document: OpenGrapheneDocument = serde_json::from_str(&contents)?;
 
@@ -352,23 +228,4 @@ fn lower_ir_path(
     } else {
         Ok(lower_document_to_ir(&document)?)
     }
-}
-
-fn emit_target(
-    ir: &IrDocument,
-    target: GenerateTarget,
-) -> Result<Vec<GeneratedFile>, Box<dyn std::error::Error>> {
-    let mut files = Vec::new();
-
-    if target.includes_typescript() {
-        files.extend(emit_typescript(ir)?);
-    }
-    if target.includes_dart() {
-        files.extend(emit_dart(ir)?);
-    }
-    if target.includes_rust() {
-        files.extend(emit_rust(ir)?);
-    }
-
-    Ok(files)
 }

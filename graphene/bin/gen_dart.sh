@@ -19,10 +19,9 @@ for CHAIN in swaplock acta; do
 
   (
     cd "${WORKSPACE_DIR}"
-    cargo run -p graphene-spec-gen -- generate \
+    cargo run -p graphene-gen-dart -- generate \
       "specs/${CHAIN}.opengraphene.json" \
       --openrpc "crates/graphene-spec-gen/fixtures/${CHAIN}.openrpc.json" \
-      --target dart \
       --out "${TMP_CHAIN_DIR}"
   )
 

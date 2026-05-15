@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::{Command, Output};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -35,20 +35,6 @@ fn run_cli_stage(stage: &str, args: &[&str]) -> Output {
     );
 
     output
-}
-
-fn assert_file_contains(stage: &str, path: &Path, expected: &str) {
-    let contents = fs::read_to_string(path).unwrap_or_else(|error| {
-        panic!(
-            "stage '{stage}' expected {} to be readable: {error}",
-            path.display()
-        )
-    });
-    assert!(
-        contents.contains(expected),
-        "stage '{stage}' expected {} to contain {expected:?}\ncontents:\n{contents}",
-        path.display()
-    );
 }
 
 fn assert_cli_fixture_contract(
@@ -109,9 +95,7 @@ fn e2e_cli_workflow_verifies_developer_contract() {
     let swaplock_openrpc = fixture_path("swaplock.openrpc.json");
     let acta_opengraphene = fixture_path("acta.opengraphene.json");
     let acta_openrpc = fixture_path("acta.openrpc.json");
-    let output_dir = unique_output_dir("generated");
     let fixture_output_dir = unique_output_dir("conformance");
-    let output_dir_arg = output_dir.to_str().expect("temp path should be UTF-8");
     let fixture_output_dir_arg = fixture_output_dir
         .to_str()
         .expect("temp path should be UTF-8");
@@ -147,49 +131,6 @@ fn e2e_cli_workflow_verifies_developer_contract() {
         "set_subscribe_callback",
     );
 
-    let generate = run_cli_stage(
-        "prototype TS/Dart metadata generation",
-        &[
-            "generate",
-            &swaplock_opengraphene,
-            "--openrpc",
-            &swaplock_openrpc,
-            "--target",
-            "all",
-            "--out",
-            output_dir_arg,
-        ],
-    );
-    let generate_stdout =
-        String::from_utf8(generate.stdout).expect("generate stdout should be UTF-8");
-    assert!(
-        generate_stdout.contains("generated target 'all'"),
-        "stage 'prototype TS/Dart metadata generation' should report the all target"
-    );
-
-    let typescript_path = output_dir.join("typescript/index.ts");
-    let dart_path = output_dir.join("dart/lib/open_graphene.dart");
-    assert!(
-        typescript_path.is_file(),
-        "stage 'prototype TS/Dart metadata generation' missing {}",
-        typescript_path.display()
-    );
-    assert!(
-        dart_path.is_file(),
-        "stage 'prototype TS/Dart metadata generation' missing {}",
-        dart_path.display()
-    );
-    assert_file_contains(
-        "prototype TS/Dart metadata generation",
-        &typescript_path,
-        "export const rpcMethods",
-    );
-    assert_file_contains(
-        "prototype TS/Dart metadata generation",
-        &dart_path,
-        "const Map<String, RpcMethodDescriptor> rpcMethods",
-    );
-
     let conformance = run_cli_stage(
         "conformance fixture emission",
         &["conformance-fixtures", "--out", fixture_output_dir_arg],
@@ -219,6 +160,5 @@ fn e2e_cli_workflow_verifies_developer_contract() {
         "stage 'conformance fixture emission' should include the broadcast payload contract"
     );
 
-    fs::remove_dir_all(output_dir).ok();
     fs::remove_dir_all(fixture_output_dir).ok();
 }
