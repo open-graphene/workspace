@@ -7,7 +7,6 @@ REPO_DIR="$(cd "${WORKSPACE_DIR}/.." && pwd)"
 ROOT_OUT_DIR="${REPO_DIR}/graphene-rs"
 TMP_DIR="${WORKSPACE_DIR}/.tmp-rs-sdk"
 
-rm -rf "${ROOT_OUT_DIR}"
 mkdir -p "${ROOT_OUT_DIR}"
 
 for CHAIN in swaplock acta; do
@@ -27,19 +26,7 @@ for CHAIN in swaplock acta; do
   )
 
   mkdir -p "${OUT_DIR}/src"
-  cp "${TMP_CHAIN_DIR}/rust/src/lib.rs" "${OUT_DIR}/src/lib.rs"
-  cat > "${OUT_DIR}/Cargo.toml" <<EOF
-[package]
-name = "graphene-bindings-${CHAIN}"
-edition = "2021"
-version = "0.1.0"
-publish = false
-
-[lib]
-path = "src/lib.rs"
-
-[workspace]
-EOF
+  cp "${TMP_CHAIN_DIR}/rust/src/lib.rs" "${OUT_DIR}/src/spec_metadata.rs"
   rm -rf "${TMP_CHAIN_DIR}"
-  echo "regenerated Rust Graphene SDK artifacts in ${OUT_DIR}"
+  echo "regenerated Rust Graphene spec metadata in ${OUT_DIR}/src/spec_metadata.rs"
 done

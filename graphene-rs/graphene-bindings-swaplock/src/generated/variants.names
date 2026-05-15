@@ -1,0 +1,13 @@
+Operation
+VestingPolicy
+FutureExtensions
+OperationResult
+LimitOrderAutoAction
+RestrictionArgumentType
+HtlcHash
+Predicate
+WorkerInitializer
+VestingPolicyInitializer
+FeeParameters
+SpecialAuthority
+WorkerType

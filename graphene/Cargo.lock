@@ -280,7 +280,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "graphene-chain-swaplock"
+name = "graphene-bindings-swaplock"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -321,7 +321,7 @@ dependencies = [
 name = "graphene-spec-gen"
 version = "0.1.0"
 dependencies = [
- "graphene-chain-swaplock",
+ "graphene-bindings-swaplock",
  "graphene-codec",
  "graphene-rpc",
  "graphene-signing",
