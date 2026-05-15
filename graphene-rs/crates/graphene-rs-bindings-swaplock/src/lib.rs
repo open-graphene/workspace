@@ -15,6 +15,7 @@
 pub mod generated {
     include!("generated/types.rs");
     include!("generated/variants.rs");
+    include!("generated/metadata.rs");
 }
 
 pub use generated::*;

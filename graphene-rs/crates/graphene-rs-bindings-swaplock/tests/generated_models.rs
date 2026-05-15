@@ -1,4 +1,4 @@
-use graphene_rs_bindings_swaplock::{Operation, TransferOperation};
+use graphene_rs_bindings_swaplock::{Operation, TransferOperation, OPERATIONS};
 use serde_json::json;
 
 fn transfer_payload() -> serde_json::Value {
@@ -10,6 +10,19 @@ fn transfer_payload() -> serde_json::Value {
         "memo": null,
         "extensions": []
     })
+}
+
+#[test]
+fn operation_metadata_contains_transfer_mapping() {
+    let transfer = OPERATIONS
+        .iter()
+        .find(|operation| operation.name == "transfer")
+        .expect("transfer operation metadata");
+
+    assert_eq!(transfer.id, 0);
+    assert_eq!(transfer.cpp_type, "transfer_operation");
+    assert_eq!(transfer.rust_type, "TransferOperation");
+    assert_eq!(transfer.schema, "#/components/schemas/transfer_operation");
 }
 
 #[test]
