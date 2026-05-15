@@ -86,6 +86,7 @@ fn generated_samples_match_committed_fixture() {
         actual_files,
         vec![
             PathBuf::from("dart/lib/open_graphene.dart"),
+            PathBuf::from("rust/src/lib.rs"),
             PathBuf::from("typescript/index.ts"),
         ],
         "generated sample fixture should stay intentionally small"
@@ -127,6 +128,17 @@ fn generated_samples_match_committed_fixture() {
     assert!(
         dart.contains("result: 'DynamicGlobalProperties'"),
         "Dart sample should include OpenRPC result enrichment"
+    );
+
+    let rust = fs::read_to_string(expected_root.join("rust/src/lib.rs"))
+        .expect("Rust sample should be readable");
+    assert!(
+        rust.contains("pub const RPC_METHODS"),
+        "Rust sample should expose RPC metadata for human review"
+    );
+    assert!(
+        rust.contains("DynamicGlobalProperties"),
+        "Rust sample should include OpenRPC result enrichment"
     );
 
     fs::remove_dir_all(output_dir).ok();

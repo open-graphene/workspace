@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 use open_graphene_gen::conformance::{build_swaplock_transfer_fixture, ConformanceFixtureError};
 use open_graphene_gen::emit::dart::emit_dart;
+use open_graphene_gen::emit::rust::emit_rust;
 use open_graphene_gen::emit::typescript::emit_typescript;
 use open_graphene_gen::emit::{write_generated_files, GeneratedFile};
 use open_graphene_gen::ir::IrDocument;
@@ -56,7 +57,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         }
         Some("generate") => {
             let path = args.next().ok_or(
-                "usage: open-graphene-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|all> --out <dir>",
+                "usage: open-graphene-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|rust|all> --out <dir>",
             )?;
             let options = parse_generate_args(args)?;
             generate_path(Path::new(&path), &options)
@@ -110,6 +111,7 @@ fn parse_inspect_ir_args(
 enum GenerateTarget {
     TypeScript,
     Dart,
+    Rust,
     All,
 }
 
@@ -118,9 +120,10 @@ impl GenerateTarget {
         match value {
             "typescript" => Ok(Self::TypeScript),
             "dart" => Ok(Self::Dart),
+            "rust" => Ok(Self::Rust),
             "all" => Ok(Self::All),
             _ => Err(format!(
-                "unsupported generate target '{value}'; expected typescript, dart, or all"
+                "unsupported generate target '{value}'; expected typescript, dart, rust, or all"
             )
             .into()),
         }
@@ -130,6 +133,7 @@ impl GenerateTarget {
         match self {
             Self::TypeScript => "typescript",
             Self::Dart => "dart",
+            Self::Rust => "rust",
             Self::All => "all",
         }
     }
@@ -140,6 +144,10 @@ impl GenerateTarget {
 
     fn includes_dart(self) -> bool {
         matches!(self, Self::Dart | Self::All)
+    }
+
+    fn includes_rust(self) -> bool {
+        matches!(self, Self::Rust | Self::All)
     }
 }
 
@@ -171,11 +179,10 @@ fn parse_generate_args(
                 if target.is_some() {
                     return Err("--target may only be provided once".into());
                 }
-                target = Some(GenerateTarget::parse(
-                    &args
-                        .next()
-                        .ok_or("--target requires typescript, dart, or all")?,
-                )?);
+                target =
+                    Some(GenerateTarget::parse(&args.next().ok_or(
+                        "--target requires typescript, dart, rust, or all",
+                    )?)?);
             }
             "--out" => {
                 if output_dir.is_some() {
@@ -191,7 +198,7 @@ fn parse_generate_args(
 
     Ok(GenerateOptions {
         openrpc_path,
-        target: target.ok_or("generate requires --target <typescript|dart|all>")?,
+        target: target.ok_or("generate requires --target <typescript|dart|rust|all>")?,
         output_dir: output_dir.ok_or("generate requires --out <dir>")?,
     })
 }
@@ -358,6 +365,9 @@ fn emit_target(
     }
     if target.includes_dart() {
         files.extend(emit_dart(ir)?);
+    }
+    if target.includes_rust() {
+        files.extend(emit_rust(ir)?);
     }
 
     Ok(files)

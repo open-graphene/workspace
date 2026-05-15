@@ -3,6 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 pub mod dart;
+pub mod rust;
 pub mod typescript;
 
 #[derive(Debug, Clone, PartialEq, Eq)]

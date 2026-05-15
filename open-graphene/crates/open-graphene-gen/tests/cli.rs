@@ -50,16 +50,20 @@ fn generate_all_writes_expected_files_deterministically() {
 
     let typescript_path = output_dir.join("typescript/index.ts");
     let dart_path = output_dir.join("dart/lib/open_graphene.dart");
+    let rust_path = output_dir.join("rust/src/lib.rs");
     assert!(typescript_path.is_file(), "missing TypeScript output");
     assert!(dart_path.is_file(), "missing Dart output");
+    assert!(rust_path.is_file(), "missing Rust output");
 
     let first_stdout = String::from_utf8(first.stdout).expect("stdout should be UTF-8");
     assert!(first_stdout.contains("generated target 'all'"));
     assert!(first_stdout.contains("wrote typescript/index.ts"));
     assert!(first_stdout.contains("wrote dart/lib/open_graphene.dart"));
+    assert!(first_stdout.contains("wrote rust/src/lib.rs"));
 
     let first_typescript = fs::read_to_string(&typescript_path).expect("TypeScript should read");
     let first_dart = fs::read_to_string(&dart_path).expect("Dart should read");
+    let first_rust = fs::read_to_string(&rust_path).expect("Rust should read");
 
     let second = run_generate();
     assert!(
@@ -79,6 +83,10 @@ fn generate_all_writes_expected_files_deterministically() {
     assert_eq!(
         first_dart,
         fs::read_to_string(&dart_path).expect("Dart should read after rerun")
+    );
+    assert_eq!(
+        first_rust,
+        fs::read_to_string(&rust_path).expect("Rust should read after rerun")
     );
 
     fs::remove_dir_all(output_dir).ok();

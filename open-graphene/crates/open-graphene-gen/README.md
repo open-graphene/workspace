@@ -299,7 +299,7 @@ Expected success signals:
 - `validate` prints `<path>: valid OpenGraphene contract` for both Swaplock and Acta fixtures.
 - `schema` prints JSON with title `OpenGrapheneDocument`.
 - `inspect-ir` prints JSON containing `methods`, `operations`, `callbacks`, and `transaction` metadata.
-- `generate --target all` prints `generated target 'all' into <dir>` and writes TypeScript plus Dart outputs.
+- `generate --target all` prints `generated target 'all' into <dir>` and writes TypeScript, Dart, and Rust outputs.
 - `conformance-fixtures` prints `generated conformance fixtures into <dir>` and writes `transfer.json`.
 
 The installed or debug binary uses the same subcommands:
@@ -308,7 +308,7 @@ The installed or debug binary uses the same subcommands:
 open-graphene-gen validate <path>
 open-graphene-gen schema
 open-graphene-gen inspect-ir <opengraphene-path> [--openrpc <openrpc-path>]
-open-graphene-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|all> --out <dir>
+open-graphene-gen generate <opengraphene-path> [--openrpc <openrpc-path>] --target <typescript|dart|rust|all> --out <dir>
 open-graphene-gen conformance-fixtures --out <dir>
 open-graphene-gen opengraphene-specs --out <dir>
 ```
@@ -326,14 +326,20 @@ The script runs `cargo run -p open-graphene-gen -- opengraphene-specs --out <tmp
 
 ```sh
 bin/gen.sh
+bin/gen_ts.sh
+bin/gen_dart.sh
+bin/gen_rs.sh
 ```
+
+`bin/gen_ts.sh` regenerates the current TypeScript generated artifacts into `../open-graphene-ts/open-graphene-ts-bindings-swaplock/src/index.ts` and `../open-graphene-ts/open-graphene-ts-bindings-acta/src/index.ts`. `bin/gen_dart.sh` regenerates the current Dart generated artifacts into `../open-graphene-dart/open-graphene-dart-bindings-swaplock/lib/open_graphene.dart` and `../open-graphene-dart/open-graphene-dart-bindings-acta/lib/open_graphene.dart`. `bin/gen_rs.sh` regenerates the current Rust generated artifacts into `../open-graphene-rs/open-graphene-rs-bindings-swaplock/src/lib.rs` and `../open-graphene-rs/open-graphene-rs-bindings-acta/src/lib.rs`, with standalone `Cargo.toml` files for `cargo check`. These wrapper outputs use the existing prototype emitters and are not yet full production SDK runtimes; they are stable generated SDK artifacts for the mandatory Swaplock and Acta specs.
 
 ## Emitted targets
 
-`generate` currently supports three target selectors:
+`generate` currently supports four target selectors:
 
 - `--target typescript`
 - `--target dart`
+- `--target rust`
 - `--target all`
 
 These targets are prototype metadata samples only. They are useful for checking that validated OpenGraphene/OpenRPC contracts lower into stable language-facing descriptors, but they are not production SDK packages and do not include transaction encoders, signers, transports, packaging, release automation, or runtime compatibility promises.
@@ -343,6 +349,7 @@ For `--target all`, the generated file layout is:
 ```text
 <out>/typescript/index.ts
 <out>/dart/lib/open_graphene.dart
+<out>/rust/src/lib.rs
 ```
 
 The checked-in generated samples live at:
@@ -404,7 +411,7 @@ Use the CLI command that maps to the failing layer:
 - Contract authoring failures: run `validate` and inspect the reported contract path. Approved raw fallbacks are printed as warnings; unsupported-shape classifications fail validation with the classified path and `unsupported_shape` marker.
 - Schema/tooling drift: run `schema` and compare the `OpenGrapheneDocument` schema.
 - OpenRPC enrichment or emitter input drift: run `inspect-ir` with the same `--openrpc` file used by generation.
-- TypeScript/Dart prototype sample drift: run `generate --target all` into a scratch directory and compare against `fixtures/generated-samples`; do not treat these samples as production SDK packaging evidence.
+- TypeScript/Dart/Rust prototype sample drift: run `generate --target all` into a scratch directory and compare against generated package outputs; do not treat these samples as production SDK packaging evidence.
 - Byte-level codec/signing drift: run `conformance-fixtures` and compare against `fixtures/conformance/transfer.json`.
 - Whole-crate regression: run `cargo test -p open-graphene-gen`.
 

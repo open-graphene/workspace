@@ -57,3 +57,13 @@ open-graphene/.env
 open-graphene/.env.*
 open-graphene/target/
 open-graphene/target/**
+
+!open-graphene-ts
+!open-graphene-ts/**
+!open-graphene-dart
+!open-graphene-dart/**
+!open-graphene-rs
+!open-graphene-rs/**
+open-graphene-rs/**/Cargo.lock
+open-graphene-rs/**/target/
+open-graphene-rs/**/target/**
