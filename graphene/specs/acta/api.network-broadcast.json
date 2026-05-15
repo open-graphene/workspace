@@ -4013,7 +4013,367 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::fee_parameters"
+        "x-cpp-type": "graphene::protocol::fee_parameters",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "transfer_operation::fee_parameters_type",
+              "index": 0,
+              "schema": "#/components/schemas/transfer_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "account_create_operation::fee_parameters_type",
+              "index": 1,
+              "schema": "#/components/schemas/account_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "account_update_operation::fee_parameters_type",
+              "index": 2,
+              "schema": "#/components/schemas/account_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "account_whitelist_operation::fee_parameters_type",
+              "index": 3,
+              "schema": "#/components/schemas/account_whitelist_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "account_upgrade_operation::fee_parameters_type",
+              "index": 4,
+              "schema": "#/components/schemas/account_upgrade_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "account_transfer_operation::fee_parameters_type",
+              "index": 5,
+              "schema": "#/components/schemas/account_transfer_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_create_operation::fee_parameters_type",
+              "index": 6,
+              "schema": "#/components/schemas/asset_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_update_operation::fee_parameters_type",
+              "index": 7,
+              "schema": "#/components/schemas/asset_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_update_bitasset_operation::fee_parameters_type",
+              "index": 8,
+              "schema": "#/components/schemas/asset_update_bitasset_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_update_feed_producers_operation::fee_parameters_type",
+              "index": 9,
+              "schema": "#/components/schemas/asset_update_feed_producers_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_issue_operation::fee_parameters_type",
+              "index": 10,
+              "schema": "#/components/schemas/asset_issue_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_reserve_operation::fee_parameters_type",
+              "index": 11,
+              "schema": "#/components/schemas/asset_reserve_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_fund_fee_pool_operation::fee_parameters_type",
+              "index": 12,
+              "schema": "#/components/schemas/asset_fund_fee_pool_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_settle_operation::fee_parameters_type",
+              "index": 13,
+              "schema": "#/components/schemas/asset_settle_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_global_settle_operation::fee_parameters_type",
+              "index": 14,
+              "schema": "#/components/schemas/asset_global_settle_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_publish_feed_operation::fee_parameters_type",
+              "index": 15,
+              "schema": "#/components/schemas/asset_publish_feed_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "witness_create_operation::fee_parameters_type",
+              "index": 16,
+              "schema": "#/components/schemas/witness_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "witness_update_operation::fee_parameters_type",
+              "index": 17,
+              "schema": "#/components/schemas/witness_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "proposal_create_operation::fee_parameters_type",
+              "index": 18,
+              "schema": "#/components/schemas/proposal_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "proposal_update_operation::fee_parameters_type",
+              "index": 19,
+              "schema": "#/components/schemas/proposal_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "proposal_delete_operation::fee_parameters_type",
+              "index": 20,
+              "schema": "#/components/schemas/proposal_delete_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "withdraw_permission_create_operation::fee_parameters_type",
+              "index": 21,
+              "schema": "#/components/schemas/withdraw_permission_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "withdraw_permission_update_operation::fee_parameters_type",
+              "index": 22,
+              "schema": "#/components/schemas/withdraw_permission_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "withdraw_permission_claim_operation::fee_parameters_type",
+              "index": 23,
+              "schema": "#/components/schemas/withdraw_permission_claim_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "withdraw_permission_delete_operation::fee_parameters_type",
+              "index": 24,
+              "schema": "#/components/schemas/withdraw_permission_delete_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "committee_member_create_operation::fee_parameters_type",
+              "index": 25,
+              "schema": "#/components/schemas/committee_member_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "committee_member_update_operation::fee_parameters_type",
+              "index": 26,
+              "schema": "#/components/schemas/committee_member_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "committee_member_update_global_parameters_operation::fee_parameters_type",
+              "index": 27,
+              "schema": "#/components/schemas/committee_member_update_global_parameters_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "vesting_balance_create_operation::fee_parameters_type",
+              "index": 28,
+              "schema": "#/components/schemas/vesting_balance_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "vesting_balance_withdraw_operation::fee_parameters_type",
+              "index": 29,
+              "schema": "#/components/schemas/vesting_balance_withdraw_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "custom_operation::fee_parameters_type",
+              "index": 30,
+              "schema": "#/components/schemas/custom_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "assert_operation::fee_parameters_type",
+              "index": 31,
+              "schema": "#/components/schemas/assert_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "balance_claim_operation::fee_parameters_type",
+              "index": 32,
+              "schema": "#/components/schemas/balance_claim_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "override_transfer_operation::fee_parameters_type",
+              "index": 33,
+              "schema": "#/components/schemas/override_transfer_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_settle_cancel_operation::fee_parameters_type",
+              "index": 34,
+              "schema": "#/components/schemas/asset_settle_cancel_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_claim_fees_operation::fee_parameters_type",
+              "index": 35,
+              "schema": "#/components/schemas/asset_claim_fees_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "fba_distribute_operation::fee_parameters_type",
+              "index": 36,
+              "schema": "#/components/schemas/fba_distribute_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_claim_pool_operation::fee_parameters_type",
+              "index": 37,
+              "schema": "#/components/schemas/asset_claim_pool_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "asset_update_issuer_operation::fee_parameters_type",
+              "index": 38,
+              "schema": "#/components/schemas/asset_update_issuer_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "personal_data_create_operation::fee_parameters_type",
+              "index": 39,
+              "schema": "#/components/schemas/personal_data_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "personal_data_remove_operation::fee_parameters_type",
+              "index": 40,
+              "schema": "#/components/schemas/personal_data_remove_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "content_card_create_operation::fee_parameters_type",
+              "index": 41,
+              "schema": "#/components/schemas/content_card_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "content_card_update_operation::fee_parameters_type",
+              "index": 42,
+              "schema": "#/components/schemas/content_card_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "content_card_remove_operation::fee_parameters_type",
+              "index": 43,
+              "schema": "#/components/schemas/content_card_remove_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "permission_create_operation::fee_parameters_type",
+              "index": 44,
+              "schema": "#/components/schemas/permission_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "permission_remove_operation::fee_parameters_type",
+              "index": 45,
+              "schema": "#/components/schemas/permission_remove_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "commit_create_operation::fee_parameters_type",
+              "index": 46,
+              "schema": "#/components/schemas/commit_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "reveal_create_operation::fee_parameters_type",
+              "index": 47,
+              "schema": "#/components/schemas/reveal_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "worker_create_operation::fee_parameters_type",
+              "index": 48,
+              "schema": "#/components/schemas/worker_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "htlc_create_operation::fee_parameters_type",
+              "index": 49,
+              "schema": "#/components/schemas/htlc_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "htlc_redeem_operation::fee_parameters_type",
+              "index": 50,
+              "schema": "#/components/schemas/htlc_redeem_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "htlc_redeemed_operation::fee_parameters_type",
+              "index": 51,
+              "schema": "#/components/schemas/htlc_redeemed_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "htlc_extend_operation::fee_parameters_type",
+              "index": 52,
+              "schema": "#/components/schemas/htlc_extend_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "htlc_refund_operation::fee_parameters_type",
+              "index": 53,
+              "schema": "#/components/schemas/htlc_refund_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "limit_order_create_operation::fee_parameters_type",
+              "index": 54,
+              "schema": "#/components/schemas/limit_order_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "limit_order_cancel_operation::fee_parameters_type",
+              "index": 55,
+              "schema": "#/components/schemas/limit_order_cancel_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "call_order_update_operation::fee_parameters_type",
+              "index": 56,
+              "schema": "#/components/schemas/call_order_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "fill_order_operation::fee_parameters_type",
+              "index": 57,
+              "schema": "#/components/schemas/fill_order_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "custom_authority_create_operation::fee_parameters_type",
+              "index": 58,
+              "schema": "#/components/schemas/custom_authority_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "custom_authority_update_operation::fee_parameters_type",
+              "index": 59,
+              "schema": "#/components/schemas/custom_authority_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "custom_authority_delete_operation::fee_parameters_type",
+              "index": 60,
+              "schema": "#/components/schemas/custom_authority_delete_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "ticket_create_operation::fee_parameters_type",
+              "index": 61,
+              "schema": "#/components/schemas/ticket_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "ticket_update_operation::fee_parameters_type",
+              "index": 62,
+              "schema": "#/components/schemas/ticket_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "ico_balance_claim_operation::fee_parameters_type",
+              "index": 63,
+              "schema": "#/components/schemas/ico_balance_claim_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "permission_create_many_operation::fee_parameters_type",
+              "index": 64,
+              "schema": "#/components/schemas/permission_create_many_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "room_create_operation::fee_parameters_type",
+              "index": 65,
+              "schema": "#/components/schemas/room_create_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "room_update_operation::fee_parameters_type",
+              "index": 66,
+              "schema": "#/components/schemas/room_update_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "room_add_participant_operation::fee_parameters_type",
+              "index": 67,
+              "schema": "#/components/schemas/room_add_participant_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "room_remove_participant_operation::fee_parameters_type",
+              "index": 68,
+              "schema": "#/components/schemas/room_remove_participant_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "room_rotate_key_operation::fee_parameters_type",
+              "index": 69,
+              "schema": "#/components/schemas/room_rotate_key_operation__fee_parameters_type"
+            },
+            {
+              "cppType": "room_update_participant_operation::fee_parameters_type",
+              "index": 70,
+              "schema": "#/components/schemas/room_update_participant_operation__fee_parameters_type"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "fee_schedule": {
         "properties": {
@@ -4107,7 +4467,17 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::future_extensions"
+        "x-cpp-type": "graphene::protocol::future_extensions",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "void_t",
+              "index": 0,
+              "schema": "#/components/schemas/void_t"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "generic_exchange_operation_result": {
         "properties": {
@@ -4406,7 +4776,32 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::htlc_hash"
+        "x-cpp-type": "graphene::protocol::htlc_hash",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "htlc_algo_ripemd160",
+              "index": 0,
+              "schema": "#/components/schemas/htlc_algo_ripemd160"
+            },
+            {
+              "cppType": "htlc_algo_sha1",
+              "index": 1,
+              "schema": "#/components/schemas/htlc_algo_sha1"
+            },
+            {
+              "cppType": "htlc_algo_sha256",
+              "index": 2,
+              "schema": "#/components/schemas/htlc_algo_sha256"
+            },
+            {
+              "cppType": "htlc_algo_hash160",
+              "index": 3,
+              "schema": "#/components/schemas/htlc_algo_hash160"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "htlc_options": {
         "properties": {
@@ -5831,7 +6226,367 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::operation"
+        "x-cpp-type": "graphene::protocol::operation",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "transfer_operation",
+              "index": 0,
+              "schema": "#/components/schemas/transfer_operation"
+            },
+            {
+              "cppType": "account_create_operation",
+              "index": 1,
+              "schema": "#/components/schemas/account_create_operation"
+            },
+            {
+              "cppType": "account_update_operation",
+              "index": 2,
+              "schema": "#/components/schemas/account_update_operation"
+            },
+            {
+              "cppType": "account_whitelist_operation",
+              "index": 3,
+              "schema": "#/components/schemas/account_whitelist_operation"
+            },
+            {
+              "cppType": "account_upgrade_operation",
+              "index": 4,
+              "schema": "#/components/schemas/account_upgrade_operation"
+            },
+            {
+              "cppType": "account_transfer_operation",
+              "index": 5,
+              "schema": "#/components/schemas/account_transfer_operation"
+            },
+            {
+              "cppType": "asset_create_operation",
+              "index": 6,
+              "schema": "#/components/schemas/asset_create_operation"
+            },
+            {
+              "cppType": "asset_update_operation",
+              "index": 7,
+              "schema": "#/components/schemas/asset_update_operation"
+            },
+            {
+              "cppType": "asset_update_bitasset_operation",
+              "index": 8,
+              "schema": "#/components/schemas/asset_update_bitasset_operation"
+            },
+            {
+              "cppType": "asset_update_feed_producers_operation",
+              "index": 9,
+              "schema": "#/components/schemas/asset_update_feed_producers_operation"
+            },
+            {
+              "cppType": "asset_issue_operation",
+              "index": 10,
+              "schema": "#/components/schemas/asset_issue_operation"
+            },
+            {
+              "cppType": "asset_reserve_operation",
+              "index": 11,
+              "schema": "#/components/schemas/asset_reserve_operation"
+            },
+            {
+              "cppType": "asset_fund_fee_pool_operation",
+              "index": 12,
+              "schema": "#/components/schemas/asset_fund_fee_pool_operation"
+            },
+            {
+              "cppType": "asset_settle_operation",
+              "index": 13,
+              "schema": "#/components/schemas/asset_settle_operation"
+            },
+            {
+              "cppType": "asset_global_settle_operation",
+              "index": 14,
+              "schema": "#/components/schemas/asset_global_settle_operation"
+            },
+            {
+              "cppType": "asset_publish_feed_operation",
+              "index": 15,
+              "schema": "#/components/schemas/asset_publish_feed_operation"
+            },
+            {
+              "cppType": "witness_create_operation",
+              "index": 16,
+              "schema": "#/components/schemas/witness_create_operation"
+            },
+            {
+              "cppType": "witness_update_operation",
+              "index": 17,
+              "schema": "#/components/schemas/witness_update_operation"
+            },
+            {
+              "cppType": "proposal_create_operation",
+              "index": 18,
+              "schema": "#/components/schemas/proposal_create_operation"
+            },
+            {
+              "cppType": "proposal_update_operation",
+              "index": 19,
+              "schema": "#/components/schemas/proposal_update_operation"
+            },
+            {
+              "cppType": "proposal_delete_operation",
+              "index": 20,
+              "schema": "#/components/schemas/proposal_delete_operation"
+            },
+            {
+              "cppType": "withdraw_permission_create_operation",
+              "index": 21,
+              "schema": "#/components/schemas/withdraw_permission_create_operation"
+            },
+            {
+              "cppType": "withdraw_permission_update_operation",
+              "index": 22,
+              "schema": "#/components/schemas/withdraw_permission_update_operation"
+            },
+            {
+              "cppType": "withdraw_permission_claim_operation",
+              "index": 23,
+              "schema": "#/components/schemas/withdraw_permission_claim_operation"
+            },
+            {
+              "cppType": "withdraw_permission_delete_operation",
+              "index": 24,
+              "schema": "#/components/schemas/withdraw_permission_delete_operation"
+            },
+            {
+              "cppType": "committee_member_create_operation",
+              "index": 25,
+              "schema": "#/components/schemas/committee_member_create_operation"
+            },
+            {
+              "cppType": "committee_member_update_operation",
+              "index": 26,
+              "schema": "#/components/schemas/committee_member_update_operation"
+            },
+            {
+              "cppType": "committee_member_update_global_parameters_operation",
+              "index": 27,
+              "schema": "#/components/schemas/committee_member_update_global_parameters_operation"
+            },
+            {
+              "cppType": "vesting_balance_create_operation",
+              "index": 28,
+              "schema": "#/components/schemas/vesting_balance_create_operation"
+            },
+            {
+              "cppType": "vesting_balance_withdraw_operation",
+              "index": 29,
+              "schema": "#/components/schemas/vesting_balance_withdraw_operation"
+            },
+            {
+              "cppType": "custom_operation",
+              "index": 30,
+              "schema": "#/components/schemas/custom_operation"
+            },
+            {
+              "cppType": "assert_operation",
+              "index": 31,
+              "schema": "#/components/schemas/assert_operation"
+            },
+            {
+              "cppType": "balance_claim_operation",
+              "index": 32,
+              "schema": "#/components/schemas/balance_claim_operation"
+            },
+            {
+              "cppType": "override_transfer_operation",
+              "index": 33,
+              "schema": "#/components/schemas/override_transfer_operation"
+            },
+            {
+              "cppType": "asset_settle_cancel_operation",
+              "index": 34,
+              "schema": "#/components/schemas/asset_settle_cancel_operation"
+            },
+            {
+              "cppType": "asset_claim_fees_operation",
+              "index": 35,
+              "schema": "#/components/schemas/asset_claim_fees_operation"
+            },
+            {
+              "cppType": "fba_distribute_operation",
+              "index": 36,
+              "schema": "#/components/schemas/fba_distribute_operation"
+            },
+            {
+              "cppType": "asset_claim_pool_operation",
+              "index": 37,
+              "schema": "#/components/schemas/asset_claim_pool_operation"
+            },
+            {
+              "cppType": "asset_update_issuer_operation",
+              "index": 38,
+              "schema": "#/components/schemas/asset_update_issuer_operation"
+            },
+            {
+              "cppType": "personal_data_create_operation",
+              "index": 39,
+              "schema": "#/components/schemas/personal_data_create_operation"
+            },
+            {
+              "cppType": "personal_data_remove_operation",
+              "index": 40,
+              "schema": "#/components/schemas/personal_data_remove_operation"
+            },
+            {
+              "cppType": "content_card_create_operation",
+              "index": 41,
+              "schema": "#/components/schemas/content_card_create_operation"
+            },
+            {
+              "cppType": "content_card_update_operation",
+              "index": 42,
+              "schema": "#/components/schemas/content_card_update_operation"
+            },
+            {
+              "cppType": "content_card_remove_operation",
+              "index": 43,
+              "schema": "#/components/schemas/content_card_remove_operation"
+            },
+            {
+              "cppType": "permission_create_operation",
+              "index": 44,
+              "schema": "#/components/schemas/permission_create_operation"
+            },
+            {
+              "cppType": "permission_remove_operation",
+              "index": 45,
+              "schema": "#/components/schemas/permission_remove_operation"
+            },
+            {
+              "cppType": "commit_create_operation",
+              "index": 46,
+              "schema": "#/components/schemas/commit_create_operation"
+            },
+            {
+              "cppType": "reveal_create_operation",
+              "index": 47,
+              "schema": "#/components/schemas/reveal_create_operation"
+            },
+            {
+              "cppType": "worker_create_operation",
+              "index": 48,
+              "schema": "#/components/schemas/worker_create_operation"
+            },
+            {
+              "cppType": "htlc_create_operation",
+              "index": 49,
+              "schema": "#/components/schemas/htlc_create_operation"
+            },
+            {
+              "cppType": "htlc_redeem_operation",
+              "index": 50,
+              "schema": "#/components/schemas/htlc_redeem_operation"
+            },
+            {
+              "cppType": "htlc_redeemed_operation",
+              "index": 51,
+              "schema": "#/components/schemas/htlc_redeemed_operation"
+            },
+            {
+              "cppType": "htlc_extend_operation",
+              "index": 52,
+              "schema": "#/components/schemas/htlc_extend_operation"
+            },
+            {
+              "cppType": "htlc_refund_operation",
+              "index": 53,
+              "schema": "#/components/schemas/htlc_refund_operation"
+            },
+            {
+              "cppType": "limit_order_create_operation",
+              "index": 54,
+              "schema": "#/components/schemas/limit_order_create_operation"
+            },
+            {
+              "cppType": "limit_order_cancel_operation",
+              "index": 55,
+              "schema": "#/components/schemas/limit_order_cancel_operation"
+            },
+            {
+              "cppType": "call_order_update_operation",
+              "index": 56,
+              "schema": "#/components/schemas/call_order_update_operation"
+            },
+            {
+              "cppType": "fill_order_operation",
+              "index": 57,
+              "schema": "#/components/schemas/fill_order_operation"
+            },
+            {
+              "cppType": "custom_authority_create_operation",
+              "index": 58,
+              "schema": "#/components/schemas/custom_authority_create_operation"
+            },
+            {
+              "cppType": "custom_authority_update_operation",
+              "index": 59,
+              "schema": "#/components/schemas/custom_authority_update_operation"
+            },
+            {
+              "cppType": "custom_authority_delete_operation",
+              "index": 60,
+              "schema": "#/components/schemas/custom_authority_delete_operation"
+            },
+            {
+              "cppType": "ticket_create_operation",
+              "index": 61,
+              "schema": "#/components/schemas/ticket_create_operation"
+            },
+            {
+              "cppType": "ticket_update_operation",
+              "index": 62,
+              "schema": "#/components/schemas/ticket_update_operation"
+            },
+            {
+              "cppType": "ico_balance_claim_operation",
+              "index": 63,
+              "schema": "#/components/schemas/ico_balance_claim_operation"
+            },
+            {
+              "cppType": "permission_create_many_operation",
+              "index": 64,
+              "schema": "#/components/schemas/permission_create_many_operation"
+            },
+            {
+              "cppType": "room_create_operation",
+              "index": 65,
+              "schema": "#/components/schemas/room_create_operation"
+            },
+            {
+              "cppType": "room_update_operation",
+              "index": 66,
+              "schema": "#/components/schemas/room_update_operation"
+            },
+            {
+              "cppType": "room_add_participant_operation",
+              "index": 67,
+              "schema": "#/components/schemas/room_add_participant_operation"
+            },
+            {
+              "cppType": "room_remove_participant_operation",
+              "index": 68,
+              "schema": "#/components/schemas/room_remove_participant_operation"
+            },
+            {
+              "cppType": "room_rotate_key_operation",
+              "index": 69,
+              "schema": "#/components/schemas/room_rotate_key_operation"
+            },
+            {
+              "cppType": "room_update_participant_operation",
+              "index": 70,
+              "schema": "#/components/schemas/room_update_participant_operation"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "operation_result": {
         "description": "Discriminated union — JSON form is [index, value]. 6 alternatives.",
@@ -5922,7 +6677,45 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::operation_result"
+        "x-cpp-type": "graphene::protocol::operation_result",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "void_result",
+              "index": 0,
+              "schema": "#/components/schemas/void_result"
+            },
+            {
+              "cppType": "object_id_type",
+              "index": 1,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "asset",
+              "index": 2,
+              "schema": "#/components/schemas/asset"
+            },
+            {
+              "cppType": "generic_operation_result",
+              "index": 3,
+              "schema": "#/components/schemas/generic_operation_result"
+            },
+            {
+              "cppType": "generic_exchange_operation_result",
+              "index": 4,
+              "schema": "#/components/schemas/generic_exchange_operation_result"
+            },
+            {
+              "cppType": "extendable_operation_result",
+              "index": 5,
+              "schema": "#/components/schemas/extendable_operation_result"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "override_transfer_operation": {
         "properties": {
@@ -6362,7 +7155,27 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::predicate"
+        "x-cpp-type": "graphene::protocol::predicate",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "account_name_eq_lit_predicate",
+              "index": 0,
+              "schema": "#/components/schemas/account_name_eq_lit_predicate"
+            },
+            {
+              "cppType": "asset_symbol_eq_lit_predicate",
+              "index": 1,
+              "schema": "#/components/schemas/asset_symbol_eq_lit_predicate"
+            },
+            {
+              "cppType": "block_id_predicate",
+              "index": 2,
+              "schema": "#/components/schemas/block_id_predicate"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "price": {
         "properties": {
@@ -7433,7 +8246,409 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::restriction::argument_type"
+        "x-cpp-type": "graphene::protocol::restriction::argument_type",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "void_t",
+              "index": 0,
+              "schema": "#/components/schemas/void_t"
+            },
+            {
+              "cppType": "bool",
+              "index": 1,
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            {
+              "cppType": "int64_t",
+              "index": 2,
+              "schema": "#/components/schemas/GrapheneInt64"
+            },
+            {
+              "cppType": "string",
+              "index": 3,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "time_point_sec",
+              "index": 4,
+              "schema": "#/components/schemas/GrapheneTimePointSec"
+            },
+            {
+              "cppType": "public_key_type",
+              "index": 5,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "fc::sha256",
+              "index": 6,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "account_id_type",
+              "index": 7,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "asset_id_type",
+              "index": 8,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "force_settlement_id_type",
+              "index": 9,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "committee_member_id_type",
+              "index": 10,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "witness_id_type",
+              "index": 11,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "limit_order_id_type",
+              "index": 12,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "call_order_id_type",
+              "index": 13,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "custom_id_type",
+              "index": 14,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "proposal_id_type",
+              "index": 15,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "withdraw_permission_id_type",
+              "index": 16,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "vesting_balance_id_type",
+              "index": 17,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "worker_id_type",
+              "index": 18,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "balance_id_type",
+              "index": 19,
+              "schema": {
+                "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                "type": "string"
+              }
+            },
+            {
+              "cppType": "flat_set<bool>",
+              "index": 20,
+              "schema": {
+                "items": {
+                  "type": "boolean"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<int64_t>",
+              "index": 21,
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/GrapheneInt64"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<string>",
+              "index": 22,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<time_point_sec>",
+              "index": 23,
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/GrapheneTimePointSec"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<public_key_type>",
+              "index": 24,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<fc::sha256>",
+              "index": 25,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<account_id_type>",
+              "index": 26,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<asset_id_type>",
+              "index": 27,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<force_settlement_id_type>",
+              "index": 28,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<committee_member_id_type>",
+              "index": 29,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<witness_id_type>",
+              "index": 30,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<limit_order_id_type>",
+              "index": 31,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<call_order_id_type>",
+              "index": 32,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<custom_id_type>",
+              "index": 33,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<proposal_id_type>",
+              "index": 34,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<withdraw_permission_id_type>",
+              "index": 35,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<vesting_balance_id_type>",
+              "index": 36,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<worker_id_type>",
+              "index": 37,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "flat_set<balance_id_type>",
+              "index": 38,
+              "schema": {
+                "items": {
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            {
+              "cppType": "vector<restriction>",
+              "index": 39,
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/restriction"
+                },
+                "type": "array"
+              }
+            },
+            {
+              "cppType": "vector<vector<restriction>>",
+              "index": 40,
+              "schema": {
+                "items": {
+                  "items": {
+                    "$ref": "#/components/schemas/restriction"
+                  },
+                  "type": "array"
+                },
+                "type": "array"
+              }
+            },
+            {
+              "cppType": "variant_assert_argument_type",
+              "index": 41,
+              "schema": "#/components/schemas/restriction__variant_assert_argument_type"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "restriction__variant_assert_argument_type": {
         "description": "Alias for pair<int64_t, vector<restriction>>",
@@ -7901,7 +9116,22 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::special_authority"
+        "x-cpp-type": "graphene::protocol::special_authority",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "no_special_authority",
+              "index": 0,
+              "schema": "#/components/schemas/no_special_authority"
+            },
+            {
+              "cppType": "top_holders_special_authority",
+              "index": 1,
+              "schema": "#/components/schemas/top_holders_special_authority"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "ticket_create_operation": {
         "properties": {
@@ -8254,7 +9484,27 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::vesting_policy_initializer"
+        "x-cpp-type": "graphene::protocol::vesting_policy_initializer",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "linear_vesting_policy_initializer",
+              "index": 0,
+              "schema": "#/components/schemas/linear_vesting_policy_initializer"
+            },
+            {
+              "cppType": "cdd_vesting_policy_initializer",
+              "index": 1,
+              "schema": "#/components/schemas/cdd_vesting_policy_initializer"
+            },
+            {
+              "cppType": "instant_vesting_policy_initializer",
+              "index": 2,
+              "schema": "#/components/schemas/instant_vesting_policy_initializer"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       },
       "void_result": {
         "properties": {},
@@ -8712,7 +9962,27 @@
             "type": "array"
           }
         ],
-        "x-cpp-type": "graphene::protocol::worker_initializer"
+        "x-cpp-type": "graphene::protocol::worker_initializer",
+        "x-graphene-static-variant": {
+          "alternatives": [
+            {
+              "cppType": "refund_worker_initializer",
+              "index": 0,
+              "schema": "#/components/schemas/refund_worker_initializer"
+            },
+            {
+              "cppType": "vesting_balance_worker_initializer",
+              "index": 1,
+              "schema": "#/components/schemas/vesting_balance_worker_initializer"
+            },
+            {
+              "cppType": "burn_worker_initializer",
+              "index": 2,
+              "schema": "#/components/schemas/burn_worker_initializer"
+            }
+          ],
+          "encoding": "index-payload-array"
+        }
       }
     }
   },

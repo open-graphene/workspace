@@ -995,6 +995,7 @@ def _variant_schema_from_alternatives(alts: list[str], reg: Registry,
                                        pending: dict[str, str],
                                        *, owner: str | None = None) -> dict:
     one_of: list[dict] = []
+    alternatives: list[dict] = []
     for idx, alt in enumerate(alts):
         alt_clean = re.sub(r"\s+", " ", alt).strip()
         alt_schema = map_type(alt_clean, reg, pending, owner=owner)
@@ -1007,9 +1008,22 @@ def _variant_schema_from_alternatives(alts: list[str], reg: Registry,
             "minItems": 2,
             "maxItems": 2,
         })
+        alternative = {
+            "index": idx,
+            "cppType": alt_clean,
+        }
+        if isinstance(alt_schema, dict) and isinstance(alt_schema.get("$ref"), str):
+            alternative["schema"] = alt_schema["$ref"]
+        else:
+            alternative["schema"] = alt_schema
+        alternatives.append(alternative)
     return {
         "description": f"Discriminated union — JSON form is [index, value]. {len(alts)} alternatives.",
         "oneOf": one_of,
+        "x-graphene-static-variant": {
+            "encoding": "index-payload-array",
+            "alternatives": alternatives,
+        },
     }
 
 

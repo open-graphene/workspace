@@ -269,6 +269,11 @@ fn audit_surface_spec(config: &SpecConfig) -> Result<(), Box<dyn Error>> {
         .values()
         .filter(|schema| is_static_variant_schema(schema))
         .count();
+    for (schema_name, schema) in schemas {
+        if is_static_variant_schema(schema) {
+            failures.extend(validate_static_variant_metadata(schema_name, schema));
+        }
+    }
     let rust_extensions = count_key(&spec, "x-rust-type");
     if rust_extensions > 0 {
         failures.push(format!(
@@ -1063,6 +1068,88 @@ fn is_static_variant_schema(schema: &JsonValue) -> bool {
                     .and_then(JsonValue::as_array)
                     .is_some_and(|items| items.len() == 2 && items[0].get("const").is_some())
         })
+}
+
+fn validate_static_variant_metadata(schema_name: &str, schema: &JsonValue) -> Vec<String> {
+    let mut failures = Vec::new();
+    let one_of = schema
+        .get("oneOf")
+        .and_then(JsonValue::as_array)
+        .expect("caller checks static variant shape");
+    let Some(metadata) = schema
+        .get("x-graphene-static-variant")
+        .and_then(JsonValue::as_object)
+    else {
+        return vec![format!(
+            "static variant schema {schema_name} is missing x-graphene-static-variant metadata"
+        )];
+    };
+
+    if metadata.get("encoding").and_then(JsonValue::as_str) != Some("index-payload-array") {
+        failures.push(format!(
+            "static variant schema {schema_name} must use x-graphene-static-variant.encoding = index-payload-array"
+        ));
+    }
+
+    let Some(alternatives) = metadata.get("alternatives").and_then(JsonValue::as_array) else {
+        failures.push(format!(
+            "static variant schema {schema_name} is missing x-graphene-static-variant.alternatives array"
+        ));
+        return failures;
+    };
+    if alternatives.len() != one_of.len() {
+        failures.push(format!(
+            "static variant schema {schema_name} metadata has {} alternatives, oneOf has {}",
+            alternatives.len(),
+            one_of.len()
+        ));
+    }
+
+    for (idx, alternative_schema) in one_of.iter().enumerate() {
+        let expected_index = alternative_schema
+            .get("prefixItems")
+            .and_then(JsonValue::as_array)
+            .and_then(|items| items.first())
+            .and_then(|item| item.get("const"))
+            .and_then(JsonValue::as_u64);
+        let payload_ref = alternative_schema
+            .get("prefixItems")
+            .and_then(JsonValue::as_array)
+            .and_then(|items| items.get(1))
+            .and_then(|payload| payload.get("$ref"))
+            .and_then(JsonValue::as_str);
+        let Some(metadata_entry) = alternatives.get(idx).and_then(JsonValue::as_object) else {
+            continue;
+        };
+
+        if metadata_entry.get("index").and_then(JsonValue::as_u64) != expected_index {
+            failures.push(format!(
+                "static variant schema {schema_name} alternative {idx} index does not match oneOf prefix const"
+            ));
+        }
+        if metadata_entry
+            .get("cppType")
+            .and_then(JsonValue::as_str)
+            .is_none()
+        {
+            failures.push(format!(
+                "static variant schema {schema_name} alternative {idx} is missing cppType"
+            ));
+        }
+        if let Some(payload_ref) = payload_ref {
+            if metadata_entry.get("schema").and_then(JsonValue::as_str) != Some(payload_ref) {
+                failures.push(format!(
+                    "static variant schema {schema_name} alternative {idx} schema does not match payload $ref"
+                ));
+            }
+        } else if metadata_entry.get("schema").is_none() {
+            failures.push(format!(
+                "static variant schema {schema_name} alternative {idx} is missing inline schema"
+            ));
+        }
+    }
+
+    failures
 }
 
 #[cfg(test)]
